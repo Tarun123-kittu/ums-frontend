@@ -1,38 +1,1577 @@
-.App {
-  text-align: center;
+.form-group input {
+    padding: 8px 20px !important;
+    border: 1px solid #D9D9D9;
+    border-radius: 11px;
+    color: #8D8D8E;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+h1,h2,h3,h4,h5,h6,p{
+    font-family: "Montserrat", sans-serif;
   }
+  .small_font {
+    color: #595959;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18.2px;
+    font-family: "Montserrat", sans-serif;
+}
+.cmn_margin {
+    margin-left: 65px !important;
+}
+/* body {
+background-color: #f7f2f2 !important;
+} */
+.login_wrapper .open_eye {
+    top: 41px;
+}
+.open_eye {
+    position: absolute;
+    left: auto;
+    right: 16px;
+    top: 34px;
+    cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+.cmn_btn{
+    background-color: #F41A1A;
+    color: white;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 6px 22px;
+    border: none;
+}
+.header_wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+.candidate_table_outer{
+    margin-top: 35px !important;
+  }
+.invite_btn{
+    border: unset;
+      border-radius: 4px;
+      color: white;
+      padding: 6px 16px;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+     background-color: #F41A1A;
+  }
+  .resend_btn{
+    background-color: #ECEAF3;
+    color: 
+    #6C6F75;
+  }
+
+  
+h1,h2,h3,h4,h5,h6,p{
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .login-container {
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .selected_text{
+    font-size: 12px;
+  }
+  .selectedResult_icon{
+    color: #298e28;
+  }
+  .rejectedResult_icon{
+    color: #f41a1a;
+  }
+  .input-group input:focus {
+    outline: none;
+    border-color:#ff5733;;
+  }
+  
+  .btn {
+    background-color: #e5472c;;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  .btn:hover {
+    background-color: #ff6e4d;
+  }
+  
+  .modal-footer{
+    border-top: unset !important;
+  }
+  
+  .small_font{
+    color: #595959;
+    font-size: 14px;
+    font-weight: 500;
+    line-height:18.2px;
+    font-family: "Montserrat", sans-serif;
+  }
+  .small_fontsize{
+    color: #333333;
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 500;
+  }
+  .modal_close_btn{
+    background: #333;
+  }
+  
+  .cmn_heading{
+    color: black;
+      font-weight: 600;
+      font-size: 26px;
+  }
+  
+  :focus-visible {
+    outline: 0px;
+  }
+  .register{
+    margin-top: 10px;
+    color: #636364;
+    font-size: 15px;
+    text-align: center;
+  }
+  
+  .heading{
+    color:  #212B2E!important;
+    font-family: "Montserrat", sans-serif;
+    font-size: 23px;
+    font-weight: 600 !important;
+  
+  }
+  
+  .select-role{
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 3px;
+  }
+  button.register-btn {
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    color: white;
+    font-family: "Open-Sans" sans-serif;
+  }
+  
+  
+  
+  
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    z-index: 99999;
+  }
+  
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    
+  }
+  
+  .logo-icon {
+    width: 90px; 
+    height: 40px; 
+    margin-right: 10px;
+  }
+  
+  .logo-text {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .logout-button {
+    /* padding: 8px 16px; */
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ce2128;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+  }
+  
+  .logout-button:hover {
+    background-color: #ff0004;
+  }
+  
+  
+  
+  
+  /* for modal css  */
+  
+  
+  
+  /* .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
+  
+  /* .modal {
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 50%; 
+  position: absolute;
+  } */
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .input-field {
+    margin-bottom: 10px;
+    display: flex;
+  }
+  
+  .input-field input {
+    width: calc(100% - 70px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .input-field button {
+    width: 60px;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ff5733;
+    color: white;
+    cursor: pointer;  
+  }
+  
+  .input-field button:hover {
+    background-color: #df330d;
+  }
+  
+  .cross-sign{
+    width: 50px;
+    float: right;
+    margin-top: 5px;
+  }
+  
+  
+  /* add language button + */
+  .ad-language-btn{
+    display: flex;
+  }
+  
+  .ad-btn{
+    height: 25px;
+    color: white;
+    background-color: #333;
+  }
+  
+  
+  
+  .createtest-btn{
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #e3bcae;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: rgb(90, 81, 81);
+    font-size: 15px;
+    font-weight: 500;
+   
+  }
+  .create-test-btn-wrapper{
+    /* background-color:rgb(185, 150, 150) ; */
+    padding: 5px; 
+    border-radius: 10px;
+  
+  }
+  
+  
+  
+  
+  
+  .internal-testbox{
+    display: flex;
+    gap: 10px;
+   
+  }
+  
+  
+  
+  .mcq-inputs, .subjective-inputs, .logical-inputs {
+    margin-bottom: 20px;
+  
+  }
+  
+  
+  .mcq-question, .mcq-options, .subjective-inputs input, .logical-inputs input  {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+  
+  }
+  select option{
+    background-color: white !important;
+  }
+  input.mcq-options{
+    color: #898181;
+      font-weight: 400;
+  }
+  
+  .correct-answer-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .cmn_text{
+    color: #333;
+    font-size: 20px;
+  }
+  
+  .correct-answer-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  
+  
+  .add-question-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .add-question-btn:disabled:hover {
+    background-color: #ccc;
+  }
+  .testbox-textarea{
+    padding: 10px;
+    width: 95%;
+    height: 180px;
+    color: #898181 !important;
+  
+  }
+  .testbox-textarea-logical{
+    padding: 10px;
+    width: 95%;
+    height: 40px;
+  }
+  
+  
+  svg.MdEdit {
+    cursor: pointer;
+  
+  }
+  
+  
+  
+  
+  .cmn_margin{
+    margin-left: 65px !important;
+  
+  }
+  .red_btn{
+    min-width: 114px;
+    color: white;
+    background-color: #FF3030 !important;
+    border: unset !important;
+    border-radius: 10px;
+    padding: 7px 16px;
+    text-align: center;
+  
+  }
+  .custom_modal_container .modal-body {
+    padding: 0px 25px 25px !important;
+  }
+  .custom_modal_container .modal-header{
+    padding: 29px 29px 0px;
+  }
+  .custom_modal_container .modal-content{
+    border-radius: 20px;
+  }
+  .custom_modal_container input::placeholder{
+   color: #8D8D8E
+  }
+  
+  .custom_modal_container input , select{
+    background-color:#f9f9f9 !important;
+  }
+  .custom_modal_container .modal-footer{
+    padding: 0px 25px 25px;
+  }
+  .custom_pagination_wapper{
+    z-index: 0;
+    position: relative;
+    gap: 10px;
+  }
+  .custom_pagination_wapper span.page-link {
+    border-radius: 4px;
+  }
+  .custom_pagination_wapper li a.page-link {
+    border-radius: 4px;
+    color: #313131;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+  }
+  .user-table tbody tr:last-child{
+    border-bottom: transparent;
+  }
+  
+  .user-table thead tr th {
+    font-size: 15px;
+    font-weight: 600;
+      color: #323232;
+      padding: 10px 15px;
+  }
+  .page-link.active, .active > .page-link{
+    background: #F41A1A !important;
+    border: unset !important;
+  }
+  
+  /* .cmn_gray_btn{
+    background-color: #333;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+  } */
+  button.cmn_darkgray_btn{
+   background-color:  #303030
+  }
+  .modal-header{
+    border-bottom:unset !important;
+  }
+  .cmn_border{
+    border:1px solid  #E2E6EB
+  }
+  .language-card {
+    margin-top: 40px;
+    background-color: white;
+   
+    cursor: pointer;
+      padding: 20px;
+      border-radius: 15px;
+     
+      
+  }
+  
+  
+  
+  .user-table tbody tr td{
+    color: #696969;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Open Sans", sans-serif;
+  }
+  div:where(.swal2-container).swal2-center>.swal2-popup{
+    border-radius: 20px;
+  }
+  div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus {
+    box-shadow: unset !important;
+  }
+  .user-table tbody tr td:nth-child(2){
+    font-weight: 600;
+    color:#2E2E2E;
+    font-size: 15px;
+  
+  }
+  
+  
+  .invite_btn{
+    border: unset;
+      border-radius: 4px;
+      color: white;
+      padding: 6px 16px;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+     background-color: #F41A1A;
+  }
+  .resend_btn{
+    background-color: #ECEAF3;
+    color: 
+    #6C6F75;
+  }
+  div:where(.swal2-container) h2:where(.swal2-title) {
+    font-size: 27px !important;
+  }
+  
+  
+  .swal-button-custom button.swal-button.swal-button--confirm {
+    background: #ce2128;
+  }
+  
+  
+  
+  
+  
+  
+  /* series css */
+  /* Modal */
+  .series-modal-overlay {
+    height: 100vh;
+    background-color: #fff6f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .series-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+  
+  }
+  
+  .modal-header {
+    text-align: center;
+    margin-bottom: 0px;
+  }
+  
+  /* .modal-body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scrollbar-width: none;
+  } */
+  
+  /* Series Options */
+  .series-option {
+  
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  
+  .close-series{
+    float: right;
+  }
+  
+  
+  .chooselanguage-heading-sidebar{
+    position: fixed;
+    height: 20px;
+    width: 400px;
+    background-color: #0056b3;
+    color: white;
+    font-size: large;
+  
+  }
+  
+  /* *******  HEADINGS OF CREATE TEST FOR SERIES */
+  .headings{
+    display: flex;
+    margin-left: 25%;
+  }
+  
+  .create-series-heading{
+    /* background-color: #0056b3; */
+    width: 1000px;
+  }
+  
+  
+  
+  
+  
+  
+  .series-outer-box{
+    background-color:#fff6f4;
+      color: #333 !important;
+     
+  }
+  .series-outer-box-pending{
+    border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8f8c8c;
+      border: 1px solid #ddd;
+      padding: 10px;
+  
+  
+  }
+  
+  
+  /* ****************** EDIT QUESTIONS */
+  
+  
+  
+  
+  .heading-objective-active{
+    color: #FF3030;
+  
+  }
+  .heading-objective_tab{
+      font-weight: 600;
+      font-size: 25px;
+      margin-top: 14px;
+      cursor: pointer;
+  
+  }
+  .heading-objective{
+    color: #6C6F75;
+  
+  
+  }
+  .question-wrapper {
+    box-shadow: 2px 2px 12px #dbd3d3;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    background: white;
+  }
+  .correct_ans_outer select{
+    min-width: 84px;
+    padding: 3px;
+  }
+  .outer-edit-question-div{
+    width: 85%;
+    margin-left: 15%;
+    height: 550px;
+    /* background-color: #0056b3; */
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+  
+  
+  
+  
+  /* .testbox-textarea-logical-edit{
+    padding: 10px;
+    width: 95%;
+    height: 40px;
+    background-color: pink;
+    margin-top: 20px;
+  } */
+  
+  .back-btn svg{
+    font-size: 22px;
+  }
+  
+  
+  /* *************\  SERIES HEADING */
+  .sub-obj-log-heading{
+    display: flex;
+   gap: 3rem;
+  }
+  
+  
+  /* ****** QUESTIONNARIE  PAGE ****** */
+  
+  .generatelink-btn{
+    height: 35px;
+    width: 150px;
+    /* margin-top: 12px; */
+    border: none;
+    font-size: medium;
+    border-radius: 4px;
+    background-color: #ff5733;
+    color: white;
+    cursor: pointer;
+    margin-left:22%;
+  }
+  
+  .questionnarie-heading{
+    display: flex;
+    margin-left: 30%;
+  }
+  
+  
+  .form-group input{
+    padding: 8px 20px !important;
+    border: 1px solid #D9D9D9;
+    border-radius: 11px;
+    color: #8D8D8E;
+  
+  }
+  
+  
+  
+  
+  /* *************  CANDIDATES DETAILS  */
+  .wrapper {
+    background: #f7f2f2;
+    margin-left: 250px;
+    padding:20px 30px;
+    height: 100%;
+    min-height: 100vh;
+  }
+  .cmn_radius{
+    border-radius: 20px;
+  }
+  .actions_wrapper{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .modal_label{
+    color: #212B2E;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    }
+  /* ******* Table  */
+  .table-responsive {
+  
+    background: white;
+    scrollbar-width: thin;
+  }
+  
+  .user-table th, .user-table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .user-table .fa-user {
+    margin: 0 auto;
+    display: block;
+  }
+  
+  
+  /* //******************   REGISTER CANDIDATE MODAL******** */
+  
+  
+  
+  
+  
+  
+  
+  
+  .app-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-form h2{
+  
+      font-size: 22px;
+      margin-top: 20px;
+      border-radius: 6px;
+   
+  }
+  .submit-button{
+    background: #00A34B;
+      color: white;
+      min-width: 120px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+     font-weight: 500;
+  }
+  
+  
+  
+  
+  .question-text {
+    margin-bottom: 12px;
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 0px;
+    line-height: 31px;
+  }
+  
+  .question-text-inner{
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 19px;
+    text-align: left;
+  }
+  .options-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+  }
+  
+  .option-label {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .open_eye{
+    position: absolute;
+    left: auto;
+    right: 16px;
+    top: 34px;
+    cursor: pointer;
+  }
+  .login_wrapper .open_eye{
+    top: 41px;
+  }
+  .option-input {
+    margin-right: 10px;
+  }
+  select.form-control {
+    appearance: auto !important;
+    padding: 8px 20px;
+      border-radius: 11px;
+      color: #8D8D8E;
+  }
+  .text-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 185px;
+    scrollbar-width: thin
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  .Interview_header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .timer_outer{
+    display: flex;
+    gap:10px;
+    font-size: 20px;
+    border: 1px solid #B8B8B8;
+    border-radius: 50px;
+    padding: 4px 14px;
+    color: #282A30;
+    font-weight: 600
+  }
+  .timer_outer svg{
+    color:#FF3030;
+  }
+  .interview-caution{
+      padding: 10px;
+      font-size: 18px;
+      margin-top: 20px;
+     
+  }
+  .interview-caution ol li {
+    line-height: 29px;
+    font-size: 18px;
+    font-family: "Open-sans" sans-serif;
+    color: #3C4649;
+    font-weight: 600;
+    margin-top: 7px;
+  }
+  .interview-caution h5{
+    font-size: 22px;
+  }
+  .Ultivic_Technologies_heading{
+  color: #4F4F4F;
+  font-weight: 700;
+  font-size: 20px;
+  font-family: "Open-Sans" sans-serif;
+  }
+  .regards{
+   color: #4F4F4F;
+   font-size: 16px;
+   font-weight: 400;
+   font-family: "Open-Sans" sans-serif;
+   text-align: end;
+  
+  }
+  .regards-message{
+    display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+  }
+  .regards-message h3{
+    padding: 40px;
+      border: 1px solid #F41A1A;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 8px;
+      line-height: 38px;
+      color: #282A30;
+    }
+  
+  .loader_outer_wrapper{
+    text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+  
+  .done-text p{
+    margin-bottom: 0px !important;
+  }
+  
+  .rejected-candidate {
+    color: red !important;
+    font-weight: 700;
+  }
+  
+  .selected-candidate {
+    color: green !important;
+    font-weight: 700;
+  }
+  
+  
+  .message{
+    text-align: left;
+    width: auto;
+  }
+  .focus-visible{
+    outline: none;
+  }
+  
+  
+  
+  #justify-tab-example{
+    font-weight: 700;
+  }
+  
+  .hr-question-outer{
+  
+    text-align: left;
+  }
+  
+  .hrQuestion-update-delete-btn{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 10px;
+  justify-content: end;
+  }
+  
+  button.hrQuestion-delete-btn{
+    border: 1px solid #464255;
+    color: #464255;
+  }
+  
+  
+  /* ************************ HR ROUND INTERVIEW  */
+  .wrapper-hr-round-caution{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: auto;
+    padding-top: 30px;
+    width: 91%;
+    min-height: 100vh;
+  }
+  
+  
+  
+  .reject-btn{
+    background: #FF3030;
+    color: white;
+    min-width: 120px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-weight: 500;
+  }
+  
+  
+  
+  .back-btn-outer{
+    text-align: left;
+    margin-bottom: 30px;
+      margin-top: 25px;
+  }
+  
+  
+  /* hr feedback ----------- */
+  .hr-feedback-filters-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    cursor: pointer;
+  }
+  
+  .status-icons div {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .status-selected {
+    background-color: #F7E3E3;
+    color: red;
+  }
+  
+  .status-icons img {
+    margin-right: 5px;
+  }
+  
+  
+  
+  
+  
+  
+  .selected {
+    background-color: #007bff; 
+    color: white; 
+  }
+  
+  .form-control:focus{
+    box-shadow: unset !important;
+  }
+  .DropdownItem:hover {
+    background-color: #0056b3; 
+    color: white; 
+  }
+  .btn-close{
+    opacity: 1 !important;
+  }
+  .cmn_cancel_btn{
+  background-color: #ECEAF3;
+  border: none;
+  color: #6C6F75;
+  font-weight: 600;
+  padding: 6px 22px;
+  border-radius: 10px;
+  }
+  .form-control:focus {
+    border-color: #F41A1A !important
+  }
+  .custom-text{
+    color:#191D23;
+    margin-top: 21px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "Open-Sans",sans-serif;
+    
+  }
+  .heading-objective_tab svg {
+    font-size: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .custom-title{
+    color: #212B2E !important;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+    font-size: 25px;
+    margin-top: 27px;
+    line-height: 34px;
+  }
+  .show_btn{
+    background: #ECEAF3;
+    border: 1px solid #4A4A4A;
+    color: #4A4A4A;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-family: "Open-Sans" sans-serif;
+  }
+  .swal-delete{
+    border-radius: 11px !important;
+    padding: 10px;
+    width: 108px;
+  }
+  .swal-cancel:hover{
+    background-image: unset !important;
+  }
+  .swal-cancel{
+    color: #6C6F75 !important;
+    border-radius: 11px !important;
+    padding: 10px;
+    width: 108px;
+  
+  }
+  .custom_deleteicon_outer{
+
+    display: flex;
+    justify-content: center;
+  }
+  .custom_deleteicon svg{
+    color: #FF5B5B;
+    text-align: center;
+    line-height: 31px;
+    font-size: 21px;
+    margin-top: 24px;
+  
+  }
+  .custom_deleteicon {
+    height: 100px;
+    width: 100px;
+    background: #FFF2F3;
+    border-radius: 50px;
+  
+    
+  }
+  .back_btn{
+    border: 1px solid #282A30 !important;
+      background: #F3EAEA !important;
+      color: #282A30;
+      font-weight: 600;
+      font-family: "Open-Sans", sans-serif;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 16px;
+  
+  }
+  .subjectic_question_heading{
+    position: relative;
+    margin-left: 46px;
+    margin-right: 2.5rem;
+  }
+  .subjectic_question_heading::before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 38%;
+      top: 50%;
+      left: -42%;
+    background: #6C6F75;
+  }
+  .subjectic_question_heading::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 38%;
+    top: 50%;
+    left: auto;
+    background: #6C6F75;
+    right: -82px;
+    
+  }
+  div#root {
+      background: #f7f2f2;
+  }
+  .subheading{
+    color: 
+    #2C2C2C;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "Montserrat", sans-serif;
+  }
+  .custom_checkicon_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    .custom_checkicon_outer {
+        height: 100px;
+        width: 100px;
+        background: #F3FFF2;
+        border-radius: 50px;
+    }
+    .custom_checkicon_outer svg{
+        color: #48b02b;
+        margin-top: 27px;
+    }
+    .edit_series_outer{
+      cursor: pointer;
+    }
+    .admin_outer{
+      padding: 0px;
+    }
+    .cmn_padding_outer{
+      padding: 20px 30px;
+  }
+ .darkGray_bg{
+    background-color: #555555;
+ }
+ .yellow_bg{
+  background-color: #f4a101;
+ }
+ .transparent_bg{
+  background: transparent;
+ }
+ .list_inner_item_outer li a.active_path {
+  color: #F41A1A;
 }
 
-.App-link {
-  color: #61dafb;
+/* nnn */
+.custom-select-wrapper {
+  position: relative;
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.custom-select {
+ 
+  appearance: none !important; /* Remove default select styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+}
+
+/* Hide the default arrow */
+.custom-select:focus {
+  outline: none;
+}
+
+/* Position the React icon */
+.dropdown-icon {
+  position: absolute;
+  color: #D9D9D9;
+  top: 50%;
+  right: 10px; /* Adjust position to fit icon */
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensure the icon does not interfere with dropdown clicks */
+  font-size: 20px; /* Adjust icon size */
+}
+
+select.custom-select.form-control {
+  appearance: none !important;
+}
+  @media screen and (min-width:1900px){
+    .heading{
+       font-size: 26px;;
+    }
+    .modal_label{
+      font-size: 16px;
   }
-  to {
-    transform: rotate(360deg);
+  .question-text {
+    font-size: 25px;
   }
+  .user-table thead tr th {
+    font-size: 18px;
+  }
+  .regards-message h3{
+    font-size: 27px;
+    line-height: 50px;
+  }
+  }
+  @media screen and (min-width:1499px){
+   
+    .heading-objective_tab {
+      padding: 15px;
+    }
+   
+  }
+  @media screen and (max-width:1440px){
+    .question-text{
+      font-size:18px;;
+    }
+  }
+  @media screen and (max-width:1280px){
+    div:where(.swal2-container) h2:where(.swal2-title) {
+      font-size: 24px !important;
+    }
+    .custom-title {
+      font-size: 22px;
+      }
+      .cmn_heading{
+        font-size: 23px;
+      }
+      .heading-objective_tab {
+        font-size: 21px;
+      }
+      .heading{
+        font-size: 21px;
+      }
+      .regards-message h3 {
+        font-size: 18px;
+      }
+      .question-text {
+        font-size: 19px;
+      }
+     
+  }
+    @media screen and (max-width:1024px){
+      .heading{
+        font-size: 21px;
+      }
+      .internal-testbox{
+        flex-wrap: wrap;
+      }
+      .heading-check-result {
+        font-size: 17px;
+      }
+    }
+    @media screen and (max-width:991px){
+      
+      .heading {
+        font-size: 19px;
+    }
+     .sub-obj-log-heading{
+      display: block;
+     }
+     .subjectic_question_heading::after{
+      content: unset;
+     }
+     .subjectic_question_heading::before{
+      content: unset;
+     }
+     .subjectic_question_heading{
+      margin-right: 0px;
+      margin-left: 0px;
+     }
+      /* .series-modal {
+        margin-left: 4rem;
+      } */
+      
+      .swal-title {
+        font-size: 23px;
+      }
+      h2#swal2-title {
+        font-size: 18px !important;
+    }
+    button.swal2-confirm.swal2-styled.swal2-default-outline {
+      font-size: 14px;
+  }
+  button.swal2-cancel.swal2-styled.swal2-default-outline {
+    font-size: 14px;
+  }
+    
+    div#swal2-html-container {
+        font-size: 15px;
+    }
+    .heading-objective_tab {
+      font-size: 18px;
+  }
+  .question-form h2 {
+    font-size: 22px;
+  }
+    }
+  
+  @media (max-width: 767px) {
+  .cmn_padding_outer {
+   padding: 20px 10px;
+  }
+
+    .custom-title {
+      font-size: 18px;
+      line-height: 28px;
+  }
+  
+  .custom_deleteicon svg {
+  
+    height: 30px;
+    width: 30px;
+    margin-top: 20px;
+  }
+    .form-group input {
+      padding: 6px 20px !important;
+    }
+   
+    
+    .register-btn{
+      margin-top: 20px;
+    }
+    
+    .text-input {
+      font-size: 14px;
+    }
+    .interview-caution ol li {
+      font-size: 14px;
+    }
+    .interview-caution  h5{
+      font-size: 18px;
+    }
+    
+    .Interview_header{
+      align-items: start;
+    }
+   
+    .swal-title {
+      font-size: 17px;
+    }
+    .question-form h2 {
+      font-size: 18px;
+    }
+   
+    .option-label {
+      font-size: 13px;
+    }
+    .question-text {
+      font-size: 14px;
+      line-height: 23px;
+    }
+    .regards-message h3 {
+      font-size: 14px;
+          padding: 20px;
+          line-height: 26px;
+          margin: 0px 20px;
+    }
+    .correct_ans_outer select{
+      width: 100%;
+      margin-top: 11px;
+   
+    }
+    div.correct_ans_outer {
+      display: block !important;
+    }
+    .series-modal{
+      margin-left: 0px;
+      width: 100%;
+    }
+    .series-outer-box-pending{
+      flex-wrap: wrap;
+    }
+    .add_question_wrapper, .sub-obj-log-heading{
+      display: block;
+    }
+   
+    .cmn_text {
+      font-size: 16px;
+    }
+    
+    
+  
+    .internal-testbox{
+      display: block
+    }
+    
+  
+    
+   
+    .user-table thead tr th {
+      font-size: 14px;
+    }
+    .heading{
+      font-size: 19px !important;
+    }
+    .status-icons{
+      flex-wrap: wrap;
+    }
+    .hr-feedback-filters-wrapper{
+      display: block;
+    }
+  
+    .wrapper{
+   
+        margin-left: 65px;
+      padding: 20px 10px;
+    }
+    .custom_deleteicon {
+      height: 70px;
+      width: 70px;
+    }
+    .cmn_heading {
+      font-size: 22px;
+    }
+    div.teamhub {
+      display: block !important;
+  }
+  .cmn_cancel_btn {
+    font-size: 14px;
+  }
+  .red_btn {
+    min-width: 91px;
+   
+    font-size: 14px;
+  }
+  .user-table tbody tr td:nth-child(2) {
+    font-size: 13px;
+  }
+  .user-table tbody tr td {
+    font-size: 12px;
+  }
+  .show_btn {
+    font-size: 13px;
+  }
+  .reject-btn {
+    min-width: 98px;
+    padding: 7px 18px;
+    font-size: 14px;
+  }
+  .submit-button{
+    min-width: 98px;
+    padding: 7px 18px;
+    font-size: 14px;
+  }
+  .Ultivic_Technologies_heading {
+    font-size: 16px;
+  }
+  .series-option{
+    font-size: 14px;
+  }
+  }
+  
+
+
+
+
+  
+
+@media screen and (max-width:767px) {
+    .chat_inner_text{
+        width: 100%;
+    }
+    .header_wrapper{
+        flex-wrap: wrap;
+    }
 }

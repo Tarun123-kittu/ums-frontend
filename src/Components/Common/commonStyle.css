@@ -1,0 +1,55 @@
+.custom-select-wrapper {
+    position: relative;
+ 
+  }
+  
+  .custom-select {
+   
+    appearance: none !important; /* Remove default select styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+  }
+  
+  /* Hide the default arrow */
+  .custom-select:focus {
+    outline: none;
+  }
+  
+  /* Position the React icon */
+  .dropdown-icon {
+    position: absolute;
+    color: #D9D9D9;
+    top: 50%;
+    right: 10px; /* Adjust position to fit icon */
+    transform: translateY(-50%);
+    pointer-events: none; /* Ensure the icon does not interfere with dropdown clicks */
+    font-size: 16px; /* Adjust icon size */
+  }
+  
+  select.custom-select.form-control {
+    appearance: none !important;
+}
+.input_form_group{
+  display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+.input_form_group input{
+  margin-top: 0px;
+    padding: 2px 10px !important;
+    border: unset;
+}
+.symbol_wrapper {
+  border-left: 1px solid #ddd;
+  padding: 7px 14px;
+  color: #798495;
+}
+
+@media screen and (max-width:767px) {
+  select.custom-select.form-control {
+    font-size: 13px;
+  }
+}

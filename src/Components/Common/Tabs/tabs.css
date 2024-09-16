@@ -1,0 +1,45 @@
+.icon_wrapper{
+    position: relative;
+}
+.icon_content_outer{
+   visibility: hidden;
+}
+.icon_wrapper:hover .icon_content_outer{
+visibility: visible;
+}
+
+.user_info_detail_list{
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0px 2px 25px 0px #e7e3e3;
+    border: 1px solid #ddd;
+}
+.user_info_detail_list li h3{
+    font-weight: 600;
+    font-size: 13px;
+}
+.user_info_detail_list li h4{
+    font-weight: 400;
+    font-size: 13px;
+}
+.user_info_detail_list li{
+    padding-top: 10px;
+}
+.triangle-wrapper {
+    position: relative;
+  }
+  
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 15px solid white;
+    position: absolute; 
+    z-index: 999; 
+    left: 48%;
+    top: 7px
+
+  }
+  

@@ -1,0 +1,136 @@
+.inerterview_lead_tabs{
+    padding: 20px;
+    position: relative;
+}
+
+.interview_lead_tabs_outer li.nav-item {
+    background: #ECEAF3;
+    margin: 0px 10px 0px 0px;
+    border-radius: 7px 7px 0px 0px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.interview_lead_tabs_outer.nav-tabs {
+    border-bottom: unset;
+}
+.addnew_btn_outer{
+    position: absolute;
+    left: auto;
+    right: 10px;
+    top: 12px;
+}
+
+.interview_lead_tabs_outer li.nav-item button {
+    color: #696969;
+}
+
+
+.interview_lead_tabs_outer .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: #9E0302 !important;
+    color: white !important;
+    font-size: 15px;
+    font-weight: 600;
+}
+.hr_question_heading{
+    font-size: 15px;
+    color: #696969;
+    font-weight: 500;
+    line-height: 20px;
+}
+.hr_interview_question_round_content{
+    padding: 20px;
+}
+.view_question_list_outer svg{
+    font-size: 26px;
+    color: #b3b8c1;
+    cursor: pointer;
+}
+.view_question_list_outer{
+    justify-content: space-between;
+}
+
+.view_question_list_outer h4{
+    font-size: 15px;
+    color: #687281;
+}
+.view_question_list_outer{
+    border: 1px solid #E2E6EB;
+    border-radius: 5px;
+    padding: 8px 10px;
+}
+.answer_heading{
+    color: #282A30;
+    font-size: 28px;
+    text-align: center;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #DEDEDE;
+}
+.question_container{
+    border: 1px solid #E2E6EB;
+    border-radius: 8px;
+    padding: 16px;
+    height: 100%;
+
+}
+.question_inner_content h3{
+    color: #4E4B50;
+    font-size: 20px;
+    font-weight: 600;
+}
+.question_inner_content h4{
+    color: #282A30;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 20px;
+}
+.question_list_wrapper{
+    list-style: none;
+    padding: 0px;
+}
+.question_list_wrapper li{
+    color: #6C6F75;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 8px;
+}
+h4.correct_ans_heading {
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+}
+.incorrect_btn{
+color:#FF3030;
+border:1px solid #FF3030
+}
+.check_btn{
+color:#464255;
+border:1px solid #464255
+}
+.correct_btn{
+ color:#00A39D;
+ border:1px solid #00A39D
+}
+.check_btn_wrapper button{
+border-radius: 6px;
+padding: 6px 20px;
+font-size: 14px;
+font-weight: 600;
+}
+
+@media screen and (max-width:991px){
+.addnew_btn_outer{
+position: unset;
+}
+.interview_lead_tabs_outer li.nav-item {
+margin-top: 10px;
+
+}
+}
+@media screen and (max-width:767px){
+    .hr_question_heading{
+        font-size: 13px;
+
+    }
+}

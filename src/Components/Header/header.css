@@ -1,0 +1,37 @@
+.count_heading{
+    height: 21px;
+    width: 20px;
+    color: white;
+    background: red;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 20px;
+    position: absolute;
+    left: auto;
+    right: -2px;
+    top: -4px;
+
+}
+.header_container{
+    display: flex;
+    gap: 21px;
+    align-items: center;
+}
+.message_outer{
+    position: relative;
+}
+.cmn_icon_size{
+    font-size: 31px;
+}
+
+.cmn_large_font{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+@media screen and (max-width:767px){
+    .cmn_large_font {
+        font-size: 20px;
+    }
+}

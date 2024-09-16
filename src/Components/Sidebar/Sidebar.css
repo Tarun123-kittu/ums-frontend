@@ -1,0 +1,110 @@
+.cmn_width .sidebar_content{
+    display: unset;
+    }
+    .cmn_width{
+        width: 65px !important;
+        padding: 0px;
+      }
+    .cmn_width .sidebar-button{
+      padding: 12px 6px;
+    }
+    .list_inner_item_outer{
+      list-style: none;
+      border-left: 1px solid gray;
+      margin-left: 3.5rem;
+      padding-left: 11px;
+    }
+    .list_inner_item_outer li{
+      font-size: 16px;
+      line-height: 31px;
+    }
+    .sidebar-button {
+
+          /* margin: 5px 10px; */
+          padding: 12px 16px;
+          background-color: transparent;
+          border: none;
+          color: #333;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          cursor: pointer;
+          /* border-radius: 11px; */
+        
+      }
+      .sidebar-button  a{
+        text-decoration: unset;
+      }
+      .list_inner_item_outer li a{
+        text-decoration: unset;
+        color: #333333;
+      }
+      .cmn_width .sidebar-button {
+        margin: 5px 10px;
+      }
+      .sidebar-button:hover {
+        color: #c22e0a;
+        background-color: #F7E3E3;
+      }
+      .sidebar-button.active-pathname .sidebar_content h4{
+        color: #F41A1A;
+      }
+      .active-pathname{
+        background-color: #F7E3E3;
+      }
+      
+      .sidebar-button.active-pathname .sidebar_content svg{
+        color: #F41A1A;
+      }
+      .sidebar_content{
+        font-size: 13px;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          margin-bottom: 0px;
+          color: #333333;
+          font-weight: 400;
+          font-family: "Inter", sans-serif;
+      }
+      .sidebar_content svg{
+        color: #333333;
+        font-size: 19px;
+      }
+      .sidebar_logo_outer img{
+        object-fit: contain;
+      }
+      .sidebar_logo_outer h3{
+        font-family: "Open Sans", sans-serif;
+        font-size: 14px;
+        color: #555555;
+        font-weight: 600;
+        line-height: 20.83px;
+        letter-spacing: 2px;
+      }
+      .bar{
+        text-align: right;
+       
+        font-size: 22px;
+        cursor: pointer;
+        padding-top: 30px;
+      }
+      .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        transition: all ease 0.4s;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background-color: #FFFFFF;
+        /* border-top-right-radius: 40px; */
+        box-shadow: 1px 0px 5px 0px #dbd7d7;
+      
+      }      
+
+       @media screen and (max-width:1400px){
+       
+       }

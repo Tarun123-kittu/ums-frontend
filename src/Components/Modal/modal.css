@@ -1,0 +1,61 @@
+.logout_title{
+    font-size: 14px;
+    color: #191D23;
+    line-height: 22px;
+}
+
+.logout_modal_wrapper .modal-body {
+    padding-top: 0px !important;
+}
+.logout_modal_wrapper .modal-content {
+    border-radius: 20px !important;
+}
+.logout_modal_wrapper .modal-footer{
+   padding-top: 0px !important; 
+}
+.logout_heading{
+    font-weight: 600;
+    color: #212B2E;
+    margin-top: 26px;
+    font-size: 26px;
+    font-family: "Open-Sans" ,sans-serif;
+}
+.logout_wrapper{
+    height: 70px;
+    width: 70px;
+    border-radius: 50px;
+    background: #FFF2F3;
+    text-align: center;
+}
+.logout_wrapper svg{
+    color: #F41A1A;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit_ques_wrapper .modal-content{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+.edit_ques_wrapper .modal-body {
+    padding: 11px 20px 18px  !important;
+}
+.custom-modal-backdrop {
+    background-color: transparent; 
+    opacity: 0 !important; 
+  }
+  .edit_ques_wrapper .modal-footer {
+    padding: 0px 20px 18px;
+}
+ @media screen  and (max-width:1280px) {
+    .logout_heading{
+        font-size: 23px;
+        margin-top: 23px;
+    }
+ }
+ @media screen  and (max-width:767px) {
+    .logout_heading{
+        font-size: 20px;
+    }
+ }

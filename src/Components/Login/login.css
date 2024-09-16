@@ -1,0 +1,179 @@
+
+
+.form-control:focus{
+    box-shadow: unset !important;
+}
+button.login-button {
+    width: 100%;
+    border: none;
+    padding: 8px;
+    color: white;
+    background: #FF3030;
+    border-radius: 11px;
+    font-size: 17px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+}
+
+.form-group input::placeholder {
+  color:"#6C6F75";
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+
+}
+
+.forget_password{
+    text-align: right;
+    text-decoration: none;
+}
+.login_inner_content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+ 
+}
+a:-webkit-any-link:focus-visible {
+    outline: 0px !important;
+}
+
+.form-group label {
+    color: #282A30;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat", sans-serif;
+}
+a.login_text {
+    color: #ce2128;
+}
+.login_bg_outer{
+    background-image: url("../assets/loginbg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+}
+.ultiviclogo_img{
+    height: 192px;
+    width: 340px;
+    object-fit: contain;
+}
+.login_container{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+.login_bg_container{
+    height: 100vh;
+    text-align: center; 
+}
+.login_bg_outer p{
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+    line-height: 28.6px;
+}
+.login_wrapper h3{
+    font-size: 42px;
+    color: #555555;
+    font-weight: 600;
+    line-height:70.2px;
+    margin-bottom: 0px;
+    padding-top: 14px;
+}
+.ultivic_logo{
+    height: 52px;
+    width: 200px;
+    object-fit: contain;
+}
+
+@media screen and (min-width:1900px){
+    .ultivic_logo{
+        height: 57px;
+        width: 228.41px;
+    }
+    .login_wrapper h3{
+        font-size: 54px;
+    }
+    .login_bg_outer p{
+        font-size: 22px;
+    }
+    .ultiviclogo_img{
+        height: 200px;
+        width: 400px;
+    }
+    .form-group label {
+      
+        font-size: 20px;
+    }
+    button.login-button {
+        font-size: 20px;
+    }
+    
+}
+@media screen and (max-width:1280px){
+    .ultiviclogo_img {
+        height: 182px;
+    width: 300px;
+    }
+    .login_wrapper h3 {
+        font-size: 38px;
+    }
+    .form-group label {
+        font-size: 15px;
+    }
+    .ultivic_logo {
+        height: 46px;
+        width: 185px;
+    }
+}
+ @media screen and (max-width:991px) {
+    .ultivic_logo {
+        height: 40px;
+        width: 157px;
+    }
+    .login_wrapper h3 {
+        font-size: 28px;
+    }
+    .login_bg_outer p {
+        font-size: 15px;
+    }
+    .ultiviclogo_img {
+        height: 156px;
+        width: 250px;
+    }
+ }
+  @media screen and (max-width:767px){
+    .login_wrapper h3 {
+        font-size: 22px;
+    }
+    .ultivic_logo {
+        height: 50px;
+        width: 110px;
+    }
+    .login_inner_content{
+    height: 100%;
+    display: block;
+    padding: 20px;
+    }
+    .login_bg_container{
+        transform: translate(-50%, -50%);
+    position: relative;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    }
+    .login_bg_outer{
+        height: 390px;
+    }
+    .login_bg_outer p {
+        font-size: 14px;
+        line-height: 22.6px;
+    }
+    .ultiviclogo_img {
+        height: 133px;
+        width: 200px;
+    }
+  }
