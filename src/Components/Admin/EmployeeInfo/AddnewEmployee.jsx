@@ -6,6 +6,12 @@ import Notification from "../Notification/Notification";
 import InputField from "../../Common/InputField";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import "react-datepicker/dist/react-datepicker.css";
 import {
   create_new_user,
   clear_create_user_state,
@@ -53,30 +59,42 @@ const AddnewEmployee = () => {
 
   useEffect(() => {
     if (is_user_created?.isSuccess) {
-      alert(is_user_created?.message?.message);
+      toast.success(is_user_created?.message?.message, {
+        autoClose: 2000,
+      });
       navigate("/employee");
       dispatch(clear_create_user_state());
     }
     if (is_user_created?.isError) {
-      alert(is_user_created?.error?.message);
+      toast.error(is_user_created?.error?.message, {
+        autoClose: 2000,
+      });
       dispatch(clear_create_user_state());
     }
   }, [is_user_created]);
 
   const handleInputChange = (name, value) => {
+    const dateFields = ["increment_date", "dob", "doj"];
+    const newValue =
+      dateFields.includes(name) && value
+        ? moment(value).format("DD/MM/YYYY")
+        : value;
+
     setField_date({
       ...field_data,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
   const handleSaveUser = (e) => {
     e.preventDefault();
-    const hasEmptyFields = Object.values(field_data).some(
-      (value) => value.trim() === ""
-    );
+
+    const hasEmptyFields = Object.values(field_data).some((value) => {
+      return typeof value === "string" ? value.trim() === "" : false;
+    });
+
     if (hasEmptyFields) {
-      alert("Fields cant be empty");
+      alert("Fields can't be empty");
     } else {
       dispatch(create_new_user({ field_data }));
     }
@@ -213,16 +231,20 @@ const AddnewEmployee = () => {
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <InputField
-                    labelname={"Increment Date"}
-                    placeholder={"04-02-2022"}
-                    classname={"new_employee_form_group"}
-                    type={"text"}
-                    value={field_data.increment_date}
-                    onChange={(e) =>
-                      handleInputChange("increment_date", e.target.value)
-                    }
-                  />
+                  <div className="form-group new_employee_form_group">
+                    <label htmlFor="">Increment Date</label>
+                    <DatePicker
+                      selected={field_data.increment_date}
+                      onChange={(date) =>
+                        handleInputChange("increment_date", date)
+                      }
+                      placeholderText="DD/MM/YYYY"
+                      onKeyDown={(e) => e.preventDefault()}
+                      dateFormat="dd/MM/yyyy"
+                      showYearDropdown
+                      scrollableYearDropdown
+                    />
+                  </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
@@ -241,25 +263,35 @@ const AddnewEmployee = () => {
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <InputField
-                    labelname={"DOB"}
-                    placeholder={"01-02-1998"}
-                    classname={"new_employee_form_group"}
-                    type={"text"}
-                    value={field_data.dob}
-                    onChange={(e) => handleInputChange("dob", e.target.value)}
-                  />
+                  <div className="form-group new_employee_form_group ">
+                    <label htmlFor="">Date of Birth</label>
+                    <DatePicker
+                      selected={field_data.dob}
+                      onChange={(date) => handleInputChange("dob", date)}
+                      placeholderText="DD/MM/YYYY"
+                      onKeyDown={(e) => e.preventDefault()}
+                      dateFormat="dd/MM/yyyy"
+                      showYearDropdown
+                      scrollableYearDropdown
+                      maxDate={new Date()}
+                    />
+                  </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <InputField
-                    labelname={" DOJ"}
-                    placeholder={"01-02-2023"}
-                    span={true}
-                    classname={"new_employee_form_group"}
-                    type={"text"}
-                    value={field_data.doj}
-                    onChange={(e) => handleInputChange("doj", e.target.value)}
-                  />
+                  <div className="form-group new_employee_form_group ">
+                    <label htmlFor="">Date of joining </label>
+                    <DatePicker
+                      classname={"form-control"}
+                      selected={field_data.doj}
+                      onChange={(date) => handleInputChange("doj", date)}
+                      placeholderText="DD/MM/YYYY"
+                      onKeyDown={(e) => e.preventDefault()}
+                      dateFormat="dd/MM/yyyy"
+                      showYearDropdown
+                      scrollableYearDropdown
+                      maxDate={new Date()}
+                    />
+                  </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -475,6 +507,7 @@ const AddnewEmployee = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };

@@ -7,6 +7,8 @@ import { FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_all_users_user } from "../../../utils/redux/userSlice/getAllUserSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
 import {
   clear_create_delete_state,
@@ -17,18 +19,34 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
+  const [user_length, setUser_length] = useState(false);
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
-      alert(is_user_deleted?.message?.message);
+      toast.success(is_user_deleted?.message?.message, {
+        autoClose: 2000,
+      });
       dispatch(get_all_users_user());
       dispatch(clear_create_delete_state());
     }
     if (is_user_deleted?.isError) {
-      alert(is_user_deleted?.error?.message);
+      toast.error(is_user_deleted?.error?.message, {
+        autoClose: 2000,
+      });
       dispatch(clear_create_delete_state());
     }
-  }, [is_user_deleted]);
+  }, [is_user_deleted, dispatch]);
+
+  useEffect(() => {
+    if (all_users_list?.data?.length === 0) {
+      setUser_length(true);
+    }
+    if (all_users_list?.isError) {
+      toast.error(all_users_list?.error?.message, {
+        autoClose: 2000,
+      });
+    }
+  }, [all_users_list]);
 
   useEffect(() => {
     dispatch(get_all_users_user());
@@ -90,40 +108,43 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {all_users_list?.data?.data?.map((user, index) => {
-              return (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{user?.name}</td>
-                  <td>{user?.email}</td>
-                  <td>{user?.mobile}</td>
-                  <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
-                  <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
-                  <td>{user?.position}</td>
-                  <td>{user?.status}</td>
-                  <td>
-                    <div className="d-flex gap-2">
-                      <div className="cmn_action_outer dark_gray_bg">
-                        <FaEye />
-                      </div>
-                      <div className="cmn_action_outer red_bg">
-                        <RiDeleteBin6Line
-                          onClick={() =>
-                            dispatch(delete_user({ id: user?.id }))
-                          }
-                        />
-                      </div>
-                      <div className="cmn_action_outer redbrown_bg">
-                        <FaClock />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {user_length
+              ? "No user Found"
+              : all_users_list?.data?.data?.map((user, index) => {
+                  return (
+                    <tr key={user?._id}>
+                      <td>{index + 1}</td>
+                      <td>{user?.name}</td>
+                      <td>{user?.email}</td>
+                      <td>{user?.mobile}</td>
+                      <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
+                      <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
+                      <td>{user?.position}</td>
+                      <td>{user?.status}</td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          <div className="cmn_action_outer dark_gray_bg">
+                            <FaEye />
+                          </div>
+                          <div className="cmn_action_outer red_bg">
+                            <RiDeleteBin6Line
+                              onClick={() =>
+                                dispatch(delete_user({ id: user?.id }))
+                              }
+                            />
+                          </div>
+                          <div className="cmn_action_outer redbrown_bg">
+                            <FaClock />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 };
