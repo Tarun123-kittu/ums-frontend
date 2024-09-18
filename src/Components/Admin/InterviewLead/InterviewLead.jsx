@@ -28,7 +28,7 @@ const obj = [
     <div className='cmn_padding_outer'>
       <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}/>
     <div className='employee_list_outer '>
-    <div className='d-flex employee_container align-items-center mt-3'>
+    <div className='d-flex employee_container align-items-end mt-3'>
 
     <div className='new_employee_form_group employee_wrapper'>
 
@@ -100,7 +100,7 @@ const obj = [
 
     </div>
     </div>
-{showDeleteModal && <CommonDeleteModal show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. "}/>}
+{showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. "}/>}
     </section>
  
   )

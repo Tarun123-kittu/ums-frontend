@@ -4,6 +4,7 @@ import { useAppContext } from '../../Utils/appContecxt'
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import InputField from '../../Common/InputField'
 import Notification from '../Notification/Notification'
+import Select from '../../Common/Select'
 
 const AddNewPerson = () => {
     const obj = [
@@ -11,6 +12,19 @@ const AddNewPerson = () => {
         { name: "Add Person", path: "/addPerson" }
       ];
 const {show}=useAppContext()
+const options=[
+    { value: "Male", option: "Male" },
+    { value: "Female", option: "Female" },
+]
+const selectProfileData=[
+    { value: "ui/ux", option: "ui/ux" },
+    { value: "Backend Developer", option: "Backend Developer" },
+]
+const selectStateData=[
+    { value: "Punjab", option: "Punjab" },
+    { value: "Delhi", option: "Delhi" },
+]
+
   return (
     <section>
     <Sidebar/>
@@ -33,6 +47,9 @@ const {show}=useAppContext()
                 <InputField labelname={"Email Address *"} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
+                <Select options={options} labelname={"Gender"} placeholder={"Select Gender"} labelClass={"new_employee_form_group"}/>
+            </div>
+            <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"DOB *"} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
@@ -42,14 +59,18 @@ const {show}=useAppContext()
                 <InputField labelname={"Current salary (optional)"} placeholder={"Enter Current salary"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Expected salary (optional)"} placeholder={"Expected salary"} classname={"new_employee_form_group"} type={"text"}/>
+                <InputField labelname={"Expected salary (optional)"} placeholder={"Enter Expected salary"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Full Name *"} placeholder={"Enter Full Name"} classname={"new_employee_form_group"} type={"text"}/>
+                <Select labelname={"Profile *"} options={selectProfileData} placeholder={"Select Profile"} classname={"new_employee_form_group"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Last Company (optional)"} placeholder={"Enter Last Company"} classname={"new_employee_form_group"} type={"text"}/>
+                <InputField labelname={"Last Company (optional)"} placeholder={"Enter Last Company Name"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
+            <div className='col-lg-4 col-sm-12 col-md-6'>
+                <Select labelname={"Select State *"} options={selectStateData} placeholder={"Select State"} classname={"new_employee_form_group"}/>
+            </div>
+           
         </div>
         <div className='form-group new_employee_form_group'>
             <label>House Address *</label>

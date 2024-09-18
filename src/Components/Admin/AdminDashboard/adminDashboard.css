@@ -4,9 +4,10 @@
     width: 100%;
 }
 .info_content h3{
-    width: 50%;
+    width: 25%;
     padding: 10px;
     border-left: 1px solid #ddd;
+    overflow-wrap: break-word;
 }
 .info_content h3:first-child{
     border-left: unset;

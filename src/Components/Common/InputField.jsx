@@ -1,21 +1,50 @@
-import React from 'react'
+import React from "react";
 
-const InputField = ({classname,labelname,placeholder,type,span=false,isRequred,symbol}) => {
+const InputField = ({
+  classname,
+  labelname,
+  placeholder,
+  type,
+  span = false,
+  isRequired,
+  symbol,
+  name,
+  value,
+  onChange,
+}) => {
   return (
     <div className={`form-group ${classname}`}>
-      {span===true? <label>{labelname} <span style={{color:"red"}}>*</span></label>:
-      <label>{labelname}</label>
-      }
-   {isRequred ? 
-  <div className='input_form_group'>
-       <input type={type} placeholder={placeholder} className='form-control'/>
-        <div className='symbol_wrapper'>{symbol}</div>
-  </div> :
-     <input type={type} placeholder={placeholder} className='form-control'/>
-
-  }
+      {span === true ? (
+        <label>
+          {labelname} <span style={{ color: "red" }}>*</span>
+        </label>
+      ) : (
+        <label>{labelname}</label>
+      )}
+      {isRequired ? (
+        <div className="input_form_group">
+          <input
+            type={type}
+            placeholder={placeholder}
+            className="form-control"
+            name={name}
+            value={value}
+            onChange={onChange}
+          />
+          <div className="symbol_wrapper">{symbol}</div>
+        </div>
+      ) : (
+        <input
+          type={type}
+          placeholder={placeholder}
+          className="form-control"
+          name={name}
+          value={value}
+          onChange={onChange}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default InputField
+export default InputField;

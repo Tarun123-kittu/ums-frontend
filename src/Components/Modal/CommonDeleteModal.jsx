@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 
-const CommonDeleteModal = ({show,setShow,heading_text,paragraph_text}) => {
+const CommonDeleteModal = ({show,setShow,heading_text,paragraph_text,dialogClassname}) => {
 
 const handleClose=()=>{
     setShow(false)
@@ -15,6 +15,7 @@ const handleClose=()=>{
     centered
     onHide={handleClose}
     className="custom_modal_container"
+    dialogClassName={dialogClassname}
 >
     <Modal.Header closeButton>
       

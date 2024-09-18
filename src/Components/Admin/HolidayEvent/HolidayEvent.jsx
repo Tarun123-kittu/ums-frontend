@@ -34,7 +34,7 @@ const yearObj=[
   
     <div className='cmn_padding_outer'>
      
-    <div className='d-flex employee_container align-items-center mt-3'>
+    <div className='d-flex employee_container align-items-end mt-3'>
       <div className='employee_wrapper'>
     <Select labelname={"Holiday"}  labelClass={""} options={yearObj}/>
 

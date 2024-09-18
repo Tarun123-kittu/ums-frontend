@@ -73,7 +73,7 @@ const {show} = useAppContext()
    </div>
 
 <div className='employee_wrapper text-end serach_add_outer'>
-  <button className='cmn_Button_style'>Search</button>
+  <button className='cmn_Button_style'>Get Report</button>
 
 </div>
 </div>
@@ -86,8 +86,8 @@ const {show} = useAppContext()
         <tr>
             <th>#</th>
             <th>Employee </th>
-            <th>Taken Leave</th>
-            <th>Paid Leave</th>
+            <th>Taken Leaves</th>
+            <th>Paid Leaves</th>
             <th>Action</th>
           </tr>
          

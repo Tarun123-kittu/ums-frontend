@@ -24,7 +24,7 @@ const {show} = useAppContext()
         <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
         />
 
-<div className='d-flex employee_container align-items-center mt-3'>
+<div className='d-flex employee_container align-items-end mt-3'>
 
 <div className='new_employee_form_group employee_wrapper'>
 

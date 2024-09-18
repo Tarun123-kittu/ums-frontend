@@ -6,11 +6,16 @@ import TechInterviewQuestionModal from '../../Modal/TechInterviewQuesModal';
 import insight_icon from "../../assets/insight.svg"
 import "./tabs.css"
 import { useNavigate } from 'react-router-dom';
+import CustomSelectComp from '../CustomSelectComp';
 
 function TabComp() {
 const[showHrQuestionModal,setShowHrQuestionModal]=useState(false)
 const[showTechInterviewQuesModal,setShowTechInterviewQuesModal]=useState(false)
-
+const resultData=[
+  { value: 'Selected', label: 'Selected' },
+  { value: 'Rejected', label: 'Rejected' },
+  { value: 'On Hold', label: 'On Hold'},
+]
 const navigate=useNavigate("/viewQuestionlist")
   return (
 <div>
@@ -142,10 +147,10 @@ const navigate=useNavigate("/viewQuestionlist")
             <td style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>{navigate("/viewQuestionlist")}}>3.6 View Questions List</td>
             <td>
               <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
+              {/* <select className='form-control'>
                 <option>On Hold</option>
-              </select>
-
+              </select> */}
+              <CustomSelectComp optionsData={resultData}/>
               </div>
             </td>
             <td>
@@ -186,9 +191,7 @@ const navigate=useNavigate("/viewQuestionlist")
             <td style={{textDecoration:"underline"}}> View Questions List</td>
             <td>
               <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
-                <option>On Hold</option>
-              </select>
+              <CustomSelectComp optionsData={resultData}/>
 
               </div>
             </td>

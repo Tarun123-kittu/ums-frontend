@@ -4,6 +4,7 @@ import { RiDeleteBinLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import InputField from '../Common/InputField'
 import { FaSort } from 'react-icons/fa'
+import CustomSelectComp from '../Common/CustomSelectComp'
 
 const TechInterviewQuestionModal = ({show,setShow}) => {
 const navigate=useNavigate()
@@ -15,6 +16,12 @@ const startHandler=()=>{
     setShow(false)
     navigate("/hrInterViewQuestion")
 }
+
+const seriesData = [
+  { value: 'Design Principles', label: 'Design Principles' },
+  { value: 'UI/UX Designer', label: 'UI/UX Designer' },
+
+];
   return (
     <div>    
  <Modal
@@ -34,13 +41,11 @@ const startHandler=()=>{
     <InputField placeholder={"Designer"} labelname={"Profile"} type={"text"} classname={"new_employee_form_group"}/>
     <div className='new_employee_form_group form-group'>
     <label>Test Series</label>
-    <div class="custom-select-wrapper ">
-    <select class="custom-select form-control" placeholder="Select Test Series">
-    <option>Node.jsx</option>
-    <option>UI/UX Designer</option>
-    </select>
-    <FaSort className='dropdown-icon '/>
-  </div>
+    <div>
+      <CustomSelectComp optionsData={seriesData}/>
+    </div>
+
+ 
     </div>
         </Modal.Body>
         <Modal.Footer>

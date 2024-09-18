@@ -15,7 +15,7 @@ import LogoutModal from "../Modal/LogoutModal";
 import ChangePassword from "../Modal/ChangePassword";
 import { AiOutlineDashboard } from "react-icons/ai";
 
-import menuitems from "./MenuItem";
+import menuitems, { developerMenuitems, hrMenuitems } from "./MenuItem";
 const Sidebar = () => {
  
   
@@ -58,7 +58,7 @@ const[showLogoutModal,setShowLogoutModal]=useState(false)
        
     
        <div className="mt-4">
-        
+        {/* admin sidebar */}
       {menuitems.map((data, i) => {
         const isActive = path.pathname === data?.pathname;
 
@@ -88,7 +88,6 @@ const[showLogoutModal,setShowLogoutModal]=useState(false)
                     expanded === i ? <MdOutlineKeyboardArrowUp onClick={()=>{handleToggle(i)}}/>: <MdOutlineKeyboardArrowDown/>}
                 </div>
                 
-             
                
               </>
             ) : (
@@ -127,6 +126,63 @@ const[showLogoutModal,setShowLogoutModal]=useState(false)
           </>
         );
       })}
+      {/* admin-sidebar end */}
+       {/* hr sidebar start */}
+      {/* {hrMenuitems.map((data,i)=>{
+          const isActive = path.pathname === data?.pathname;
+        return(
+          <div
+            key={i} 
+            className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
+          >
+              <Link to={data?.pathname}>
+                <div className="sidebar_content ">
+                  <img
+                    src={data?.icon}
+                    alt={data?.name}
+                    height="18px"
+                    width="18px"
+                    className={isActive ? "filterClass" : ""}
+                  />
+                  <h4 className={show ? 'd-none' : ''}>
+                    {data?.name}
+                  </h4>
+                </div>
+              </Link>
+
+            </div>
+        )
+      })} */}
+      {/* hr sidebar end */}
+      
+     {/* developer siebar */}
+          {/* {developerMenuitems.map((data,i)=>{
+            const isActive = path.pathname === data?.pathname;
+          return(
+            <div
+              key={i} 
+              className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
+            >
+                <Link to={data?.pathname}>
+                  <div className="sidebar_content ">
+                    <img
+                      src={data?.icon}
+                      alt={data?.name}
+                      height="18px"
+                      width="18px"
+                      className={isActive ? "filterClass" : ""}
+                    />
+                    <h4 className={show ? 'd-none' : ''}>
+                      {data?.name}
+                    </h4>
+                  </div>
+                </Link>
+  
+              </div>
+          )
+        })} */}
+        {/* developer sidebar end  */}
+      
     </div>
     
       </div>

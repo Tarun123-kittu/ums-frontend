@@ -65,4 +65,40 @@ pathname:"/logout"
 },
 ]
 
+export const hrMenuitems=[
+{
+icon:calendar,
+name:"Candidates",
+pathname:"/candidates"
+},
+{
+icon:employeeIcon,
+name:"Team Hub",
+pathname:"/teamHub"
+},
+{
+  icon:calendar,
+  name:"HR Screening",
+  pathname:"/hrScreening"
+  },
+{
+icon:calendar,
+name:"HR Round",
+pathname:"/hrRound"
+},
+]
+
+export const developerMenuitems=[
+  {
+  icon:calendar,
+  name:"Questionnaire",
+  pathname:"/questionnaire"
+  },
+  {
+  icon:employeeIcon,
+  name:"Candidate Results",
+  pathname:"/candidateResults"
+  },
+   
+  ]
 export default menuitems

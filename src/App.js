@@ -19,6 +19,7 @@ import RoleAndPermission from './Components/Admin/RoleAndPermission/RoleAndPermi
 import EditRoleAndPermission from './Components/Admin/RoleAndPermission/EditRoleAndPermission';
 import ViewQuestionList from './Components/Admin/InterviewLead/ViewquestionList';
 import QuestionAnswerSheet from './Components/Admin/InterviewLead/QuestionAnswerSheet';
+import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
 
 function App() {
   
@@ -44,6 +45,7 @@ function App() {
        <Route path='/editRole' element={< EditRoleAndPermission/>}/>
        <Route path='/viewQuestionlist' element={< ViewQuestionList/>}/>
        <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet/>}/>
+       <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo/>}/>
        
     </Routes>
     </BrowserRouter>
