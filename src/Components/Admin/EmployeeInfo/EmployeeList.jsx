@@ -5,6 +5,7 @@ import { FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaClock } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import PaginationComp from '../../Pagination/Pagination';
 const EmployeeList = () => {
 
 const navigate=useNavigate()
@@ -24,14 +25,7 @@ const navigate=useNavigate()
 <FaSort className='dropdown-icon '/>
 </div>
 </div>
-        {/* <h4 className='inter_fontfamily'>Status</h4>
-       <div className='serach_user_outer'>
-        <input placeholder='Active'/>
-       <div className='sort_outer d-flex '>
-       <TiArrowSortedUp />
-       <FaSortDown />
-       </div>
-       </div> */}
+
     </div>
    
 
@@ -92,7 +86,11 @@ const navigate=useNavigate()
           </tr>
         </tbody>
       </table>
+
     </div>
+    <div className='mt-4'>
+<PaginationComp/>
+</div>
     </div>
   )
 }

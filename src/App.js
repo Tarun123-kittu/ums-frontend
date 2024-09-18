@@ -25,8 +25,8 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path='/login' element={<Login/>}/>
-       <Route path='/' element={<Candidate/>}/>
+      <Route path='/' element={<Login/>}/>
+       <Route path='/candidate' element={<Candidate/>}/>
        <Route path='/adminDashboard' element={<AdminDashboard/>}/>
        <Route path='/employee' element={<EmployeeInfo/>}/>
        <Route path='/addemployee' element={<AddnewEmployee/>}/>

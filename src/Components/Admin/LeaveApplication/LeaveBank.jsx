@@ -6,6 +6,7 @@ import Sidebar from '../../Sidebar/Sidebar';
 import { useAppContext } from '../../Utils/appContecxt';
 import { FaSortDown } from 'react-icons/fa';
 import { TiArrowSortedUp } from 'react-icons/ti';
+import Select from '../../Common/Select';
 
 const LeaveBank = () => {
     const obj = [
@@ -13,7 +14,36 @@ const LeaveBank = () => {
         { name: "Leave Bank", path: "/leaveBank" },
         
       ];
+      const yearObj=[
+        {
+          value:2022,
+          option:2022
+        },
+        {
+          value:2023,
+          option:2023
+        },
+        {
+          value:2024,
+          option:2023
+        },
+        ]
+        const monthDataObj=[
 
+          { value: "01", option: "January" },
+          { value: "02", option: "February" },
+          { value: "03", option: "March" },
+          { value: "04", option: "April" },
+          { value: "05", option: "May" },
+          { value: "06", option: "June" },
+          { value: "07", option: "July" },
+          { value: "08", option: "August" },
+          { value: "09", option: "September" },
+          { value: "10", option: "October" },
+          { value: "11", option: "November" },
+          { value: "12", option: "December" },
+      
+      ]
 const {show} = useAppContext()
 
   return (
@@ -26,47 +56,31 @@ const {show} = useAppContext()
         <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
         />
 
-<div className='d-flex employee_container align-items-center mt-3'>
+<div className='d-flex employee_container align-items-end mt-3'>
 
 <div className='employee_wrapper'>
-    <h4 className='inter_fontfamily'>Select Financial Year</h4>
-   <div className='serach_user_outer'>
-    <input placeholder='2024'/>
-   <div className='sort_outer d-flex '>
-   <TiArrowSortedUp />
-   <FaSortDown />
-   </div>
-   </div>
+<Select labelname={"Select Financial Year"}  labelClass={""} options={yearObj}/>
+
 </div>
 
 <div className='employee_wrapper'>
-    <h4 className='inter_fontfamily'>Month</h4>
-   <div className='serach_user_outer'>
-    <input placeholder='2024'/>
-   <div className='sort_outer d-flex '>
-   <TiArrowSortedUp />
-   <FaSortDown />
-   </div>
-   </div>
+<Select labelname={"Months"}  labelClass={""} options={monthDataObj}/>
+
 </div>
 <div className='employee_wrapper'>
-    <h4 className='inter_fontfamily'>Year</h4>
-   <div className='serach_user_outer'>
-    <input placeholder='2024'/>
-   <div className='sort_outer d-flex '>
-   <TiArrowSortedUp />
-   <FaSortDown />
-   </div>
-   </div>
-</div>
+<Select labelname={"Years"}  labelClass={""} options={yearObj}/>
 
-<div className='employee_wrapper text-center serach_add_outer'>
+   </div>
+
+<div className='employee_wrapper text-end serach_add_outer'>
   <button className='cmn_Button_style'>Search</button>
 
 </div>
-
 </div>
-        <div className='table-responsive mt-3 transparent_bg'>
+
+
+
+<div className='table-responsive mt-3 transparent_bg'>
       <table className='employee_detail_table'>
         <thead>
         <tr>
@@ -91,8 +105,8 @@ const {show} = useAppContext()
           </tr>
         </tbody>
         </table>
-         </div>
-      </div>
+</div>
+</div>
 
     
 
