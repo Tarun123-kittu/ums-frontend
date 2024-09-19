@@ -21,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("ums_token")) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }, []);
 
@@ -39,7 +39,7 @@ const Login = () => {
       toast.success("Logged in Successfully", { autoClose: 2000 });
       localStorage.setItem("ums_token", login_details?.data?.token);
       localStorage.setItem("roles", login_details?.data?.roles);
-      navigate("/");
+      navigate("/dashboard");
       dispatch(clear_login_state());
     }
     if (login_details?.isError) {

@@ -14,6 +14,7 @@ import {
   clear_create_delete_state,
   delete_user,
 } from "../../../utils/redux/userSlice/deleteUserSlice";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ const EmployeeList = () => {
   const [searchStatus, setSearchStatus] = useState("");
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  console.log(user_all_permissions, "from employee list");
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
@@ -49,6 +54,10 @@ const EmployeeList = () => {
   useEffect(() => {
     dispatch(get_all_users_user());
   }, []);
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
   return (
     <div className="employee_list_outer">
       <div className="d-flex employee_container align-items-end mt-3">
@@ -122,30 +131,9 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-          <tr>
-              <td>1</td>
-              <td>John</td>
-              <td>John@gmail.com</td>
-              <td>3435454</td>
-              <td>12/08/24</td>
-              <td>12/06/1900</td>
-              <td>UI/UX</td>
-              <td>On Probition</td>
-              <td>
-                <div className="d-flex gap-2 justify-content-center employee_delete_Edit_outer">
-                      <div className="cmn_action_outer dark_gray_bg">
-                        <FaEye onClick={()=>navigate("/viewEmployeeInfo")}/>
-                      </div>
-                      <div className="cmn_action_outer red_bg">
-                        <RiDeleteBin6Line
-                        />
-                      </div>
-                     
-                    </div></td>
-            </tr>
             {all_users_list?.data?.data?.map((user, index) => {
               return (
-                <tr key={user?._id}>
+                <tr key={user?.id}>
                   <td>{index + 1}</td>
                   <td>{user?.name}</td>
                   <td>{user?.email}</td>
@@ -160,6 +148,11 @@ const EmployeeList = () => {
                         className="cmn_action_outer dark_gray_bg"
                         style={{ cursor: "pointer" }}
                         title="view details"
+                        onClick={() =>
+                          navigate("/viewEmployeeInfo", {
+                            state: { user_id: user?.id },
+                          })
+                        }
                       >
                         <FaEye />
                       </div>

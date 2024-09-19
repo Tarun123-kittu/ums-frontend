@@ -1,4 +1,4 @@
-import { BrowserRouter, Route,Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login from "../src/Components/Login/Login"
 import Candidate from './Components/Candidate/Candidate';
@@ -24,34 +24,34 @@ import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
 import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
 
 function App() {
-  
+
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<Login/>}/>
-       <Route path='/candidate' element={<Candidate/>}/>
-       <Route path='/adminDashboard' element={<AdminDashboard/>}/>
-       <Route path='/employee' element={<EmployeeInfo/>}/>
-       <Route path='/addemployee' element={<AddnewEmployee/>}/>
-       <Route path='/todayAttendence' element={<TodayAttendence/>}/>
-       <Route path='incompleteAttendence' element={<IncompleteAttendence/>}/>
-       <Route path='/attendenceReport' element={<AttendenceReport/>}/>
-       <Route path='/leaveRequest' element={<LeaveRequest/>}/>
-       <Route path='/leaveBank' element={<LeaveBank/>}/>
-       <Route path='/leaveReport' element={<LeaveReport/>}/>
-       <Route path='/holiday' element={< HolidayEvent/>}/>
-       <Route path='/interviewLead' element={< InterviewLead/>}/>
-       <Route path='/addNewPerson' element={< AddNewPerson/>}/>
-       <Route path='/hrInterViewQuestion' element={< HrInterViewQuestion/>}/>
-       <Route path='/rolePermission' element={< RoleAndPermission/>}/>
-       <Route path='/editRole' element={< EditRoleAndPermission/>}/>
-       <Route path='/viewQuestionlist' element={< ViewQuestionList/>}/>
-       <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet/>}/>
-       <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo/>}/>
-       <Route path='/editEmployee' element={< EditEmployeeInfo/>}/>
-       <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/>
-      
-    </Routes>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/candidate' element={<Candidate />} />
+        <Route path='/dashboard' element={<AdminDashboard />} />
+        <Route path='/employee' element={<EmployeeInfo />} />
+        <Route path='/addemployee' element={<AddnewEmployee />} />
+        <Route path='/todayAttendence' element={<TodayAttendence />} />
+        <Route path='incompleteAttendence' element={<IncompleteAttendence />} />
+        <Route path='/attendenceReport' element={<AttendenceReport />} />
+        <Route path='/leaveRequest' element={<LeaveRequest />} />
+        <Route path='/leaveBank' element={<LeaveBank />} />
+        <Route path='/leaveReport' element={<LeaveReport />} />
+        <Route path='/holiday' element={< HolidayEvent />} />
+        <Route path='/interviewLead' element={< InterviewLead />} />
+        <Route path='/addNewPerson' element={< AddNewPerson />} />
+        <Route path='/hrInterViewQuestion' element={< HrInterViewQuestion />} />
+        <Route path='/rolePermission' element={< RoleAndPermission />} />
+        <Route path='/editRole' element={< EditRoleAndPermission />} />
+        <Route path='/viewQuestionlist' element={< ViewQuestionList />} />
+        <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet />} />
+        <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
+        <Route path='/editEmployee' element={< EditEmployeeInfo />} />
+        {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
+
+      </Routes>
     </BrowserRouter>
   );
 }
