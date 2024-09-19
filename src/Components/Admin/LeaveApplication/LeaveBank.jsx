@@ -10,7 +10,7 @@ import Select from '../../Common/Select';
 
 const LeaveBank = () => {
     const obj = [
-        { name: "Leave Application", path: "/leaveApplication" },
+        { name: "Leave Application", path: "" },
         { name: "Leave Bank", path: "/leaveBank" },
         
       ];

@@ -7,7 +7,7 @@ import { FaSort } from 'react-icons/fa';
 
 const LeaveReport = () => {
     const obj = [
-        { name: "Leave Application", path: "/leaveApplication" },
+        { name: "Leave Application", path: "" },
         { name: "Leave Report", path: "/leaveReport" },
         
       ];

@@ -8,7 +8,7 @@ import { useAppContext } from '../../Utils/appContecxt';
 
 const LeaveRequest = () => {
     const obj = [
-        { name: "Leave Application", path: "/leaveApplication" },
+        { name: "Leave Application", path: "" },
         { name: "Leave Request", path: "/leaveRequest" },
         
       ];

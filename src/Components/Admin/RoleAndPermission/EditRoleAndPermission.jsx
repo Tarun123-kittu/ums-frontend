@@ -18,6 +18,7 @@ const EditRoleAndPermission = () => {
 const {show}=useAppContext()
 const [showDeleteModal,setShowDeleteModal]=useState(false)
 const [showAssignModal,setShowAssignModal]=useState(false)
+const [showDeleteRoleModal,setShowDeleteRoleModal]=useState(false)
 
   return (
     <section className='role_permission_outer'>
@@ -37,7 +38,7 @@ const [showAssignModal,setShowAssignModal]=useState(false)
         <input className='form-control'/>
      </div>
      <div>
-     <button className='cmn_Button_style cmn_darkgray_btn'>Delete</button>
+     <button className='cmn_Button_style cmn_darkgray_btn' onClick={()=>{setShowDeleteRoleModal(true)}}>Delete</button>
 
      </div>
 
@@ -93,7 +94,7 @@ const [showAssignModal,setShowAssignModal]=useState(false)
             <ul className='role_list'>
               <li className='d-flex '>
                 <h3 className='cmn_text_heading'>Pritpale Sohi</h3>
-                <RiDeleteBin6Line onClick={()=>{setShowDeleteModal(true)}}/>
+                <RiDeleteBin6Line className='cursor_pointer' onClick={()=>{setShowDeleteModal(true)}}/>
               </li>
             </ul>
           </div>
@@ -104,6 +105,7 @@ const [showAssignModal,setShowAssignModal]=useState(false)
     </div>
     {showAssignModal && <AssignNameModal show={showAssignModal} setShow={ setShowAssignModal}/>}
 {showDeleteModal && <CommonDeleteModal show={showDeleteModal} setShow={setShowDeleteModal} heading_text={"Are you sure to delete the Pritpal Sohi form Test Series"} paragraph_text={""}/>}
+ {showDeleteRoleModal && <CommonDeleteModal className={""} show={showDeleteRoleModal} setShow={setShowDeleteRoleModal} heading_text={"Are you sure to delete Test Series role"} paragraph_text={""}/>}
   </div>
   </section>
   )

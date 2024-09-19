@@ -4,7 +4,6 @@ import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import InputField from "../../Common/InputField";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -12,17 +11,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./employee.css"
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  create_new_user,
-  clear_create_user_state,
-} from "../../../utils/redux/userSlice/createNewUserSlice";
+
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
-  const navigate = useNavigate();
+
   const obj = [
     { name: "Employees", path: "/employee" },
-    { name: "Add New Employees", path: "/addemployee" },
+    { name: "Information aAout Dinesh Kumar", path: "/viewEmployeeInfo" },
+    { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
   ];
   const [field_data, setField_date] = useState({
     username: "",
@@ -412,21 +409,7 @@ const EditEmployeeInfo = () => {
                     onChange={(e) =>{}}
                   />
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
-                    <label> Role</label>
-                    <select
-                      className="form-control"
-                      value={field_data.role}
-                      onChange={(e) =>
-                        handleInputChange("role", e.target.value)
-                      }
-                    >
-                      <option>Select Role</option>
-                      <option value={"admin"}>ADMIN</option>
-                    </select>
-                  </div>
-                </div>
+                
               </div>
 
               <div className="form-group new_employee_form_group">

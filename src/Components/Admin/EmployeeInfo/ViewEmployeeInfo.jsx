@@ -33,7 +33,7 @@ const ViewEmployeeInfo = () => {
   }, []);
 
   const obj = [
-    { name: "Attendence Report", path: "/attendenceReport" },
+    { name: "Employee", path: "/employee" },
     { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
   ];
 
@@ -121,10 +121,7 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">
                   {user_details?.increment_date}
                 </h3>
-                <h3 className="heading_style">Increment Date</h3>
-                <h3 className="heading_style">
-                  {user_details?.increment_date}
-                </h3>
+                
               </li>
               <li className="d-flex align-items-center info_content">
                 <h3 className="heading_style">Address</h3>

@@ -6,12 +6,13 @@ import Notification from '../Notification/Notification'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
 import "./rolePermission.css"
+import { useNavigate } from 'react-router-dom'
+
 const RoleAndPermission = () => {
-    const obj = [
-        { name: "Role & Permissions", path: "/rolePermission" },
-  
-      ];
+const obj = [{name: "Role & Permissions", path: "/rolePermission" }];
+
 const {show}=useAppContext()
+const navigate =useNavigate()
 
   return (
     <section className='role_permission_outer'>
@@ -46,8 +47,8 @@ const {show}=useAppContext()
             <td> 
                 <div className='d-flex gap-2'>
              
-                <div className='cmn_action_outer yellow_bg'><FiEdit /></div>
-                <div className='cmn_action_outer red_bg'><RiDeleteBin6Line /></div>
+                <div className='cmn_action_outer yellow_bg cursor_pointer' onClick={()=>{navigate("/editRole")}}><FiEdit /></div>
+                <div className='cmn_action_outer red_bg cursor_pointer' ><RiDeleteBin6Line /></div>
               </div></td>
         
          
