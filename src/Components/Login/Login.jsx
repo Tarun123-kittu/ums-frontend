@@ -47,6 +47,7 @@ const Login = () => {
       dispatch(clear_login_state());
     }
   }, [login_details]);
+
   return (
     <div className="login_container">
       <div className="row">

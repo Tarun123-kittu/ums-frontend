@@ -17,6 +17,8 @@ import {
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchName, setSearchName] = useState("");
+  const [searchStatus, setSearchStatus] = useState("");
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
 
@@ -54,7 +56,12 @@ const EmployeeList = () => {
           <div className="new_employee_form_group">
             <label className="">Status</label>
             <div class="custom-select-wrapper">
-              <select class="custom-select form-control" placeholder="Active">
+              <select
+                class="custom-select form-control"
+                placeholder="Active"
+                value={searchStatus}
+                onChange={(e) => setSearchStatus(e.target.value)}
+              >
                 <option>Active</option>
               </select>
               <FaSort className="dropdown-icon " />
@@ -69,8 +76,19 @@ const EmployeeList = () => {
               <select
                 class="custom-select form-control"
                 placeholder="Search Employee"
+                value={searchName}
+                onChange={(e) => {
+                  setSearchName(e.target.value);
+                }}
               >
                 <option>Search Employee</option>
+                {all_users_list?.data?.data?.map((user, i) => {
+                  return (
+                    <option key={i} value={user?.name}>
+                      {user?.name}
+                    </option>
+                  );
+                })}
               </select>
               <FaSort className="dropdown-icon " />
             </div>
@@ -117,18 +135,23 @@ const EmployeeList = () => {
                   <td>{user?.status}</td>
                   <td>
                     <div className="d-flex gap-2">
-                      <div className="cmn_action_outer dark_gray_bg">
+                      <div
+                        className="cmn_action_outer dark_gray_bg"
+                        style={{ cursor: "pointer" }}
+                        title="view details"
+                      >
                         <FaEye />
                       </div>
-                      <div className="cmn_action_outer red_bg">
+                      <div
+                        className="cmn_action_outer red_bg"
+                        style={{ cursor: "pointer" }}
+                        title="delete user"
+                      >
                         <RiDeleteBin6Line
                           onClick={() =>
                             dispatch(delete_user({ id: user?.id }))
                           }
                         />
-                      </div>
-                      <div className="cmn_action_outer redbrown_bg">
-                        <FaClock />
                       </div>
                     </div>
                   </td>
