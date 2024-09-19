@@ -100,6 +100,12 @@ const AddnewEmployee = () => {
     }
   };
 
+  const getMaxDate = () => {
+    const today = new Date();
+    const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
+    return nextYear;
+  };
+
   return (
     <section className="add_new_emp_container">
       <Sidebar />
@@ -234,7 +240,11 @@ const AddnewEmployee = () => {
                   <div className="form-group new_employee_form_group">
                     <label htmlFor="">Increment Date</label>
                     <DatePicker
-                      selected={field_data.increment_date}
+                      selected={
+                        field_data.increment_date
+                          ? new Date(field_data.increment_date)
+                          : null
+                      }
                       onChange={(date) =>
                         handleInputChange("increment_date", date)
                       }
@@ -243,6 +253,7 @@ const AddnewEmployee = () => {
                       dateFormat="dd/MM/yyyy"
                       showYearDropdown
                       scrollableYearDropdown
+                      maxDate={getMaxDate()}
                     />
                   </div>
                 </div>

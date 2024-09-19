@@ -19,7 +19,6 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
-  const [user_length, setUser_length] = useState(false);
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
@@ -38,9 +37,6 @@ const EmployeeList = () => {
   }, [is_user_deleted, dispatch]);
 
   useEffect(() => {
-    if (all_users_list?.data?.length === 0) {
-      setUser_length(true);
-    }
     if (all_users_list?.isError) {
       toast.error(all_users_list?.error?.message, {
         autoClose: 2000,
@@ -108,37 +104,37 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {user_length
-              ? "No user Found"
-              : all_users_list?.data?.data?.map((user, index) => {
-                  return (
-                    <tr key={user?._id}>
-                      <td>{index + 1}</td>
-                      <td>{user?.name}</td>
-                      <td>{user?.email}</td>
-                      <td>{user?.mobile}</td>
-                      <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
-                      <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
-                      <td>{user?.position}</td>
-                      <td>{user?.status}</td>
-                      <td>
-                        <div className="d-flex gap-2">
-                          <div className="cmn_action_outer dark_gray_bg">
-                            <FaEye onClick={()=>navigate("/viewEmployeeInfo")}/>
-                          </div>
-                          <div className="cmn_action_outer red_bg">
-                            <RiDeleteBin6Line
-                              onClick={() =>
-                                dispatch(delete_user({ id: user?.id }))
-                              }
-                            />
-                          </div>
-                         
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+            {all_users_list?.data?.data?.map((user, index) => {
+              return (
+                <tr key={user?._id}>
+                  <td>{index + 1}</td>
+                  <td>{user?.name}</td>
+                  <td>{user?.email}</td>
+                  <td>{user?.mobile}</td>
+                  <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
+                  <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
+                  <td>{user?.position}</td>
+                  <td>{user?.status}</td>
+                  <td>
+                    <div className="d-flex gap-2">
+                      <div className="cmn_action_outer dark_gray_bg">
+                        <FaEye />
+                      </div>
+                      <div className="cmn_action_outer red_bg">
+                        <RiDeleteBin6Line
+                          onClick={() =>
+                            dispatch(delete_user({ id: user?.id }))
+                          }
+                        />
+                      </div>
+                      <div className="cmn_action_outer redbrown_bg">
+                        <FaClock />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
