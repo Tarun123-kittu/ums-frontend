@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAppContext } from '../../Utils/appContecxt';
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp';
 import Notification from '../Notification/Notification';
@@ -8,10 +8,11 @@ const QuestionAnswerSheet = () => {
     const {show}=useAppContext()
 const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
-    { name: "Hr Round", path: "/hrRound" },
+    { name: "Technical Round", path: "" },
   
     
   ];
+ 
   return (
     <section className='Interviewlead_outer'>
     <Sidebar/>

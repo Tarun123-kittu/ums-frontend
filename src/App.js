@@ -22,6 +22,7 @@ import QuestionAnswerSheet from './Components/Admin/InterviewLead/QuestionAnswer
 import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
 import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
 import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
+import EditPerson from './Components/Admin/InterviewLead/EditPerson';
 
 function App() {
 
@@ -49,6 +50,8 @@ function App() {
         <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet />} />
         <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
         <Route path='/editEmployee' element={< EditEmployeeInfo />} />
+        <Route path='/editPerson' element={< EditPerson />} />
+        
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 
       </Routes>

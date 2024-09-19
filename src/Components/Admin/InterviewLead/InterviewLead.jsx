@@ -34,7 +34,7 @@ const obj = [
 
 <label className='inter_fontfamily'>Profile</label>
 <div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Financial Year">
+<select class="custom-select form-control" placeholder="Select Profile">
 
  <option  value="2022">java developer</option>
       

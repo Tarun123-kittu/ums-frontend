@@ -7,6 +7,10 @@ import Select, { components } from 'react-select';
 const CustomSelectComp = ({optionsData}) => {
 
     const customStyles = {
+      container: (provided) => ({
+        ...provided,
+        width: '100%', 
+      }),
         option: (provided, state) => ({
           ...provided,
           backgroundColor: state.isSelected ? '#9e0302' : state.isFocused ? '#f6f6f6' : '#f6f6f6', // Change the background color

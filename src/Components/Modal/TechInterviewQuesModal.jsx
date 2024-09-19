@@ -41,7 +41,7 @@ const seriesData = [
     <InputField placeholder={"Designer"} labelname={"Profile"} type={"text"} classname={"new_employee_form_group"}/>
     <div className='new_employee_form_group form-group'>
     <label>Test Series</label>
-    <div>
+    <div className='mt-3'>
       <CustomSelectComp optionsData={seriesData}/>
     </div>
 

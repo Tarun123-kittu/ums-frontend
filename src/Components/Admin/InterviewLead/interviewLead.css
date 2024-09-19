@@ -102,15 +102,18 @@ h4.correct_ans_heading {
 }
 .incorrect_btn{
 color:#FF3030;
-border:1px solid #FF3030
+border:1px solid #FF3030;
+background-color: #FDE5E5;
 }
 .check_btn{
 color:#464255;
-border:1px solid #464255
+border:1px solid #464255;
+background: #ECEAF3;
 }
 .correct_btn{
  color:#00A39D;
- border:1px solid #00A39D
+ border:1px solid #00A39D;
+ background-color: #DEF7EF;
 }
 .check_btn_wrapper button{
 border-radius: 6px;
