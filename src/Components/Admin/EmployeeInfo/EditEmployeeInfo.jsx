@@ -17,8 +17,7 @@ import {
   clear_create_user_state,
 } from "../../../utils/redux/userSlice/createNewUserSlice";
 
-const AddnewEmployee = () => {
-  const dispatch = useDispatch();
+const EditEmployeeInfo = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const obj = [
@@ -55,23 +54,8 @@ const AddnewEmployee = () => {
     password: "",
   });
 
-  const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
-  useEffect(() => {
-    if (is_user_created?.isSuccess) {
-      toast.success(is_user_created?.message?.message, {
-        autoClose: 2000,
-      });
-      navigate("/employee");
-      dispatch(clear_create_user_state());
-    }
-    if (is_user_created?.isError) {
-      toast.error(is_user_created?.error?.message, {
-        autoClose: 2000,
-      });
-      dispatch(clear_create_user_state());
-    }
-  }, [is_user_created]);
+
 
   const handleInputChange = (name, value) => {
     const dateFields = ["increment_date", "dob", "doj"];
@@ -86,25 +70,9 @@ const AddnewEmployee = () => {
     });
   };
 
-  const handleSaveUser = (e) => {
-    e.preventDefault();
+ 
 
-    const hasEmptyFields = Object.values(field_data).some((value) => {
-      return typeof value === "string" ? value.trim() === "" : false;
-    });
 
-    if (hasEmptyFields) {
-      alert("Fields can't be empty");
-    } else {
-      dispatch(create_new_user({ field_data }));
-    }
-  };
-
-  const getMaxDate = () => {
-    const today = new Date();
-    const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
-    return nextYear;
-  };
 
   return (
     <section className="add_new_emp_container">
@@ -151,10 +119,8 @@ const AddnewEmployee = () => {
                     placeholder={"Mobile of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.mobile}
-                    onChange={(e) =>
-                      handleInputChange("mobile", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -163,12 +129,8 @@ const AddnewEmployee = () => {
                     placeholder={"Relationship of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_relationship}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_relationship",
-                        e.target.value
-                      )
+                    value={""}
+                    onChange={(e) =>{}
                     }
                   />
                 </div>
@@ -178,13 +140,8 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency Contact Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_name}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_name",
-                        e.target.value
-                      )
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -193,10 +150,8 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency mobile no of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact}
-                    onChange={(e) =>
-                      handleInputChange("emergency_contact", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
 
@@ -206,10 +161,8 @@ const AddnewEmployee = () => {
                     placeholder={"Bank Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.bank_name}
-                    onChange={(e) =>
-                      handleInputChange("bank_name", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
 
@@ -219,10 +172,8 @@ const AddnewEmployee = () => {
                     placeholder={"Account Number"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.account_number}
-                    onChange={(e) =>
-                      handleInputChange("account_number", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
 
@@ -232,8 +183,8 @@ const AddnewEmployee = () => {
                     placeholder={"Bank IFCE Code"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ifsc}
-                    onChange={(e) => handleInputChange("ifsc", e.target.value)}
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -253,7 +204,7 @@ const AddnewEmployee = () => {
                       dateFormat="dd/MM/yyyy"
                       showYearDropdown
                       scrollableYearDropdown
-                      maxDate={getMaxDate()}
+                     
                     />
                   </div>
                 </div>
@@ -310,10 +261,8 @@ const AddnewEmployee = () => {
                     placeholder={"Skepe"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.skype_email}
-                    onChange={(e) =>
-                      handleInputChange("skype_email", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
 
@@ -323,10 +272,8 @@ const AddnewEmployee = () => {
                     placeholder={"Ultivic Email"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ultivic_email}
-                    onChange={(e) =>
-                      handleInputChange("ultivic_email", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -337,10 +284,8 @@ const AddnewEmployee = () => {
                     placeholder={"Salary"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.salary}
-                    onChange={(e) =>
-                      handleInputChange("salary", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -351,10 +296,8 @@ const AddnewEmployee = () => {
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.security}
-                    onChange={(e) =>
-                      handleInputChange("security", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -365,10 +308,8 @@ const AddnewEmployee = () => {
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.total_security}
-                    onChange={(e) =>
-                      handleInputChange("total_security", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -414,10 +355,8 @@ const AddnewEmployee = () => {
                     </label>
                     <select
                       className="form-control"
-                      value={field_data.department}
-                      onChange={(e) =>
-                        handleInputChange("department", e.target.value)
-                      }
+                      value={""}
+                      onChange={(e) =>{}}
                     >
                       <option>Select</option>
                       <option value={"mern"}>MERN</option>
@@ -449,10 +388,8 @@ const AddnewEmployee = () => {
                     placeholder={"Username"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.username}
-                    onChange={(e) =>
-                      handleInputChange("username", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -461,10 +398,8 @@ const AddnewEmployee = () => {
                     placeholder={"Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -473,10 +408,8 @@ const AddnewEmployee = () => {
                     placeholder={"Confirm Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.confirm_password}
-                    onChange={(e) =>
-                      handleInputChange("confirm_password", e.target.value)
-                    }
+                    value={""}
+                    onChange={(e) =>{}}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -497,24 +430,61 @@ const AddnewEmployee = () => {
               </div>
 
               <div className="form-group new_employee_form_group">
-                <label>Address</label>
+                <label>Address <span style={{ color: "red" }}>*</span></label>
                 <textarea
                   className="form-control mt-3"
                   placeholder="Address"
                   rows={5}
-                  value={field_data.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  value={""}
+                  onChange={(e) =>{}}
                 />
               </div>
-             
+              {/* edit user code */}
               <div className="text-end mt-3">
                 <button
-                  className="cmn_Button_style"
-                  onClick={(e) => handleSaveUser(e)}
+                  className="cmn_Button_style add_document_btn" 
+                
                 >
-                  Save
+                  Add Document
                 </button>
               </div>
+                <div className='table-responsive mt-4 transparent_bg'>
+           
+              <table className='employee_detail_table mt-3'>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Document Name</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                  
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <td>1</td>
+                      <td>Aadhar Card</td>
+                      <td>N/A</td>
+                      <td>
+                        <input type="checkbox"/>
+                      </td>
+                    
+                  
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="text-center mt-3">
+                <button
+                  className="cmn_Button_style"
+                  
+                >
+                  Add
+                </button>
+              </div>
+              {/* edit user code end*/}
+              
+          
             </form>
           </div>
         </div>
@@ -524,4 +494,4 @@ const AddnewEmployee = () => {
   );
 };
 
-export default AddnewEmployee;
+export default EditEmployeeInfo;

@@ -7,9 +7,25 @@ import { RiDeleteBin6Line } from 'react-icons/ri'
 import { TiArrowSortedUp } from 'react-icons/ti'
 import "./holiday.css"
 import AddEventModal from '../../Modal/AddEventModal'
+import Select from '../../Common/Select'
 const HolidayEvent = () => {
 const {show} = useAppContext()
 const [showEventModal,setShowEventModal]=useState(false)
+
+const yearObj=[
+{
+  value:2022,
+  option:2022
+},
+{
+  value:2023,
+  option:2023
+},
+{
+  value:2024,
+  option:2023
+},
+]
   return (
     <section className='holiday_event_wrapper'>
     <Sidebar/>
@@ -18,9 +34,13 @@ const [showEventModal,setShowEventModal]=useState(false)
   
     <div className='cmn_padding_outer'>
      
-    <div className='d-flex employee_container align-items-center mt-3'>
+    <div className='d-flex employee_container align-items-end mt-3'>
+      <div className='employee_wrapper'>
+    <Select labelname={"Holiday"}  labelClass={""} options={yearObj}/>
 
-<div className='employee_wrapper'>
+      </div>
+
+{/* <div className='employee_wrapper'>
     <h4 className='inter_fontfamily'>Happy Holidays</h4>
    <div className='serach_user_outer'>
     <input placeholder='2024'/>
@@ -29,7 +49,7 @@ const [showEventModal,setShowEventModal]=useState(false)
    <FaSortDown />
    </div>
    </div>
-</div>
+</div> */}
 
 
 

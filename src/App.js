@@ -19,14 +19,17 @@ import RoleAndPermission from './Components/Admin/RoleAndPermission/RoleAndPermi
 import EditRoleAndPermission from './Components/Admin/RoleAndPermission/EditRoleAndPermission';
 import ViewQuestionList from './Components/Admin/InterviewLead/ViewquestionList';
 import QuestionAnswerSheet from './Components/Admin/InterviewLead/QuestionAnswerSheet';
+import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
+import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
+import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
 
 function App() {
   
   return (
     <BrowserRouter>
     <Routes>
-      <Route path='/login' element={<Login/>}/>
-       <Route path='/' element={<Candidate/>}/>
+      <Route path='/' element={<Login/>}/>
+       <Route path='/candidate' element={<Candidate/>}/>
        <Route path='/adminDashboard' element={<AdminDashboard/>}/>
        <Route path='/employee' element={<EmployeeInfo/>}/>
        <Route path='/addemployee' element={<AddnewEmployee/>}/>
@@ -44,7 +47,10 @@ function App() {
        <Route path='/editRole' element={< EditRoleAndPermission/>}/>
        <Route path='/viewQuestionlist' element={< ViewQuestionList/>}/>
        <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet/>}/>
-       
+       <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo/>}/>
+       <Route path='/editEmployee' element={< EditEmployeeInfo/>}/>
+       <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/>
+      
     </Routes>
     </BrowserRouter>
   );

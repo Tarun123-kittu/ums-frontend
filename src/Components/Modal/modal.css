@@ -48,6 +48,9 @@
   .edit_ques_wrapper .modal-footer {
     padding: 0px 20px 18px;
 }
+.modal-dialog.custom_modal_width {
+    width: 430px;
+}
  @media screen  and (max-width:1280px) {
     .logout_heading{
         font-size: 23px;
@@ -57,5 +60,8 @@
  @media screen  and (max-width:767px) {
     .logout_heading{
         font-size: 20px;
+    }
+    .modal-dialog.custom_modal_width {
+        width: auto;
     }
  }

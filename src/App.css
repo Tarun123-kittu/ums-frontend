@@ -1,9 +1,4 @@
-.form-group input {
-    padding: 8px 20px !important;
-    border: 1px solid #D9D9D9;
-    border-radius: 11px;
-    color: #8D8D8E;
-}
+
 h1,h2,h3,h4,h5,h6,p{
     font-family: "Montserrat", sans-serif;
   }
@@ -14,12 +9,13 @@ h1,h2,h3,h4,h5,h6,p{
     line-height: 18.2px;
     font-family: "Montserrat", sans-serif;
 }
-.cmn_margin {
-    margin-left: 65px !important;
-}
+
 /* body {
 background-color: #f7f2f2 !important;
 } */
+ body{
+  overflow-x:hidden
+ }
 .react-datepicker-wrapper {
   width: 100%;
 }
@@ -177,7 +173,7 @@ h1,h2,h3,h4,h5,h6,p{
     color:  #212B2E!important;
     font-family: "Montserrat", sans-serif;
     font-size: 23px;
-    font-weight: 600 !important;
+    font-weight: 500 !important;
   
   }
   
@@ -426,9 +422,6 @@ h1,h2,h3,h4,h5,h6,p{
   
   }
   
-  
-  
-  
   .cmn_margin{
     margin-left: 65px !important;
   
@@ -491,12 +484,7 @@ h1,h2,h3,h4,h5,h6,p{
     border: unset !important;
   }
   
-  /* .cmn_gray_btn{
-    background-color: #333;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 16px;
-  } */
+
   button.cmn_darkgray_btn{
    background-color:  #303030
   }
@@ -509,15 +497,10 @@ h1,h2,h3,h4,h5,h6,p{
   .language-card {
     margin-top: 40px;
     background-color: white;
-   
     cursor: pointer;
       padding: 20px;
       border-radius: 15px;
-     
-      
   }
-  
-  
   
   .user-table tbody tr td{
     color: #696969;
@@ -564,10 +547,6 @@ h1,h2,h3,h4,h5,h6,p{
   }
   
   
-  
-  
-  
-  
   /* series css */
   /* Modal */
   .series-modal-overlay {
@@ -591,14 +570,7 @@ h1,h2,h3,h4,h5,h6,p{
     margin-bottom: 0px;
   }
   
-  /* .modal-body {
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    scrollbar-width: none;
-  } */
-  
-  /* Series Options */
+
   .series-option {
   
     margin-bottom: 5px;
@@ -624,14 +596,14 @@ h1,h2,h3,h4,h5,h6,p{
   
   }
   
-  /* *******  HEADINGS OF CREATE TEST FOR SERIES */
+
   .headings{
     display: flex;
     margin-left: 25%;
   }
   
   .create-series-heading{
-    /* background-color: #0056b3; */
+
     width: 1000px;
   }
   
@@ -658,8 +630,7 @@ h1,h2,h3,h4,h5,h6,p{
   }
   
   
-  /* ****************** EDIT QUESTIONS */
-  
+
   
   
   
@@ -694,40 +665,23 @@ h1,h2,h3,h4,h5,h6,p{
     width: 85%;
     margin-left: 15%;
     height: 550px;
-    /* background-color: #0056b3; */
+
     overflow-y: scroll;
     scrollbar-width: thin;
   }
-  
-  
-  
-  
-  /* .testbox-textarea-logical-edit{
-    padding: 10px;
-    width: 95%;
-    height: 40px;
-    background-color: pink;
-    margin-top: 20px;
-  } */
-  
   .back-btn svg{
     font-size: 22px;
   }
-  
-  
-  /* *************\  SERIES HEADING */
+ 
   .sub-obj-log-heading{
     display: flex;
    gap: 3rem;
   }
   
-  
-  /* ****** QUESTIONNARIE  PAGE ****** */
-  
   .generatelink-btn{
     height: 35px;
     width: 150px;
-    /* margin-top: 12px; */
+
     border: none;
     font-size: medium;
     border-radius: 4px;
@@ -754,7 +708,6 @@ h1,h2,h3,h4,h5,h6,p{
   
   
   
-  /* *************  CANDIDATES DETAILS  */
   .wrapper {
     background: #f7f2f2;
     margin-left: 250px;
@@ -778,7 +731,7 @@ h1,h2,h3,h4,h5,h6,p{
     font-family: "Open Sans", sans-serif;
     font-weight: 400;
     }
-  /* ******* Table  */
+
   .table-responsive {
   
     background: white;
@@ -794,16 +747,7 @@ h1,h2,h3,h4,h5,h6,p{
     margin: 0 auto;
     display: block;
   }
-  
-  
-  /* //******************   REGISTER CANDIDATE MODAL******** */
-  
-  
-  
-  
-  
-  
-  
+
   
   .app-container {
     max-width: 800px;
@@ -832,9 +776,6 @@ h1,h2,h3,h4,h5,h6,p{
       cursor: pointer;
      font-weight: 500;
   }
-  
-  
-  
   
   .question-text {
     margin-bottom: 12px;
@@ -879,7 +820,7 @@ h1,h2,h3,h4,h5,h6,p{
   }
   select.form-control {
     appearance: auto !important;
-    padding: 8px 20px;
+    padding: 6px 20px;
       border-radius: 11px;
       color: #8D8D8E;
   }
@@ -892,15 +833,6 @@ h1,h2,h3,h4,h5,h6,p{
     height: 185px;
     scrollbar-width: thin
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   .Interview_header {
     display: flex;
@@ -992,7 +924,9 @@ h1,h2,h3,h4,h5,h6,p{
     font-weight: 700;
   }
   
-  
+  .green_color{
+    color: #33b070;
+  }
   .message{
     text-align: left;
     width: auto;
@@ -1023,8 +957,6 @@ h1,h2,h3,h4,h5,h6,p{
     color: #464255;
   }
   
-  
-  /* ************************ HR ROUND INTERVIEW  */
   .wrapper-hr-round-caution{
     display: flex;
     flex-direction: column;
@@ -1057,9 +989,7 @@ h1,h2,h3,h4,h5,h6,p{
     margin-bottom: 30px;
       margin-top: 25px;
   }
-  
-  
-  /* hr feedback ----------- */
+
   .hr-feedback-filters-wrapper {
     display: flex;
     justify-content: space-between;
@@ -1572,11 +1502,6 @@ select.custom-select.form-control {
     font-size: 14px;
   }
   }
-  
-
-
-
-
   
 
 @media screen and (max-width:767px) {

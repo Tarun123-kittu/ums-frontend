@@ -12,18 +12,25 @@
 .employee_wrapper h4{
     font-size: 14px;
 }
+button.add_document_btn{
+    background-color: #555555;
+    border-radius: 5px;
+}
 .sort_outer{
     flex-direction: column;
     color: #D9D9D9;
 }
 .employee_container{
     border: 1px solid #E2E6EB;
-    padding: 12px 9px;
+    padding: 20px;
     gap: 10px;
 }
 .employee_wrapper{
     width: 100%;
 }
+
+
+
 .cmn_Button_style{
     border: unset;
     background-color: #9E0302;
@@ -31,7 +38,8 @@
     font-size: 14px;
     border-radius: 30px;
     padding: 6px 9px;
-    min-width: 100px
+    min-width: 100px;
+    font-family: "Inter", sans-serif;
 }
 .dark_red_bg{
     background-color: #9E0302;  
@@ -62,11 +70,13 @@
     color: #687281;
     font-weight: 700;
     border: 1px solid #ddd;
+    font-family: "Inter", sans-serif;
 }
 .employee_detail_table{
     width: 100%;
 }
 .employee_detail_table td{
+    font-family: "Inter", sans-serif;
     color: #8a8d91;
     font-size: 14px;
     font-weight: 600;
@@ -106,10 +116,13 @@
     color: #798398;
 }
 .new_employee_form_group select::placeholder {
-    color: #798398;
+    color: #798398 ;
+    font-family: "Inter", sans-serif;
 }
+
 .new_employee_form_group label{
     color: #798495;
+    font-family: "Inter", sans-serif;
 }
 .new_employee_form_group {
     margin-top: 10px;
@@ -121,7 +134,9 @@
 }
 .new_employee_form_group textarea.form-control::placeholder {
     color: #798398;
+    font-family: "Inter", sans-serif;
 }
+
 .new_employee_form_group select{
     background-color: transparent !important;
     border-radius: 7px;
@@ -135,10 +150,14 @@ a.employee_heading  {
 a.active-breadcrumb{
     color: #687281;
   }
-  .serach_add_outer{
-    margin-top: 28px;
-  }
-/* new employee css code end  */
+
+.employee_delete_Edit_outer{
+    cursor: pointer;
+}
+.employee_editInfo_wrapper {
+    border: 1px solid #E2E6EB;
+    padding: 20px;
+}
 @media screen and (max-width:991px){
     .employee_container {
         flex-wrap: wrap;
@@ -149,11 +168,19 @@ a.active-breadcrumb{
 
     .serach_add_outer{
         display: flex;
+        margin-top: 10px;
     }
     .cmn_Button_style{
         min-width: 79px;
+        font-size: 11px;
       }
       .new_employee_form_group label {
         font-size: 14px;
+      }
+      .employee_detail_table td {
+        font-size: 12px;
+      }
+      .employee_detail_table th{
+        font-size: 12px;
       }
 }

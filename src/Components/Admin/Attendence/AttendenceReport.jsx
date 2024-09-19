@@ -63,7 +63,7 @@ const yearDataObj=years
         <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
         />
 
-<div className='d-flex employee_container align-items-center mt-3'>
+<div className='d-flex employee_container align-items-end mt-3'>
 
 <div className='employee_wrapper'>
 <Select labelname={"Employee"}  labelClass={""} options={employeeDataObj}/>
@@ -113,8 +113,8 @@ const yearDataObj=years
             <td>John</td>
             <td>01:30:40 PM</td>
             <td>--</td>
+            <td style={{color:"#33b070"}}>14:51:23</td>
             <td>Bids Project understanding</td>
-            <td>NA</td>
             <td>NA</td>
             <td>AA</td>
             <td>John Mobile:false</td>
@@ -122,6 +122,22 @@ const yearDataObj=years
             <td>
             <div className='cmn_action_outer yellow_bg'><FiEdit /></div>
             </td>
+          </tr>
+          <tr>
+            <td style={{color:"#33b070"}}>2</td>
+            <td colspan="5" style={{color:"#33b070"}}>19/08/24 Saturday</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>AA</td>
+            <td colspan="3"></td>
+          </tr>
+          <tr>
+            <td style={{color:"#33b070"}}>3</td>
+            <td colspan="5" style={{color:"#33b070"}}>19/08/24 Sunday</td>
+            <td>NA</td>
+            <td style={{color:"#33b070"}}>AA</td>
+            <td style={{color:"#33b070"}}>AA</td>
+            <td colspan="3"></td>
           </tr>
         </tbody>
         </table>

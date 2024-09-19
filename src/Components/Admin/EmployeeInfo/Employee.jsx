@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Sidebar from '../../Sidebar/Sidebar'
 import { useAppContext } from '../../Utils/appContecxt'
 import "./employee.css"
@@ -6,7 +6,6 @@ import "./employee.css"
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp';
 import Notification from '../Notification/Notification';
 import EmployeeList from './EmployeeList';
-import AddnewEmployee from './AddnewEmployee';
 
 const EmployeeInfo = () => {
 
@@ -29,7 +28,7 @@ const EmployeeInfo = () => {
         />
      <EmployeeList/>
       
-     
+
       </div>
 
     

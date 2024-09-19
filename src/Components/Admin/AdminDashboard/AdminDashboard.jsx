@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   return (
     <section>
       <Sidebar/>
-    <div className={`cmn_margin_outer lightgray_bg ${show?"cmn_margin":""}`  }>
+    <div className={` lightgray_bg ${show?"cmn_margin":"cmn_margin_outer"}`  }>
    <div className='admin_dashboard_container'>
    </div>
    <div className='admin_dashboard_outer'>

@@ -12,7 +12,9 @@ import EditQuesModal from '../../Modal/EditQuesModal';
 
 const ViewQuestionList = () => {
 const [showEditModal,setShowEditModal]=useState(false)
+
 const {show}=useAppContext()
+
 const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
     { name: "Hr Round", path: "/hrRound" },
@@ -23,7 +25,8 @@ const obj = [
   return (
     <section className='Interviewlead_outer'>
     <Sidebar/>
-  <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
+  <div className={`wrapper gray_bg admin_outer  ${show? "cmn_margin":"cmn_margin_outer"}`  }>
+
     <Notification/>
     <div className='cmn_padding_outer'>
     <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"} />
