@@ -1,31 +1,56 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const get_all_users_user = createAsyncThunk("get_all_users_user", async (thunkAPI) => {
-    try {
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6W251bGxdLCJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MjY0NzUzOTR9.q2fTeDNt5st98Umo4oGwbf8PSG6ypV6JsEwMT5mbYWs");
+export const get_all_users_user = createAsyncThunk(
+    "get_all_users_user",
+    async ({ name, status }, thunkAPI) => {
+        try {
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow"
-        };
+            const requestOptions = {
+                method: "GET",
+                headers: myHeaders,
+                redirect: "follow",
+            };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_employees`, requestOptions)
-        if (!response.ok) {
-            const errorMessage = await response.json();
-            if (errorMessage) {
-                throw new Error(errorMessage.message);
+            // Start with the base URL
+            let url = `${process.env.REACT_APP_BACKEN_URL}/get_employees`;
+
+            // Collect query parameters if name and/or status exist
+            const queryParams = [];
+            if (name) {
+                queryParams.push(`name=${encodeURIComponent(name)}`);
             }
+            if (status) {
+                queryParams.push(`status=${encodeURIComponent(status)}`);
+            }
+
+            // Append query parameters to the URL if they exist
+            if (queryParams.length > 0) {
+                url += `?${queryParams.join('&')}`;
+            }
+
+            // Log the final URL for debugging purposes
+            console.log("Fetching data from URL:", url);
+
+            const response = await fetch(url, requestOptions);
+
+            // Check if the response is ok
+            if (!response.ok) {
+                const errorMessage = await response.json();
+                throw new Error(errorMessage.message || "Failed to fetch users");
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+            return thunkAPI.rejectWithValue({
+                message: error.message,
+            });
         }
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        return thunkAPI.rejectWithValue({
-            message: error.message,
-        });
     }
-})
+);
 
 export const getAllUsers = createSlice({
     name: "getAllUsers",
@@ -34,24 +59,24 @@ export const getAllUsers = createSlice({
         isSuccess: false,
         isError: false,
         isLoading: false,
-        error: null
+        error: null,
     },
     extraReducers: (builder) => {
         builder
             .addCase(get_all_users_user.pending, (state) => {
-                state.isLoading = true
+                state.isLoading = true;
             })
             .addCase(get_all_users_user.fulfilled, (state, action) => {
-                state.isSuccess = true
-                state.data = action.payload
-                state.isLoading = false
+                state.isSuccess = true;
+                state.data = action.payload;
+                state.isLoading = false;
             })
             .addCase(get_all_users_user.rejected, (state, action) => {
-                state.isError = true
-                state.error = action.payload
-                state.isLoading = false
-            })
-    }
-})
+                state.isError = true;
+                state.error = action.payload;
+                state.isLoading = false;
+            });
+    },
+});
 
-export default getAllUsers.reducer
+export default getAllUsers.reducer;

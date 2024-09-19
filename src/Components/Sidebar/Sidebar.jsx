@@ -92,10 +92,10 @@ const Sidebar = () => {
         {uniqueRoles?.includes("Admin") && (
           <div
             className={`sidebar-button mt-4 ${
-              path.pathname === "/adminDashboard" ? "active-pathname" : ""
+              path.pathname === "/dashboard" ? "active-pathname" : ""
             }`}
           >
-            <Link to="/adminDashboard">
+            <Link to="/dashboard">
               <div className="sidebar_content">
                 <AiOutlineDashboard />
                 <h4 className={show ? "d-none" : "sidebar_content"}>
