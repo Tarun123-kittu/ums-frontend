@@ -6,50 +6,50 @@ import { RxCross2 } from "react-icons/rx";
 import { PiNotebookFill } from "react-icons/pi";
 import { FaUserGroup } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
+import logout from "../assets/logout.svg"
 import {
-  MdKeyboardArrowDown,
-  MdOutlineEditCalendar,
+
+  MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
-  MdOutlineQuickreply,
+
 } from "react-icons/md";
 import logo from "../assets/logo1.png";
-import { IoIosArrowUp, IoIosLogOut } from "react-icons/io";
+import { IoIosLogOut } from "react-icons/io";
 
 import "./Sidebar.css";
-import { CiUser } from "react-icons/ci";
+
 import { useAppContext } from "../Utils/appContecxt";
 import LogoutModal from "../Modal/LogoutModal";
 import ChangePassword from "../Modal/ChangePassword";
-import { AiOutlineDashboard } from "react-icons/ai";
 
 import menuitems, { developerMenuitems, hrMenuitems } from "./MenuItem";
-import { IoCalendarOutline } from "react-icons/io5";
-import { HiOutlineUsers } from "react-icons/hi";
-import { TbUsersGroup } from "react-icons/tb";
+
 import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
   const navigate = useNavigate();
   const path = useLocation();
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
-  const [showAttendenceReportDropdown, setShowAttendenceReportDropdown] =
-    useState(false);
-  const [showLeaveDropdown, setShowLeaveDropdown] = useState(false);
-  const [showInterviewDropdown, setShowInterviewDropdown] = useState(false);
+ 
 
-  useEffect(() => {
-    if (!localStorage.getItem("ums_token")) {
-      navigate("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!localStorage.getItem("ums_token")) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   const handleLogout = () => {
     localStorage.clear("ums_token");
     toast.success("Logout successfully!!", { autoClose: 2000 });
-    navigate("/login");
+    navigate("/");
   };
 
   const handleChangePassword = () => {
     setShowChangePassword(true);
+  };
+  const[expanded,setExpanded]=useState(null)
+
+  const handleToggle = (index) => {
+    setExpanded(expanded === index ? null : index); 
   };
   return (
     <>
@@ -69,264 +69,154 @@ const Sidebar = () => {
           {/* <h3 className="mt-1">TECHNOLOGIES</h3> */}
         </div>
 
-        {/* <>
-              <div className={`sidebar-button mt-4 ${path.pathname === "/candidates" ? "active-pathname" : ""}`} >
-                <div className="sidebar_content"><CiUser /> 
-                  <h4 className={show ? "d-none" : "sidebar_content"} >Candidates</h4>
-                </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/ultivic-team" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content">
-                  <FaUserGroup />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >Team Hub</h4>
-                </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/hr-screening" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content"><CiUser />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >HR Screening</h4>
-                </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/hr-round-response" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content"><MdOutlineQuickreply />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >HR feedback </h4>
-                </div>
-              </div>
-            </> */}
-
-        {/* <div className="mt-4">
-            <div className={`sidebar-button  ${path.pathname === "/homepage" ? "active-pathname" : ""}`}  >
-              <div className="sidebar_content">
-                <RiQuestionnaireFill />
-                <h4 className={show ? "d-none" : "sidebar_content"}>Questionnaire</h4>
-
-              </div>
-            </div>
-
-            <div className={`sidebar-button ${path.pathname === "/candidates-performance" ? "active-pathname" : ""}`}>
-              <div className="sidebar_content">
-                <PiNotebookFill className="sidebar_content" />
-                <h4 className={show ? "d-none" : "sidebar_content"}> Candidate Results</h4>
-              </div>
-            </div>
-            
-            
-            
-
-          </div>  */}
-        {/* <div className={`sidebar-button`} onClick={handleChangePassword}>
-              <div className="sidebar_content">
-                <RiLockPasswordLine className="sidebar_content" />
-                <h4 className={show ? "d-none" : "sidebar_content"}> Change Password </h4>
-              </div>
-            </div> */}
+        <div className="mt-4">
+        
         {/* admin sidebar */}
-        <div
-          className={`sidebar-button mt-4 ${
-            path.pathname === "/adminDashboard" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/adminDashboard">
-            <div className="sidebar_content">
-              <AiOutlineDashboard />
-              <h4 className={show ? "d-none" : "sidebar_content"}>Dashboard</h4>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/employee" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/employee">
-            <div className="sidebar_content">
-              <FaRegUser />
-              <h4 className={show ? "d-none" : "sidebar_content"}>Employees</h4>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/ultivic-team" ? "active-pathname" : ""
-          }`}
-        >
+        
+         {menuitems.map((data, i) => {
+        const isActive = path.pathname === data?.pathname;
+
+        return (
+          <>
           <div
-            className="sidebar_content justify-content-between "
-            onClick={() => {
-              setShowAttendenceReportDropdown(!showAttendenceReportDropdown);
-            }}
+            key={i} 
+            className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
           >
-            <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-              <MdOutlineEditCalendar />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Attendence Report{" "}
-              </h4>
-            </div>
-            {show ? (
-              ""
-            ) : showAttendenceReportDropdown ? (
-              <MdOutlineKeyboardArrowUp />
+            {  data.subItems ? (
+              <>
+                <div className="sidebar_content justify-content-between" onClick={() => handleToggle(i)}>
+                  <div className={`transition_class ${show ?"":"d-flex flex-grow-1 gap-2 "}` }>
+                  <img
+                    src={data?.icon}
+                    alt={data?.name}
+                    height="18px"
+                    width="18px"
+                    className={isActive ? "filterClass" : ""}
+                  />
+                  <h4 className={show ? 'd-none' : ''}>
+                    {data?.name}
+                  </h4>
+
+                  </div>
+                  {show ?"":
+                    expanded === i ? <MdOutlineKeyboardArrowUp onClick={()=>{handleToggle(i)}}/>: <MdOutlineKeyboardArrowDown/>}
+                </div>
+                
+               
+              </>
             ) : (
-              <MdKeyboardArrowDown />
+              <Link to={data?.pathname}>
+                <div className="sidebar_content ">
+                  <img
+                    src={data?.icon}
+                    alt={data?.name}
+                    height="18px"
+                    width="18px"
+                    className={isActive ? "filterClass" : ""}
+                  />
+                  <h4 className={show ? 'd-none' : ''}>
+                    {data?.name}
+                  </h4>
+                </div>
+              </Link>
             )}
           </div>
-        </div>
-        {show
-          ? ""
-          : showAttendenceReportDropdown && (
+           {!show && expanded === i && 
+            (
               <ul className="list_inner_item_outer">
-                <li>
-                  <Link
-                    to="/todayAttendence"
-                    className={
-                      path.pathname === "/todayAttendence" ? "active_path" : ""
-                    }
-                  >
-                    Attendence Today
-                  </Link>
+                {data?.subItems?.map((subItem, j) => (
+                  <li className="">
+                  
+                  <Link to={subItem.pathname} className={path.pathname===subItem.pathname?"active_path":""}>
+                        {subItem.name}
+                      
+                    </Link>
+                 
                 </li>
-                <li>
-                  <Link
-                    to="/attendenceReport"
-                    className={
-                      path.pathname === "/attendenceReport" ? "active_path" : ""
-                    }
-                  >
-                    Attendence Report
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/incompleteAttendence"
-                    className={
-                      path.pathname === "/incompleteAttendence"
-                        ? "active_path"
-                        : ""
-                    }
-                  >
-                    Incomplete Attendence
-                  </Link>
-                </li>
+               
+                ))}
               </ul>
             )}
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/holiday" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/holiday">
-            <div className="sidebar_content">
-              <IoCalendarOutline />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Holidays & Events
-              </h4>
-            </div>
-          </Link>
-        </div>
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/leaveApplication" ? "active-pathname" : ""
-          }`}
-        >
+          </>
+        );
+      })}
+      
+      {/* admin-sidebar end */}
+       {/* hr sidebar start */}
+      {/* {hrMenuitems.map((data,i)=>{
+          const isActive = path.pathname === data?.pathname;
+        return(
           <div
-            className="sidebar_content justify-content-between"
-            onClick={() => {
-              setShowLeaveDropdown(!showLeaveDropdown);
-            }}
+            key={i} 
+            className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
           >
-            <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-              <MdOutlineEditCalendar />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Leave Application{" "}
-              </h4>
+              <Link to={data?.pathname}>
+                <div className="sidebar_content ">
+                  <img
+                    src={data?.icon}
+                    alt={data?.name}
+                    height="18px"
+                    width="18px"
+                    className={isActive ? "filterClass" : ""}
+                  />
+                  <h4 className={show ? 'd-none' : ''}>
+                    {data?.name}
+                  </h4>
+                </div>
+              </Link>
             </div>
-
-            {show ? (
-              ""
-            ) : showLeaveDropdown ? (
-              <MdOutlineKeyboardArrowUp />
-            ) : (
-              <MdKeyboardArrowDown />
-            )}
-          </div>
-        </div>
-        {show
-          ? ""
-          : showLeaveDropdown && (
-              <ul className="list_inner_item_outer">
-                <li>
-                  <Link
-                    to="/leaveRequest"
-                    className={
-                      path.pathname === "/leaveRequest" ? "active_path" : ""
-                    }
-                  >
-                    Leave Request
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/leaveBank"
-                    className={
-                      path.pathname === "/leaveBank" ? "active_path" : ""
-                    }
-                  >
-                    Leave Bank
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/leaveReport"
-                    className={
-                      path.pathname === "/leaveReport" ? "active_path" : ""
-                    }
-                  >
-                    Leave Report
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/interviewLead" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/interviewLead">
-            <div className="sidebar_content justify-content-between">
-              <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-                <HiOutlineUsers />
-                <h4 className={show ? "d-none" : "sidebar_content"}>
-                  Interview Leads{" "}
-                </h4>
+        )
+      })} */}
+      {/* hr sidebar end */}
+      
+     {/* developer siebar */}
+          {/* {developerMenuitems.map((data,i)=>{
+            const isActive = path.pathname === data?.pathname;
+          return(
+            <div
+              key={i} 
+              className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
+            >
+                <Link to={data?.pathname}>
+                  <div className="sidebar_content ">
+                    <img
+                      src={data?.icon}
+                      alt={data?.name}
+                      height="18px"
+                      width="18px"
+                      className={isActive ? "filterClass" : ""}
+                    />
+                    <h4 className={show ? 'd-none' : ''}>
+                      {data?.name}
+                    </h4>
+                  </div>
+                </Link>
+  
               </div>
-            </div>
-          </Link>
-        </div>
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/rolePermission" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/rolePermission">
-            <div className="sidebar_content">
-              <TbUsersGroup />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Teams & Roles
-              </h4>
-            </div>
-          </Link>
-        </div>
-        {/* admin sidebar end */}
-        <div className={`sidebar-button`} onClick={handleLogout}>
-          <div className="sidebar_content">
-            <IoIosLogOut className="sidebar_content" />
-            <h4 className={show ? "d-none" : "sidebar_content"}> Logout</h4>
+          )
+        })} */}
+        {/* developer sidebar end  */}
+        <div onClick={handleLogout} className='sidebar-button' >
+            <div className="sidebar_content ">
+                  <img
+                    src={logout}
+                    alt="logout"
+                    height="18px"
+                    width="18px"
+                    
+                  />
+                  <h4 className={show ? 'd-none' : ''}>
+                    Logout
+                  </h4>
+                </div>
           </div>
-        </div>
+        
+    </div>
+
       </div>
+
+
+      
       
     </>
   );

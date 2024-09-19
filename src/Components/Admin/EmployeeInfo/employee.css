@@ -116,9 +116,10 @@ button.add_document_btn{
     color: #798398;
 }
 .new_employee_form_group select::placeholder {
-    color: #798398;
+    color: #798398 ;
     font-family: "Inter", sans-serif;
 }
+
 .new_employee_form_group label{
     color: #798495;
     font-family: "Inter", sans-serif;
@@ -150,7 +151,13 @@ a.active-breadcrumb{
     color: #687281;
   }
 
-
+.employee_delete_Edit_outer{
+    cursor: pointer;
+}
+.employee_editInfo_wrapper {
+    border: 1px solid #E2E6EB;
+    padding: 20px;
+}
 @media screen and (max-width:991px){
     .employee_container {
         flex-wrap: wrap;

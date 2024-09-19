@@ -104,6 +104,27 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
+          <tr>
+              <td>1</td>
+              <td>John</td>
+              <td>John@gmail.com</td>
+              <td>3435454</td>
+              <td>12/08/24</td>
+              <td>12/06/1900</td>
+              <td>UI/UX</td>
+              <td>On Probition</td>
+              <td>
+                <div className="d-flex gap-2 justify-content-center employee_delete_Edit_outer">
+                      <div className="cmn_action_outer dark_gray_bg">
+                        <FaEye onClick={()=>navigate("/viewEmployeeInfo")}/>
+                      </div>
+                      <div className="cmn_action_outer red_bg">
+                        <RiDeleteBin6Line
+                        />
+                      </div>
+                     
+                    </div></td>
+            </tr>
             {all_users_list?.data?.data?.map((user, index) => {
               return (
                 <tr key={user?._id}>

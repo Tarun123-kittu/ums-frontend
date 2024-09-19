@@ -1,0 +1,16 @@
+.unauthorized_page_content{
+    height: 100vh;
+}
+.unauthorized_wrapper h2{
+    font-size: 71px;
+    color: #9E0302;
+}
+.unauthorized_wrapper button{
+    padding: 9px 27px;
+}
+.unauthorized_wrapper h3{
+    font-size: 25px;
+    line-height: 40px;
+    color: #333333;
+    font-family: "Inter" ,sans-serif;
+}

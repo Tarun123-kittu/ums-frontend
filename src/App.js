@@ -20,6 +20,8 @@ import EditRoleAndPermission from './Components/Admin/RoleAndPermission/EditRole
 import ViewQuestionList from './Components/Admin/InterviewLead/ViewquestionList';
 import QuestionAnswerSheet from './Components/Admin/InterviewLead/QuestionAnswerSheet';
 import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
+import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
+import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
 
 function App() {
   
@@ -46,7 +48,9 @@ function App() {
        <Route path='/viewQuestionlist' element={< ViewQuestionList/>}/>
        <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet/>}/>
        <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo/>}/>
-       
+       <Route path='/editEmployee' element={< EditEmployeeInfo/>}/>
+       <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/>
+      
     </Routes>
     </BrowserRouter>
   );

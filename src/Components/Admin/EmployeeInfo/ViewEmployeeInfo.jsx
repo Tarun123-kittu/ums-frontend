@@ -3,6 +3,7 @@ import Sidebar from '../../Sidebar/Sidebar'
 import Notification from '../Notification/Notification'
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import { useAppContext } from '../../Utils/appContecxt'
+import { useNavigate } from 'react-router-dom'
 
 const ViewEmployeeInfo = () => {
     const {show} =useAppContext()
@@ -11,6 +12,8 @@ const ViewEmployeeInfo = () => {
         { name: "Attendence Report", path: "/attendenceReport" },
         { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
       ];
+const navigate=useNavigate()
+
   return (
     <section>
     <Sidebar/>
@@ -20,7 +23,7 @@ const ViewEmployeeInfo = () => {
     <div className='employee_wrapper cmn_padding_outer'>
       <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"} 
       />
-     <div className='employee_info_wrappers'>
+     <div className='employee_editInfo_wrapper'>
   
   <ul className='user_info_list_outer'>
   <li className='d-flex align-items-center info_content'>
@@ -113,6 +116,9 @@ const ViewEmployeeInfo = () => {
        </tr>
      </tbody>
    </table>
+  </div>
+  <div className='mt-3 text-end'>
+    <button className='cmn_Button_style' onClick={()=>{navigate("/editEmployee")}}>Edit</button>
   </div>
  </div>
     

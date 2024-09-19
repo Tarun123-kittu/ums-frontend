@@ -2,7 +2,7 @@ import attendenceIcon from "../assets/attendence.svg"
 import calendar from "../assets/calendar.svg"
 import leaveApplication from "../assets/leaveApplication.svg"
 import testSeries from "../assets/testSeries.svg"
-import logout from "../assets/logout.svg"
+
 import interviewLead from "../assets/interviewLead.svg"
 import teamAndRole from "../assets/people.svg"
 import employeeIcon from "../assets/employeeIcon.svg"
@@ -58,11 +58,7 @@ icon:teamAndRole,
 name:"Teams & Roles",
 pathname:"/rolePermission"
 },
-{
-icon:logout,
-name:"Logout",
-pathname:"/logout"
-},
+
 ]
 
 export const hrMenuitems=[
