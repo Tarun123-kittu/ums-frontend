@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
@@ -7,20 +7,28 @@ import { useAppContext } from "../../Utils/appContecxt";
 import { FaSortDown } from "react-icons/fa";
 import { TiArrowSortedUp } from "react-icons/ti";
 import Select from "../../Common/Select";
-import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
+import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceReport";
+import { useDispatch, useSelector } from "react-redux";
+import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
 
 const AttendenceReport = () => {
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  UseUserAttendanceReport({ name, month, year });
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Attendance Report", path: "/attendenceReport" },
   ];
+  let [all_names, setAllNames] = useState([]);
+  console.log(all_names, "this is the all naes  ");
 
   const { show } = useAppContext();
-
-  const employeeDataObj = [
-    { option: "Akriti", value: "Akriti" },
-    { option: "Amit", value: "Amit" },
-  ];
+  const user_attendance_report = useSelector(
+    (store) => store.GET_USER_ATTENDANCE_REPORT
+  );
+  console.log(user_attendance_report, "user_attendance_report");
   const leaveDataObj = [
     { option: "1", value: "1" },
     { option: "2", value: "2" },
@@ -50,6 +58,37 @@ const AttendenceReport = () => {
 
   const yearDataObj = years;
 
+  const convertTo12Hour = (time24) => {
+    if (!time24) return "--";
+
+    let [hours, minutes] = time24.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
+  };
+
+  const timeToHours = (time) => {
+    if (!time || time === "--") return 0; // Handle cases where there's no time or it's '--'
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    return hours + minutes / 60 + seconds / 3600;
+  };
+
+  useEffect(() => {
+    let user_data = [];
+    user_attendance_report?.data?.data?.forEach((user_name) => {
+      if (!user_data.some((user) => user.value === user_name?.name)) {
+        user_data.push({ value: user_name?.name, option: user_name?.name });
+      }
+    });
+    setAllNames(user_data);
+  }, [user_attendance_report]);
+
+  const handleSelectChange = (field, e) => {
+    field === "name" && setName(e.target.value);
+    field === "month" && setMonth(e.target.value);
+    field === "year" && setYear(e.target.value);
+  };
+
   return (
     <section className="attendenceReport_outer">
       <Sidebar />
@@ -70,20 +109,16 @@ const AttendenceReport = () => {
               <Select
                 labelname={"Employee"}
                 labelClass={""}
-                options={employeeDataObj}
+                onChange={(e) => handleSelectChange("name", e)}
+                options={all_names}
               />
             </div>
-            <div className="employee_wrapper">
-              <Select
-                labelname={"Pending Leaves"}
-                labelClass={""}
-                options={leaveDataObj}
-              />
-            </div>
+
             <div className="employee_wrapper">
               <Select
                 labelname={"Month"}
                 labelClass={""}
+                onChange={(e) => handleSelectChange("month", e)}
                 options={monthDataObj}
               />
             </div>
@@ -91,12 +126,20 @@ const AttendenceReport = () => {
               <Select
                 labelname={"Year"}
                 labelClass={""}
+                onChange={(e) => handleSelectChange("year", e)}
                 options={yearDataObj}
               />
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
-              <button className="cmn_Button_style">Search</button>
+              <button
+                className="cmn_Button_style"
+                onClick={() =>
+                  dispatch(get_user_attendance_report({ name, month, year }))
+                }
+              >
+                Search
+              </button>
             </div>
           </div>
           <div className="table-responsive mt-3 transparent_bg">
@@ -118,24 +161,48 @@ const AttendenceReport = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>19/08/24 -Monday</td>
-                  <td>John</td>
-                  <td>01:30:40 PM</td>
-                  <td>--</td>
-                  <td style={{ color: "#33b070" }}>14:51:23</td>
-                  <td>Bids Project understanding</td>
-                  <td>NA</td>
-                  <td>AA</td>
-                  <td>John Mobile:false</td>
-                  <td>John Mobile:false</td>
-                  <td>
-                    <div className="cmn_action_outer yellow_bg">
-                      <FiEdit />
-                    </div>
-                  </td>
-                </tr>
+                {user_attendance_report?.data?.data?.map((report, index) => {
+                  return (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>
+                        {report?.date}-{report?.date_in_week_day}
+                      </td>
+                      <td>{report?.name}</td>
+                      <td>{convertTo12Hour(report?.in_time)}</td>
+                      <td>
+                        {report?.out_time
+                          ? convertTo12Hour(report?.out_time)
+                          : "--"}
+                      </td>
+                      <td
+                        style={{
+                          color:
+                            timeToHours(report?.total_time) < 9
+                              ? "red"
+                              : "#33b070",
+                        }}
+                      >
+                        {report?.total_time
+                          ? `${report.total_time} hours`
+                          : "--"}
+                      </td>
+                      <td>{report?.report}</td>
+                      <td>NA</td>
+                      <td>{report?.review ? report?.review : "NA"}</td>
+                      <td>{report?.rating}</td>
+                      <td>
+                        {report?.name}:{report?.login_mobile}
+                      </td>
+                      <td>
+                        <div className="cmn_action_outer yellow_bg">
+                          <FiEdit />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {/*       
                 <tr>
                   <td style={{ color: "#33b070" }}>2</td>
                   <td colspan="5" style={{ color: "#33b070" }}>
@@ -155,7 +222,7 @@ const AttendenceReport = () => {
                   <td style={{ color: "#33b070" }}>AA</td>
                   <td style={{ color: "#33b070" }}>AA</td>
                   <td colspan="3"></td>
-                </tr>
+                </tr> */}
               </tbody>
             </table>
           </div>
