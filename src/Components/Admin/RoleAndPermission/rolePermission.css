@@ -21,14 +21,19 @@ ul.role_list li {
     list-style-type: disc !important;
 }
 .role_list li h3{
-    font-size: 16px;
+    font-size: 13px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
 }
 .cmn_text_heading{
     color: #696969;
 }
 .assign_role_header h3{
-    font-size: 18px;
+    font-size: 15px;
     margin-bottom: 0px;
+    font-weight: 400;
+    font-family: "Open Sans", sans-serif;
+
 }
 .assign_role_header{
     justify-content: space-between;
@@ -55,19 +60,21 @@ ul.role_list li {
 }
 table.edit_role_table th {
     color: #323232;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     text-align: center;
     padding: 10px;
     border: 1px solid #ddd;
+    font-family: "Open-Sans",sans-serif;
 }
 table.edit_role_table{
     width: 100%;
 }
 table.edit_role_table th:first-child{
     text-align: left;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
 }
 table.edit_role_table td {
     text-align: center;
@@ -76,4 +83,23 @@ table.edit_role_table td {
 table.edit_role_table td:first-child {
     text-align: left;
     color: #696969;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: 'Open Sans' ,sans-serif;
 }
+
+@media screen and (max-width:1044px){
+    .assign_role_wrapper{
+        flex-wrap: wrap;
+
+    }
+    .assign_role_wrapper .new_employee_form_group {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .edit_role_delete_outer{
+        margin-top: 15px;
+    }
+
+}
+

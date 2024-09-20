@@ -59,7 +59,7 @@ button.add_document_btn{
     background-color:#555555
 }
 .red_bg{
-    background-color: #e81600;
+    background-color: #9e0302;
 }
 .employee_detail_table th ,td{
     padding: 10px;
@@ -79,7 +79,7 @@ button.add_document_btn{
     font-family: "Inter", sans-serif;
     color: #8a8d91;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid #ddd;
 }
 .serach_user_outer{

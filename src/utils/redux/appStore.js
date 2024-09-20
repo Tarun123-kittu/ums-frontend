@@ -6,6 +6,8 @@ import Login from './loginSlice/loginSlice'
 import getLoggedInUserPermissions from './userPermissionSlice/userpermissionSlice'
 import userPermissionHandler from './userPermissionSlice/userRolesAndPermissionSlice'
 import getUserDetails from './userSlice/userDetailsSlice'
+import updateUser from './userSlice/updateUserSlice'
+import getAttendanceReport from './attendanceSlice/getAttendanceReport'
 
 const appStore = configureStore({
     reducer: {
@@ -15,7 +17,9 @@ const appStore = configureStore({
         DELETE_USER: deleteUser,
         USER_PERMISSIONS: getLoggedInUserPermissions,
         USER_ALL_PERMISSIONS: userPermissionHandler,
-        GET_USER_DETAILS: getUserDetails
+        GET_USER_DETAILS: getUserDetails,
+        UPDATE_USER: updateUser,
+        ATTENDANCE_REPORT: getAttendanceReport
     },
 })
 

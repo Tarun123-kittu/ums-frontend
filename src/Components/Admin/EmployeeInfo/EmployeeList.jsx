@@ -56,7 +56,7 @@ const EmployeeList = () => {
   }, [all_users_list]);
 
   useEffect(() => {
-    dispatch(get_all_users_user());
+    dispatch(get_all_users_user({ name: searchName, status: searchStatus }));
   }, []);
 
   const deleteHandler=()=>{
@@ -114,7 +114,16 @@ const EmployeeList = () => {
         </div>
 
         <div className="employee_wrapper text-end serach_add_outer">
-          <button className="cmn_Button_style">Search</button>
+          <button
+            className="cmn_Button_style"
+            onClick={() =>
+              dispatch(
+                get_all_users_user({ name: searchName, status: searchStatus })
+              )
+            }
+          >
+            Search
+          </button>
           <button
             className="cmn_Button_style ms-3"
             onClick={() => navigate("/addemployee")}

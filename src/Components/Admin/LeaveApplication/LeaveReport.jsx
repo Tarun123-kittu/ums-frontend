@@ -15,7 +15,7 @@ const LeaveReport = () => {
 const {show} = useAppContext()
 
   return (
-    <section className='attendenceReport_outer'>
+    <section className='leaveReport_outer'>
       <Sidebar/>
     <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
       <Notification/>

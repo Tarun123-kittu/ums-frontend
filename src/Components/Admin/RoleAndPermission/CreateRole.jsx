@@ -9,10 +9,10 @@ import { RiDeleteBin6Line } from 'react-icons/ri'
 import CommonDeleteModal from '../../Modal/CommonDeleteModal'
 import AssignNameModal from '../../Modal/AssignNameModal'
 
-const EditRoleAndPermission = () => {
+const CreateRole = () => {
     const obj = [
         { name: "Role & Permissions", path: "/rolePermission" },
-        { name: "Edit the Ux/Ui Designer Role", path: "/editRole" },
+        { name: "Create The New Role", path: "/createtRole" },
         
       ];
 const {show}=useAppContext()
@@ -37,10 +37,7 @@ const [showDeleteRoleModal,setShowDeleteRoleModal]=useState(false)
         <label>Role Name</label>
         <input className='form-control'/>
      </div>
-     <div className='edit_role_delete_outer'>
-     <button className='cmn_Button_style cmn_darkgray_btn' onClick={()=>{setShowDeleteRoleModal(true)}}>Delete</button>
-
-     </div>
+    
 
       </div>
       {/* permissions */}
@@ -114,4 +111,4 @@ heading_text={"Are you sure to delete the Pritpal Sohi form Test Series"} paragr
   )
 }
 
-export default EditRoleAndPermission
+export default CreateRole

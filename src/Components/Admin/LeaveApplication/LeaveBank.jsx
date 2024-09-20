@@ -47,7 +47,7 @@ const LeaveBank = () => {
 const {show} = useAppContext()
 
   return (
-    <section className='attendenceReport_outer'>
+    <section className='attendenceBank_outer'>
       <Sidebar/>
     <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
       <Notification/>
@@ -64,11 +64,11 @@ const {show} = useAppContext()
 </div>
 
 <div className='employee_wrapper'>
-<Select labelname={"Months"}  labelClass={""} options={monthDataObj}/>
+<Select labelname={"Month"}  labelClass={""} options={monthDataObj}/>
 
 </div>
 <div className='employee_wrapper'>
-<Select labelname={"Years"}  labelClass={""} options={yearObj}/>
+<Select labelname={"Year"}  labelClass={""} options={yearObj}/>
 
    </div>
 

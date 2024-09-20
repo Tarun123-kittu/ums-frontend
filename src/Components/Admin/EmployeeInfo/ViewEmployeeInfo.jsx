@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../Sidebar/Sidebar";
 import Notification from "../Notification/Notification";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
@@ -15,12 +15,9 @@ const ViewEmployeeInfo = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { user_id } = location.state ? location?.state : location;
-  const user_details = useSelector(
-    (store) => store.GET_USER_DETAILS?.data?.data[0]
-  );
-  console.log(user_details, "this is the user details");
+  const [user_details, setUser_details] = useState([]);
+  console.log(user_details, "state");
 
   useEffect(() => {
     if (!user_id) {
@@ -30,7 +27,15 @@ const ViewEmployeeInfo = () => {
 
   useEffect(() => {
     dispatch(get_user_details({ id: user_id }));
-  }, []);
+  }, [user_id]);
+
+  const user_detail = useSelector((store) => store.GET_USER_DETAILS?.data);
+
+  useEffect(() => {
+    if (user_detail?.type === "success") {
+      setUser_details(user_detail?.data[0]);
+    }
+  }, [user_detail]);
 
   const obj = [
     { name: "Employee", path: "/employee" },
@@ -155,7 +160,7 @@ const ViewEmployeeInfo = () => {
               <button
                 className="cmn_Button_style"
                 onClick={() => {
-                  navigate("/editEmployee");
+                  navigate("/editEmployee", { state: { user_details } });
                 }}
               >
                 Edit

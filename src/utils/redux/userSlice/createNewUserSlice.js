@@ -2,11 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import moment from "moment";
 
 export const create_new_user = createAsyncThunk("create_new_user", async ({ field_data }, thunkAPI) => {
-    console.log(field_data, "this is from the slice")
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6W251bGxdLCJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MjY0NzUzOTR9.q2fTeDNt5st98Umo4oGwbf8PSG6ypV6JsEwMT5mbYWs");
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
             "username": field_data?.username,
