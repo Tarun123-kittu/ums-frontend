@@ -17,7 +17,12 @@ const ViewEmployeeInfo = () => {
   const dispatch = useDispatch();
   const { user_id } = location.state ? location?.state : location;
   const [user_details, setUser_details] = useState([]);
-  console.log(user_details, "state");
+
+  useEffect(() => {
+    return () => {
+      dispatch(clear_user_detail_slice());
+    };
+  }, []);
 
   useEffect(() => {
     if (!user_id) {

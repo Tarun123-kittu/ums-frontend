@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceReport";
+import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 
 
 const UseAttendanceReport = () => {
