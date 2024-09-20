@@ -24,7 +24,8 @@ const EditEmployeeInfo = () => {
   const dispatch = useDispatch();
   const obj = [
     { name: "Employees", path: "/employee" },
-    { name: "Add New Employees", path: "/addemployee" },
+    { name: "Information aAout Dinesh Kumar", path: "/viewEmployeeInfo" },
+    { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
   ];
   const { user_details } = location?.state ? location?.state : location;
   console.log(user_details, "user_details user_details");

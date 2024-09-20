@@ -47,7 +47,7 @@
 .admin_dashboard_outer {
     padding: 12px;
     border-radius: 5px;
-    margin: -68px 20px 0px;
+    margin: -72px 20px 0px;
 }
 
 .cmn_margin_outer{
@@ -69,7 +69,7 @@ li.info_content:last-child {
 }
 
 .admin_dashboard_container{
-    height: 80px;
+    height: 107px;
     background-image: linear-gradient(to right, #ff0b0b, #480303);
 }
 

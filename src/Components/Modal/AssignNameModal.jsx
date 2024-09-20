@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal } from 'react-bootstrap'
 import Select from '../Common/Select'
 
-const AssignNameModal = ({show,setShow}) => {
+const AssignNameModal = ({show,setShow,dialogClassname}) => {
 
 const handleClose=()=>{
     setShow(false)
@@ -20,6 +20,7 @@ const AssingnameObj=[{
     centered
     onHide={handleClose}
     className="custom_modal_container"
+    dialogClassName={dialogClassname}
 >
     <Modal.Header closeButton>
       

@@ -1,6 +1,6 @@
 
 h1,h2,h3,h4,h5,h6,p{
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
   }
   .small_font {
     color: #595959;
@@ -171,10 +171,10 @@ h1,h2,h3,h4,h5,h6,p{
   
   .heading{
     color:  #212B2E!important;
-    font-family: "Montserrat", sans-serif;
-    font-size: 23px;
+    font-family: "Open-Sans", sans-serif;
+    font-size: 21px;
     font-weight: 500 !important;
-  
+    line-height: 32px;
   }
   
   .select-role{
@@ -385,7 +385,9 @@ h1,h2,h3,h4,h5,h6,p{
     color: #333;
     font-size: 20px;
   }
-  
+  .cursor_pointer{
+    cursor: pointer;
+  }
   .correct-answer-select {
     width: 100%;
     padding: 10px;
@@ -454,6 +456,7 @@ h1,h2,h3,h4,h5,h6,p{
   }
   .custom_modal_container .modal-footer{
     padding: 0px 25px 25px;
+    gap: 10px;
   }
   .custom_pagination_wapper{
     z-index: 0;
@@ -1237,6 +1240,9 @@ h1,h2,h3,h4,h5,h6,p{
 
 select.custom-select.form-control {
   appearance: none !important;
+}
+.btn-close:focus{
+  box-shadow: unset !important;
 }
   @media screen and (min-width:1900px){
     .heading{

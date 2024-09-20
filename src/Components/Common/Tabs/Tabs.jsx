@@ -17,6 +17,19 @@ const resultData=[
   { value: 'On Hold', label: 'On Hold'},
 ]
 const navigate=useNavigate("/viewQuestionlist")
+const [activeTab, setActiveTab] = useState('Add Person'); // Manage active tab
+
+const handleNextTab = () => {
+  if(activeTab==="Technical"){
+    setActiveTab('Face to face');
+
+  }else if(activeTab==="Face to face"){
+    setActiveTab("Final Interaction")
+  }
+  
+   
+};
+
   return (
 <div>
 
@@ -24,6 +37,13 @@ const navigate=useNavigate("/viewQuestionlist")
       defaultActiveKey="Add Person"
       id="uncontrolled-tab-example"
       className=" interview_lead_tabs_outer"
+      activeKey={activeTab}
+      onSelect={(k) =>{
+        setActiveTab(k)
+        console.log(k,"ke")
+        
+      } 
+      }
     >
       <Tab eventKey="Add Person" title="Add Person">
       <div className='table-responsive transparent_bg'>
@@ -46,9 +66,10 @@ const navigate=useNavigate("/viewQuestionlist")
             <div className='d-flex justify-content-between align-items-center'>
             John
             <div className='icon_wrapper'>
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            {/* <div className='icon_content_outer'>
+            <img src={insight_icon} height={"17px"} width={"17px"} className='cursor_pointer'/>
+            <div className='icon_content_outer'>
               <div className='triangle'></div>
+             <div className='tooltip_content'>
             <ul className='user_info_detail_list'>
               <li className='d-flex gap-2'>
                 <h3 className='cmn_text_heading'>Name :</h3>
@@ -98,10 +119,16 @@ const navigate=useNavigate("/viewQuestionlist")
                 <h3 className='cmn_text_heading'>House address :  </h3>
                 <h4 className='cmn_text_heading'>Strret 56 chandigarh house no #4589</h4>
               </li>
-        
+              
             
             </ul>
-             </div> */}
+            <div className='text-end'>
+            <button className='cmn_Button_style' onClick={()=>{navigate("/editPerson")}}>Edit</button>
+            </div>
+
+             </div>
+
+             </div>
             </div>
             </div>
             </td>
@@ -139,7 +166,7 @@ const navigate=useNavigate("/viewQuestionlist")
             <td>
             <div className='d-flex justify-content-between align-items-center'>
            John
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
+            <img src={insight_icon} height={"17px"} width={"17px"} />
             </div>
             </td>
             <td>Java developer</td>
@@ -163,7 +190,7 @@ const navigate=useNavigate("/viewQuestionlist")
       </table>
          </div>
       </Tab>
-      <Tab eventKey=" Tachnical" title="Tachnical">
+      <Tab eventKey="Technical" title="Technical">
       <div className='table-responsive transparent_bg'>
       <table className='employee_detail_table'>
         <thead>
@@ -188,7 +215,7 @@ const navigate=useNavigate("/viewQuestionlist")
             </td>
             <td>Java developer</td>
             <td>2.5</td>
-            <td style={{textDecoration:"underline"}}> View Questions List</td>
+            <td style={{textDecoration:"underline"}} onClick={()=>{navigate("/questionAnswerSheet")}}> View Questions List</td>
             <td>
               <div className='form-group new_employee_form_group'>
               <CustomSelectComp optionsData={resultData}/>
@@ -197,7 +224,7 @@ const navigate=useNavigate("/viewQuestionlist")
             </td>
             <td>
         
-              <button className='cmn_Button_style'>Start</button>
+              <button className='cmn_Button_style' onClick={handleNextTab}>Start</button>
            
             </td>
           </tr>
@@ -205,7 +232,7 @@ const navigate=useNavigate("/viewQuestionlist")
       </table>
         </div>
       </Tab>
-      <Tab eventKey=" Face to face" title="Face to face">
+      <Tab eventKey="Face to face" title="Face to face">
       <div className='table-responsive transparent_bg'>
       <table className='employee_detail_table'>
         <thead>
@@ -241,7 +268,7 @@ const navigate=useNavigate("/viewQuestionlist")
             </td>
             <td>
         
-              <button className='cmn_Button_style'>Start</button>
+              <button className='cmn_Button_style' onClick={handleNextTab}>Start</button>
            
             </td>
           </tr>

@@ -22,6 +22,10 @@ import QuestionAnswerSheet from './Components/Admin/InterviewLead/QuestionAnswer
 import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
 import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
 import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
+import EditPerson from './Components/Admin/InterviewLead/EditPerson';
+import CustomToast from './Components/CustomToast/CustomToast';
+import EditAttendence from './Components/Admin/Attendence/EditAttendence';
+import CreateRole from './Components/Admin/RoleAndPermission/CreateRole';
 
 function App() {
 
@@ -49,6 +53,10 @@ function App() {
         <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet />} />
         <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
         <Route path='/editEmployee' element={< EditEmployeeInfo />} />
+        <Route path='/editPerson' element={< EditPerson />} />
+        <Route path='/editAttendence' element={< EditAttendence/>} />
+        <Route path='/createRole' element={< CreateRole/>} />
+        
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 
       </Routes>

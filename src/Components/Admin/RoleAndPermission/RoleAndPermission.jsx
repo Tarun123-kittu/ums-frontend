@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
-import UseAllUserRoles from "../../Utils/customHooks/useAllUserRoles";
 import "./rolePermission.css";
+import { useNavigate } from "react-router-dom";
+import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+
 const RoleAndPermission = () => {
-  UseAllUserRoles();
   const obj = [{ name: "Role & Permissions", path: "/rolePermission" }];
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { show } = useAppContext();
+  const navigate = useNavigate();
 
   return (
     <section className="role_permission_outer">
@@ -26,7 +29,14 @@ const RoleAndPermission = () => {
             classname={"inter_fontfamily employee_heading"}
           />
           <div className="text-end">
-            <button className="cmn_Button_style">Add</button>
+            <button
+              className="cmn_Button_style"
+              onClick={() => {
+                navigate("/createRole");
+              }}
+            >
+              Add
+            </button>
           </div>
 
           <div className="table-responsive mt-3 transparent_bg">
@@ -46,11 +56,20 @@ const RoleAndPermission = () => {
                   <td>Harmeet Sohi</td>
                   <td>
                     <div className="d-flex gap-2">
-                      <div className="cmn_action_outer yellow_bg">
+                      <div
+                        className="cmn_action_outer yellow_bg cursor_pointer"
+                        onClick={() => {
+                          navigate("/editRole");
+                        }}
+                      >
                         <FiEdit />
                       </div>
-                      <div className="cmn_action_outer red_bg">
-                        <RiDeleteBin6Line />
+                      <div className="cmn_action_outer red_bg cursor_pointer">
+                        <RiDeleteBin6Line
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                          }}
+                        />
                       </div>
                     </div>
                   </td>
@@ -60,6 +79,15 @@ const RoleAndPermission = () => {
           </div>
         </div>
       </div>
+      {showDeleteModal && (
+        <CommonDeleteModal
+          dialogClassname={"custom_modal_width"}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          heading_text={"Are you sure you want to delete?"}
+          paragraph_text={""}
+        />
+      )}
     </section>
   );
 };
