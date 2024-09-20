@@ -10,6 +10,7 @@ import updateUser from './userSlice/updateUserSlice'
 import getAttendanceReport from './attendanceSlice/getTodayAttendance'
 import getUserAttendanceReport from './attendanceSlice/getAttendanceRepot'
 import getAllAppliedLeaves from './leaveSlice/getAllAppliedLeaves'
+import getAllUserRoles from './rolesAndPermissionSlice/getUserRolesSlice'
 
 const appStore = configureStore({
     reducer: {
@@ -23,7 +24,8 @@ const appStore = configureStore({
         UPDATE_USER: updateUser,
         ATTENDANCE_REPORT: getAttendanceReport,
         GET_USER_ATTENDANCE_REPORT: getUserAttendanceReport,
-        GET_ALL_APPLIED_LEAVES: getAllAppliedLeaves
+        GET_ALL_APPLIED_LEAVES: getAllAppliedLeaves,
+        GET_ALL_USER_ROLES: getAllUserRoles
     },
 })
 
