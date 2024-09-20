@@ -31,7 +31,7 @@ const[showDeleteModal,setShowDeleteModal]=useState(false)
     <Header/>
     </div>
    
-    <div className='text-end register_btn_wrapper'>
+    <div className='text-end register_btn_wrapper mt-3'>
       <button onClick={()=>{setShowRegiterModal(true)}} className='cmn_btn'><IoMdAdd /> Register</button>
     </div>
     <div className="table-responsive candidate_table_outer cmn_radius">

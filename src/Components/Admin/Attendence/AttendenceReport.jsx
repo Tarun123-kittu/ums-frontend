@@ -10,6 +10,7 @@ import Select from "../../Common/Select";
 import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceReport";
 import { useDispatch, useSelector } from "react-redux";
 import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
+import { useNavigate } from "react-router-dom";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const AttendenceReport = () => {
   ];
   let [all_names, setAllNames] = useState([]);
   console.log(all_names, "this is the all naes  ");
-
+const navigate =useNavigate()
   const { show } = useAppContext();
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
@@ -196,7 +197,7 @@ const AttendenceReport = () => {
                       </td>
                       <td>
                         <div className="cmn_action_outer yellow_bg">
-                          <FiEdit />
+                          <FiEdit onClick={()=>{navigate('/editAttendenceReport')}}/>
                         </div>
                       </td>
                     </tr>

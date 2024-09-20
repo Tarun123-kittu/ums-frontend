@@ -62,43 +62,43 @@ const ViewEmployeeInfo = () => {
           />
           <div className="employee_editInfo_wrapper">
             <ul className="user_info_list_outer">
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Name</h3>
                 <h3 className="heading_style">{user_details?.name}</h3>
                 <h3 className="heading_style">Email</h3>
                 <h3 className="heading_style">{user_details?.email}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Mobile</h3>
                 <h3 className="heading_style">{user_details?.mobile}</h3>
                 <h3 className="heading_style">User Name</h3>
                 <h3 className="heading_style">{user_details?.username}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">DOB</h3>
                 <h3 className="heading_style">{user_details?.dob}</h3>
                 <h3 className="heading_style">DOJ</h3>
                 <h3 className="heading_style">{user_details?.doj}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Skepe</h3>
                 <h3 className="heading_style">{user_details?.skype_email}</h3>
                 <h3 className="heading_style">Ultivic email</h3>
                 <h3 className="heading_style">{user_details?.ultivic_email}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Position</h3>
                 <h3 className="heading_style">{user_details?.position}</h3>
                 <h3 className="heading_style">Technology/Department</h3>
                 <h3 className="heading_style">{user_details?.department}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Staus</h3>
                 <h3 className="heading_style">{user_details?.status}</h3>
                 <h3 className="heading_style">Salary</h3>
                 <h3 className="heading_style">{user_details?.salary}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">
                   Emergency Contact Relationship
                 </h3>
@@ -110,7 +110,7 @@ const ViewEmployeeInfo = () => {
                   {user_details?.emergency_contact_name}
                 </h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Emergency Contact</h3>
                 <h3 className="heading_style">
                   {user_details?.emergency_contact}
@@ -118,7 +118,7 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">Bank Name</h3>
                 <h3 className="heading_style">{user_details?.bank_name}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Account Number</h3>
                 <h3 className="heading_style">
                   {user_details?.account_number}
@@ -126,14 +126,14 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">Bank IFC Code</h3>
                 <h3 className="heading_style">{user_details?.ifsc}</h3>
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Increment Date</h3>
                 <h3 className="heading_style">
                   {user_details?.increment_date}
                 </h3>
                 
               </li>
-              <li className="d-flex align-items-center info_content">
+              <li className="d-flex  info_content">
                 <h3 className="heading_style">Address</h3>
                 <h3 className="heading_style">{user_details?.address}</h3>
               </li>

@@ -1208,7 +1208,7 @@ h1,h2,h3,h4,h5,h6,p{
   color: #F41A1A;
 }
 
-/* nnn */
+
 .custom-select-wrapper {
   position: relative;
 
@@ -1243,6 +1243,9 @@ select.custom-select.form-control {
 }
 .btn-close:focus{
   box-shadow: unset !important;
+}
+.cmn_editattendence_outer{
+  padding: 20px;
 }
   @media screen and (min-width:1900px){
     .heading{

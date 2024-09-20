@@ -5,3 +5,15 @@
     font-size: 24px;
 
 }
+.rating_outer svg {
+    color: #eb833e;
+    font-size: 18px;
+}
+.rating_outer h3{
+    color: #798495;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+ 

@@ -2,16 +2,15 @@ import React from 'react'
 import Sidebar from '../../Sidebar/Sidebar'
 import { useAppContext } from '../../Utils/appContecxt'
 import InputField from '../../Common/InputField'
-import { PiArrowBendDownLeftBold, PiCalendarPlusDuotone } from 'react-icons/pi'
 import "./attendence.css"
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import Notification from '../Notification/Notification'
 import { MdStar } from 'react-icons/md'
-
-const EditAttendence = () => {
+import "./attendence.css"
+const EditAttendenceReport = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
-    { name: "Edit  Attendance Today", path: "/editAttendenceToday" },
+    { name: "Edit  Attendance Report", path: "/editAttendenceReport" },
   ];
   const {show} =useAppContext()
   return (
@@ -53,11 +52,11 @@ const EditAttendence = () => {
      </div>
 
     </div>
-    <div className='new_employee_form_group'>
+    <div className='new_employee_form_group form-group'>
     <label>Report</label>
     <textarea className='form-control mt-2'/>
     </div>
-    <div className='new_employee_form_group'>
+    <div className='new_employee_form_group form-group'>
     <label>Remark</label>
     <textarea className='form-control mt-2'/>
     </div>
@@ -82,4 +81,4 @@ const EditAttendence = () => {
   )
 }
 
-export default EditAttendence
+export default EditAttendenceReport
