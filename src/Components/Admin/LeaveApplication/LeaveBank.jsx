@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import Notification from '../Notification/Notification'
 import { FiEdit } from 'react-icons/fi';
@@ -7,8 +7,10 @@ import { useAppContext } from '../../Utils/appContecxt';
 import { FaSortDown } from 'react-icons/fa';
 import { TiArrowSortedUp } from 'react-icons/ti';
 import Select from '../../Common/Select';
+import EditLeaveBankModal from '../../Modal/EditLeaveBankModal';
 
 const LeaveBank = () => {
+const[showEditLeaveModal,setShowEditLeaveModal]=useState(false)
     const obj = [
         { name: "Leave Application", path: "" },
         { name: "Leave Bank", path: "/leaveBank" },
@@ -100,7 +102,7 @@ const {show} = useAppContext()
             <td>4</td>
          
             <td>
-            <div className='cmn_action_outer yellow_bg'><FiEdit /></div>
+            <div className='cmn_action_outer yellow_bg cusror_pointer' onClick={()=>{setShowEditLeaveModal(true)}}><FiEdit /></div>
             </td>
           </tr>
         </tbody>
@@ -110,7 +112,7 @@ const {show} = useAppContext()
 
     
 
-
+{showEditLeaveModal && <EditLeaveBankModal show={showEditLeaveModal} setShow={setShowEditLeaveModal}/>}
     </div>
     </section>
   )

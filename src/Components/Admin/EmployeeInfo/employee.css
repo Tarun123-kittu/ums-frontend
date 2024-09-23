@@ -108,7 +108,7 @@ button.add_document_btn{
 
 }
 .new_employee_form_group input{
-    background-color: transparent !important;
+    background-color: transparent ;
     border-radius: 7px;
     margin-top: 10px;
 }

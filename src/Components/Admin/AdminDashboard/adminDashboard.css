@@ -2,6 +2,7 @@
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
     width: 100%;
+    align-items: stretch;
 }
 .info_content h3{
     width: 25%;
@@ -76,6 +77,9 @@ li.info_content:last-child {
 @media screen and (max-width:991px) {
     .info_content{
         flex-wrap: wrap;
+    }
+    .info_content h3 {
+        width: 50%;
     }
 }
 @media screen and (max-width:767px) {

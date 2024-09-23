@@ -2,16 +2,16 @@ import React from 'react'
 import Sidebar from '../../Sidebar/Sidebar'
 import { useAppContext } from '../../Utils/appContecxt'
 import InputField from '../../Common/InputField'
-import { PiArrowBendDownLeftBold, PiCalendarPlusDuotone } from 'react-icons/pi'
+
 import "./attendence.css"
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import Notification from '../Notification/Notification'
 import { MdStar } from 'react-icons/md'
 
-const EditAttendence = () => {
+const EditIncompleteAttendence = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
-    { name: "Edit  Attendance Today", path: "/editAttendenceToday" },
+    { name: "Edit Incomplete Attendance", path: "/editIncompleteAttendence" },
   ];
   const {show} =useAppContext()
   return (
@@ -82,4 +82,4 @@ const EditAttendence = () => {
   )
 }
 
-export default EditAttendence
+export default EditIncompleteAttendence

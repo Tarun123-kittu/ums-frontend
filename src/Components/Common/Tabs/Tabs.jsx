@@ -215,7 +215,7 @@ const handleNextTab = () => {
             </td>
             <td>Java developer</td>
             <td>2.5</td>
-            <td style={{textDecoration:"underline"}} onClick={()=>{navigate("/questionAnswerSheet")}}> View Questions List</td>
+            <td className="cursor_pointer" style={{textDecoration:"underline"}} onClick={()=>{navigate("/questionAnswerSheet")}}> View Questions List</td>
             <td>
               <div className='form-group new_employee_form_group'>
               <CustomSelectComp optionsData={resultData}/>

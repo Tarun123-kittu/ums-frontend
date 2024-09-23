@@ -38,19 +38,19 @@ const selectStateData=[
         <form>
         <div className='row'>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Full Name *"} placeholder={"Enter Full Name"} classname={"new_employee_form_group"} type={"text"}/>
+                <InputField labelname={"Full Name"} span={true} placeholder={"Enter Full Name"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Phone Number *"} placeholder={"Enter Phone Number"} classname={"new_employee_form_group"} type={"number"}/>
+                <InputField labelname={"Phone Number"} span={true} placeholder={"Enter Phone Number"} classname={"new_employee_form_group"} type={"number"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Email Address *"} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
+                <InputField labelname={"Email Address"} span={true} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <Select options={options} labelname={"Gender"} placeholder={"Select Gender"} labelClass={"new_employee_form_group"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"DOB *"} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
+                <InputField labelname={"DOB"} span={true} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"Experience "} placeholder={"Enter Experience"} classname={"new_employee_form_group"} type={"number"}/>
@@ -59,22 +59,22 @@ const selectStateData=[
                 <InputField labelname={"Current salary (optional)"} placeholder={"Enter Current salary"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Expected salary (optional)"} placeholder={"Enter Expected salary"} classname={"new_employee_form_group"} type={"text"}/>
+                <InputField  labelname={"Expected salary (optional)"} placeholder={"Enter Expected salary"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <Select labelname={"Profile *"} options={selectProfileData} placeholder={"Select Profile"} classname={"new_employee_form_group"}/>
+                <Select labelname={"Profile"} span={true} options={selectProfileData} placeholder={"Select Profile"} classname={"new_employee_form_group"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"Last Company (optional)"} placeholder={"Enter Last Company Name"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <Select labelname={"Select State *"} options={selectStateData} placeholder={"Select State"} classname={"new_employee_form_group"}/>
+                <Select  span={true}  labelname={"Select State"} options={selectStateData} placeholder={"Select State"} classname={"new_employee_form_group"}/>
             </div>
            
         </div>
         <div className='form-group new_employee_form_group'>
-            <label>House Address *</label>
-            <textarea className='form-control mt-2'  rows={5}/>
+            <label>House Address <span style={{color:"red"}}>*</span></label>
+            <textarea className='form-control mt-2' placeholder='Enter Address'  rows={5}/>
         </div>
 
         <div className='d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer'>

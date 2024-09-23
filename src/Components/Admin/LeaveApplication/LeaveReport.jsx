@@ -4,6 +4,8 @@ import Notification from '../Notification/Notification'
 import Sidebar from '../../Sidebar/Sidebar';
 import { useAppContext } from '../../Utils/appContecxt';
 import { FaSort } from 'react-icons/fa';
+import { FiEdit } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const LeaveReport = () => {
     const obj = [
@@ -13,7 +15,7 @@ const LeaveReport = () => {
       ];
 
 const {show} = useAppContext()
-
+const navigate=useNavigate()
   return (
     <section className='leaveReport_outer'>
       <Sidebar/>
@@ -86,6 +88,7 @@ const {show} = useAppContext()
             <th>Description</th>
             <th>Status</th>
             <th>Remark</th>
+            <th>Action</th>
           </tr>
          
         </thead>
@@ -101,7 +104,9 @@ const {show} = useAppContext()
             <td>Leave For Rakhi</td>
             <td>Accepted</td>
             <td></td>
-         
+            <td>
+            <div className='cmn_action_outer yellow_bg cursor_pointer'><FiEdit onClick={()=>{navigate("/editLeaveReport")}}/></div>
+            </td>
            
           </tr>
         </tbody>

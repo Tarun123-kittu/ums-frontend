@@ -2,10 +2,15 @@ import React from "react";
 import "./commonStyle.css";
 import { FaSort } from "react-icons/fa";
 
-const Select = ({ labelname, options, labelClass, placeholder, onChange }) => {
+const Select = ({ labelname, options, labelClass, placeholder, onChange,span }) => {
   return (
     <div className="new_employee_form_group">
+      {span ?  
+      <label>
+          {labelname} <span style={{ color: "red" }}>*</span>
+        </label>:
       <label className={labelClass}>{labelname}</label>
+      }  
       <div className="custom-select-wrapper">
         <select
           className="custom-select form-control"

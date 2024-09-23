@@ -6,6 +6,7 @@ import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import { useSelector } from "react-redux";
 import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllAppliedLeaves";
+import { useNavigate } from "react-router-dom";
 
 const LeaveRequest = () => {
   UseFetchAllAppliedLeaves();
@@ -28,7 +29,7 @@ const LeaveRequest = () => {
     const year = date.getFullYear(); // Get the year
     return `${year}-${month}-${day}`;
   };
-
+  const navigate=useNavigate()
   return (
     <section className="leaveRequest_outer">
       <Sidebar />
@@ -77,7 +78,7 @@ const LeaveRequest = () => {
                       <td></td>
                       <td>
                         <div className="cmn_action_outer yellow_bg">
-                          <FiEdit />
+                          <FiEdit onClick={()=>{navigate("/editLeaveRequest")}}/>
                         </div>
                       </td>
                     </tr>

@@ -26,6 +26,10 @@ import EditPerson from './Components/Admin/InterviewLead/EditPerson';
 import CustomToast from './Components/CustomToast/CustomToast';
 import EditAttendence from './Components/Admin/Attendence/EditAttendence';
 import CreateRole from './Components/Admin/RoleAndPermission/CreateRole';
+import EditIncompleteAttendence from './Components/Admin/Attendence/EditIncompleteAttendence';
+import EditAttendenceReport from './Components/Admin/Attendence/EditAttendenceReport';
+import EditLeaveRequest from './Components/Admin/LeaveApplication/EditLeaveRequest';
+import EditLeaveReport from './Components/Admin/LeaveApplication/EditleaveReport';
 
 function App() {
 
@@ -54,8 +58,12 @@ function App() {
         <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
         <Route path='/editEmployee' element={< EditEmployeeInfo />} />
         <Route path='/editPerson' element={< EditPerson />} />
-        <Route path='/editAttendence' element={< EditAttendence/>} />
+        <Route path='/editAttendenceToday' element={< EditAttendence/>} />
+        <Route path='/editIncompleteAttendence' element={< EditIncompleteAttendence/>} />
+        <Route path='/editAttendenceReport' element={< EditAttendenceReport/>} />
         <Route path='/createRole' element={< CreateRole/>} />
+        <Route path='/editLeaveRequest' element={< EditLeaveRequest/>} />
+        <Route path='/editLeaveReport' element={< EditLeaveReport/>} />
         
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

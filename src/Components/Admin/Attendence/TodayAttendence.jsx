@@ -6,6 +6,7 @@ import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const TodayAttendence = () => {
   UseAttendanceReport();
@@ -13,6 +14,8 @@ const TodayAttendence = () => {
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Attendance Today", path: "/todayAttendence" },
   ];
+  const navigate =useNavigate()
+
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
   const { show } = useAppContext();
 
@@ -88,7 +91,7 @@ const TodayAttendence = () => {
 
                       <td>
                         <div className="cmn_action_outer yellow_bg">
-                          <FiEdit />
+                          <FiEdit onClick={()=>{navigate("editAttendenceToday")}}/>
                         </div>
                       </td>
                     </tr>
