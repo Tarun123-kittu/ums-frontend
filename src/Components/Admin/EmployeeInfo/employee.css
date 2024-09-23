@@ -29,7 +29,9 @@ button.add_document_btn{
     width: 100%;
 }
 
-
+.employee_detail_table td span {
+    display: block;
+}
 
 .cmn_Button_style{
     border: unset;

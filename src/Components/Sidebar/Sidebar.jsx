@@ -20,7 +20,9 @@ import { useNavigate } from "react-router-dom";
 import { get_logged_in_user_permissions } from "../../utils/redux/userPermissionSlice/userpermissionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { save_user_permission_and_roles_globally } from "../../utils/redux/userPermissionSlice/userRolesAndPermissionSlice";
+import UseAllUsernames from "../Utils/customHooks/useAllUserNames";
 const Sidebar = () => {
+  UseAllUsernames();
   const navigate = useNavigate();
   const path = useLocation();
   const dispatch = useDispatch();
@@ -30,7 +32,12 @@ const Sidebar = () => {
     useState(false);
   const [showLeaveDropdown, setShowLeaveDropdown] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
+  console.log(uniqueRoles, "uniqueRoles uniqueRoles uniqueRoles");
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  console.log(
+    all_permissions,
+    "all_permissions all_permissions all_permissions"
+  );
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );

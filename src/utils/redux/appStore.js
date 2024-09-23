@@ -14,6 +14,11 @@ import getAllUserRoles from './rolesAndPermissionSlice/getUserRolesSlice'
 import getRolePermissions from './rolesAndPermissionSlice/getRolePermissions'
 import updateRolePermission from './rolesAndPermissionSlice/updateRolePermission'
 import disableRole from './rolesAndPermissionSlice/deleteRole'
+import createNewRoleAndAssignPermissions from './rolesAndPermissionSlice/createNewRole'
+import getAllUsername from './userSlice/getAllUserName'
+import getUsersAssignedToRoles from './rolesAndPermissionSlice/getUserAssignedToRole'
+import deleteUserAssignedToRole from './rolesAndPermissionSlice/deleteUserAssignedToRole'
+import assignedRole from './rolesAndPermissionSlice/assignedRoleToUser'
 
 const appStore = configureStore({
     reducer: {
@@ -31,7 +36,12 @@ const appStore = configureStore({
         GET_ALL_USER_ROLES: getAllUserRoles,
         GET_ROLE_PERMISSIONS: getRolePermissions,
         UPDATE_ROLE_PERMISSION: updateRolePermission,
-        DISABLE_ROLE: disableRole
+        DISABLE_ROLE: disableRole,
+        CREATE_NEW_ROLE_AND_PERMISSIONS: createNewRoleAndAssignPermissions,
+        ALL_USERNAMES: getAllUsername,
+        USERS_ASSIGNED_TO_ROLE: getUsersAssignedToRoles,
+        DELETE_USER_ASSIGNED_TO_ROLE: deleteUserAssignedToRole,
+        ASSIGNED_ROLE: assignedRole
     },
 })
 

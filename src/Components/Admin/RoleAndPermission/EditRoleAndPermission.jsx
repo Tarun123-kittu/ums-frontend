@@ -21,6 +21,11 @@ import {
   clear_disable_role_state,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteRole";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
+import { get_users_assigned_to_role } from "../../../utils/redux/rolesAndPermissionSlice/getUserAssignedToRole";
+import {
+  delete_user_assigned_to_role,
+  clear_delete_user_assigned_to_role,
+} from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
@@ -35,6 +40,10 @@ const EditRoleAndPermission = () => {
     (store) => store.UPDATE_ROLE_PERMISSION
   );
   const is_role_disabled = useSelector((store) => store.DISABLE_ROLE);
+  const user_assigned = useSelector((store) => store.USERS_ASSIGNED_TO_ROLE);
+  const deleted_users_state = useSelector(
+    (store) => store.DELETE_USER_ASSIGNED_TO_ROLE
+  );
   UseRolePermissions({ id });
 
   useEffect(() => {
@@ -47,6 +56,10 @@ const EditRoleAndPermission = () => {
     if (!id) navigate("/rolePermission");
   }, [id]);
 
+  useEffect(() => {
+    dispatch(get_users_assigned_to_role({ role_id: id }));
+  }, [id, dispatch]);
+
   const obj = [
     { name: "Role & Permissions", path: "/rolePermission" },
     { name: "Edit the Ux/Ui Designer Role", path: "/editRole" },
@@ -55,6 +68,7 @@ const EditRoleAndPermission = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteRoleModal, setShowDeleteRoleModal] = useState(false);
+  const [deleted_id, setDeleted_id] = useState(null);
 
   const handleChangePermissions = (index, valueKey) => {
     const updatedPermissions = permissions_state.map((state, idx) => {
@@ -94,6 +108,18 @@ const EditRoleAndPermission = () => {
       disable_role(get_all_user_roles());
     }
   }, [is_role_disabled]);
+
+  const handleDeleteUser = () => {
+    dispatch(delete_user_assigned_to_role({ user_id: deleted_id, roleId: id }));
+  };
+
+  useEffect(() => {
+    if (deleted_users_state?.isSuccess) {
+      dispatch(get_users_assigned_to_role({ role_id: id }));
+      dispatch(clear_delete_user_assigned_to_role());
+      setShowDeleteModal(false);
+    }
+  }, [deleted_users_state]);
 
   return (
     <section className="role_permission_outer">
@@ -222,15 +248,20 @@ const EditRoleAndPermission = () => {
                   </div>
                 </div>
                 <ul className="role_list">
-                  <li className="d-flex ">
-                    <h3 className="cmn_text_heading">Pritpal Sohi</h3>
-                    <RiDeleteBin6Line
-                      className="cursor_pointer"
-                      onClick={() => {
-                        setShowDeleteModal(true);
-                      }}
-                    />
-                  </li>
+                  {user_assigned?.data?.data?.map((name, i) => {
+                    return (
+                      <li key={i} className="d-flex ">
+                        <h3 className="cmn_text_heading">{name?.name}</h3>
+                        <RiDeleteBin6Line
+                          className="cursor_pointer"
+                          onClick={() => {
+                            setDeleted_id(name?.id);
+                            setShowDeleteModal(true);
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -241,6 +272,8 @@ const EditRoleAndPermission = () => {
             dialogClassname={"custom_modal_width"}
             show={showAssignModal}
             setShow={setShowAssignModal}
+            userAssignedToOldRole={true}
+            role_id={id}
           />
         )}
         {showDeleteModal && (
@@ -248,10 +281,9 @@ const EditRoleAndPermission = () => {
             dialogClassname={"custom_modal_width"}
             show={showDeleteModal}
             setShow={setShowDeleteModal}
-            heading_text={
-              "Are you sure to delete the Pritpal Sohi form Test Series"
-            }
+            heading_text={"Are you sure to delete"}
             paragraph_text={""}
+            handleDelete={handleDeleteUser}
           />
         )}
         {showDeleteRoleModal && (
