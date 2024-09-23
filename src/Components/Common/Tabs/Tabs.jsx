@@ -40,8 +40,6 @@ const handleNextTab = () => {
       activeKey={activeTab}
       onSelect={(k) =>{
         setActiveTab(k)
-        console.log(k,"ke")
-        
       } 
       }
     >

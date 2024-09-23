@@ -51,7 +51,7 @@ const AdminDashboard = () => {
         <h3 className='heading_style'>07-2-2024</h3>
       </li>
       <li className='d-flex  info_content'>
-        <h3 className='heading_style'>Skepe</h3>
+        <h3 className='heading_style'>Skype</h3>
         <h3 className='heading_style'>DineshKumar@ultivic.com</h3>
         <h3 className='heading_style'>Ultivic email</h3>
         <h3 className='heading_style'>john@ultivic.com</h3>

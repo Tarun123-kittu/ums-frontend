@@ -89,13 +89,15 @@ const [showDeleteRoleModal,setShowDeleteRoleModal]=useState(false)
           </div>
 
             </div>
+          
             <ul className='role_list'>
-              <li className='d-flex '>
+            <li>
+                <div className='d-flex role_list_wrapper'>
                 <h3 className='cmn_text_heading'>Pritpal Sohi</h3>
                 <RiDeleteBin6Line className='cursor_pointer' onClick={()=>{setShowDeleteModal(true)}}/>
+                </div>
               </li>
             </ul>
-            
           </div>
         </div>
       </div>
@@ -104,7 +106,7 @@ const [showDeleteRoleModal,setShowDeleteRoleModal]=useState(false)
     </div>
     {showAssignModal && <AssignNameModal dialogClassname={'custom_modal_width'} show={showAssignModal} setShow={ setShowAssignModal}/>}
 {showDeleteModal && <CommonDeleteModal dialogClassname ={'custom_modal_width'} show={showDeleteModal} setShow={setShowDeleteModal} 
-heading_text={"Are you sure to delete the Pritpal Sohi form Test Series"} paragraph_text={""}/>}
+heading_text={"Are you sure to delete the Pritpal Sohi form Test Series."} paragraph_text={""}/>}
  {showDeleteRoleModal && 
  <CommonDeleteModal dialogClassname={"custom_modal_width"} className={""}show={showDeleteRoleModal} setShow={setShowDeleteRoleModal} 
   heading_text={"Are you sure to delete Test Series role"}

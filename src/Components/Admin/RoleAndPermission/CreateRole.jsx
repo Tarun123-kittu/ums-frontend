@@ -101,7 +101,7 @@ const [showDeleteRoleModal,setShowDeleteRoleModal]=useState(false)
     </div>
     {showAssignModal && <AssignNameModal dialogClassname={'custom_modal_width'} show={showAssignModal} setShow={ setShowAssignModal}/>}
 {showDeleteModal && <CommonDeleteModal dialogClassname ={'custom_modal_width'} show={showDeleteModal} setShow={setShowDeleteModal} 
-heading_text={"Are you sure to delete the Pritpal Sohi form Test Series"} paragraph_text={""}/>}
+heading_text={"Are you sure to delete the Pritpal Sohi form Test Series."} paragraph_text={""}/>}
  {showDeleteRoleModal && 
  <CommonDeleteModal dialogClassname={"custom_modal_width"} className={""}show={showDeleteRoleModal} setShow={setShowDeleteRoleModal} 
   heading_text={"Are you sure to delete Test Series role"}
