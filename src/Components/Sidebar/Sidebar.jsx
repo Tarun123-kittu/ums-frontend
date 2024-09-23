@@ -66,7 +66,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.clear("ums_token");
     toast.success("Logout successfully!!", { autoClose: 2000 });
-    navigate("/login");
+    navigate("/");
   };
 
   const handleChangePassword = () => {
