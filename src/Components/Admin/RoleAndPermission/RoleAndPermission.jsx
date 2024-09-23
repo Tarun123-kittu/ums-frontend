@@ -38,7 +38,7 @@ const RoleAndPermission = () => {
       dispatch(clear_disable_role_state());
       UseAllUserRoles();
     }
-  }, [is_role_disabled]);
+  }, [is_role_disabled, dispatch]);
 
   return (
     <section className="role_permission_outer">
