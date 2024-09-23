@@ -66,4 +66,4 @@ const navigate =useNavigate()
   )
 }
 
-export default RoleAndPermission
+export default RoleAndPermission;
