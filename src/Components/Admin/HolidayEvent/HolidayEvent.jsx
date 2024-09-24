@@ -8,24 +8,16 @@ import { TiArrowSortedUp } from 'react-icons/ti'
 import "./holiday.css"
 import AddEventModal from '../../Modal/AddEventModal'
 import Select from '../../Common/Select'
+import EditEventModal from '../../Modal/EditEventModal'
+import CommonDeleteModal from '../../Modal/CommonDeleteModal'
+import CustomSelectComp from '../../Common/CustomSelectComp'
 const HolidayEvent = () => {
 const {show} = useAppContext()
 const [showEventModal,setShowEventModal]=useState(false)
+const [showEditEventModal,setShowEditEventModal]=useState(false)
+const [showDeleteModal,setShowDeleteModal]=useState(false)
 
-const yearObj=[
-{
-  value:2022,
-  option:2022
-},
-{
-  value:2023,
-  option:2023
-},
-{
-  value:2024,
-  option:2023
-},
-]
+
   return (
     <section className='holiday_event_wrapper'>
     <Sidebar/>
@@ -35,26 +27,13 @@ const yearObj=[
     <div className='cmn_padding_outer'>
      
     <div className='d-flex employee_container align-items-end mt-3'>
-      <div className='employee_wrapper'>
-    <Select labelname={"Holiday"}  labelClass={""} options={yearObj}/>
-
-      </div>
-
-{/* <div className='employee_wrapper'>
-    <h4 className='inter_fontfamily'>Happy Holidays</h4>
-   <div className='serach_user_outer'>
-    <input placeholder='2024'/>
-   <div className='sort_outer d-flex '>
-   <TiArrowSortedUp />
-   <FaSortDown />
-   </div>
-   </div>
-</div> */}
-
-
-
-
-
+    <div className='form-group new_employee_form_group w-100'>
+            <label>Holiday</label>
+             <div className='mt-2'>
+             <CustomSelectComp/>
+             </div>
+             </div>
+    
 <div className='employee_wrapper text-end serach_add_outer'>
   <button className='cmn_Button_style'>Search</button>
   <button className='cmn_Button_style ms-3' onClick={()=>{setShowEventModal(true)}}>Add Event</button>
@@ -79,8 +58,8 @@ const yearObj=[
            
             <td>
               <div className='d-flex gap-2 justify-content-center'>
-                <div className='cmn_action_outer yellow_bg'><FaRegEdit /></div>
-                <div className='cmn_action_outer red_bg'><RiDeleteBin6Line /></div>
+                <div className='cmn_action_outer yellow_bg cursor_pointer' onClick={()=>{setShowEditEventModal(true)}}><FaRegEdit /></div>
+                <div className='cmn_action_outer red_bg cursor_pointer' onClick={()=>{setShowDeleteModal(true)}}><RiDeleteBin6Line /></div>
      
               </div>
             </td>
@@ -94,6 +73,8 @@ const yearObj=[
 
   
 {showEventModal && <AddEventModal show={showEventModal} setShow={setShowEventModal} />}
+{showEditEventModal && <EditEventModal show={showEditEventModal} setShow={setShowEditEventModal}/>}
+{showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the Holiday & Events"} paragraph_text={""}/>}
 
   </div>
   </section>

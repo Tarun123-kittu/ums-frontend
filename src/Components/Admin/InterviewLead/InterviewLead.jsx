@@ -9,6 +9,7 @@ import "./interviewLead.css"
 import { useNavigate } from 'react-router-dom';
 import CommonDeleteModal from '../../Modal/CommonDeleteModal';
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp';
+import CustomSelectComp from '../../Common/CustomSelectComp';
 
 const InterviewLead = () => {
 
@@ -30,19 +31,12 @@ const obj = [
     <div className='employee_list_outer '>
     <div className='d-flex employee_container align-items-end mt-3'>
 
-    <div className='new_employee_form_group employee_wrapper'>
-
-<label className='inter_fontfamily'>Profile</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Profile">
-
- <option  value="2022">java developer</option>
-      
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
+    <div className='form-group new_employee_form_group employee_wrapper'>
+            <label>Profile</label>
+             <div className='mt-2'>
+             <CustomSelectComp placeholder={"Select Profile"}/>
+             </div>
+    </div>
    
 
 <div className='new_employee_form_group employee_wrapper'>
@@ -54,31 +48,21 @@ const obj = [
 </div>
    </div>
 
-   <div className='new_employee_form_group employee_wrapper'>
-
-<label className='inter_fontfamily'>Experience</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Experience">
-
- <option >1</option>
-      
   
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
+   <div className='form-group new_employee_form_group employee_wrapper'>
+            <label>Experience</label>
+             <div className='mt-2'>
+             <CustomSelectComp/>
+             </div>
+    </div>
 
-<div className='new_employee_form_group employee_wrapper'>
-
-<label className='inter_fontfamily'>Result</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Result">
-
- <option>Pass</option>
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
+ 
+    <div className='form-group new_employee_form_group employee_wrapper'>
+            <label>Result</label>
+             <div className='mt-2'>
+             <CustomSelectComp/>
+             </div>
+    </div>
    
     <div className='employee_wrapper text-end serach_add_outer d-flex gap-2'>
       <button className='cmn_Button_style cmn_darkgray_btn' onClick={()=>{setShowDeleteModal(true)}}>Delete</button>
@@ -100,7 +84,7 @@ const obj = [
 
     </div>
     </div>
-{showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={""}/>}
+{showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={"Please confirm your action. Deleting the user list is permanent and cannot be reversed."}/>}
     </section>
  
   )

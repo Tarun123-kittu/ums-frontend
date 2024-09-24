@@ -102,7 +102,7 @@ const {show} = useAppContext()
             <td>4</td>
          
             <td>
-            <div className='cmn_action_outer yellow_bg cusror_pointer' onClick={()=>{setShowEditLeaveModal(true)}}><FiEdit /></div>
+            <div className='cmn_action_outer yellow_bg cursor_pointer' onClick={()=>{setShowEditLeaveModal(true)}}><FiEdit /></div>
             </td>
           </tr>
         </tbody>

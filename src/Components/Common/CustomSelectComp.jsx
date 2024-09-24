@@ -4,12 +4,13 @@ import { TiArrowUnsorted } from 'react-icons/ti';
 
 import Select, { components } from 'react-select';
 
-const CustomSelectComp = ({optionsData}) => {
+const CustomSelectComp = ({optionsData,placeholder}) => {
 
     const customStyles = {
       container: (provided) => ({
         ...provided,
         width: '100%', 
+        backgroundColor:'transparent'
       }),
         option: (provided, state) => ({
           ...provided,
@@ -25,18 +26,18 @@ const CustomSelectComp = ({optionsData}) => {
         }),
         input: (provided) => ({
           ...provided,
-          fontSize: 5,
+          fontSize: 14,
         }),
         control: (provided, state) => ({
           ...provided,
          borderRadius:7,
           border: state.isFocused ? '1px solid #D9D9D9' : '1px solid #D9D9D9',
-          padding: '0 8px',
+          padding: '3px 8px',
           boxShadow: 'none', 
           '&:hover': {
         border: '1px solid #D9D9D9',
-      
         },
+          backgroundColor:"transparent"
      
         }),
         placeholder: (provided) => ({
@@ -90,6 +91,7 @@ const CustomSelectComp = ({optionsData}) => {
     styles={customStyles}
     components={{ Option: CustomOption ,DropdownIndicator }} 
     menuPortalTarget={document.body}
+    placeholder={placeholder}
     />
   )
 }

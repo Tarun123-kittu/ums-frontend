@@ -51,6 +51,9 @@
 .modal-dialog.custom_modal_width {
     width: 430px;
 }
+.cmn_ques_heading{
+    font-size: 15px;
+}
  @media screen  and (max-width:1280px) {
     .logout_heading{
         font-size: 23px;

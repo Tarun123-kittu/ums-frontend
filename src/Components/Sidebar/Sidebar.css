@@ -72,7 +72,8 @@
         transition: all 0.3s ease;
     }
     .filterClass{
-      filter: invert(36%) sepia(84%) saturate(6135%) hue-rotate(332deg) brightness(102%) contrast(110%);
+      filter:invert(19%) sepia(40%) saturate(5500%) hue-rotate(340deg) brightness(114%) contrast(105%);
+    
     }
     .sidebar_content svg{
       color: #333333;

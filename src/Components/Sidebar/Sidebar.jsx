@@ -22,7 +22,9 @@ import { get_logged_in_user_permissions } from "../../utils/redux/userPermission
 import { useDispatch, useSelector } from "react-redux";
 import menuitems from "./MenuItem"
 import { save_user_permission_and_roles_globally } from "../../utils/redux/userPermissionSlice/userRolesAndPermissionSlice";
+import UseAllUsernames from "../Utils/customHooks/useAllUserNames";
 const Sidebar = () => {
+  UseAllUsernames();
   const navigate = useNavigate();
   const path = useLocation();
   const dispatch = useDispatch();
@@ -32,7 +34,12 @@ const Sidebar = () => {
     useState(false);
   const [showLeaveDropdown, setShowLeaveDropdown] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
+  console.log(uniqueRoles, "uniqueRoles uniqueRoles uniqueRoles");
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  console.log(
+    all_permissions,
+    "all_permissions all_permissions all_permissions"
+  );
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
@@ -68,7 +75,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.clear("ums_token");
     toast.success("Logout successfully!!", { autoClose: 2000 });
-    navigate("/login");
+    navigate("/");
   };
 
   const handleChangePassword = () => {
@@ -79,7 +86,16 @@ const Sidebar = () => {
   const handleToggle = (index) => {
     setExpanded(expanded === index ? null : index); 
   };
-
+  useEffect(() => {
+    menuitems.forEach((data, index) => {
+      if (data.subItems) {
+        const subItemMatch = data.subItems.some(subItem => path.pathname === subItem.pathname);
+        if (subItemMatch) {
+          setExpanded(index);
+        }
+      }
+    });
+  }, [path.pathname, menuitems]);
   return (
     
       <div className={`sidebar ${show ? "cmn_width" : ""}`}>
