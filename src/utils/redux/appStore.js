@@ -19,6 +19,10 @@ import getAllUsername from './userSlice/getAllUserName'
 import getUsersAssignedToRoles from './rolesAndPermissionSlice/getUserAssignedToRole'
 import deleteUserAssignedToRole from './rolesAndPermissionSlice/deleteUserAssignedToRole'
 import assignedRole from './rolesAndPermissionSlice/assignedRoleToUser'
+import getAppliedLeaveDetail from './leaveSlice/getAppliedLeavesDetails'
+import updateLeave from './leaveSlice/updateLeaves'
+import getAllUserLeave from './leaveSlice/getUsersAllLeaves'
+import getLeaveBankReport from './leaveSlice/getLeaveBankReport'
 
 const appStore = configureStore({
     reducer: {
@@ -41,7 +45,11 @@ const appStore = configureStore({
         ALL_USERNAMES: getAllUsername,
         USERS_ASSIGNED_TO_ROLE: getUsersAssignedToRoles,
         DELETE_USER_ASSIGNED_TO_ROLE: deleteUserAssignedToRole,
-        ASSIGNED_ROLE: assignedRole
+        ASSIGNED_ROLE: assignedRole,
+        APPLIED_LEAVE_DETAIL: getAppliedLeaveDetail,
+        UPDATE_LEAVE: updateLeave,
+        USER_ALL_LEAVES: getAllUserLeave,
+        LEAVE_REPORT_BANK: getLeaveBankReport
     },
 })
 

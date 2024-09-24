@@ -16,6 +16,7 @@ import {
   clear_new_role_permission_state,
 } from "../../../utils/redux/rolesAndPermissionSlice/createNewRole";
 import { useNavigate } from "react-router-dom";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const CreateRole = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,9 @@ const CreateRole = () => {
   const is_new_role_created = useSelector(
     (store) => store.CREATE_NEW_ROLE_AND_PERMISSIONS
   );
-  console.log(is_new_role_created, "is_new_role_created");
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const all_userNames = useSelector((store) => store.ALL_USERNAMES?.data?.data);
 
   const handleChangePermissions = (index, valueKey, permission_id) => {
@@ -102,6 +105,10 @@ const CreateRole = () => {
       navigate("/rolePermission");
     }
   }, [is_new_role_created]);
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section className="role_permission_outer">

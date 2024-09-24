@@ -22,14 +22,13 @@ const EmployeeList = () => {
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [userId,  setuserId] = useState("");
- 
+  const [userId, setuserId] = useState("");
+
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-  console.log(user_all_permissions, "from employee list");
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
@@ -59,11 +58,11 @@ const EmployeeList = () => {
     dispatch(get_all_users_user({ name: searchName, status: searchStatus }));
   }, []);
 
-  const deleteHandler=()=>{
-       dispatch(delete_user({ id: userId }))
-       setShowDeleteModal(false)
-  }
-  
+  const deleteHandler = () => {
+    dispatch(delete_user({ id: userId }));
+    setShowDeleteModal(false);
+  };
+
   if (!user_all_permissions?.roles_data?.includes("Admin")) {
     return <UnauthorizedPage />;
   }
@@ -180,12 +179,11 @@ const EmployeeList = () => {
                         title="delete user"
                       >
                         <RiDeleteBin6Line
-                          onClick={() =>{
-                            setShowDeleteModal(true)
-                            setuserId(user?.id)
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                            setuserId(user?.id);
                             // dispatch(delete_user({ id: user?.id }))
-                          }
-                          }
+                          }}
                         />
                       </div>
                     </div>
@@ -196,7 +194,15 @@ const EmployeeList = () => {
           </tbody>
         </table>
       </div>
-      {showDeleteModal && <CommonDeleteModal heading_text={"Are you sure you want to delete "} paragraph_text={""} show={showDeleteModal} setShow={setShowDeleteModal} deleteHandler={deleteHandler}/>}
+      {showDeleteModal && (
+        <CommonDeleteModal
+          heading_text={"Are you sure you want to delete "}
+          paragraph_text={""}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          deleteHandler={deleteHandler}
+        />
+      )}
       <ToastContainer />
     </div>
   );

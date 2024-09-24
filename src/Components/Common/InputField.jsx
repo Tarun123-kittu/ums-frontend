@@ -11,6 +11,7 @@ const InputField = ({
   name,
   value,
   onChange,
+  disabled,
 }) => {
   return (
     <div className={`form-group ${classname}`}>
@@ -30,6 +31,7 @@ const InputField = ({
             name={name}
             value={value}
             onChange={onChange}
+            disabled
           />
           <div className="symbol_wrapper">{symbol}</div>
         </div>

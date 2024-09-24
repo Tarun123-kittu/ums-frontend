@@ -15,6 +15,8 @@ import {
   clear_disable_role_state,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteRole";
 import { ToastContainer, toast } from "react-toastify";
+import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const RoleAndPermission = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,9 @@ const RoleAndPermission = () => {
   const navigate = useNavigate();
   const [role_id, setRole_id] = useState("");
   const is_role_disabled = useSelector((store) => store.DISABLE_ROLE);
-
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const user_roles = useSelector((store) => store.GET_ALL_USER_ROLES);
 
   const handleDelete = () => {
@@ -36,9 +40,14 @@ const RoleAndPermission = () => {
     if (is_role_disabled?.isSuccess) {
       toast.success("Role deleted successfully");
       dispatch(clear_disable_role_state());
-      UseAllUserRoles();
+      dispatch(get_all_user_roles());
+      setShowDeleteModal(false);
     }
   }, [is_role_disabled, dispatch]);
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section className="role_permission_outer">

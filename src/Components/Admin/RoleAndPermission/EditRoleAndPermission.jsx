@@ -26,6 +26,7 @@ import {
   delete_user_assigned_to_role,
   clear_delete_user_assigned_to_role,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
+import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
@@ -90,9 +91,10 @@ const EditRoleAndPermission = () => {
 
   useEffect(() => {
     if (is_permissions_updated?.isSuccess) {
+      dispatch(get_role_permissions({ id }));
       toast.success("Permission updated Successfully");
-      UseRolePermissions({ id });
       dispatch(clear_update_role_permissions_slice());
+      navigate("/rolePermission");
     }
   }, [is_permissions_updated]);
 

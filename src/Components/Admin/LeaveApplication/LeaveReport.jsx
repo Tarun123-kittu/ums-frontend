@@ -1,125 +1,224 @@
-import React from 'react'
-import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
-import Notification from '../Notification/Notification'
-import Sidebar from '../../Sidebar/Sidebar';
-import { useAppContext } from '../../Utils/appContecxt';
-import { FaSort } from 'react-icons/fa';
-import { FiEdit } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import Notification from "../Notification/Notification";
+import Sidebar from "../../Sidebar/Sidebar";
+import { useAppContext } from "../../Utils/appContecxt";
+import { FaSort } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { get_all_user_leave } from "../../../utils/redux/leaveSlice/getUsersAllLeaves";
 
 const LeaveReport = () => {
-    const obj = [
-        { name: "Leave Application", path: "" },
-        { name: "Leave Report", path: "/leaveReport" },
-        
-      ];
+  const dispatch = useDispatch();
+  const obj = [
+    { name: "Leave Application", path: "" },
+    { name: "Leave Report", path: "/leaveReport" },
+  ];
 
-const {show} = useAppContext()
-const navigate=useNavigate()
+  const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
+  const all_userNames = useSelector((store) => store.ALL_USERNAMES);
+  const [year, setYear] = useState([]);
+  const [selected_employee, setSelected_employee] = useState();
+  const [selected_month, setSelected_month] = useState();
+  const [selected_year, setSelected_year] = useState();
+
+  useEffect(() => {
+    dispatch(
+      get_all_user_leave({
+        name: selected_employee,
+        month: selected_month,
+        year: selected_year,
+      })
+    );
+    years();
+  }, []);
+
+  const { show } = useAppContext();
+  const navigate = useNavigate();
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // handle the case when the date is null or undefined
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with '0' if needed
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (months are 0-based)
+    const year = date.getFullYear(); // Get the year
+    return `${year}-${month}-${day}`;
+  };
+
+  const years = (startYear = 2022) => {
+    let currentYear = new Date().getFullYear();
+    let result = [];
+
+    while (startYear <= currentYear) {
+      result.push(startYear++);
+    }
+    setYear(result);
+  };
+
+  const handleManageFilters = () => {
+    if (selected_employee || selected_month || selected_year) {
+      dispatch(
+        get_all_user_leave({
+          name: selected_employee,
+          month: selected_month,
+          year: selected_year,
+        })
+      );
+    }
+  };
   return (
-    <section className='leaveReport_outer'>
-      <Sidebar/>
-    <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
-      <Notification/>
-    
-      <div className='cmn_padding_outer'>
-        <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
-        />
+    <section className="leaveReport_outer">
+      <Sidebar />
+      <div
+        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
 
-<div className='d-flex employee_container align-items-end mt-3'>
+        <div className="cmn_padding_outer">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+            onBreadcrumbClick={""}
+          />
 
-<div className='new_employee_form_group employee_wrapper'>
+          <div className="d-flex employee_container align-items-end mt-3">
+            <div className="new_employee_form_group employee_wrapper">
+              <label className="inter_fontfamily">Employees</label>
+              <div class="custom-select-wrapper ">
+                <select
+                  class="custom-select form-control"
+                  placeholder="Select Financial Year"
+                  value={selected_employee}
+                  onChange={(e) => setSelected_employee(e.target.value)}
+                >
+                  <option>Select</option>
+                  {all_userNames?.data?.data?.map((name, i) => {
+                    return (
+                      <option key={i} value={name?.id}>
+                        {name?.name}-({name?.username})
+                      </option>
+                    );
+                  })}
+                </select>
+                <FaSort className="dropdown-icon " />
+              </div>
+            </div>
 
-<label className='inter_fontfamily'>Select Financial Year</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Financial Year">
+            <div className="new_employee_form_group employee_wrapper">
+              <label className="inter_fontfamily">Month</label>
+              <div class="custom-select-wrapper ">
+                <select
+                  class="custom-select form-control"
+                  placeholder="Month"
+                  value={selected_month}
+                  onChange={(e) => setSelected_month(e.target.value)}
+                >
+                  <option>Select</option>
+                  <option value="1">January</option>
+                  <option value="2">Feburary</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+                <FaSort className="dropdown-icon " />
+              </div>
+            </div>
 
- <option  value="2022">jan</option>
-      
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
+            <div className="new_employee_form_group employee_wrapper">
+              <label className="inter_fontfamily">Year</label>
+              <div class="custom-select-wrapper ">
+                <select
+                  class="custom-select form-control"
+                  placeholder="Year"
+                  value={selected_year}
+                  onChange={(e) => setSelected_year(e.target.value)}
+                >
+                  <option>Select</option>
+                  {year?.map((select_year, i) => {
+                    return (
+                      <option key={i} value={select_year}>
+                        {select_year}
+                      </option>
+                    );
+                  })}
+                </select>
+                <FaSort className="dropdown-icon " />
+              </div>
+            </div>
 
-<div className='new_employee_form_group employee_wrapper'>
-
-<label className='inter_fontfamily'>Month</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Month">
-   
- <option  value="2022">Jan</option>
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
-
-
-<div className='new_employee_form_group employee_wrapper'>
-<label className='inter_fontfamily'>Year</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder='Year'>
-  <option  value="2022">2022</option>
- 
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
-
-<div className='employee_wrapper text-center serach_add_outer'>
-  <button className='cmn_Button_style'>Search</button>
-
-</div>
-
-</div>
-        <div className='table-responsive mt-3 transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Employee </th>
-            <th>Type</th>
-            <th>Apply On</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Total</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Remark</th>
-            <th>Action</th>
-          </tr>
-         
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>John</td>
-            <td>Casual Leave</td>
-            <td>19/08/24</td>
-            <td>21/08/24</td>
-            <td>23/08/24</td>
-            <td>2</td>
-            <td>Leave For Rakhi</td>
-            <td>Accepted</td>
-            <td></td>
-            <td>
-            <div className='cmn_action_outer yellow_bg cursor_pointer'><FiEdit onClick={()=>{navigate("/editLeaveReport")}}/></div>
-            </td>
-           
-          </tr>
-        </tbody>
-        </table>
-         </div>
+            <div className="employee_wrapper text-center serach_add_outer">
+              <button
+                className="cmn_Button_style"
+                onClick={() => handleManageFilters()}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+          <div className="table-responsive mt-3 transparent_bg">
+            <table className="employee_detail_table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Employee </th>
+                  <th>Type</th>
+                  <th>Apply On</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Total</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Remark</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leave_data?.data?.data?.map((leave, i) => {
+                  return (
+                    <tr>
+                      <td>{i + 1}</td>
+                      <td>{leave?.name}</td>
+                      <td>{leave?.type}</td>
+                      <td>{formatDate(leave?.createdAt)}</td>
+                      <td>{leave?.from_date}</td>
+                      <td>{leave?.to_date}</td>
+                      <td>{leave?.count}</td>
+                      <td>{leave?.description}</td>
+                      <td>{leave?.status}</td>
+                      <td>{leave?.remark}</td>
+                      <td>
+                        <div className="cmn_action_outer yellow_bg cursor_pointer">
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editLeaveRequest", {
+                                state: {
+                                  leave_id: leave?.id,
+                                  back_to_report: true,
+                                  leave_status: leave?.status,
+                                  leave_remark: leave?.remark,
+                                },
+                              });
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-
-    
-
-
-    </div>
     </section>
-  )
-}
+  );
+};
 
-export default LeaveReport
+export default LeaveReport;

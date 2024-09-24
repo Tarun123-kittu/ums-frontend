@@ -29,7 +29,7 @@ const LeaveRequest = () => {
     const year = date.getFullYear(); // Get the year
     return `${year}-${month}-${day}`;
   };
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <section className="leaveRequest_outer">
       <Sidebar />
@@ -65,7 +65,7 @@ const LeaveRequest = () => {
               <tbody>
                 {all_applied_leaves?.data?.data?.map((leaves, i) => {
                   return (
-                    <tr>
+                    <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{leaves?.name}</td>
                       <td>{leaves?.type}</td>
@@ -75,10 +75,20 @@ const LeaveRequest = () => {
                       <td>{leaves?.count}</td>
                       <td>{leaves?.description}</td>
                       <td>{leaves?.status}</td>
-                      <td></td>
+                      <td>{leaves?.remark}</td>
                       <td>
                         <div className="cmn_action_outer yellow_bg">
-                          <FiEdit onClick={()=>{navigate("/editLeaveRequest")}}/>
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editLeaveRequest", {
+                                state: {
+                                  leave_id: leaves?.id,
+                                  leave_status: leaves?.status,
+                                  leave_remark: leaves?.remark,
+                                },
+                              });
+                            }}
+                          />
                         </div>
                       </td>
                     </tr>
