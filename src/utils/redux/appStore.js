@@ -23,6 +23,11 @@ import getAppliedLeaveDetail from './leaveSlice/getAppliedLeavesDetails'
 import updateLeave from './leaveSlice/updateLeaves'
 import getAllUserLeave from './leaveSlice/getUsersAllLeaves'
 import getLeaveBankReport from './leaveSlice/getLeaveBankReport'
+import addHolidayAndEvent from './holidayAndEventsSlice/addHolidayAndEvent'
+import getAllHolidaysAndEvents from './holidayAndEventsSlice/getAllHolidaysAndEvents'
+import getSelectedHolidayAndEventDetails from './holidayAndEventsSlice/getSelectedHolidayAndEvent'
+import updateSelectedEvents from './holidayAndEventsSlice/updateHolidayAndEvents'
+import deleteEvent from './holidayAndEventsSlice/deleteEvent'
 
 const appStore = configureStore({
     reducer: {
@@ -49,7 +54,12 @@ const appStore = configureStore({
         APPLIED_LEAVE_DETAIL: getAppliedLeaveDetail,
         UPDATE_LEAVE: updateLeave,
         USER_ALL_LEAVES: getAllUserLeave,
-        LEAVE_REPORT_BANK: getLeaveBankReport
+        LEAVE_REPORT_BANK: getLeaveBankReport,
+        ADD_HOLIDAY_AND_EVENT: addHolidayAndEvent,
+        ALL_HOLIDAY_AND_EVENT: getAllHolidaysAndEvents,
+        SELECTED_EVENT_DETAILS: getSelectedHolidayAndEventDetails,
+        UPDATE_SELECTED_EVENT: updateSelectedEvents,
+        DELETE_EVENT: deleteEvent
     },
 })
 
