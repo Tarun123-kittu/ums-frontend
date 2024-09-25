@@ -13,25 +13,17 @@ const LeaveBank = () => {
   const dispatch = useDispatch();
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
-  console.log(leave_bank_data, "leave_bank_data leave_bank_data");
+  const [session, setSession] = useState("");
+  const [selected_year, setSelected_year] = useState("");
+  const [selected_month, setSelected_month] = useState("");
+  const [year, setYear] = useState([]);
+  const [yearObj, setYearObj] = useState([]);
+  const [financial_year, setFinancial_year] = useState([]);
   const obj = [
     { name: "Leave Application", path: "" },
     { name: "Leave Bank", path: "/leaveBank" },
   ];
-  const yearObj = [
-    {
-      value: 2022,
-      option: 2022,
-    },
-    {
-      value: 2023,
-      option: 2023,
-    },
-    {
-      value: 2024,
-      option: 2023,
-    },
-  ];
+
   const monthDataObj = [
     { value: "01", option: "January" },
     { value: "02", option: "February" },
@@ -49,8 +41,46 @@ const LeaveBank = () => {
   const { show } = useAppContext();
 
   useEffect(() => {
-    dispatch(get_leave_bank_report());
+    dispatch(
+      get_leave_bank_report({
+        session,
+        month: selected_month,
+        year: selected_year,
+      })
+    );
+    years();
   }, []);
+
+  const years = (startYear = 2020) => {
+    setYear([]);
+    let currentYear = new Date().getFullYear();
+    let result = [];
+
+    while (startYear <= currentYear) {
+      result.push(startYear++);
+    }
+    setYear(result);
+  };
+
+  useEffect(() => {
+    if (year?.length !== 0) {
+      year?.forEach((data) => {
+        if (!yearObj.some((item) => item.value === data)) {
+          yearObj.push({ value: data, option: data });
+          financial_year.push({
+            value: data + "-" + (Number(data) + 1),
+            option: data + "-" + (Number(data) + 1),
+          });
+        }
+      });
+    }
+  }, [year]);
+
+  const handleFilter = (e, filter) => {
+    if (filter === "financial_year") setSession(e.target.value);
+    if (filter === "month") setSelected_month(e.target.value);
+    if (filter === "year") setSelected_year(e.target.value);
+  };
 
   return (
     <section className="attendenceBank_outer">
@@ -72,7 +102,8 @@ const LeaveBank = () => {
               <Select
                 labelname={"Select Financial Year"}
                 labelClass={""}
-                options={yearObj}
+                options={financial_year}
+                onChange={(e) => handleFilter(e, "financial_year")}
               />
             </div>
 
@@ -81,14 +112,33 @@ const LeaveBank = () => {
                 labelname={"Month"}
                 labelClass={""}
                 options={monthDataObj}
+                onChange={(e) => handleFilter(e, "month")}
               />
             </div>
             <div className="employee_wrapper">
-              <Select labelname={"Year"} labelClass={""} options={yearObj} />
+              <Select
+                labelname={"Year"}
+                labelClass={""}
+                options={yearObj}
+                onChange={(e) => handleFilter(e, "year")}
+              />
             </div>
 
             <div className="employee_wrapper text-end serach_add_outer">
-              <button className="cmn_Button_style">Search</button>
+              <button
+                className="cmn_Button_style"
+                onClick={() =>
+                  dispatch(
+                    get_leave_bank_report({
+                      session,
+                      month: selected_month,
+                      year: selected_year,
+                    })
+                  )
+                }
+              >
+                Search
+              </button>
             </div>
           </div>
 
@@ -110,8 +160,8 @@ const LeaveBank = () => {
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{leave_bank?.name}</td>
-                        <td>{leave_bank?.used_leaves}</td>
-                        <td>{leave_bank?.total_allowed_leaves}</td>
+                        <td>{leave_bank?.taken_leave}</td>
+                        <td>{leave_bank?.paid_leave}</td>
 
                         <td>
                           <div
