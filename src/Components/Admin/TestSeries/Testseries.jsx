@@ -31,7 +31,7 @@ const obj=[{name:"Test Series",path:""}]
       />
      
       <div className="d-flex test_series_header employee_container align-items-end mt-3">
-        <div className='d-flex gap-3'>
+        <div className='d-flex gap-3 test_series_header_wrapper'>
       <div className='form-group new_employee_form_group'>
       <label>Profile</label>
      <div className='profile_select_box'> <CustomSelectComp/></div>

@@ -45,7 +45,7 @@ const handleClose=()=>{
                <input type='text' className='form-control' placeholder='Enter Option 4'/>
              </div> 
              <div className='mt-3'>
-                <label className='inter_fontfamily cmn_ques_heading'>Type</label>
+                <label className='inter_fontfamily cmn_ques_heading'>Choose Answer Option</label>
           <div className='mt-2'>
           <CustomSelectComp/>
           </div>

@@ -44,11 +44,11 @@ const Sidebar = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
 
-  // useEffect(() => {
-  //   if (!localStorage.getItem("ums_token")) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!localStorage.getItem("ums_token")) {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(get_logged_in_user_permissions());
@@ -110,7 +110,7 @@ const Sidebar = () => {
        <div className="mt-4">
         {/* admin sidebar */}
       { 
-      // uniqueRoles?.includes("Admin") && 
+      uniqueRoles?.includes("Admin") && 
        menuitems.map((data, i) => {
         const isActive = path.pathname === data?.pathname;
 

@@ -483,7 +483,7 @@ background-color: #f7f2f2 !important;
       padding: 10px 15px;
   }
   .page-link.active, .active > .page-link{
-    background: #F41A1A !important;
+    background: #9E0302 !important;
     border: unset !important;
   }
   
@@ -699,18 +699,12 @@ background-color: #f7f2f2 !important;
     margin-left: 30%;
   }
   
-  
   .form-group input{
-    padding: 8px 20px;
+    padding: 7px 20px;
     border: 1px solid #D9D9D9;
     border-radius: 11px;
     color: #8D8D8E;
-  
   }
-  
-  
-  
-  
   .wrapper {
     background: #f7f2f2;
     margin-left: 250px;
@@ -1435,25 +1429,19 @@ select.custom-select.form-control {
     .add_question_wrapper, .sub-obj-log-heading{
       display: block;
     }
-   
     .cmn_text {
       font-size: 16px;
     }
-    
-    
-  
     .internal-testbox{
       display: block
     }
     
-  
-    
-   
     .user-table thead tr th {
       font-size: 14px;
     }
     .heading{
-      font-size: 19px !important;
+      font-size: 19px;
+      line-height: 30px;
     }
     .status-icons{
       flex-wrap: wrap;

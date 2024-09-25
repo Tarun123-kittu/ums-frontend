@@ -16,6 +16,7 @@ import {
   clear_delete_event_state,
   delete_event,
 } from "../../../utils/redux/holidayAndEventsSlice/deleteEvent";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
@@ -54,7 +55,7 @@ const HolidayEvent = () => {
     if (year?.length !== 0) {
       year?.forEach((data) => {
         if (!yearObj.some((item) => item.value === data)) {
-          yearObj.push({ value: data, option: data });
+          yearObj.push({ value: data, label: data });
         }
       });
     }
@@ -70,7 +71,8 @@ const HolidayEvent = () => {
   };
 
   const handleSetYear = (e) => {
-    setSelected_year(e.target.value);
+    setSelected_year(e.value);
+    // setSelected_year(selectedOption.value);
     setIsSearched(true);
   };
 
@@ -103,15 +105,17 @@ const HolidayEvent = () => {
         <div className="cmn_padding_outer">
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Holiday"}
                 labelClass={""}
                 options={yearObj}
                 onChange={(e) => handleSetYear(e)}
-              />
+              /> */}
+              <CustomSelectComp changeHandler={(e) => handleSetYear(e)}   optionsData={yearObj}/>
             </div>
 
-            <div className="employee_wrapper text-end serach_add_outer">
+            <div className="employee_wrapper  serach_reset_outer">
+              <button className="cmn_Button_style cmn_darkgray_btn">Reset</button>
               <button
                 className="cmn_Button_style"
                 onClick={() =>
@@ -125,7 +129,7 @@ const HolidayEvent = () => {
                 Search
               </button>
               <button
-                className="cmn_Button_style ms-3"
+                className="cmn_Button_style"
                 onClick={() => {
                   setShowEventModal(true);
                 }}

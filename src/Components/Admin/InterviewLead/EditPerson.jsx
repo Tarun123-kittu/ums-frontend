@@ -36,13 +36,13 @@ const selectProfileData=[
         <form>
         <div className='row'>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Full Name *"} placeholder={"Enter Full Name"} classname={"new_employee_form_group"} type={"text"}/>
+                <InputField labelname={"Full Name "} span={true} placeholder={"Enter Full Name"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Phone Number *"} placeholder={"Enter Phone Number"} classname={"new_employee_form_group"} type={"number"}/>
+                <InputField labelname={"Phone Number"} span={true} placeholder={"Enter Phone Number"} classname={"new_employee_form_group"} type={"number"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"Email Address *"} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
+                <InputField labelname={"Email Address"} span={true} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
             <div className='form-group new_employee_form_group'>
@@ -53,7 +53,7 @@ const selectProfileData=[
              </div>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <InputField labelname={"DOB *"} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
+                <InputField labelname={"DOB"} span={true} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"Experience "} placeholder={"Enter Experience"} classname={"new_employee_form_group"} type={"number"}/>
@@ -85,7 +85,7 @@ const selectProfileData=[
            
         </div>
         <div className='form-group new_employee_form_group'>
-            <label>House Address *</label>
+            <label>House Address Full Name <span style={{color:"red"}}>*</span></label>
             <textarea className='form-control mt-2'  rows={5}/>
         </div>
 

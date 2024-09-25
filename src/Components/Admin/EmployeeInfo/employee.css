@@ -117,10 +117,12 @@ button.add_document_btn{
 }
 .new_employee_form_group input.form-control::placeholder {
     color: #798398;
+    font-size: 14px;
 }
 .new_employee_form_group select::placeholder {
     color: #798398 ;
     font-family: "Inter", sans-serif;
+    font-size: 14px;
 }
 
 .new_employee_form_group label{
@@ -134,11 +136,14 @@ button.add_document_btn{
     background: transparent;
     border-radius: 7px;
     color: #8D8D8E;
+  
     
 }
 .new_employee_form_group textarea.form-control::placeholder {
     color: #798398;
     font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .new_employee_form_group select{

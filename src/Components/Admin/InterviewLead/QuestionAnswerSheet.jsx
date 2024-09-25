@@ -26,7 +26,7 @@ const obj = [
             <div className='question_container'>
                 <h3 className='answer_heading'>Original Answers</h3>
                 <div className='question_inner_content'>
-                    <h3>Objective</h3>
+                    <h3>OBJECTIVE</h3>
                   <h4>01 What is NODE.Js?</h4>
                   <ul className='question_list_wrapper'>
                     <li>Lorem ipsum</li>
@@ -42,7 +42,7 @@ const obj = [
             <div className='question_container'>
                 <h3 className='answer_heading'>Candidate Answers</h3>
                 <div className='question_inner_content'>
-                    <h3>Objective</h3>
+                    <h3>OBJECTIVE</h3>
                   <h4>01 What is NODE.Js?</h4>
                   <ul className='question_list_wrapper'>
                     <li>Lorem ipsum</li>

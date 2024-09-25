@@ -69,7 +69,7 @@ const obj=[{name:"Test Series",path:"/testSeries"},{name:"Create Test Series Que
         <input type='text' className={'form-control'} placeholder={"lorem 1"}/>
 
         </div>
-        <div className='d-flex justify-content-end gap-3 mt-4'>
+        <div className='d-flex justify-content-end gap-3 mt-4 obj_btn_outer'>
             <button className='cmn_Button_style cmn_darkgray_btn cursor_pointer' onClick={()=>setShowDelObjectiveQuesModal(true)}>Delete</button>
             <button className='cmn_Button_style cursor_pointer' onClick={()=>{setShowEditObjectiveQuesModal(true)}}>Edit</button>
         </div>
@@ -84,13 +84,13 @@ const obj=[{name:"Test Series",path:"/testSeries"},{name:"Create Test Series Que
 
         </div>
         
-        <div className='d-flex justify-content-end gap-3 mt-4'>
+        <div className='d-flex justify-content-end gap-3 mt-4 obj_btn_outer'>
             <button className='cmn_Button_style cmn_darkgray_btn cursor_pointer' onClick={()=>{setShowDelSubjectiveQuesModal(true)}}>Delete</button>
             <button className='cmn_Button_style cursor_pointer' onClick={()=>{setShowEditSubjectiveQuesModal(true)}}>Edit</button>
         </div>
       </div>
       </Tab>
-      <Tab eventKey="Logical" title="Logical">
+      <Tab eventKey="Logical" title="Logical" className='cmn_padding_wrapper cmn_border'>
       <button className='add_question_btn cmn_Button_style' onClick={()=>{setShowLogicalQuesModal(true)}}>Add</button>
       <div className='cmn_border view_question_tab_content'>
         <h2 className='heading'>You are given a 7-minute hourglass and an 11-minute hourglass. How can you measure exactly 15 minutes?</h2>
@@ -99,7 +99,7 @@ const obj=[{name:"Test Series",path:"/testSeries"},{name:"Create Test Series Que
 
         </div>
         
-        <div className='d-flex justify-content-end gap-3 mt-4'>
+        <div className='d-flex justify-content-end gap-3 mt-4 obj_btn_outer'>
             <button className='cmn_Button_style cmn_darkgray_btn cursor_pointer' onClick={()=>{setShowDelLogicalQuesModal(true)}}>Delete</button>
             <button className='cmn_Button_style cursor_pointer' onClick={()=>{setShowEditLogicalQuesModal(true)}}>Edit</button>
         </div>

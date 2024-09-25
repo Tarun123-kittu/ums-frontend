@@ -4,7 +4,8 @@ import { TiArrowUnsorted } from "react-icons/ti";
 
 import Select, { components } from "react-select";
 
-const CustomSelectComp = ({ optionsData, setType, value }) => {
+const CustomSelectComp = ({ optionsData,changeHandler }) => {
+ 
   const customStyles = {
     container: (provided) => ({
       ...provided,
@@ -28,7 +29,7 @@ const CustomSelectComp = ({ optionsData, setType, value }) => {
     }),
     input: (provided) => ({
       ...provided,
-      fontSize: 5,
+      fontSize: 14,
     }),
     control: (provided, state) => ({
       ...provided,
@@ -39,12 +40,14 @@ const CustomSelectComp = ({ optionsData, setType, value }) => {
       "&:hover": {
         border: "1px solid #D9D9D9",
       },
+      backgroundColor:"transparent"
     }),
     placeholder: (provided) => ({
       ...provided,
       fontSize: 14,
-      color: "#929aab",
+      color: "#798398",
       fontWeight: 500,
+      
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -83,16 +86,14 @@ const CustomSelectComp = ({ optionsData, setType, value }) => {
     );
   };
 
-  const handleSetType = (e) => {
-    setType(e.value);
-  };
+
   return (
     <Select
       options={optionsData}
       styles={customStyles}
       components={{ Option: CustomOption, DropdownIndicator }}
       menuPortalTarget={document.body}
-      onChange={(e) => handleSetType(e)}
+      onChange={changeHandler}
     />
   );
 };
