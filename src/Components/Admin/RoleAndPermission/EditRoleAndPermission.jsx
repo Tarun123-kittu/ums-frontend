@@ -252,7 +252,8 @@ const EditRoleAndPermission = () => {
                 <ul className="role_list">
                   {user_assigned?.data?.data?.map((name, i) => {
                     return (
-                      <li key={i} className="d-flex ">
+                      <li key={i}>
+                        <div className="d-flex role_list_wrapper">
                         <h3 className="cmn_text_heading">{name?.name}</h3>
                         <RiDeleteBin6Line
                           className="cursor_pointer"
@@ -261,6 +262,7 @@ const EditRoleAndPermission = () => {
                             setShowDeleteModal(true);
                           }}
                         />
+                        </div>
                       </li>
                     );
                   })}

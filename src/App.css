@@ -72,10 +72,7 @@ background-color: #f7f2f2 !important;
   }
 
   
-h1,h2,h3,h4,h5,h6,p{
-    font-family: "Montserrat", sans-serif;
-  }
-  
+
   .login-container {
     background-color: #fff;
     border-radius: 8px;
@@ -173,7 +170,7 @@ h1,h2,h3,h4,h5,h6,p{
     color:  #212B2E!important;
     font-family: "Open-Sans", sans-serif;
     font-size: 21px;
-    font-weight: 500 !important;
+    font-weight: 500;
     line-height: 32px;
   }
   
@@ -451,8 +448,11 @@ h1,h2,h3,h4,h5,h6,p{
    color: #8D8D8E
   }
   
-  .custom_modal_container input , select{
-    background-color:#f9f9f9 !important;
+  .custom_modal_container input {
+    background-color:#f9f9f9;
+  }
+  .custom_modal_container input ,select{
+    background-color:#f9f9f9;
   }
   .custom_modal_container .modal-footer{
     padding: 0px 25px 25px;
@@ -701,7 +701,7 @@ h1,h2,h3,h4,h5,h6,p{
   
   
   .form-group input{
-    padding: 8px 20px !important;
+    padding: 8px 20px;
     border: 1px solid #D9D9D9;
     border-radius: 11px;
     color: #8D8D8E;

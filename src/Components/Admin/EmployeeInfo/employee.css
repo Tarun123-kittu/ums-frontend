@@ -113,6 +113,7 @@ button.add_document_btn{
     background-color: transparent ;
     border-radius: 7px;
     margin-top: 10px;
+    color:#8D8D8E;;
 }
 .new_employee_form_group input.form-control::placeholder {
     color: #798398;
@@ -132,6 +133,7 @@ button.add_document_btn{
 .new_employee_form_group textarea {
     background: transparent;
     border-radius: 7px;
+    color: #8D8D8E;
     
 }
 .new_employee_form_group textarea.form-control::placeholder {

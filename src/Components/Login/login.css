@@ -11,7 +11,7 @@ button.login-button {
     background: #FF3030;
     border-radius: 11px;
     font-size: 17px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 600;
 }
 
@@ -19,7 +19,7 @@ button.login-button {
   color:"#6C6F75";
   font-size: 14px;
   font-weight: 500;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
 
 }
 
@@ -42,7 +42,7 @@ a:-webkit-any-link:focus-visible {
     color: #282A30;
     font-size: 16px;
     font-weight: 500;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
 }
 a.login_text {
     color: #ce2128;

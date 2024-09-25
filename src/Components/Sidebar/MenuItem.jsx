@@ -11,7 +11,7 @@ const menuitems=[
   {
     icon:calendar,
     name:"Dashboard",
-    pathname:"/adminDashboard"
+    pathname:"/dashboard"
     },
     {
       icon:employeeIcon,

@@ -254,7 +254,8 @@ const CreateRole = () => {
                 <ul className="role_list">
                   {Array.isArray(name_assigned) && name_assigned.length > 0 ? (
                     name_assigned.map((name, i) => (
-                      <li key={i} className="d-flex ">
+                      <li key={i}>
+                        <div className="d-flex role_list_wrapper">
                         <h3 className="cmn_text_heading">{name?.name}</h3>
                         <RiDeleteBin6Line
                           className="cursor_pointer"
@@ -263,6 +264,7 @@ const CreateRole = () => {
                             setDeleted_id(name?.id);
                           }}
                         />
+                        </div>
                       </li>
                     ))
                   ) : (

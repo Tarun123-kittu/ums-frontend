@@ -40,8 +40,6 @@ const handleNextTab = () => {
       activeKey={activeTab}
       onSelect={(k) =>{
         setActiveTab(k)
-        console.log(k,"ke")
-        
       } 
       }
     >
@@ -260,10 +258,7 @@ const handleNextTab = () => {
             <td> 20000Rs</td>
             <td>
               <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
-                <option>On Hold</option>
-              </select>
-
+              <CustomSelectComp/>
               </div>
             </td>
             <td>
@@ -304,9 +299,7 @@ const handleNextTab = () => {
             <td> 20000Rs</td>
             <td>
               <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
-                <option>On Hold</option>
-              </select>
+              <CustomSelectComp optionsData={resultData}/>
 
               </div>
             </td>

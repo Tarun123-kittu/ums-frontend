@@ -1,146 +1,149 @@
 .cmn_width .sidebar_content{
-    display: unset;
+  display: unset;
+  }
+  .cmn_width{
+      width: 65px !important;
+      padding: 0px;
     }
-    .cmn_width{
-        width: 65px !important;
-        padding: 0px;
-      }
-    .cmn_width .sidebar-button{
-      padding: 12px 6px;
+  .cmn_width .sidebar-button{
+    padding: 12px 6px;
+  }
+  .sidebar_content{
+     display: flex;
+        gap: 10px;
+        align-items: center;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+  }
+  
+  .list_inner_item_outer li h3{
+    font-size: 14px;
+    line-height: 31px;
+    margin-bottom: 0px;
+  }
+  .sidebar-button {
+        width: 100%;
+        margin-top: 5px;
+        padding: 12px 16px;
+        background-color: transparent;
+        border: none;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        /* border-radius: 11px; */
+      
     }
-    .sidebar_content{
-       display: flex;
-          gap: 10px;
-          align-items: center;
+    .sidebar-button  a{
+      text-decoration: unset;
+    }
+    .list_inner_item_outer li a{
+      text-decoration: unset;
+      color: #333333;
+      font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+    }
+    .cmn_width .sidebuttonbar- {
+      margin-top: 5px 10px;
+    }
+    .sidebar-button:hover {
+      color: #c22e0a;
+      background-color: #F7E3E3;
+    }
+  
+    .sidebar-button.active-pathname .sidebar_content h4{
+      color: #F41A1A;
+    }
+    .active-pathname{
+      background-color: #F7E3E3;
     }
     
-    .list_inner_item_outer li h3{
-      font-size: 14px;
-      line-height: 31px;
-      margin-bottom: 0px;
+    .sidebar-button.active-pathname .sidebar_content svg{
+      color: #F41A1A;
     }
-    .sidebar-button {
-
-          margin-top: 5px;
-          padding: 12px 16px;
-          background-color: transparent;
-          border: none;
-          color: #333;
-          font-size: 16px;
-          font-weight: bold;
-          text-align: center;
-          cursor: pointer;
-          /* border-radius: 11px; */
-        
-      }
-      .sidebar-button  a{
-        text-decoration: unset;
-      }
-      .list_inner_item_outer li a{
-        text-decoration: unset;
+    .sidebar_content h4{
+      font-size: 13px;
+        margin-bottom: 0px;
         color: #333333;
         font-weight: 400;
-        font-family: 'Inter', sans-serif;
-        font-size: 13px;
-      }
-      .cmn_width .sidebuttonbar- {
-        margin-top: 5px 10px;
-      }
-      .sidebar-button:hover {
-        color: #c22e0a;
-        background-color: #F7E3E3;
-      }
-    
-      .sidebar-button.active-pathname .sidebar_content h4{
-        color: #F41A1A;
-      }
-      .active-pathname{
-        background-color: #F7E3E3;
-      }
-      
-      .sidebar-button.active-pathname .sidebar_content svg{
-        color: #F41A1A;
-      }
-      .sidebar_content h4{
-        font-size: 13px;
-          margin-bottom: 0px;
-          color: #333333;
-          font-weight: 400;
-          font-family: "Inter", sans-serif;
-      }
-      .filterClass{
-        filter: invert(36%) sepia(84%) saturate(6135%) hue-rotate(332deg) brightness(102%) contrast(110%);
-      }
-      .sidebar_content svg{
-        color: #333333;
-        font-size: 19px;
-      }
-      .sidebar_logo_outer img{
-        object-fit: contain;
-      }
-      .sidebar_logo_outer h3{
-        font-family: "Open Sans", sans-serif;
-        font-size: 14px;
-        color: #555555;
-        font-weight: 600;
-        line-height: 20.83px;
-        letter-spacing: 2px;
-      }
-      .bar{
-        text-align: right;
-       
-        font-size: 22px;
-        cursor: pointer;
-        padding-top: 30px;
-      }
-      .sidebar {
-        height: 100%;
-        width: 250px;
-        overflow: hidden;
-        position: fixed;
-        overflow-y: scroll;
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
+        font-family: "Inter", sans-serif;
         transition: all 0.3s ease;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        background-color: #FFFFFF;
-        /* border-top-right-radius: 40px; */
-        box-shadow: 1px 0px 5px 0px #dbd7d7;
-      
-      }      
-      .list_inner_item_outer {
-        list-style: none; 
-        padding-left: 11px;
-        margin-left: 32px;
-      }
-          
-      .list_inner_item_outer li {
-        position: relative; 
-        padding-left: 11px;
-      }
-      
-      .list_inner_item_outer li::before {
-        content: '';
-        position: absolute;
-        left: 0; 
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        background-color: gray;
-      }
-      
-      .list_inner_item_outer li:first-child::before {
-        top: 8px;
-      }
-      .list_inner_item_outer li:last-child::before {
-      bottom: 6px;
-      }
-      
-       @media screen and (max-width:1400px){
-       
-       }
+    }
+    .filterClass{
+      filter:invert(19%) sepia(40%) saturate(5500%) hue-rotate(340deg) brightness(114%) contrast(105%);
+    
+    }
+    .sidebar_content svg{
+      color: #333333;
+      font-size: 19px;
+    }
+    .sidebar_logo_outer img{
+      object-fit: contain;
+    }
+    .sidebar_logo_outer h3{
+      font-family: "Open Sans", sans-serif;
+      font-size: 14px;
+      color: #555555;
+      font-weight: 600;
+      line-height: 20.83px;
+      letter-spacing: 2px;
+    }
+    .bar{
+      text-align: right;
+     
+      font-size: 22px;
+      cursor: pointer;
+      padding-top: 30px;
+    }
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      overflow: hidden;
+      position: fixed;
+      overflow-y: scroll;
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+      transition: all 0.3s ease;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background-color: #FFFFFF;
+      /* border-top-right-radius: 40px; */
+      box-shadow: 1px 0px 5px 0px #dbd7d7;
+    
+    }      
+    .list_inner_item_outer {
+      list-style: none; 
+      padding-left: 11px;
+      margin-left: 32px;
+    }
+        
+    .list_inner_item_outer li {
+      position: relative; 
+      padding-left: 11px;
+    }
+    
+    .list_inner_item_outer li::before {
+      content: '';
+      position: absolute;
+      left: 0; 
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: gray;
+    }
+    
+    .list_inner_item_outer li:first-child::before {
+      top: 8px;
+    }
+    .list_inner_item_outer li:last-child::before {
+    bottom: 6px;
+    }
+    
+     @media screen and (max-width:1400px){
+     
+     }
 
 
- 

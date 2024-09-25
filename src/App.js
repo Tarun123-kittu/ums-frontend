@@ -30,6 +30,8 @@ import EditIncompleteAttendence from './Components/Admin/Attendence/EditIncomple
 import EditAttendenceReport from './Components/Admin/Attendence/EditAttendenceReport';
 import EditLeaveRequest from './Components/Admin/LeaveApplication/EditLeaveRequest';
 import EditLeaveReport from './Components/Admin/LeaveApplication/EditleaveReport';
+import Testseries from './Components/Admin/TestSeries/Testseries';
+import ViewTestseriesQuestions from './Components/Admin/TestSeries/ViewTestSeriesQuestions';
 
 function App() {
 
@@ -64,6 +66,8 @@ function App() {
         <Route path='/createRole' element={< CreateRole/>} />
         <Route path='/editLeaveRequest' element={< EditLeaveRequest/>} />
         <Route path='/editLeaveReport' element={< EditLeaveReport/>} />
+        <Route path='/testSeries' element={<Testseries/>} />
+        <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions/>} />
         
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

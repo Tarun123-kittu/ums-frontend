@@ -5,6 +5,7 @@ import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
 import InputField from '../../Common/InputField'
 import Notification from '../Notification/Notification'
 import Select from '../../Common/Select'
+import CustomSelectComp from '../../Common/CustomSelectComp'
 
 const AddNewPerson = () => {
     const obj = [
@@ -13,16 +14,16 @@ const AddNewPerson = () => {
       ];
 const {show}=useAppContext()
 const options=[
-    { value: "Male", option: "Male" },
-    { value: "Female", option: "Female" },
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
 ]
 const selectProfileData=[
-    { value: "ui/ux", option: "ui/ux" },
-    { value: "Backend Developer", option: "Backend Developer" },
+    { value: "ui/ux", label: "ui/ux" },
+    { value: "Backend Developer", label: "Backend Developer" },
 ]
 const selectStateData=[
-    { value: "Punjab", option: "Punjab" },
-    { value: "Delhi", option: "Delhi" },
+    { value: "Punjab", label: "Punjab" },
+    { value: "Delhi", label: "Delhi" },
 ]
 
   return (
@@ -47,7 +48,12 @@ const selectStateData=[
                 <InputField labelname={"Email Address"} span={true} placeholder={"Enter Email Address"} classname={"new_employee_form_group"} type={"email"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <Select options={options} labelname={"Gender"} placeholder={"Select Gender"} labelClass={"new_employee_form_group"}/>
+            <div className='form-group new_employee_form_group'>
+            <label>Select Gender <span style={{color:"red"}}>*</span></label>
+             <div className='mt-2'>
+             <CustomSelectComp placeholder={"Select Gender"} optionsData={options}/>
+             </div>
+             </div>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"DOB"} span={true} placeholder={"Select DOB"} classname={"new_employee_form_group"} type={"date"}/>
@@ -62,13 +68,23 @@ const selectStateData=[
                 <InputField  labelname={"Expected salary (optional)"} placeholder={"Enter Expected salary"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <Select labelname={"Profile"} span={true} options={selectProfileData} placeholder={"Select Profile"} classname={"new_employee_form_group"}/>
+            <div className='form-group new_employee_form_group'>
+            <label>Profile <span style={{color:"red"}}>*</span></label>
+             <div className='mt-2'>
+             <CustomSelectComp placeholder={"Select profile"}/>
+             </div>
+             </div>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
                 <InputField labelname={"Last Company (optional)"} placeholder={"Enter Last Company Name"} classname={"new_employee_form_group"} type={"text"}/>
             </div>
             <div className='col-lg-4 col-sm-12 col-md-6'>
-                <Select  span={true}  labelname={"Select State"} options={selectStateData} placeholder={"Select State"} classname={"new_employee_form_group"}/>
+             <div className='form-group new_employee_form_group'>
+            <label>State <span style={{color:"red"}}>*</span></label>
+             <div className='mt-2'>
+             <CustomSelectComp placeholder={"Select State"}/>
+             </div>
+             </div>
             </div>
            
         </div>
