@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
-import "./employee.css"
+import "./employee.css";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   create_new_user,
@@ -506,7 +506,7 @@ const AddnewEmployee = () => {
                   onChange={(e) => handleInputChange("address", e.target.value)}
                 />
               </div>
-             
+
               <div className="text-end mt-3">
                 <button
                   className="cmn_Button_style"
@@ -519,7 +519,6 @@ const AddnewEmployee = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

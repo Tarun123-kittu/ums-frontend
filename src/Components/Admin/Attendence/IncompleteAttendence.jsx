@@ -5,14 +5,14 @@ import { FiEdit } from "react-icons/fi";
 import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import { useSelector } from "react-redux";
-import "./attendence.css"
+import "./attendence.css";
 import { useNavigate } from "react-router-dom";
 const IncompleteAttendence = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Incomplete Attendance", path: "/incompleteAttendence" },
   ];
-const navigate=useNavigate()
+  const navigate = useNavigate();
   const { show } = useAppContext();
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
 
@@ -63,9 +63,17 @@ const navigate=useNavigate()
                         <td>{convertTo12Hour(report?.in_time)}</td>
                         <td>--</td>
                         <td>
-                          <div className="cmn_action_outer yellow_bg cursor_pointer">
-                            <FiEdit onClick={()=>{navigate('/editIncompleteAttendence')}}/>
-                          </div>
+                          {report?.id && (
+                            <div className="cmn_action_outer yellow_bg cursor_pointer">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editAttendenceReport", {
+                                    state: { id: report?.id },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
                         </td>
                       </tr>
                     );

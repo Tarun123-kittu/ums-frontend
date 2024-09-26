@@ -7,7 +7,7 @@ import { FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_all_users_user } from "../../../utils/redux/userSlice/getAllUserSlice";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
 import {
@@ -32,25 +32,19 @@ const EmployeeList = () => {
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
-      toast.success(is_user_deleted?.message?.message, {
-        autoClose: 2000,
-      });
+      toast.success(is_user_deleted?.message?.message);
       dispatch(get_all_users_user());
       dispatch(clear_create_delete_state());
     }
     if (is_user_deleted?.isError) {
-      toast.error(is_user_deleted?.error?.message, {
-        autoClose: 2000,
-      });
+      toast.error(is_user_deleted?.error?.message);
       dispatch(clear_create_delete_state());
     }
   }, [is_user_deleted, dispatch]);
 
   useEffect(() => {
     if (all_users_list?.isError) {
-      toast.error(all_users_list?.error?.message, {
-        autoClose: 2000,
-      });
+      toast.error(all_users_list?.error?.message);
     }
   }, [all_users_list]);
 
@@ -203,7 +197,6 @@ const EmployeeList = () => {
           deleteHandler={deleteHandler}
         />
       )}
-      <ToastContainer />
     </div>
   );
 };

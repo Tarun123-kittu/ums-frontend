@@ -9,7 +9,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import CommonDeleteModal from "../../Modal/CommonDeleteModal";
 import AssignNameModal from "../../Modal/AssignNameModal";
 import { permissionsList } from "../../Utils/customData/permissionsListData";
-import CustomToast from "../../CustomToast/CustomToast";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   create_new_role_and_assign_permissions,
@@ -62,9 +62,7 @@ const CreateRole = () => {
 
   const handleCreateNewRole = () => {
     if (!role) {
-      setToastMessage("Role name can't be empty");
-      setShowToast(true);
-      setType("error");
+      toast.error("Role name can't be empty");
     } else {
       dispatch(
         create_new_role_and_assign_permissions({
@@ -99,7 +97,7 @@ const CreateRole = () => {
 
   useEffect(() => {
     if (is_new_role_created?.isSuccess) {
-      setToastMessage(is_new_role_created?.message?.message);
+      toast.success(is_new_role_created?.message?.message);
       setShowToast(true);
       dispatch(clear_new_role_permission_state());
       navigate("/rolePermission");
@@ -113,13 +111,6 @@ const CreateRole = () => {
   return (
     <section className="role_permission_outer">
       <Sidebar />
-      {showToast && (
-        <CustomToast
-          setShow={setShowToast}
-          message={toastMessage}
-          type={type}
-        />
-      )}
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
@@ -256,14 +247,14 @@ const CreateRole = () => {
                     name_assigned.map((name, i) => (
                       <li key={i}>
                         <div className="d-flex role_list_wrapper">
-                        <h3 className="cmn_text_heading">{name?.name}</h3>
-                        <RiDeleteBin6Line
-                          className="cursor_pointer"
-                          onClick={() => {
-                            setShowDeleteModal(true);
-                            setDeleted_id(name?.id);
-                          }}
-                        />
+                          <h3 className="cmn_text_heading">{name?.name}</h3>
+                          <RiDeleteBin6Line
+                            className="cursor_pointer"
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setDeleted_id(name?.id);
+                            }}
+                          />
                         </div>
                       </li>
                     ))

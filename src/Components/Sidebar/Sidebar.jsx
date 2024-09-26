@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaBars, FaRegUser } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import {
   MdKeyboardArrowDown,
   MdOutlineEditCalendar,
@@ -20,7 +20,7 @@ import { TbUsersGroup } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { get_logged_in_user_permissions } from "../../utils/redux/userPermissionSlice/userpermissionSlice";
 import { useDispatch, useSelector } from "react-redux";
-import menuitems from "./MenuItem"
+import menuitems from "./MenuItem";
 import { save_user_permission_and_roles_globally } from "../../utils/redux/userPermissionSlice/userRolesAndPermissionSlice";
 import UseAllUsernames from "../Utils/customHooks/useAllUserNames";
 const Sidebar = () => {
@@ -81,15 +81,17 @@ const Sidebar = () => {
   const handleChangePassword = () => {
     setShowChangePassword(true);
   };
-  const[expanded,setExpanded]=useState(null)
+  const [expanded, setExpanded] = useState(null);
 
   const handleToggle = (index) => {
-    setExpanded(expanded === index ? null : index); 
+    setExpanded(expanded === index ? null : index);
   };
   useEffect(() => {
     menuitems.forEach((data, index) => {
       if (data.subItems) {
-        const subItemMatch = data.subItems.some(subItem => path.pathname === subItem.pathname);
+        const subItemMatch = data.subItems.some(
+          (subItem) => path.pathname === subItem.pathname
+        );
         if (subItemMatch) {
           setExpanded(index);
         }
@@ -97,97 +99,112 @@ const Sidebar = () => {
     });
   }, [path.pathname, menuitems]);
   return (
-    
-      <div className={`sidebar ${show ? "cmn_width" : ""}`}>
+    <div className={`sidebar ${show ? "cmn_width" : ""}`}>
+      <h3
+        className={`bar ${show ? "text-center" : "pe-3"}`}
+        onClick={() => {
+          setShow(!show);
+        }}
+      >
+        {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
+      </h3>
+      <div className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}>
+        <img src={logo} height={"40px"} width={"158px"} />
+        {/* <h3 className="mt-1">TECHNOLOGIES</h3> */}
+      </div>
 
-        <h3 className={`bar ${show?"text-center":"pe-3"}`} onClick={() => { setShow(!show) }}>{show ?  <FaBars /> :<RxCross2 className="p-0 text-center" />}</h3>
-       <div className={`${show?"d-none":"text-center sidebar_logo_outer"}`}>
-       <img src={logo} height={"40px"} width={"158px"}/>
-       {/* <h3 className="mt-1">TECHNOLOGIES</h3> */}
-       </div>
-       
-    
-       <div className="mt-4">
+      <div className="mt-4">
         {/* admin sidebar */}
-      { 
-      uniqueRoles?.includes("Admin") && 
-       menuitems.map((data, i) => {
-        const isActive = path.pathname === data?.pathname;
+        {uniqueRoles?.includes("Admin") &&
+          menuitems.map((data, i) => {
+            const isActive = path.pathname === data?.pathname;
 
-        return (
-      
-          <>
-          <div
-            key={i} 
-            className={`sidebar-button ${isActive ? 'active-pathname' : ''}`}
-          >
-            {data.subItems ? (
+            return (
               <>
-                <div className="sidebar_content justify-content-between" onClick={() => handleToggle(i)}>
-                  <div className={`transition_class ${show ?"":"d-flex flex-grow-1 gap-2 "}` }>
-                  <img
-                    src={data?.icon}
-                    alt={data?.name}
-                    height="18px"
-                    width="18px"
-                    className={isActive ? "filterClass" : ""}
-                  />
-                  <h4 className={show ? 'd-none' : ''}>
-                    {data?.name}
-                  </h4>
-
-                  </div>
-                  {show ?"":
-                    expanded === i ? <MdOutlineKeyboardArrowUp onClick={()=>{handleToggle(i)}}/>: <MdOutlineKeyboardArrowDown/>}
-                </div>
-                
-               
-              </>
-            ) : (
-              <Link to={data?.pathname}>
-                <div className="sidebar_content ">
-                  <img
-                    src={data?.icon}
-                    alt={data?.name}
-                    height="18px"
-                    width="18px"
-                    className={isActive ? "filterClass" : ""}
-                  />
-                  <h4 className={show ? 'd-none' : ''}>
-                    {data?.name}
-                  </h4>
-                </div>
-              </Link>
-            )}
-          </div>
-           {expanded === i && 
-            (
-              <ul className="list_inner_item_outer">
-                {data?.subItems?.map((subItem, j) => (
-                  <li className="">
-                  
-                  <Link to={subItem.pathname} className={path.pathname===subItem.pathname?"active_path":""}>
-                        {subItem.name}
-                      
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
                     </Link>
-                 
-                </li>
-               
-                ))}
-              </ul>
-            )}
-          </>
-        );
-      })}
-       <div className={`sidebar-button`} onClick={handleLogout}>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          })}
+        <div className={`sidebar-button`} onClick={handleLogout}>
           <div className="sidebar_content">
             <IoIosLogOut className="sidebar_content" />
             <h4 className={show ? "d-none" : "sidebar_content"}> Logout</h4>
           </div>
         </div>
-      {/* admin-sidebar end */}
-       {/* hr sidebar start */}
-      {/* {hrMenuitems.map((data,i)=>{
+        {/* admin-sidebar end */}
+        {/* hr sidebar start */}
+        {/* {hrMenuitems.map((data,i)=>{
           const isActive = path.pathname === data?.pathname;
         return(
           <div
@@ -212,10 +229,10 @@ const Sidebar = () => {
             </div>
         )
       })} */}
-      {/* hr sidebar end */}
-      
-     {/* developer siebar */}
-          {/* {developerMenuitems.map((data,i)=>{
+        {/* hr sidebar end */}
+
+        {/* developer siebar */}
+        {/* {developerMenuitems.map((data,i)=>{
             const isActive = path.pathname === data?.pathname;
           return(
             <div
@@ -241,13 +258,8 @@ const Sidebar = () => {
           )
         })} */}
         {/* developer sidebar end  */}
-      
-    </div>
-    
       </div>
-      
-
-  
+    </div>
   );
 };
 

@@ -1,29 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const update_leave = createAsyncThunk("update_leave", async ({ leave_id,
-    status,
-    remark,
-    email,
-    name,
-    from_date,
-    to_date,
-    user_id,
-    leave_count, }, thunkAPI) => {
+export const update_attendance = createAsyncThunk("update_attendance", async ({ id, in_time, out_time, remark, report }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
-            "leave_id": leave_id,
-            "status": status,
-            "remark": remark,
-            "user_id": user_id,
-            "leave_count": leave_count,
-            "email": email,
-            "name": name,
-            "from_date": from_date,
-            "to_date": to_date
+            "rating": 5,
+            "report": report,
+            "in_time": in_time,
+            "out_time": out_time,
+            "remark": remark
         });
 
         const requestOptions = {
@@ -33,7 +21,7 @@ export const update_leave = createAsyncThunk("update_leave", async ({ leave_id,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_pending_leaaves`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_attendance_details?attendanceId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -50,41 +38,41 @@ export const update_leave = createAsyncThunk("update_leave", async ({ leave_id,
     }
 })
 
-export const updateLeave = createSlice({
-    name: "updateLeave",
+export const updateAttendance = createSlice({
+    name: "updateAttendance",
     initialState: {
         message: {},
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
     },
     reducers: {
-        clear_update_leave_state: (state) => {
+        clear_update_attendance_state: (state) => {
             state.message = {}
             state.isSuccess = false
-            state.isError = false
             state.isLoading = false
+            state.isError = false
             state.error = null
             return state
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(update_leave.pending, (state) => {
+            .addCase(update_attendance.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(update_leave.fulfilled, (state, action) => {
+            .addCase(update_attendance.fulfilled, (state, action) => {
                 state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(update_leave.rejected, (state, action) => {
+            .addCase(update_attendance.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-export const { clear_update_leave_state } = updateLeave.actions
-export default updateLeave.reducer
+export const { clear_update_attendance_state } = updateAttendance.actions
+export default updateAttendance.reducer

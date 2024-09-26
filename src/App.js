@@ -23,7 +23,6 @@ import ViewEmployeeInfo from './Components/Admin/EmployeeInfo/ViewEmployeeInfo';
 import EditEmployeeInfo from './Components/Admin/EmployeeInfo/EditEmployeeInfo';
 import UnauthorizedPage from './Components/Unauthorized/UnauthorizedPage';
 import EditPerson from './Components/Admin/InterviewLead/EditPerson';
-import CustomToast from './Components/CustomToast/CustomToast';
 import EditAttendence from './Components/Admin/Attendence/EditAttendence';
 import CreateRole from './Components/Admin/RoleAndPermission/CreateRole';
 import EditIncompleteAttendence from './Components/Admin/Attendence/EditIncompleteAttendence';
@@ -60,15 +59,15 @@ function App() {
         <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
         <Route path='/editEmployee' element={< EditEmployeeInfo />} />
         <Route path='/editPerson' element={< EditPerson />} />
-        <Route path='/editAttendenceToday' element={< EditAttendence/>} />
-        <Route path='/editIncompleteAttendence' element={< EditIncompleteAttendence/>} />
-        <Route path='/editAttendenceReport' element={< EditAttendenceReport/>} />
-        <Route path='/createRole' element={< CreateRole/>} />
-        <Route path='/editLeaveRequest' element={< EditLeaveRequest/>} />
-        <Route path='/editLeaveReport' element={< EditLeaveReport/>} />
-        <Route path='/testSeries' element={<Testseries/>} />
-        <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions/>} />
-        
+        <Route path='/editAttendenceToday' element={< EditAttendence />} />
+        <Route path='/editIncompleteAttendence' element={< EditIncompleteAttendence />} />
+        <Route path='/editAttendenceReport' element={< EditAttendenceReport />} />
+        <Route path='/createRole' element={< CreateRole />} />
+        <Route path='/editLeaveRequest' element={< EditLeaveRequest />} />
+        <Route path='/editLeaveReport' element={< EditLeaveReport />} />
+        <Route path='/testSeries' element={<Testseries />} />
+        <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions />} />
+
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 
       </Routes>

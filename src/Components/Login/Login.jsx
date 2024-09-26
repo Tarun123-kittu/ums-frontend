@@ -9,8 +9,9 @@ import {
   login,
   clear_login_state,
 } from "../../utils/redux/loginSlice/loginSlice";
-import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -134,7 +135,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

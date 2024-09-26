@@ -14,7 +14,7 @@ const TodayAttendence = () => {
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Attendance Today", path: "/todayAttendence" },
   ];
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
   const { show } = useAppContext();
@@ -90,9 +90,17 @@ const TodayAttendence = () => {
                       </td>
 
                       <td>
-                        <div className="cmn_action_outer yellow_bg">
-                          <FiEdit onClick={()=>{navigate("editAttendenceToday")}}/>
-                        </div>
+                        {report?.id && (
+                          <div className="cmn_action_outer yellow_bg">
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editAttendenceReport", {
+                                  state: { id: report?.id },
+                                });
+                              }}
+                            />
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );

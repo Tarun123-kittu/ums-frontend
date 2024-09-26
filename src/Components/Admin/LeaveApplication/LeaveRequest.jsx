@@ -85,6 +85,12 @@ const LeaveRequest = () => {
                                   leave_id: leaves?.id,
                                   leave_status: leaves?.status,
                                   leave_remark: leaves?.remark,
+                                  from_date: leaves?.date_from,
+                                  to_date: leaves?.to_date,
+                                  leave_count: leaves?.count,
+                                  user_id: leaves?.user_id,
+                                  name: leaves?.name,
+                                  email: leaves?.email,
                                 },
                               });
                             }}
