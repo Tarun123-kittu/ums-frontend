@@ -14,7 +14,7 @@ import {
   disable_role,
   clear_disable_role_state,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteRole";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
@@ -40,6 +40,12 @@ const RoleAndPermission = () => {
   useEffect(() => {
     if (is_role_disabled?.isSuccess) {
       toast.success("Role deleted successfully");
+      dispatch(clear_disable_role_state());
+      dispatch(get_all_user_roles());
+      setShowDeleteModal(false);
+    }
+    if (is_role_disabled?.isError) {
+      toast.success("Something went wrong. Please try again later");
       dispatch(clear_disable_role_state());
       dispatch(get_all_user_roles());
       setShowDeleteModal(false);
@@ -128,7 +134,6 @@ const RoleAndPermission = () => {
             </table>
           </div>
         </div>
-        <ToastContainer />
         <PaginationComp/>
       </div>
       {showDeleteModal && (

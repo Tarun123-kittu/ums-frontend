@@ -28,6 +28,11 @@ import getAllHolidaysAndEvents from './holidayAndEventsSlice/getAllHolidaysAndEv
 import getSelectedHolidayAndEventDetails from './holidayAndEventsSlice/getSelectedHolidayAndEvent'
 import updateSelectedEvents from './holidayAndEventsSlice/updateHolidayAndEvents'
 import deleteEvent from './holidayAndEventsSlice/deleteEvent'
+import getSelectedAttendanceDetail from './attendanceSlice/getSelectedAttendanceDetails'
+import updateAttendance from './attendanceSlice/updateAttendance'
+import getAllLanguage from './testSeries/getAllLanguages'
+import createTestSeries from './testSeries/createTestSeries'
+import getAllSeries from './testSeries/getAllTestSeries'
 
 const appStore = configureStore({
     reducer: {
@@ -59,7 +64,12 @@ const appStore = configureStore({
         ALL_HOLIDAY_AND_EVENT: getAllHolidaysAndEvents,
         SELECTED_EVENT_DETAILS: getSelectedHolidayAndEventDetails,
         UPDATE_SELECTED_EVENT: updateSelectedEvents,
-        DELETE_EVENT: deleteEvent
+        DELETE_EVENT: deleteEvent,
+        SELECTED_ATTENDANCE_DETAIL: getSelectedAttendanceDetail,
+        UPDATE_ATTENDANCE: updateAttendance,
+        ALL_LANGUAGES: getAllLanguage,
+        CREATE_TEST_SERIES: createTestSeries,
+        ALL_SERIES: getAllSeries
     },
 })
 

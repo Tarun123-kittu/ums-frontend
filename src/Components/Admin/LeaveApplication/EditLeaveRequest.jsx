@@ -14,14 +14,24 @@ import {
   update_leave,
   clear_update_leave_state,
 } from "../../../utils/redux/leaveSlice/updateLeaves";
-import CustomToast from "../../CustomToast/CustomToast";
+import toast from "react-hot-toast";
 
 const EditLeaveRequest = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const { leave_id, back_to_report, leave_status, leave_remark } =
-    location?.state ? location?.state : location;
+  const {
+    leave_id,
+    back_to_report,
+    leave_status,
+    leave_remark,
+    from_date,
+    to_date,
+    leave_count,
+    user_id,
+    name,
+    email,
+  } = location?.state ? location?.state : location;
   const leave_details = useSelector((store) => store.APPLIED_LEAVE_DETAIL);
   const update_leave_data = useSelector((store) => store.UPDATE_LEAVE);
   const [leaveDetail, setLeaveDetail] = useState();
@@ -44,18 +54,12 @@ const EditLeaveRequest = () => {
 
   useEffect(() => {
     if (update_leave_data?.isSuccess) {
-      setShowToast(true);
-      setTimeout(() => {
-        setToastMessage("Leave Updated Successfully");
-        setType("success");
-        dispatch(clear_update_leave_state());
-        back_to_report ? navigate("/leaveReport") : navigate("/leaveRequest");
-      }, 200);
+      toast.success("Leave updated successfully");
+      dispatch(clear_update_leave_state());
+      back_to_report ? navigate("/leaveReport") : navigate("/leaveRequest");
     }
     if (update_leave_data?.isError) {
-      setToastMessage("Something Went Wrong");
-      setShowToast(true);
-      setType("error");
+      toast.error("Something went Wrong");
       dispatch(clear_update_leave_state());
     }
   }, [update_leave_data]);
@@ -67,18 +71,23 @@ const EditLeaveRequest = () => {
   const { show } = useAppContext();
 
   const handleUpdateLeave = () => {
-    dispatch(update_leave({ leave_id, status, remark }));
+    dispatch(
+      update_leave({
+        leave_id,
+        status,
+        remark,
+        email,
+        name,
+        from_date,
+        to_date,
+        user_id,
+        leave_count,
+      })
+    );
   };
   return (
     <section className="editLeave_outer">
       <Sidebar />
-      {showToast && (
-        <CustomToast
-          setShow={setShowToast}
-          type={type}
-          message={toastMessage}
-        />
-      )}
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >

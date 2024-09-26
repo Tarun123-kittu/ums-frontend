@@ -11,11 +11,11 @@ const InputField = ({
   name,
   value,
   onChange,
-  disabled,
+  disabled, // Destructure the disabled prop
 }) => {
   return (
     <div className={`form-group ${classname}`}>
-      {span === true ? (
+      {span ? (
         <label>
           {labelname} <span style={{ color: "red" }}>*</span>
         </label>
@@ -31,7 +31,8 @@ const InputField = ({
             name={name}
             value={value}
             onChange={onChange}
-            disabled
+            disabled={disabled}
+            step="1"
           />
           <div className="symbol_wrapper">{symbol}</div>
         </div>
@@ -43,6 +44,8 @@ const InputField = ({
           name={name}
           value={value}
           onChange={onChange}
+          disabled={disabled} // Set the disabled attribute based on the prop
+          step="1"
         />
       )}
     </div>

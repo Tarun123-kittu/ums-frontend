@@ -26,7 +26,7 @@ const AttendenceReport = () => {
   ];
   let [all_names, setAllNames] = useState([]);
   console.log(all_names, "this is the all naes  ");
-const navigate =useNavigate()
+  const navigate = useNavigate();
   const { show } = useAppContext();
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
@@ -218,9 +218,17 @@ const navigate =useNavigate()
                         {report?.name}:{report?.login_mobile}
                       </td>
                       <td>
-                        <div className="cmn_action_outer yellow_bg">
-                          <FiEdit onClick={()=>{navigate('/editAttendenceReport')}}/>
-                        </div>
+                        {report?.id && (
+                          <div className="cmn_action_outer yellow_bg">
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editAttendenceReport ", {
+                                  state: { id: report?.id },
+                                });
+                              }}
+                            />
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );

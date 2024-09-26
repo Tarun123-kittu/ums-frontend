@@ -15,7 +15,7 @@ import {
   update_role_permission,
   clear_update_role_permissions_slice,
 } from "../../../utils/redux/rolesAndPermissionSlice/updateRolePermission";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import {
   disable_role,
   clear_disable_role_state,
@@ -117,6 +117,7 @@ const EditRoleAndPermission = () => {
 
   useEffect(() => {
     if (deleted_users_state?.isSuccess) {
+      toast.success("Deleted Successfully");
       dispatch(get_users_assigned_to_role({ role_id: id }));
       dispatch(clear_delete_user_assigned_to_role());
       setShowDeleteModal(false);
@@ -254,14 +255,14 @@ const EditRoleAndPermission = () => {
                     return (
                       <li key={i}>
                         <div className="d-flex role_list_wrapper">
-                        <h3 className="cmn_text_heading">{name?.name}</h3>
-                        <RiDeleteBin6Line
-                          className="cursor_pointer"
-                          onClick={() => {
-                            setDeleted_id(name?.id);
-                            setShowDeleteModal(true);
-                          }}
-                        />
+                          <h3 className="cmn_text_heading">{name?.name}</h3>
+                          <RiDeleteBin6Line
+                            className="cursor_pointer"
+                            onClick={() => {
+                              setDeleted_id(name?.id);
+                              setShowDeleteModal(true);
+                            }}
+                          />
                         </div>
                       </li>
                     );
@@ -304,7 +305,6 @@ const EditRoleAndPermission = () => {
           />
         )}
       </div>
-      <ToastContainer />
     </section>
   );
 };

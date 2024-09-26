@@ -7,8 +7,7 @@ import InputField from "../../Common/InputField";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 import "./employee.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -79,7 +78,6 @@ const EditEmployeeInfo = () => {
   let [username, setUsername] = useState(user_details?.username);
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
-  console.log(update_user_details, "update_user_details");
 
   useEffect(() => {
     if (update_user_details?.isSuccess) {
@@ -497,7 +495,6 @@ const EditEmployeeInfo = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };
