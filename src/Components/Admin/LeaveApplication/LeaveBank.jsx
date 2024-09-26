@@ -8,6 +8,8 @@ import Select from "../../Common/Select";
 import EditLeaveBankModal from "../../Modal/EditLeaveBankModal";
 import { useDispatch, useSelector } from "react-redux";
 import { get_leave_bank_report } from "../../../utils/redux/leaveSlice/getLeaveBankReport";
+import PaginationComp from "../../Pagination/Pagination";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
@@ -25,18 +27,18 @@ const LeaveBank = () => {
   ];
 
   const monthDataObj = [
-    { value: "01", option: "January" },
-    { value: "02", option: "February" },
-    { value: "03", option: "March" },
-    { value: "04", option: "April" },
-    { value: "05", option: "May" },
-    { value: "06", option: "June" },
-    { value: "07", option: "July" },
-    { value: "08", option: "August" },
-    { value: "09", option: "September" },
-    { value: "10", option: "October" },
-    { value: "11", option: "November" },
-    { value: "12", option: "December" },
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
   ];
   const { show } = useAppContext();
 
@@ -66,10 +68,10 @@ const LeaveBank = () => {
     if (year?.length !== 0) {
       year?.forEach((data) => {
         if (!yearObj.some((item) => item.value === data)) {
-          yearObj.push({ value: data, option: data });
+          yearObj.push({ value: data, label: data });
           financial_year.push({
             value: data + "-" + (Number(data) + 1),
-            option: data + "-" + (Number(data) + 1),
+            label: data + "-" + (Number(data) + 1),
           });
         }
       });
@@ -77,9 +79,9 @@ const LeaveBank = () => {
   }, [year]);
 
   const handleFilter = (e, filter) => {
-    if (filter === "financial_year") setSession(e.target.value);
-    if (filter === "month") setSelected_month(e.target.value);
-    if (filter === "year") setSelected_year(e.target.value);
+    if (filter === "financial_year") setSession(e.value);
+    if (filter === "month") setSelected_month(e.value);
+    if (filter === "year") setSelected_year(e.value);
   };
 
   return (
@@ -90,7 +92,7 @@ const LeaveBank = () => {
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -99,29 +101,59 @@ const LeaveBank = () => {
 
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Select Financial Year"}
                 labelClass={""}
                 options={financial_year}
                 onChange={(e) => handleFilter(e, "financial_year")}
+              /> */}
+              <div className="form-group new_employee_form_group mt-2">
+            <label className="modal_label">Select Financial Year</label>
+            <div className="mt-2">
+              <CustomSelectComp
+                optionsData={financial_year}
+                changeHandler={(e) => handleFilter(e, "financial_year")}
+                value={session}
               />
+            </div>
+           </div>
             </div>
 
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Month"}
                 labelClass={""}
                 options={monthDataObj}
                 onChange={(e) => handleFilter(e, "month")}
+              /> */}
+              <div className="form-group new_employee_form_group mt-2">
+             <label className="modal_label">Month</label>
+             <div className="mt-2">
+              <CustomSelectComp
+                optionsData={monthDataObj}
+                changeHandler={(e) => handleFilter(e, "month")}
+                value={selected_month}
               />
+              </div>
+             </div>
             </div>
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Year"}
                 labelClass={""}
                 options={yearObj}
                 onChange={(e) => handleFilter(e, "year")}
+              /> */}
+              <div className="form-group new_employee_form_group mt-2">
+            <label className="modal_label">Year</label>
+            <div className="mt-2">
+              <CustomSelectComp
+                optionsData={yearObj}
+                changeHandler={(e) => handleFilter(e, "year")}
+                value={selected_year}
               />
+            </div>
+           </div>
             </div>
 
             <div className="employee_wrapper text-end serach_add_outer">
@@ -180,6 +212,7 @@ const LeaveBank = () => {
             </table>
           </div>
         </div>
+        <PaginationComp/>
 
         {showEditLeaveModal && (
           <EditLeaveBankModal

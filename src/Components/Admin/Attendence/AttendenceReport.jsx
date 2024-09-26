@@ -11,6 +11,8 @@ import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceRe
 import { useDispatch, useSelector } from "react-redux";
 import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
 import { useNavigate } from "react-router-dom";
+import PaginationComp from "../../Pagination/Pagination";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
@@ -35,23 +37,23 @@ const navigate =useNavigate()
     { option: "2", value: "2" },
   ];
   const monthDataObj = [
-    { value: "01", option: "January" },
-    { value: "02", option: "February" },
-    { value: "03", option: "March" },
-    { value: "04", option: "April" },
-    { value: "05", option: "May" },
-    { value: "06", option: "June" },
-    { value: "07", option: "July" },
-    { value: "08", option: "August" },
-    { value: "09", option: "September" },
-    { value: "10", option: "October" },
-    { value: "11", option: "November" },
-    { value: "12", option: "December" },
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
   ];
   const generateYearOptions = (startYear, endYear) => {
     const years = [];
     for (let year = startYear; year <= endYear; year++) {
-      years.push({ option: year, value: year });
+      years.push({ label: year, value: year });
     }
     return years;
   };
@@ -78,18 +80,17 @@ const navigate =useNavigate()
     let user_data = [];
     user_attendance_report?.data?.data?.forEach((user_name) => {
       if (!user_data.some((user) => user.value === user_name?.name)) {
-        user_data.push({ value: user_name?.name, option: user_name?.name });
+        user_data.push({ value: user_name?.name, label: user_name?.name });
       }
     });
     setAllNames(user_data);
   }, [user_attendance_report]);
 
   const handleSelectChange = (field, e) => {
-    field === "name" && setName(e.target.value);
-    field === "month" && setMonth(e.target.value);
-    field === "year" && setYear(e.target.value);
+    field === "name" && setName(e.value);
+    field === "month" && setMonth(e.value);
+    field === "year" && setYear(e.value);
   };
-
   return (
     <section className="attendenceReport_outer">
       <Sidebar />
@@ -98,7 +99,7 @@ const navigate =useNavigate()
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -107,29 +108,50 @@ const navigate =useNavigate()
 
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Employee"}
                 labelClass={""}
                 onChange={(e) => handleSelectChange("name", e)}
                 options={all_names}
-              />
+              /> */}
+              <div className="form-group new_employee_form_group">
+              <label>Employee</label>
+              </div>
+              <div className="mt-2">
+              <CustomSelectComp value={name} changeHandler={(e) => handleSelectChange("name", e)} optionsData={all_names}/>
+
+              </div>
             </div>
 
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Month"}
                 labelClass={""}
                 onChange={(e) => handleSelectChange("month", e)}
                 options={monthDataObj}
-              />
+              /> */}
+               <div className="form-group new_employee_form_group">
+              <label>Month</label>
+              </div>
+              <div className="mt-2">
+              <CustomSelectComp value={month} changeHandler={(e) => handleSelectChange("month", e)} optionsData={monthDataObj}/>
+
+              </div>
             </div>
             <div className="employee_wrapper">
-              <Select
+              {/* <Select
                 labelname={"Year"}
                 labelClass={""}
                 onChange={(e) => handleSelectChange("year", e)}
                 options={yearDataObj}
-              />
+              /> */}
+               <div className="form-group new_employee_form_group">
+              <label>Year</label>
+              </div>
+              <div className="mt-2">
+              <CustomSelectComp value={year} changeHandler={(e) => handleSelectChange("year", e)} optionsData={yearDataObj}/>
+
+              </div>
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
@@ -228,6 +250,7 @@ const navigate =useNavigate()
             </table>
           </div>
         </div>
+        <PaginationComp/>
       </div>
     </section>
   );

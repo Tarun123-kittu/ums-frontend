@@ -7,6 +7,7 @@ import { useAppContext } from "../../Utils/appContecxt";
 import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import PaginationComp from "../../Pagination/Pagination";
 
 const TodayAttendence = () => {
   UseAttendanceReport();
@@ -36,7 +37,7 @@ const TodayAttendence = () => {
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -101,6 +102,7 @@ const TodayAttendence = () => {
             </table>
           </div>
         </div>
+        <PaginationComp/>
       </div>
     </section>
   );

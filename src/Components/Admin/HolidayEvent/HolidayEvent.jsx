@@ -17,6 +17,7 @@ import {
   delete_event,
 } from "../../../utils/redux/holidayAndEventsSlice/deleteEvent";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import PaginationComp from "../../Pagination/Pagination";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
@@ -102,7 +103,7 @@ const HolidayEvent = () => {
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
               {/* <Select
@@ -111,7 +112,14 @@ const HolidayEvent = () => {
                 options={yearObj}
                 onChange={(e) => handleSetYear(e)}
               /> */}
-              <CustomSelectComp changeHandler={(e) => handleSetYear(e)}   optionsData={yearObj}/>
+              
+              <div className="form-group new_employee_form_group">
+                <label>Holiday</label>
+              <div className="mt-2">
+              <CustomSelectComp value={selected_year} changeHandler={(e) => handleSetYear(e)}   optionsData={yearObj}/>
+               
+              </div>
+              </div>
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
@@ -180,7 +188,8 @@ const HolidayEvent = () => {
             </table>
           </div>
         </div>
-
+        <PaginationComp/>
+      
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />
         )}

@@ -16,6 +16,8 @@ import {
 } from "../../../utils/redux/userSlice/deleteUserSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+import PaginationComp from "../../Pagination/Pagination";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,12 +69,21 @@ const EmployeeList = () => {
     return <UnauthorizedPage />;
   }
   return (
-    <div className="employee_list_outer">
+    <>
+    <div className="employee_list_outer minheight">
       <div className="d-flex employee_container align-items-end mt-3">
         <div className="employee_wrapper">
           <div className="new_employee_form_group">
             <label className="">Status</label>
-            <div class="custom-select-wrapper">
+            <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:'active',label:"Active"}]}
+                        changeHandler={(e) => setSearchStatus(e.value)}
+                        value={searchStatus}
+                        placeholder="Active"
+                      />
+                    </div>
+            {/* <div class="custom-select-wrapper">
               <select
                 class="custom-select form-control"
                 placeholder="Active"
@@ -82,7 +93,7 @@ const EmployeeList = () => {
                 <option>Active</option>
               </select>
               <FaSort className="dropdown-icon " />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -205,6 +216,8 @@ const EmployeeList = () => {
       )}
       <ToastContainer />
     </div>
+      <PaginationComp/>
+    </>
   );
 };
 

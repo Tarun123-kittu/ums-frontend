@@ -17,6 +17,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import PaginationComp from "../../Pagination/Pagination";
 
 const RoleAndPermission = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const RoleAndPermission = () => {
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer">
+        <div className="employee_wrapper cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -128,6 +129,7 @@ const RoleAndPermission = () => {
           </div>
         </div>
         <ToastContainer />
+        <PaginationComp/>
       </div>
       {showDeleteModal && (
         <CommonDeleteModal

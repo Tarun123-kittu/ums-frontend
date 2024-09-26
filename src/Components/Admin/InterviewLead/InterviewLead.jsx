@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import CommonDeleteModal from '../../Modal/CommonDeleteModal';
 import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp';
 import CustomSelectComp from '../../Common/CustomSelectComp';
+import PaginationComp from '../../Pagination/Pagination';
 
 const InterviewLead = () => {
 
@@ -26,7 +27,7 @@ const obj = [
     <Sidebar/>
   <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
     <Notification/>
-    <div className='cmn_padding_outer'>
+    <div className='cmn_padding_outer minheight'>
       <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}/>
     <div className='employee_list_outer '>
     <div className='d-flex employee_container align-items-end mt-3'>
@@ -81,8 +82,8 @@ const obj = [
 
 
     </div>
-
     </div>
+      <PaginationComp/>
     </div>
 {showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={"Please confirm your action. Deleting the user list is permanent and cannot be reversed."}/>}
     </section>

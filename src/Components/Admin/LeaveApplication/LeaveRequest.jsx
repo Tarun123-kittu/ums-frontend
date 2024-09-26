@@ -7,6 +7,7 @@ import { useAppContext } from "../../Utils/appContecxt";
 import { useSelector } from "react-redux";
 import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllAppliedLeaves";
 import { useNavigate } from "react-router-dom";
+import PaginationComp from "../../Pagination/Pagination";
 
 const LeaveRequest = () => {
   UseFetchAllAppliedLeaves();
@@ -38,7 +39,7 @@ const LeaveRequest = () => {
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -98,6 +99,7 @@ const LeaveRequest = () => {
             </table>
           </div>
         </div>
+        <PaginationComp/>
       </div>
     </section>
   );

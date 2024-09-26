@@ -13,6 +13,9 @@ h1,h2,h3,h4,h5,h6,p{
 /* body {
 background-color: #f7f2f2 !important;
 } */
+ .minheight{
+  min-height: calc(100vh - 126px);
+ }
  body{
   overflow-x:hidden
  }
@@ -1020,11 +1023,6 @@ background-color: #f7f2f2 !important;
   .status-icons img {
     margin-right: 5px;
   }
-  
-  
-  
-  
-  
   
   .selected {
     background-color: #007bff; 

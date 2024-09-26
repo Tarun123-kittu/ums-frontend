@@ -4,6 +4,7 @@ import Select from "../Common/Select";
 import { useSelector, useDispatch } from "react-redux";
 import { assigned_role } from "../../utils/redux/rolesAndPermissionSlice/assignedRoleToUser";
 import { get_users_assigned_to_role } from "../../utils/redux/rolesAndPermissionSlice/getUserAssignedToRole";
+import CustomSelectComp from "../Common/CustomSelectComp";
 
 const AssignNameModal = ({
   show,
@@ -27,7 +28,7 @@ const AssignNameModal = ({
     let name_container = [];
     if (all_userNames?.isSuccess) {
       all_userNames?.data?.data?.map((name, i) => {
-        name_container.push({ value: name?.id, option: name?.username });
+        name_container.push({ value: name?.id, label: name?.username });
       });
     }
     setUsername(name_container);
@@ -36,10 +37,10 @@ const AssignNameModal = ({
   const handleUpdateUserIds = (e) => {
     if (userAssignedToOldRole) {
       dispatch(
-        assigned_role({ role_id: role_id, user_id: e.target.value * 1 })
+        assigned_role({ role_id: role_id, user_id: e.value * 1 })
       );
     } else {
-      const newUserId = e.target.value * 1;
+      const newUserId = e.value * 1;
       setUser_ids((prevUserIds) => [...prevUserIds, newUserId]);
     }
   };
@@ -64,13 +65,20 @@ const AssignNameModal = ({
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <h3 className="heading"> Assigned Names</h3>
-          <Select
+          {/* <Select
             labelname={"Assigned Names"}
             placeholder={"Enter Name"}
             labelClass={"new_employee_form_group"}
             options={userName}
             onChange={(e) => handleUpdateUserIds(e)}
-          />
+          /> */}
+           <div className='form-group new_employee_form_group'>
+            <label>Assigned Names</label>
+             <div className='mt-2'>
+             <CustomSelectComp  placeholder={"Enter Name"} changeHandler={(e) => handleUpdateUserIds(e)}   optionsData={userName}/>
+             </div>
+             </div>
+
         </Modal.Body>
         <Modal.Footer className="justify-content-center gap-3">
           <button

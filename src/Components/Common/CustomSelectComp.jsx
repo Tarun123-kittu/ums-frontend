@@ -4,8 +4,9 @@ import { TiArrowUnsorted } from "react-icons/ti";
 
 import Select, { components } from "react-select";
 
-const CustomSelectComp = ({ optionsData,changeHandler }) => {
- 
+const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
+  const valueObj = optionsData?.find(option => option.value === value);
+
   const customStyles = {
     container: (provided) => ({
       ...provided,
@@ -85,7 +86,9 @@ const CustomSelectComp = ({ optionsData,changeHandler }) => {
       </components.DropdownIndicator>
     );
   };
-
+  // const handleSetType = (e) => {
+  //   setType(e.value);
+  // };
 
   return (
     <Select
@@ -94,6 +97,9 @@ const CustomSelectComp = ({ optionsData,changeHandler }) => {
       components={{ Option: CustomOption, DropdownIndicator }}
       menuPortalTarget={document.body}
       onChange={changeHandler}
+      placeholder={placeholder}
+      value={valueObj|| null}
+    
     />
   );
 };

@@ -132,6 +132,7 @@ button.add_document_btn{
 .new_employee_form_group {
     margin-top: 10px;
 }
+
 .new_employee_form_group textarea {
     background: transparent;
     border-radius: 7px;

@@ -16,6 +16,7 @@ import {
   create_new_user,
   clear_create_user_state,
 } from "../../../utils/redux/userSlice/createNewUserSlice";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -254,13 +255,23 @@ const AddnewEmployee = () => {
                       showYearDropdown
                       scrollableYearDropdown
                       maxDate={getMaxDate()}
+                      className="form-control"
                     />
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label> Gender </label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:"male",label:"Male"},{value:"female",label:"Female"}]}
+                        changeHandler={(e) =>
+                          handleInputChange("gender", e.value)
+                        }
+                        value={field_data.gender}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.gender}
                       onChange={(e) =>
@@ -270,7 +281,7 @@ const AddnewEmployee = () => {
                       <option>Select</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -285,6 +296,7 @@ const AddnewEmployee = () => {
                       showYearDropdown
                       scrollableYearDropdown
                       maxDate={new Date()}
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -292,7 +304,7 @@ const AddnewEmployee = () => {
                   <div className="form-group new_employee_form_group ">
                     <label htmlFor="">Date of joining </label>
                     <DatePicker
-                      classname={"form-control"}
+                      className={"form-control"}
                       selected={field_data.doj}
                       onChange={(date) => handleInputChange("doj", date)}
                       placeholderText="DD/MM/YYYY"
@@ -374,7 +386,16 @@ const AddnewEmployee = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label> Installment</label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:1,label:1}]}
+                        changeHandler={(e) =>
+                          handleInputChange("installments", e.value)
+                        }
+                        value={field_data.installments}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.installments}
                       onChange={(e) =>
@@ -383,16 +404,25 @@ const AddnewEmployee = () => {
                     >
                       <option>Select</option>
                       <option value={1}>1</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                      {" "}
+                     
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:'intern',label:'Intern'}]}
+                        changeHandler={(e) =>
+                          handleInputChange("position", e.value)
+                        }
+                        value={field_data.position}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.position}
                       onChange={(e) =>
@@ -401,18 +431,27 @@ const AddnewEmployee = () => {
                     >
                       <option>Select</option>
                       <option value="intern">Intern</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                      {" "}
+                     
                       Technology/Department{" "}
                       <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:'mern',label:'MERN'}]}
+                        changeHandler={(e) =>
+                          handleInputChange("department", e.value)
+                        }
+                        value={field_data.department}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.department}
                       onChange={(e) =>
@@ -421,7 +460,7 @@ const AddnewEmployee = () => {
                     >
                       <option>Select</option>
                       <option value={"mern"}>MERN</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -430,7 +469,16 @@ const AddnewEmployee = () => {
                       {" "}
                       Status <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:'active',label:'ACTIVE'}]}
+                        changeHandler={(e) =>
+                          handleInputChange("status", e.value)
+                        }
+                        value={field_data.status}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.status}
                       onChange={(e) =>
@@ -439,7 +487,7 @@ const AddnewEmployee = () => {
                     >
                       <option>Select</option>
                       <option value="active">ACTIVE</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -482,7 +530,16 @@ const AddnewEmployee = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label> Role</label>
-                    <select
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[{value:'admin',label:'ADMIN'}]}
+                        changeHandler={(e) =>
+                          handleInputChange("role", e.value)
+                        }
+                        value={field_data.role}
+                      />
+                    </div>
+                    {/* <select
                       className="form-control"
                       value={field_data.role}
                       onChange={(e) =>
@@ -491,7 +548,7 @@ const AddnewEmployee = () => {
                     >
                       <option>Select Role</option>
                       <option value={"admin"}>ADMIN</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
               </div>

@@ -152,8 +152,10 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
             <div className="mt-2">
               <CustomSelectComp
                 optionsData={options}
-                setType={setType}
-                value={date ? date : type}
+                changeHandler={(e)=>setType(e.value)}
+                // setType={setType}
+                // value={date ? date : type}
+                value={type}
               />
             </div>
           </div>

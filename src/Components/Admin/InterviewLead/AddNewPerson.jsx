@@ -17,14 +17,7 @@ const options=[
     { value: "Male", label: "Male" },
     { value: "Female", label: "Female" },
 ]
-const selectProfileData=[
-    { value: "ui/ux", label: "ui/ux" },
-    { value: "Backend Developer", label: "Backend Developer" },
-]
-const selectStateData=[
-    { value: "Punjab", label: "Punjab" },
-    { value: "Delhi", label: "Delhi" },
-]
+
 
   return (
     <section>

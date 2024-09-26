@@ -8,6 +8,8 @@ import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_all_user_leave } from "../../../utils/redux/leaveSlice/getUsersAllLeaves";
+import PaginationComp from "../../Pagination/Pagination";
+import CustomSelectComp from "../../Common/CustomSelectComp";
 
 const LeaveReport = () => {
   const dispatch = useDispatch();
@@ -50,7 +52,10 @@ const LeaveReport = () => {
     let result = [];
 
     while (startYear <= currentYear) {
-      result.push(startYear++);
+ 
+      // result.push(startYear++);
+       result.push({ label: startYear, value: startYear });
+      startYear++; 
     }
     setYear(result);
   };
@@ -66,6 +71,20 @@ const LeaveReport = () => {
       );
     }
   };
+  const monthDataObj = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
   return (
     <section className="leaveReport_outer">
       <Sidebar />
@@ -74,7 +93,7 @@ const LeaveReport = () => {
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer minheight">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -105,15 +124,14 @@ const LeaveReport = () => {
             </div>
 
             <div className="new_employee_form_group employee_wrapper">
-              <label className="inter_fontfamily">Month</label>
-              <div class="custom-select-wrapper ">
+              {/* <div class="custom-select-wrapper ">
                 <select
                   class="custom-select form-control"
                   placeholder="Month"
                   value={selected_month}
                   onChange={(e) => setSelected_month(e.target.value)}
                 >
-                  <option>Select</option>
+                  <option disabled>Select</option>
                   <option value="1">January</option>
                   <option value="2">Feburary</option>
                   <option value="3">March</option>
@@ -128,12 +146,22 @@ const LeaveReport = () => {
                   <option value="12">December</option>
                 </select>
                 <FaSort className="dropdown-icon " />
+              </div> */}
+              <div className="form-group new_employee_form_group mt-2">
+             <label className="inter_fontfamily">Month</label>
+             <div className="mt-2">
+              <CustomSelectComp
+                optionsData={monthDataObj}
+                changeHandler={(e) => setSelected_month(e.value)}
+                value={selected_month}
+              />
               </div>
+             </div>
             </div>
 
             <div className="new_employee_form_group employee_wrapper">
               <label className="inter_fontfamily">Year</label>
-              <div class="custom-select-wrapper ">
+              {/* <div class="custom-select-wrapper ">
                 <select
                   class="custom-select form-control"
                   placeholder="Year"
@@ -150,6 +178,13 @@ const LeaveReport = () => {
                   })}
                 </select>
                 <FaSort className="dropdown-icon " />
+              </div> */}
+              <div className="mt-2">
+              <CustomSelectComp
+                optionsData={year}
+                changeHandler={(e) => setSelected_year(e.value)}
+                value={selected_year}
+              />
               </div>
             </div>
 
@@ -216,6 +251,7 @@ const LeaveReport = () => {
             </table>
           </div>
         </div>
+        <PaginationComp/>
       </div>
     </section>
   );
