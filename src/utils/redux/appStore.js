@@ -33,6 +33,13 @@ import updateAttendance from './attendanceSlice/updateAttendance'
 import getAllLanguage from './testSeries/getAllLanguages'
 import createTestSeries from './testSeries/createTestSeries'
 import getAllSeries from './testSeries/getAllTestSeries'
+import updateTestseries from './testSeries/updatTestSeries'
+import getSeries from './testSeries/getSeries'
+import deleteSeries from './testSeries/deleteSeries'
+import createObjQuestion from './testSeries/objectiveQuestionsSlice/createObjQuestion'
+import getQueAns from './testSeries/getQuestionsAnswer'
+import addSubjectiveQue from './testSeries/subjectiveQue/addSubjectiveQue'
+import addLogicalQue from './testSeries/logicalQuestionSlice/addLogicalQue'
 
 const appStore = configureStore({
     reducer: {
@@ -69,7 +76,14 @@ const appStore = configureStore({
         UPDATE_ATTENDANCE: updateAttendance,
         ALL_LANGUAGES: getAllLanguage,
         CREATE_TEST_SERIES: createTestSeries,
-        ALL_SERIES: getAllSeries
+        ALL_SERIES: getAllSeries,
+        UPDATE_TESTSERIES: updateTestseries,
+        GET_SERIES: getSeries,
+        DELETE_SERIES: deleteSeries,
+        CREATE_OBJ_QUESTION: createObjQuestion,
+        ALL_QUE_ANS: getQueAns,
+        SUBJECTIVE_QUE: addSubjectiveQue,
+        LOGICAL_QUE: addLogicalQue
     },
 })
 

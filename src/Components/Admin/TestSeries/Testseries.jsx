@@ -15,6 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_all_series } from "../../../utils/redux/testSeries/getAllTestSeries";
 import toast from "react-hot-toast";
 import { FaRegUser } from "react-icons/fa";
+import {
+  delete_series,
+  clear_delete_series_state,
+} from "../../../utils/redux/testSeries/deleteSeries";
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -28,8 +32,10 @@ const Testseries = () => {
   const [id, setId] = useState("");
   const [all_languagages, setAll_languages] = useState([]);
   const [search_enable, setSearch_enable] = useState(false);
+  const [seriesId, setSeriesId] = useState(null);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const all_series = useSelector((store) => store.ALL_SERIES);
+  const deleted_state = useSelector((store) => store.DELETE_SERIES);
 
   useEffect(() => {
     dispatch(get_all_languages());
@@ -54,7 +60,21 @@ const Testseries = () => {
       setSearch_enable(false);
       toast.error(all_series?.error?.message);
     }
-  });
+  }, [all_series]);
+
+  useEffect(() => {
+    if (deleted_state?.isSuccess) {
+      toast.success("Series deleted successfully");
+      setShowDeleteModal(false);
+      dispatch(get_all_series({ id }));
+      dispatch(clear_delete_series_state());
+    }
+    if (deleted_state?.isError) {
+      toast.error(deleted_state?.error?.message);
+      setShowDeleteModal(false);
+      dispatch(clear_delete_series_state());
+    }
+  }, [deleted_state]);
 
   const formatTimeToReadable = (time) => {
     if (!time) return "";
@@ -86,6 +106,10 @@ const Testseries = () => {
     } else {
       dispatch(get_all_series({ id }));
     }
+  };
+
+  const handleDelete = () => {
+    dispatch(delete_series({ id: seriesId }));
   };
   return (
     <section className="test_serie_wrapper">
@@ -135,30 +159,36 @@ const Testseries = () => {
 
           <div className="create_series_outer mt-3">
             <div className="row">
-            
               {all_series?.data?.data?.map((series, i) => {
                 return (
                   <div className="col-lg-4 col-sm-12 col-md-6">
                     <div key={i} className="series_card">
-                      <div className='d-flex justify-content-end gap-1 align-items-center series_description_outer'>
-                      <h3 className='series_created_text'>
-                      <FaRegUser /> John
-                      </h3>
-                      <h3 className='series_created_text'>
-                      Php
-                      </h3>
-                      <h3 className='series_created_text'>
-                      {formatTimeToReadable(series?.time_taken)}
-                      </h3>
-                      <RiDeleteBinLine className='cursor_pointer series_created_heading' onClick={()=>{setShowDeleteModal(true)}}/>
-                    </div>
-                   
+                      <div className="d-flex justify-content-end gap-1 align-items-center series_description_outer">
+                        <h3 className="series_created_text">
+                          <FaRegUser /> {series?.name}
+                        </h3>
+                        <h3 className="series_created_text">
+                          {series?.language}
+                        </h3>
+                        <h3 className="series_created_text">
+                          {formatTimeToReadable(series?.time_taken)}
+                        </h3>
+                        <RiDeleteBinLine
+                          className="cursor_pointer series_created_heading"
+                          onClick={() => {
+                            setSeriesId(series?.id);
+                            setShowDeleteModal(true);
+                          }}
+                        />
+                      </div>
+
                       <h2 className="card_heading">{series?.series_name}</h2>
                       <h6>{series?.description}</h6>
                       <div className="create_series_btn_outer">
                         <button
                           className="cmn_cancel_btn"
                           onClick={() => {
+                            setSeriesId(series?.id);
                             setShowEditSeriesModal(true);
                           }}
                         >
@@ -167,7 +197,12 @@ const Testseries = () => {
                         <button
                           className="cmn_Button_style mt-3"
                           onClick={() => {
-                            navigate("/viewTestSeriesQuestion");
+                            navigate("/viewTestSeriesQuestion", {
+                              state: {
+                                id: series?.id,
+                                language_id: series?.language_id,
+                              },
+                            });
                           }}
                         >
                           View Questions
@@ -190,6 +225,7 @@ const Testseries = () => {
           paragraph_text={""}
           show={showDeleteModal}
           setShow={setShowDeleteModal}
+          handleDelete={handleDelete}
         />
       )}
       {showCreateTestSeriesModal && (
@@ -203,6 +239,8 @@ const Testseries = () => {
         <EditTestSeriesModal
           show={showEditSeriesModal}
           setShow={setShowEditSeriesModal}
+          seriesId={seriesId}
+          languages={languages}
         />
       )}
     </section>
