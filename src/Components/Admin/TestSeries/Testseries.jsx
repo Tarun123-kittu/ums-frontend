@@ -14,6 +14,7 @@ import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguag
 import { useDispatch, useSelector } from "react-redux";
 import { get_all_series } from "../../../utils/redux/testSeries/getAllTestSeries";
 import toast from "react-hot-toast";
+import { FaRegUser } from "react-icons/fa";
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -134,21 +135,24 @@ const Testseries = () => {
 
           <div className="create_series_outer mt-3">
             <div className="row">
+            
               {all_series?.data?.data?.map((series, i) => {
                 return (
                   <div className="col-lg-4 col-sm-12 col-md-6">
                     <div key={i} className="series_card">
-                      <h3 className="series_created_heading text-end">
-                        <span className="series_created_text">
-                          {formatTimeToReadable(series?.time_taken)}
-                        </span>
-                        <RiDeleteBinLine
-                          className="cursor_pointer"
-                          onClick={() => {
-                            setShowDeleteModal(true);
-                          }}
-                        />
+                      <div className='d-flex justify-content-end gap-1 align-items-center series_description_outer'>
+                      <h3 className='series_created_text'>
+                      <FaRegUser /> John
                       </h3>
+                      <h3 className='series_created_text'>
+                      Php
+                      </h3>
+                      <h3 className='series_created_text'>
+                      {formatTimeToReadable(series?.time_taken)}
+                      </h3>
+                      <RiDeleteBinLine className='cursor_pointer series_created_heading' onClick={()=>{setShowDeleteModal(true)}}/>
+                    </div>
+                   
                       <h2 className="card_heading">{series?.series_name}</h2>
                       <h6>{series?.description}</h6>
                       <div className="create_series_btn_outer">
