@@ -51,6 +51,7 @@ const ViewTestseriesQuestions = () => {
     useState(false);
   const [showEditLogicalQuesModal, setShowEditLogicalQuesModal] =
     useState(false);
+  const [question_id, setQuestion_id] = useState(null);
 
   const obj = [
     { name: "Test Series", path: "/testSeries" },
@@ -105,7 +106,7 @@ const ViewTestseriesQuestions = () => {
                               <input
                                 type="text"
                                 className={
-                                  question?.correct_answer === option?.option
+                                  question?.correct_answer == option?.option_id
                                     ? " form-control correct_ans"
                                     : "form-control "
                                 }
@@ -124,9 +125,10 @@ const ViewTestseriesQuestions = () => {
                             </button>
                             <button
                               className="cmn_Button_style cursor_pointer"
-                              onClick={() =>
-                                setShowEditObjectiveQuesModal(true)
-                              }
+                              onClick={() => {
+                                setQuestion_id(question?.question_id);
+                                setShowEditObjectiveQuesModal(true);
+                              }}
                             >
                               Edit
                             </button>
@@ -175,6 +177,7 @@ const ViewTestseriesQuestions = () => {
                             <button
                               className="cmn_Button_style cursor_pointer"
                               onClick={() => {
+                                setQuestion_id(ques?.question_id);
                                 setShowEditSubjectiveQuesModal(true);
                               }}
                             >
@@ -225,7 +228,8 @@ const ViewTestseriesQuestions = () => {
                             <button
                               className="cmn_Button_style cursor_pointer"
                               onClick={() => {
-                                setShowEditSubjectiveQuesModal(true);
+                                setQuestion_id(ques?.question_id);
+                                setShowEditLogicalQuesModal(true);
                               }}
                             >
                               Edit
@@ -295,18 +299,27 @@ const ViewTestseriesQuestions = () => {
         <EditLogicalQuesModal
           show={showEditLogicalQuesModal}
           setShow={setShowEditLogicalQuesModal}
+          question_id={question_id}
+          series_id={id}
+          language_id={language_id}
         />
       )}
       {showEditObjectiveQuesModal && (
         <EditObjectiveQuesModal
           show={showEditObjectiveQuesModal}
           setShow={setShowEditObjectiveQuesModal}
+          question_id={question_id}
+          series_id={id}
+          language_id={language_id}
         />
       )}
       {showEditSubjectiveQuesModal && (
         <EditSubjectiveQuesModal
           show={showEditSubjectiveQuesModal}
           setShow={setShowEditSubjectiveQuesModal}
+          question_id={question_id}
+          series_id={id}
+          language_id={language_id}
         />
       )}
     </section>

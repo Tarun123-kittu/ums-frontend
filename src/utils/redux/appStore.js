@@ -40,6 +40,10 @@ import createObjQuestion from './testSeries/objectiveQuestionsSlice/createObjQue
 import getQueAns from './testSeries/getQuestionsAnswer'
 import addSubjectiveQue from './testSeries/subjectiveQue/addSubjectiveQue'
 import addLogicalQue from './testSeries/logicalQuestionSlice/addLogicalQue'
+import getLogicalSubjectiveQuestion from './testSeries/logicalQuestionSlice/getLogicalQuestions'
+import getObjectiveQuestion from './testSeries/objectiveQuestionsSlice/getObjectiveQuestion'
+import updateLogicalQue from './testSeries/logicalQuestionSlice/updateLogicalQuestion'
+import updateObjQue from './testSeries/objectiveQuestionsSlice/updateObjectiveQuestion'
 
 const appStore = configureStore({
     reducer: {
@@ -83,7 +87,11 @@ const appStore = configureStore({
         CREATE_OBJ_QUESTION: createObjQuestion,
         ALL_QUE_ANS: getQueAns,
         SUBJECTIVE_QUE: addSubjectiveQue,
-        LOGICAL_QUE: addLogicalQue
+        LOGICAL_QUE: addLogicalQue,
+        GET_LOGICAL_SUBJECTIVE_QUESTION: getLogicalSubjectiveQuestion,
+        GET_OBJECTIVE_QUESTION: getObjectiveQuestion,
+        UPDATE_LOGICAL_QUESTION: updateLogicalQue,
+        UPDATE_OBJECTIVE_QUESTION: updateObjQue
     },
 })
 

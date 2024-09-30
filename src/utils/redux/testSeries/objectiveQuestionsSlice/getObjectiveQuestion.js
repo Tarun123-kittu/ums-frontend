@@ -1,26 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test_series_id, language_id, question, answer }, thunkAPI) => {
+export const get_objective_question = createAsyncThunk("get_objective_question", async ({ question_id }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
-        const raw = JSON.stringify({
-            "test_series_id": test_series_id,
-            "language_id": language_id,
-            "question": question,
-            "answer": answer * 1
-        });
-
         const requestOptions = {
-            method: "POST",
+            method: "GET",
             headers: myHeaders,
-            body: raw,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/add_logical`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_objective_questions?question_id=${question_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -36,41 +27,42 @@ export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test
     }
 })
 
-export const addLogicalQue = createSlice({
-    name: "addSubjectiveQue",
+export const getObjectiveQuestion = createSlice({
+    name: "getObjectiveQuestion",
     initialState: {
-        message: {},
+        data: {},
         isSuccess: false,
         isError: false,
         isLoading: false,
         error: null
     },
     reducers: {
-        clear_add_log_ques_state: (state) => {
-            state.message = {}
+        clear_objective_questions_state: (state) => {
+            state.data = {}
             state.isSuccess = false
-            state.isError = false
             state.isLoading = false
+            state.isError = false
             state.error = null
             return state
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(add_logical_que.pending, (state) => {
+            .addCase(get_objective_question.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(add_logical_que.fulfilled, (state, action) => {
-                state.message = action.payload
+            .addCase(get_objective_question.fulfilled, (state, action) => {
+                state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(add_logical_que.rejected, (state, action) => {
+            .addCase(get_objective_question.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-export const { clear_add_log_ques_state } = addLogicalQue.actions
-export default addLogicalQue.reducer
+
+export const { clear_objective_questions_state } = getObjectiveQuestion.actions
+export default getObjectiveQuestion.reducer
