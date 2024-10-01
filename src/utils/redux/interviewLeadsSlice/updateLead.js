@@ -1,14 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const update_logical_que = createAsyncThunk("update_logical_que", async ({ question_id, answer_id, question, answer }, thunkAPI) => {
+export const update_lead = createAsyncThunk("update_lead", async ({ name, mobile, email, gender, dob, profile, state, address, experience, current_salary, expected_salary, last_company, id }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
-            "question": question,
-            "answer": answer
+            "name": name,
+            "phone_number": mobile,
+            "email": email,
+            "gender": gender,
+            "dob": dob,
+            "profile": profile,
+            "state": state,
+            "house_address": address,
+            "experience": experience,
+            "current_salary": current_salary,
+            "expected_salary": expected_salary,
+            "last_company": last_company
         });
 
         const requestOptions = {
@@ -18,13 +28,14 @@ export const update_logical_que = createAsyncThunk("update_logical_que", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_logical_and_subjective_question?question_id=${question_id}&answer_id=${answer_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_lead?leadId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -34,41 +45,41 @@ export const update_logical_que = createAsyncThunk("update_logical_que", async (
     }
 })
 
-export const updateLogicalQue = createSlice({
-    name: "updateLogicalQue",
+export const updateLead = createSlice({
+    name: "updateLead",
     initialState: {
         message: {},
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
     },
-    reducers: {
-        clear_update_logical_question_state: (state) => {
+    reducer: {
+        clear_update_lead_state: (state) => {
             state.message = {}
             state.isSuccess = false
-            state.isLoading = false
             state.isError = false
+            state.isLoading = false
             state.error = null
             return state
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(update_logical_que.pending, (state) => {
+            .addCase(update_lead.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(update_logical_que.fulfilled, (state, action) => {
+            .addCase(update_lead.fulfilled, (state, action) => {
                 state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(update_logical_que.rejected, (state, action) => {
-                state.error = action.payload
+            .addCase(update_lead.rejected, (state, action) => {
                 state.isError = true
+                state.error = action.payload
                 state.isLoading = false
             })
     }
 })
-export const { clear_update_logical_question_state } = updateLogicalQue.actions
-export default updateLogicalQue.reducer
+export const { clear_update_lead_state } = updateLead.actions
+export default updateLead.reducer

@@ -44,6 +44,11 @@ import getLogicalSubjectiveQuestion from './testSeries/logicalQuestionSlice/getL
 import getObjectiveQuestion from './testSeries/objectiveQuestionsSlice/getObjectiveQuestion'
 import updateLogicalQue from './testSeries/logicalQuestionSlice/updateLogicalQuestion'
 import updateObjQue from './testSeries/objectiveQuestionsSlice/updateObjectiveQuestion'
+import deleteLogicalQue from './testSeries/logicalQuestionSlice/deleteLogicalQUestion'
+import deleteObjectiveQue from './testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion'
+import addInterviewLeads from './interviewLeadsSlice/addLeads'
+import getAllLeads from './interviewLeadsSlice/getAllLeads'
+import { updateLead } from './interviewLeadsSlice/updateLead'
 
 const appStore = configureStore({
     reducer: {
@@ -91,7 +96,12 @@ const appStore = configureStore({
         GET_LOGICAL_SUBJECTIVE_QUESTION: getLogicalSubjectiveQuestion,
         GET_OBJECTIVE_QUESTION: getObjectiveQuestion,
         UPDATE_LOGICAL_QUESTION: updateLogicalQue,
-        UPDATE_OBJECTIVE_QUESTION: updateObjQue
+        UPDATE_OBJECTIVE_QUESTION: updateObjQue,
+        DELETE_LOGICAL_QUE: deleteLogicalQue,
+        DELETE_OBJECTIVE_QUE: deleteObjectiveQue,
+        ADD_INTERVIEW_LEADS: addInterviewLeads,
+        ALL_LEADS: getAllLeads,
+        UPDATE_LEAD: updateLead
     },
 })
 

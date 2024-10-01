@@ -16,6 +16,15 @@ import EditSubjectiveQuesModal from "../../Modal/EditSubjectiveQuesModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_question_answer } from "../../../utils/redux/testSeries/getQuestionsAnswer";
+import {
+  delete_logical,
+  clear_delete_logical_question_state,
+} from "../../../utils/redux/testSeries/logicalQuestionSlice/deleteLogicalQUestion";
+import {
+  delete_objective,
+  clear_delete_objective_question_state,
+} from "../../../utils/redux/testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion";
+import toast from "react-hot-toast";
 
 const ViewTestseriesQuestions = () => {
   const { show } = useAppContext();
@@ -24,7 +33,10 @@ const ViewTestseriesQuestions = () => {
   const dispatch = useDispatch();
   const { id, language_id } = location.state ? location.state : location;
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
-  console.log(all_questions, "this is the all question answer");
+  const delete_logical_state = useSelector((store) => store.DELETE_LOGICAL_QUE);
+  const delete_objective_state = useSelector(
+    (store) => store.DELETE_OBJECTIVE_QUE
+  );
 
   useEffect(() => {
     if (!id) {
@@ -57,6 +69,47 @@ const ViewTestseriesQuestions = () => {
     { name: "Test Series", path: "/testSeries" },
     { name: "Create Test Series Question", path: "" },
   ];
+
+  const handleDelete = () => {
+    dispatch(delete_logical({ question_id }));
+  };
+
+  const handleDeleteObjective = () => {
+    dispatch(delete_objective({ question_id }));
+  };
+
+  useEffect(() => {
+    if (delete_logical_state?.isSuccess) {
+      toast.success("Question Delted successfully!!");
+      dispatch(clear_delete_logical_question_state());
+      dispatch(
+        get_question_answer({ language_id: language_id, series_id: id })
+      );
+      setShowDelLogicalQuesModal(false);
+      setShowDelSubjectiveQuesModal(false);
+    }
+
+    if (delete_logical_state?.isError) {
+      toast.error(delete_logical_state?.error?.message);
+      dispatch(clear_delete_objective_question_state());
+    }
+  }, [delete_logical_state]);
+
+  useEffect(() => {
+    if (delete_objective_state?.isSuccess) {
+      toast.success("Question Delted successfully!!");
+      dispatch(clear_delete_objective_question_state());
+      dispatch(
+        get_question_answer({ language_id: language_id, series_id: id })
+      );
+      setShowDelObjectiveQuesModal(false);
+    }
+
+    if (delete_objective_state?.isError) {
+      toast.error(delete_objective_state?.error?.message);
+      dispatch(clear_delete_logical_question_state());
+    }
+  }, [delete_objective_state]);
   return (
     <section className="test_serie_wrapper">
       <Sidebar />
@@ -119,7 +172,10 @@ const ViewTestseriesQuestions = () => {
                           <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
                             <button
                               className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                              onClick={() => setShowDelObjectiveQuesModal(true)}
+                              onClick={() => {
+                                setQuestion_id(question?.question_id);
+                                setShowDelObjectiveQuesModal(true);
+                              }}
                             >
                               Delete
                             </button>
@@ -169,6 +225,7 @@ const ViewTestseriesQuestions = () => {
                             <button
                               className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                               onClick={() => {
+                                setQuestion_id(ques?.question_id);
                                 setShowDelSubjectiveQuesModal(true);
                               }}
                             >
@@ -220,6 +277,7 @@ const ViewTestseriesQuestions = () => {
                             <button
                               className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                               onClick={() => {
+                                setQuestion_id(ques?.question_id);
                                 setShowDelSubjectiveQuesModal(true);
                               }}
                             >
@@ -276,6 +334,8 @@ const ViewTestseriesQuestions = () => {
           heading_text={"Are you sure you want to delete?"}
           show={showDelSubjectiveQuesModal}
           setShow={setShowDelSubjectiveQuesModal}
+          question_id={question_id}
+          handleDelete={handleDelete}
         />
       )}
       {showDelLogicalQuesModal && (
@@ -284,6 +344,8 @@ const ViewTestseriesQuestions = () => {
           heading_text={"Are you sure you want to delete?"}
           show={showDelLogicalQuesModal}
           setShow={setShowDelLogicalQuesModal}
+          question_id={question_id}
+          handleDelete={handleDelete}
         />
       )}
       {showDelObjectiveQuesModal && (
@@ -292,6 +354,8 @@ const ViewTestseriesQuestions = () => {
           heading_text={"Are you sure you want to delete?"}
           show={showDelObjectiveQuesModal}
           setShow={setShowDelObjectiveQuesModal}
+          question_id={question_id}
+          handleDelete={handleDeleteObjective}
         />
       )}
 
