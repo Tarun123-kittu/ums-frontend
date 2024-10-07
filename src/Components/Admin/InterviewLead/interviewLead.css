@@ -123,6 +123,28 @@ padding: 6px 20px;
 font-size: 14px;
 font-weight: 600;
 }
+.key-point-box {
+    position: relative;
+    display: inline-block;
+}
+
+.key-point-tooltip {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    width: 260px;
+    right: 0;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .key-point-box:hover .key-point-tooltip {
+    display: block; /* Show on hover */
+  }
+
 @media screen and (max-width:1280px){
     .Interviewlead_outer .employee_detail_table th{
         min-width:200px

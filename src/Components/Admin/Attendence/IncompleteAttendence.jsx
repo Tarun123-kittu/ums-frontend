@@ -7,7 +7,8 @@ import { useAppContext } from "../../Utils/appContecxt";
 import { useSelector } from "react-redux";
 import "./attendence.css";
 import { useNavigate } from "react-router-dom";
-import PaginationComp from "../../Pagination/Pagination"
+import PaginationComp from "../../Pagination/Pagination";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 const IncompleteAttendence = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -16,6 +17,9 @@ const IncompleteAttendence = () => {
   const navigate = useNavigate();
   const { show } = useAppContext();
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -25,6 +29,16 @@ const IncompleteAttendence = () => {
     hours = hours % 12 || 12;
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
   };
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="incomplete_attendence_outer">
       <Sidebar />
@@ -84,7 +98,7 @@ const IncompleteAttendence = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
     </section>
   );

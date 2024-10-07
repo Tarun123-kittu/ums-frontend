@@ -8,13 +8,17 @@ import { useSelector } from "react-redux";
 import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllAppliedLeaves";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const LeaveRequest = () => {
+  const navigate = useNavigate();
   UseFetchAllAppliedLeaves();
   const all_applied_leaves = useSelector(
     (store) => store.GET_ALL_APPLIED_LEAVES
   );
-  console.log(all_applied_leaves, "all_applied_leaves");
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const obj = [
     { name: "Leave Application", path: "/leaveApplication" },
     { name: "Leave Request", path: "/leaveRequest" },
@@ -30,7 +34,16 @@ const LeaveRequest = () => {
     const year = date.getFullYear(); // Get the year
     return `${year}-${month}-${day}`;
   };
-  const navigate = useNavigate();
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="leaveRequest_outer">
       <Sidebar />
@@ -105,7 +118,7 @@ const LeaveRequest = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
     </section>
   );

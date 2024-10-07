@@ -1,32 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test_series_id, language_id, question, answer }, thunkAPI) => {
+export const get_hr_round_questions = createAsyncThunk("get_hr_round_questions", async ({ count }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
-        const raw = JSON.stringify({
-            "test_series_id": test_series_id,
-            "language_id": language_id,
-            "question": question,
-            "answer": answer
-        });
-
         const requestOptions = {
-            method: "POST",
+            method: "GET",
             headers: myHeaders,
-            body: raw,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/add_logical`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_hr_assign_questions_to_lead?count=${count}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -36,17 +28,17 @@ export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test
     }
 })
 
-export const addLogicalQue = createSlice({
-    name: "addSubjectiveQue",
+export const hrRoundQuestion = createSlice({
+    name: "hrRoundQuestion",
     initialState: {
-        message: {},
+        data: [],
         isSuccess: false,
         isError: false,
         isLoading: false,
         error: null
     },
     reducers: {
-        clear_add_log_ques_state: (state) => {
+        clear_hr_round_questions_state: (state) => {
             state.message = {}
             state.isSuccess = false
             state.isError = false
@@ -57,20 +49,20 @@ export const addLogicalQue = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(add_logical_que.pending, (state) => {
+            .addCase(get_hr_round_questions.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(add_logical_que.fulfilled, (state, action) => {
-                state.message = action.payload
+            .addCase(get_hr_round_questions.fulfilled, (state, action) => {
+                state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(add_logical_que.rejected, (state, action) => {
+            .addCase(get_hr_round_questions.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-export const { clear_add_log_ques_state } = addLogicalQue.actions
-export default addLogicalQue.reducer
+export const { clear_hr_round_questions_state } = hrRoundQuestion.actions
+export default hrRoundQuestion.reducer

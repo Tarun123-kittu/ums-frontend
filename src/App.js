@@ -31,6 +31,7 @@ import EditLeaveRequest from './Components/Admin/LeaveApplication/EditLeaveReque
 import EditLeaveReport from './Components/Admin/LeaveApplication/EditleaveReport';
 import Testseries from './Components/Admin/TestSeries/Testseries';
 import ViewTestseriesQuestions from './Components/Admin/TestSeries/ViewTestSeriesQuestions';
+import Leads from './Components/Admin/LeadTest/leads';
 
 function App() {
 
@@ -67,6 +68,7 @@ function App() {
         <Route path='/editLeaveReport' element={< EditLeaveReport />} />
         <Route path='/testSeries' element={<Testseries />} />
         <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions />} />
+        <Route path='/leads/technical-round/:lead_id/:token' element={<Leads />} />
 
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

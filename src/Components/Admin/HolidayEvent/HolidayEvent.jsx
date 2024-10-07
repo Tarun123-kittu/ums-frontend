@@ -6,7 +6,6 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import "./holiday.css";
 import AddEventModal from "../../Modal/AddEventModal";
-import Select from "../../Common/Select";
 import { useDispatch, useSelector } from "react-redux";
 import { get_all_holidays_and_events } from "../../../utils/redux/holidayAndEventsSlice/getAllHolidaysAndEvents";
 import toast from "react-hot-toast";
@@ -18,6 +17,7 @@ import {
 } from "../../../utils/redux/holidayAndEventsSlice/deleteEvent";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import PaginationComp from "../../Pagination/Pagination";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
@@ -33,7 +33,9 @@ const HolidayEvent = () => {
     (store) => store.ALL_HOLIDAY_AND_EVENT
   );
   const is_deleted = useSelector((store) => store.DELETE_EVENT);
-  console.log(is_deleted, "is_deleted is_deleted");
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     dispatch(get_all_holidays_and_events({ year: selected_year }));
@@ -73,7 +75,6 @@ const HolidayEvent = () => {
 
   const handleSetYear = (e) => {
     setSelected_year(e.value);
-    // setSelected_year(selectedOption.value);
     setIsSearched(true);
   };
 
@@ -96,6 +97,15 @@ const HolidayEvent = () => {
     }
   }, [is_deleted]);
 
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="holiday_event_wrapper">
       <Sidebar />
@@ -106,24 +116,22 @@ const HolidayEvent = () => {
         <div className="cmn_padding_outer minheight">
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Holiday"}
-                labelClass={""}
-                options={yearObj}
-                onChange={(e) => handleSetYear(e)}
-              /> */}
-              
               <div className="form-group new_employee_form_group">
                 <label>Holiday</label>
-              <div className="mt-2">
-              <CustomSelectComp value={selected_year} changeHandler={(e) => handleSetYear(e)}   optionsData={yearObj}/>
-               
-              </div>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    value={selected_year}
+                    changeHandler={(e) => handleSetYear(e)}
+                    optionsData={yearObj}
+                  />
+                </div>
               </div>
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
-              <button className="cmn_Button_style cmn_darkgray_btn">Reset</button>
+              <button className="cmn_Button_style cmn_darkgray_btn">
+                Reset
+              </button>
               <button
                 className="cmn_Button_style"
                 onClick={() =>
@@ -188,8 +196,8 @@ const HolidayEvent = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
-      
+        <PaginationComp />
+
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />
         )}

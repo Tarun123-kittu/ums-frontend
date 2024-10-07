@@ -19,6 +19,7 @@ import {
   delete_series,
   clear_delete_series_state,
 } from "../../../utils/redux/testSeries/deleteSeries";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,9 @@ const Testseries = () => {
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const all_series = useSelector((store) => store.ALL_SERIES);
   const deleted_state = useSelector((store) => store.DELETE_SERIES);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     dispatch(get_all_languages());
@@ -111,6 +115,11 @@ const Testseries = () => {
   const handleDelete = () => {
     dispatch(delete_series({ id: seriesId }));
   };
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="test_serie_wrapper">
       <Sidebar />

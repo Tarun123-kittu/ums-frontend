@@ -49,6 +49,16 @@ import deleteObjectiveQue from './testSeries/objectiveQuestionsSlice/deleteObjec
 import addInterviewLeads from './interviewLeadsSlice/addLeads'
 import getAllLeads from './interviewLeadsSlice/getAllLeads'
 import { updateLead } from './interviewLeadsSlice/updateLead'
+import hrRoundQuestion from './interviewLeadsSlice/hrRound/getHrRoundQuestions'
+import hrRound from './interviewLeadsSlice/hrRound/hrRoundResponse'
+import getHrRoundLeads from './interviewLeadsSlice/hrRound/getHrRoundCandidate'
+import hrUpdateLeadStatus from './interviewLeadsSlice/hrRound/hrUpdateLeadStatus'
+import hrAssinedQuestionsToLead from './interviewLeadsSlice/hrRound/getAssignedQuestionsToLead'
+import updateKeypoint from './interviewLeadsSlice/hrRound/updateKeyPoints'
+import getSelectedLanguageSeries from './interviewLeadsSlice/technicalRound/getAllSelectedTestSeries'
+import sendTestLink from './interviewLeadsSlice/hrRound/sendTestLink'
+import getAllTechLeads from './interviewLeadsSlice/technicalRound/getAllTechRoundLeads'
+import updateTechStatus from './interviewLeadsSlice/technicalRound/updateTechnicalRoundStatus'
 
 const appStore = configureStore({
     reducer: {
@@ -101,7 +111,17 @@ const appStore = configureStore({
         DELETE_OBJECTIVE_QUE: deleteObjectiveQue,
         ADD_INTERVIEW_LEADS: addInterviewLeads,
         ALL_LEADS: getAllLeads,
-        UPDATE_LEAD: updateLead
+        UPDATE_LEAD: updateLead,
+        HR_ROUND_QUESTION: hrRoundQuestion,
+        HR_ROUND_RESULT: hrRound,
+        HR_ROUND_LEAD: getHrRoundLeads,
+        HR_UPDATE_LEAD_STATUS: hrUpdateLeadStatus,
+        HR_ASSIGNED_QUESTION_TO_LEAD: hrAssinedQuestionsToLead,
+        UPDATE_KEY_POINT: updateKeypoint,
+        SELECTED_LANGUAGE_SERIES: getSelectedLanguageSeries,
+        SENT_TEST_LINK: sendTestLink,
+        TECH_LEADS: getAllTechLeads,
+        UPDATE_TECH_STATUS: updateTechStatus
     },
 })
 

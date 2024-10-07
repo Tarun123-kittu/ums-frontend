@@ -52,7 +52,12 @@ const RoleAndPermission = () => {
     }
   }, [is_role_disabled, dispatch]);
 
-  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
 
@@ -134,7 +139,7 @@ const RoleAndPermission = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
       {showDeleteModal && (
         <CommonDeleteModal

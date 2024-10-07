@@ -10,11 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_leave_bank_report } from "../../../utils/redux/leaveSlice/getLeaveBankReport";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const [session, setSession] = useState("");
   const [selected_year, setSelected_year] = useState("");
   const [selected_month, setSelected_month] = useState("");
@@ -84,6 +88,15 @@ const LeaveBank = () => {
     if (filter === "year") setSelected_year(e.value);
   };
 
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="attendenceBank_outer">
       <Sidebar />
@@ -108,15 +121,15 @@ const LeaveBank = () => {
                 onChange={(e) => handleFilter(e, "financial_year")}
               /> */}
               <div className="form-group new_employee_form_group mt-2">
-            <label className="modal_label">Select Financial Year</label>
-            <div className="mt-2">
-              <CustomSelectComp
-                optionsData={financial_year}
-                changeHandler={(e) => handleFilter(e, "financial_year")}
-                value={session}
-              />
-            </div>
-           </div>
+                <label className="modal_label">Select Financial Year</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    optionsData={financial_year}
+                    changeHandler={(e) => handleFilter(e, "financial_year")}
+                    value={session}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="employee_wrapper">
@@ -127,15 +140,15 @@ const LeaveBank = () => {
                 onChange={(e) => handleFilter(e, "month")}
               /> */}
               <div className="form-group new_employee_form_group mt-2">
-             <label className="modal_label">Month</label>
-             <div className="mt-2">
-              <CustomSelectComp
-                optionsData={monthDataObj}
-                changeHandler={(e) => handleFilter(e, "month")}
-                value={selected_month}
-              />
+                <label className="modal_label">Month</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    optionsData={monthDataObj}
+                    changeHandler={(e) => handleFilter(e, "month")}
+                    value={selected_month}
+                  />
+                </div>
               </div>
-             </div>
             </div>
             <div className="employee_wrapper">
               {/* <Select
@@ -145,15 +158,15 @@ const LeaveBank = () => {
                 onChange={(e) => handleFilter(e, "year")}
               /> */}
               <div className="form-group new_employee_form_group mt-2">
-            <label className="modal_label">Year</label>
-            <div className="mt-2">
-              <CustomSelectComp
-                optionsData={yearObj}
-                changeHandler={(e) => handleFilter(e, "year")}
-                value={selected_year}
-              />
-            </div>
-           </div>
+                <label className="modal_label">Year</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    optionsData={yearObj}
+                    changeHandler={(e) => handleFilter(e, "year")}
+                    value={selected_year}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="employee_wrapper text-end serach_add_outer">
@@ -212,7 +225,7 @@ const LeaveBank = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
 
         {showEditLeaveModal && (
           <EditLeaveBankModal

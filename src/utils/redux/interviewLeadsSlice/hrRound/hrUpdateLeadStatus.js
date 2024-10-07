@@ -1,32 +1,31 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test_series_id, language_id, question, answer }, thunkAPI) => {
+export const hr_update_lead_status = createAsyncThunk("hr_update_lead_status", async ({ interview_id, hr_round_result }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
-            "test_series_id": test_series_id,
-            "language_id": language_id,
-            "question": question,
-            "answer": answer
+            "interview_id": interview_id,
+            "hr_round_result": hr_round_result
         });
 
         const requestOptions = {
-            method: "POST",
+            method: "PUT",
             headers: myHeaders,
             body: raw,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/add_logical`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/hr_round_result`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -36,8 +35,8 @@ export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test
     }
 })
 
-export const addLogicalQue = createSlice({
-    name: "addSubjectiveQue",
+export const hrUpdateLeadStatus = createSlice({
+    name: "hrUpdateLeadStatus",
     initialState: {
         message: {},
         isSuccess: false,
@@ -46,31 +45,31 @@ export const addLogicalQue = createSlice({
         error: null
     },
     reducers: {
-        clear_add_log_ques_state: (state) => {
+        clear_hr_lead_updated_status: (state) => {
             state.message = {}
             state.isSuccess = false
-            state.isError = false
             state.isLoading = false
+            state.isError = false
             state.error = null
             return state
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(add_logical_que.pending, (state) => {
+            .addCase(hr_update_lead_status.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(add_logical_que.fulfilled, (state, action) => {
+            .addCase(hr_update_lead_status.fulfilled, (state, action) => {
                 state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(add_logical_que.rejected, (state, action) => {
+            .addCase(hr_update_lead_status.rejected, (state, action) => {
                 state.error = action.payload
-                state.isError = true
                 state.isLoading = false
+                state.isError = true
             })
     }
 })
-export const { clear_add_log_ques_state } = addLogicalQue.actions
-export default addLogicalQue.reducer
+export const { clear_hr_lead_updated_status } = hrUpdateLeadStatus.actions
+export default hrUpdateLeadStatus.reducer
