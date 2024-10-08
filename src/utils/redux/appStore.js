@@ -59,6 +59,10 @@ import getSelectedLanguageSeries from './interviewLeadsSlice/technicalRound/getA
 import sendTestLink from './interviewLeadsSlice/hrRound/sendTestLink'
 import getAllTechLeads from './interviewLeadsSlice/technicalRound/getAllTechRoundLeads'
 import updateTechStatus from './interviewLeadsSlice/technicalRound/updateTechnicalRoundStatus'
+import verifyLead from './interviewLeadsSlice/technicalRound/verifyLead'
+import startTest from './interviewLeadsSlice/technicalRound/startTest'
+import getTestQuestions from './interviewLeadsSlice/technicalRound/getTestQuestions'
+import submitTest from './interviewLeadsSlice/technicalRound/submitTest'
 
 const appStore = configureStore({
     reducer: {
@@ -121,7 +125,11 @@ const appStore = configureStore({
         SELECTED_LANGUAGE_SERIES: getSelectedLanguageSeries,
         SENT_TEST_LINK: sendTestLink,
         TECH_LEADS: getAllTechLeads,
-        UPDATE_TECH_STATUS: updateTechStatus
+        UPDATE_TECH_STATUS: updateTechStatus,
+        VERIFY_LEAD: verifyLead,
+        START_TEST: startTest,
+        TEST_QUESTIONS: getTestQuestions,
+        SUBMIT_TEST: submitTest
     },
 })
 

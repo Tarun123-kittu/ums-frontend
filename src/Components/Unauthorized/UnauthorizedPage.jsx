@@ -1,5 +1,4 @@
 import React from "react";
-import Sidebar from "../Sidebar/Sidebar";
 import { useAppContext } from "../Utils/appContecxt";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,6 @@ const UnauthorizedPage = () => {
   const navigate = useNavigate();
   return (
     <section className="unauthorized_page_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${
           show ? "cmn_margin" : "cmn_margin_outer"

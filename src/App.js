@@ -32,7 +32,8 @@ import EditLeaveReport from './Components/Admin/LeaveApplication/EditleaveReport
 import Testseries from './Components/Admin/TestSeries/Testseries';
 import ViewTestseriesQuestions from './Components/Admin/TestSeries/ViewTestSeriesQuestions';
 import Leads from './Components/Admin/LeadTest/leads';
-
+import LeadTest from './Components/Admin/LeadTest/lead-test';
+import TestThankyou from './Components/Admin/LeadTest/test-thankyou';
 function App() {
 
   return (
@@ -69,6 +70,8 @@ function App() {
         <Route path='/testSeries' element={<Testseries />} />
         <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions />} />
         <Route path='/leads/technical-round/:lead_id/:token' element={<Leads />} />
+        <Route path='/lead-test/:is_open/:name/:lead_id/:token' element={<LeadTest />} />
+        <Route path='/test-thankyou' element={<TestThankyou />} />
 
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const verify_lead = createAsyncThunk("verify_lead", async ({ lead_id }, thunkAPI) => {
+export const start_test = createAsyncThunk("start_test", async ({ lead_id }, thunkAPI) => {
     try {
         const requestOptions = {
-            method: "GET",
+            method: "PUT",
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/verify_lead?lead_id=${lead_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/start_test?lead_id=${lead_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -24,20 +24,20 @@ export const verify_lead = createAsyncThunk("verify_lead", async ({ lead_id }, t
     }
 })
 
-export const verifyLead = createSlice({
-    name: "verifyLead",
+export const startTest = createSlice({
+    name: "startTest",
     initialState: {
-        data: {},
+        message: {},
         isSuccess: false,
         isError: false,
         isLoading: false,
         error: null
     },
     reducers: {
-        clear_verify_lead_status: (state) => {
-            state.data = {}
-            state.isError = false
+        clear_start_test_state: (state) => {
+            state.message = {}
             state.isSuccess = false
+            state.isError = false
             state.isLoading = false
             state.error = null
             return state
@@ -45,20 +45,20 @@ export const verifyLead = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(verify_lead.pending, (state) => {
+            .addCase(start_test.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(verify_lead.fulfilled, (state, action) => {
-                state.data = action.payload
+            .addCase(start_test.fulfilled, (state, action) => {
+                state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(verify_lead.rejected, (state, action) => {
+            .addCase(start_test.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-export const { clear_verify_lead_status } = verifyLead.actions
-export default verifyLead.reducer
+export const { clear_start_test_state } = startTest.actions
+export default startTest.reducer

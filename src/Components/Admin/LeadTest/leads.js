@@ -1,22 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./leads.css";
 import logo from "../../assets/grey_logo.svg";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { verify_lead, clear_verify_lead_status } from "../../../utils/redux/interviewLeadsSlice/technicalRound/verifyLead";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { start_test, clear_start_test_state } from "../../../utils/redux/interviewLeadsSlice/technicalRound/startTest";
+import { useNavigate } from "react-router-dom";
 const Leads = () => {
   const params = useParams();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { lead_id, token } = params;
   const [checked, setChecked] = useState(false);
+  const [alreadySubmitTest, setAlreadySUbmitTest] = useState(false)
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  const leadData = useSelector((store) => store.VERIFY_LEAD)
+  const start_test_data = useSelector((store) => store.START_TEST)
+  console.log()
   const handleStart = () => {
     if (!checked) {
       toast.error("Please confirm terms and conditions");
     }
+    else {
+      dispatch(start_test({ lead_id }))
+    }
   };
+
+  useEffect(() => {
+    dispatch(verify_lead({ lead_id }))
+  }, [lead_id, token])
+
+  useEffect(() => {
+    if (leadData?.isSuccess) {
+      if (leadData?.data?.data?.is_open === 1) {
+        setAlreadySUbmitTest(true)
+      }
+    }
+    if (leadData?.isError) {
+      toast.error(leadData?.error?.message)
+      dispatch(clear_verify_lead_status())
+    }
+
+  }, [leadData])
+
+  useEffect(() => {
+    if (start_test_data?.isSuccess) {
+      const newUrl = `/lead-test/${leadData?.data?.data?.is_open}/${leadData?.data?.data?.name}/${lead_id}/${token}`;
+      const newWindow = window.open(newUrl, '_blank');
+
+      if (newWindow) {
+        newWindow.onload = () => {
+          newWindow.postMessage({
+            is_open: leadData?.data?.data?.is_open,
+            name: leadData?.data?.data?.name,
+          }, '*');
+        };
+      }
+      window.close();
+      dispatch(clear_start_test_state())
+    }
+  }, [start_test_data])
+
+  if (alreadySubmitTest) {
+    navigate("/test-thankyou", { state: { name: leadData?.data?.data?.name } });
+  }
+
+
+  if (
+    (
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
+
   return (
     <div className="leads_outer">
       <div className="zero_header">
         <div className="header_wrapper">
           <img src={logo} alt="logo" />
+        </div>
+        <div className="leads-user-name">
+          <h4>Hi {leadData?.data?.data?.name}</h4>
         </div>
       </div>
       <div className="container">
@@ -58,7 +129,7 @@ const Leads = () => {
             <button onClick={() => handleStart()}>Start</button>
             <p>Best Wishes</p>
             <h4>
-              <a href="https://ultivic.com/" target="blank">
+              <a className="ultivic-text" href="https://ultivic.com/" target="blank">
                 Ultivic pvt. ltd
               </a>
             </h4>
