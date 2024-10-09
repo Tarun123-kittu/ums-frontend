@@ -31,42 +31,48 @@ import EditLeaveRequest from './Components/Admin/LeaveApplication/EditLeaveReque
 import EditLeaveReport from './Components/Admin/LeaveApplication/EditleaveReport';
 import Testseries from './Components/Admin/TestSeries/Testseries';
 import ViewTestseriesQuestions from './Components/Admin/TestSeries/ViewTestSeriesQuestions';
-
+import Leads from './Components/Admin/LeadTest/leads';
+import LeadTest from './Components/Admin/LeadTest/lead-test';
+import TestThankyou from './Components/Admin/LeadTest/test-thankyou';
+import Sidebar from './Components/Sidebar/Sidebar';
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/candidate' element={<Candidate />} />
-        <Route path='/dashboard' element={<AdminDashboard />} />
-        <Route path='/employee' element={<EmployeeInfo />} />
-        <Route path='/addemployee' element={<AddnewEmployee />} />
-        <Route path='/todayAttendence' element={<TodayAttendence />} />
-        <Route path='incompleteAttendence' element={<IncompleteAttendence />} />
-        <Route path='/attendenceReport' element={<AttendenceReport />} />
-        <Route path='/leaveRequest' element={<LeaveRequest />} />
-        <Route path='/leaveBank' element={<LeaveBank />} />
-        <Route path='/leaveReport' element={<LeaveReport />} />
-        <Route path='/holiday' element={< HolidayEvent />} />
-        <Route path='/interviewLead' element={< InterviewLead />} />
-        <Route path='/addNewPerson' element={< AddNewPerson />} />
-        <Route path='/hrInterViewQuestion' element={< HrInterViewQuestion />} />
-        <Route path='/rolePermission' element={< RoleAndPermission />} />
-        <Route path='/editRole' element={< EditRoleAndPermission />} />
-        <Route path='/viewQuestionlist' element={< ViewQuestionList />} />
-        <Route path='/questionAnswerSheet' element={< QuestionAnswerSheet />} />
-        <Route path='/viewEmployeeInfo' element={< ViewEmployeeInfo />} />
-        <Route path='/editEmployee' element={< EditEmployeeInfo />} />
-        <Route path='/editPerson' element={< EditPerson />} />
-        <Route path='/editAttendenceToday' element={< EditAttendence />} />
-        <Route path='/editIncompleteAttendence' element={< EditIncompleteAttendence />} />
-        <Route path='/editAttendenceReport' element={< EditAttendenceReport />} />
-        <Route path='/createRole' element={< CreateRole />} />
-        <Route path='/editLeaveRequest' element={< EditLeaveRequest />} />
-        <Route path='/editLeaveReport' element={< EditLeaveReport />} />
-        <Route path='/testSeries' element={<Testseries />} />
-        <Route path='/viewTestSeriesQuestion' element={<ViewTestseriesQuestions />} />
+        <Route path='/candidate' element={<><Sidebar /><Candidate /></>} />
+        <Route path='/dashboard' element={<><Sidebar /><AdminDashboard /></>} />
+        <Route path='/employee' element={<><Sidebar /><EmployeeInfo /></>} />
+        <Route path='/addemployee' element={<><Sidebar /><AddnewEmployee /></>} />
+        <Route path='/todayAttendence' element={<><Sidebar /><TodayAttendence /></>} />
+        <Route path='incompleteAttendence' element={<><Sidebar /><IncompleteAttendence /></>} />
+        <Route path='/attendenceReport' element={<><Sidebar /><AttendenceReport /></>} />
+        <Route path='/leaveRequest' element={<><Sidebar /><LeaveRequest /></>} />
+        <Route path='/leaveBank' element={<><Sidebar /><LeaveBank /></>} />
+        <Route path='/leaveReport' element={<><Sidebar /><LeaveReport /></>} />
+        <Route path='/holiday' element={<><Sidebar />< HolidayEvent /></>} />
+        <Route path='/interviewLead' element={<><Sidebar />< InterviewLead /></>} />
+        <Route path='/addNewPerson' element={<><Sidebar />< AddNewPerson /></>} />
+        <Route path='/hrInterViewQuestion' element={<><Sidebar />< HrInterViewQuestion /></>} />
+        <Route path='/rolePermission' element={<><Sidebar />< RoleAndPermission /></>} />
+        <Route path='/editRole' element={<><Sidebar />< EditRoleAndPermission /></>} />
+        <Route path='/viewQuestionlist' element={<><Sidebar />< ViewQuestionList /></>} />
+        <Route path='/questionAnswerSheet' element={<><Sidebar />< QuestionAnswerSheet /></>} />
+        <Route path='/viewEmployeeInfo' element={<><Sidebar />< ViewEmployeeInfo /></>} />
+        <Route path='/editEmployee' element={<><Sidebar />< EditEmployeeInfo /></>} />
+        <Route path='/editPerson' element={<><Sidebar />< EditPerson /></>} />
+        <Route path='/editAttendenceToday' element={<><Sidebar />< EditAttendence /></>} />
+        <Route path='/editIncompleteAttendence' element={<><Sidebar />< EditIncompleteAttendence /></>} />
+        <Route path='/editAttendenceReport' element={<><Sidebar />< EditAttendenceReport /></>} />
+        <Route path='/createRole' element={<><Sidebar />< CreateRole /></>} />
+        <Route path='/editLeaveRequest' element={<><Sidebar />< EditLeaveRequest /></>} />
+        <Route path='/editLeaveReport' element={<><Sidebar />< EditLeaveReport /></>} />
+        <Route path='/testSeries' element={<><Sidebar /><Testseries /></>} />
+        <Route path='/viewTestSeriesQuestion' element={<><Sidebar /><ViewTestseriesQuestions /></>} />
+        <Route path='/leads/technical-round/:lead_id/:token' element={<Leads />} />
+        <Route path='/lead-test/:is_open/:name/:lead_id/:token' element={<LeadTest />} />
+        <Route path='/test-thankyou' element={<TestThankyou />} />
 
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

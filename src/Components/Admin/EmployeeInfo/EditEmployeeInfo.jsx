@@ -127,7 +127,6 @@ const EditEmployeeInfo = () => {
 
   return (
     <section className="add_new_emp_container">
-      <Sidebar />
       <div
         className={`wrapper admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >

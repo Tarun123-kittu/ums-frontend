@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_all_user_leave } from "../../../utils/redux/leaveSlice/getUsersAllLeaves";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const LeaveReport = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,9 @@ const LeaveReport = () => {
 
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const [year, setYear] = useState([]);
   const [selected_employee, setSelected_employee] = useState();
   const [selected_month, setSelected_month] = useState();
@@ -52,10 +56,9 @@ const LeaveReport = () => {
     let result = [];
 
     while (startYear <= currentYear) {
- 
       // result.push(startYear++);
-       result.push({ label: startYear, value: startYear });
-      startYear++; 
+      result.push({ label: startYear, value: startYear });
+      startYear++;
     }
     setYear(result);
   };
@@ -85,9 +88,18 @@ const LeaveReport = () => {
     { value: "11", label: "November" },
     { value: "12", label: "December" },
   ];
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="leaveReport_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
@@ -148,15 +160,15 @@ const LeaveReport = () => {
                 <FaSort className="dropdown-icon " />
               </div> */}
               <div className="form-group new_employee_form_group mt-2">
-             <label className="inter_fontfamily">Month</label>
-             <div className="mt-2">
-              <CustomSelectComp
-                optionsData={monthDataObj}
-                changeHandler={(e) => setSelected_month(e.value)}
-                value={selected_month}
-              />
+                <label className="inter_fontfamily">Month</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    optionsData={monthDataObj}
+                    changeHandler={(e) => setSelected_month(e.value)}
+                    value={selected_month}
+                  />
+                </div>
               </div>
-             </div>
             </div>
 
             <div className="new_employee_form_group employee_wrapper">
@@ -180,11 +192,11 @@ const LeaveReport = () => {
                 <FaSort className="dropdown-icon " />
               </div> */}
               <div className="mt-2">
-              <CustomSelectComp
-                optionsData={year}
-                changeHandler={(e) => setSelected_year(e.value)}
-                value={selected_year}
-              />
+                <CustomSelectComp
+                  optionsData={year}
+                  changeHandler={(e) => setSelected_year(e.value)}
+                  value={selected_year}
+                />
               </div>
             </div>
 
@@ -251,7 +263,7 @@ const LeaveReport = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
     </section>
   );

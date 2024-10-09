@@ -109,7 +109,6 @@ const AddnewEmployee = () => {
 
   return (
     <section className="add_new_emp_container">
-      <Sidebar />
       <div
         className={`wrapper admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
@@ -264,7 +263,10 @@ const AddnewEmployee = () => {
                     <label> Gender </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:"male",label:"Male"},{value:"female",label:"Female"}]}
+                        optionsData={[
+                          { value: "male", label: "Male" },
+                          { value: "female", label: "Female" },
+                        ]}
                         changeHandler={(e) =>
                           handleInputChange("gender", e.value)
                         }
@@ -388,7 +390,7 @@ const AddnewEmployee = () => {
                     <label> Installment</label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:1,label:1}]}
+                        optionsData={[{ value: 1, label: 1 }]}
                         changeHandler={(e) =>
                           handleInputChange("installments", e.value)
                         }
@@ -410,12 +412,11 @@ const AddnewEmployee = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                     
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:'intern',label:'Intern'}]}
+                        optionsData={[{ value: "intern", label: "Intern" }]}
                         changeHandler={(e) =>
                           handleInputChange("position", e.value)
                         }
@@ -438,13 +439,12 @@ const AddnewEmployee = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                     
                       Technology/Department{" "}
                       <span style={{ color: "red" }}>*</span>
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:'mern',label:'MERN'}]}
+                        optionsData={[{ value: "mern", label: "MERN" }]}
                         changeHandler={(e) =>
                           handleInputChange("department", e.value)
                         }
@@ -471,7 +471,7 @@ const AddnewEmployee = () => {
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:'active',label:'ACTIVE'}]}
+                        optionsData={[{ value: "active", label: "ACTIVE" }]}
                         changeHandler={(e) =>
                           handleInputChange("status", e.value)
                         }
@@ -532,7 +532,7 @@ const AddnewEmployee = () => {
                     <label> Role</label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{value:'admin',label:'ADMIN'}]}
+                        optionsData={[{ value: "admin", label: "ADMIN" }]}
                         changeHandler={(e) =>
                           handleInputChange("role", e.value)
                         }

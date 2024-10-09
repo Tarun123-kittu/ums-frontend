@@ -126,7 +126,6 @@ const EditRoleAndPermission = () => {
 
   return (
     <section className="role_permission_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >

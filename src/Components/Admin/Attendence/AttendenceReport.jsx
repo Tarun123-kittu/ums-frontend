@@ -4,15 +4,13 @@ import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
 import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
-import { FaSortDown } from "react-icons/fa";
-import { TiArrowSortedUp } from "react-icons/ti";
-import Select from "../../Common/Select";
 import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceReport";
 import { useDispatch, useSelector } from "react-redux";
 import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
@@ -25,17 +23,15 @@ const AttendenceReport = () => {
     { name: "Attendance Report", path: "/attendenceReport" },
   ];
   let [all_names, setAllNames] = useState([]);
-  console.log(all_names, "this is the all naes  ");
   const navigate = useNavigate();
   const { show } = useAppContext();
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
   );
-  console.log(user_attendance_report, "user_attendance_report");
-  const leaveDataObj = [
-    { option: "1", value: "1" },
-    { option: "2", value: "2" },
-  ];
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+
   const monthDataObj = [
     { value: "01", label: "January" },
     { value: "02", label: "February" },
@@ -91,9 +87,18 @@ const AttendenceReport = () => {
     field === "month" && setMonth(e.value);
     field === "year" && setYear(e.value);
   };
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <section className="attendenceReport_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
@@ -108,49 +113,40 @@ const AttendenceReport = () => {
 
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Employee"}
-                labelClass={""}
-                onChange={(e) => handleSelectChange("name", e)}
-                options={all_names}
-              /> */}
               <div className="form-group new_employee_form_group">
-              <label>Employee</label>
+                <label>Employee</label>
               </div>
               <div className="mt-2">
-              <CustomSelectComp value={name} changeHandler={(e) => handleSelectChange("name", e)} optionsData={all_names}/>
-
+                <CustomSelectComp
+                  value={name}
+                  changeHandler={(e) => handleSelectChange("name", e)}
+                  optionsData={all_names}
+                />
               </div>
             </div>
 
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Month"}
-                labelClass={""}
-                onChange={(e) => handleSelectChange("month", e)}
-                options={monthDataObj}
-              /> */}
-               <div className="form-group new_employee_form_group">
-              <label>Month</label>
+              <div className="form-group new_employee_form_group">
+                <label>Month</label>
               </div>
               <div className="mt-2">
-              <CustomSelectComp value={month} changeHandler={(e) => handleSelectChange("month", e)} optionsData={monthDataObj}/>
-
+                <CustomSelectComp
+                  value={month}
+                  changeHandler={(e) => handleSelectChange("month", e)}
+                  optionsData={monthDataObj}
+                />
               </div>
             </div>
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Year"}
-                labelClass={""}
-                onChange={(e) => handleSelectChange("year", e)}
-                options={yearDataObj}
-              /> */}
-               <div className="form-group new_employee_form_group">
-              <label>Year</label>
+              <div className="form-group new_employee_form_group">
+                <label>Year</label>
               </div>
               <div className="mt-2">
-              <CustomSelectComp value={year} changeHandler={(e) => handleSelectChange("year", e)} optionsData={yearDataObj}/>
-
+                <CustomSelectComp
+                  value={year}
+                  changeHandler={(e) => handleSelectChange("year", e)}
+                  optionsData={yearDataObj}
+                />
               </div>
             </div>
 
@@ -233,32 +229,11 @@ const AttendenceReport = () => {
                     </tr>
                   );
                 })}
-                {/*       
-                <tr>
-                  <td style={{ color: "#33b070" }}>2</td>
-                  <td colspan="5" style={{ color: "#33b070" }}>
-                    19/08/24 Saturday
-                  </td>
-                  <td>NA</td>
-                  <td>NA</td>
-                  <td>AA</td>
-                  <td colspan="3"></td>
-                </tr>
-                <tr>
-                  <td style={{ color: "#33b070" }}>3</td>
-                  <td colspan="5" style={{ color: "#33b070" }}>
-                    19/08/24 Sunday
-                  </td>
-                  <td>NA</td>
-                  <td style={{ color: "#33b070" }}>AA</td>
-                  <td style={{ color: "#33b070" }}>AA</td>
-                  <td colspan="3"></td>
-                </tr> */}
               </tbody>
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
     </section>
   );

@@ -41,7 +41,10 @@ background-color: #f7f2f2 !important;
     top: 34px;
     cursor: pointer;
 }
-
+input.form-control.correct_ans {
+  border: 1px solid #00A39D;
+  background: #DEF7EF;
+}
 
 .cmn_btn{
     background-color: #F41A1A;

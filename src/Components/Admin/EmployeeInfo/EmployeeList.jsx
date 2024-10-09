@@ -64,152 +64,141 @@ const EmployeeList = () => {
   }
   return (
     <>
-    <div className="employee_list_outer minheight">
-      <div className="d-flex employee_container align-items-end mt-3">
-        <div className="employee_wrapper">
-          <div className="new_employee_form_group">
-            <label className="">Status</label>
-            <div className="mt-2">
-                      <CustomSelectComp
-                        optionsData={[{value:'active',label:"Active"}]}
-                        changeHandler={(e) => setSearchStatus(e.value)}
-                        value={searchStatus}
-                        placeholder="Active"
-                      />
-                    </div>
-            {/* <div class="custom-select-wrapper">
-              <select
-                class="custom-select form-control"
-                placeholder="Active"
-                value={searchStatus}
-                onChange={(e) => setSearchStatus(e.target.value)}
-              >
-                <option>Active</option>
-              </select>
-              <FaSort className="dropdown-icon " />
-            </div> */}
-          </div>
-        </div>
-
-        <div className="employee_wrapper">
-          <div className="new_employee_form_group">
-            <label className="">Employee</label>
-            <div class="custom-select-wrapper">
-              <select
-                class="custom-select form-control"
-                placeholder="Search Employee"
-                value={searchName}
-                onChange={(e) => {
-                  setSearchName(e.target.value);
-                }}
-              >
-                <option>Search Employee</option>
-                {all_users_list?.data?.data?.map((user, i) => {
-                  return (
-                    <option key={i} value={user?.name}>
-                      {user?.name}
-                    </option>
-                  );
-                })}
-              </select>
-              <FaSort className="dropdown-icon " />
+      <div className="employee_list_outer minheight">
+        <div className="d-flex employee_container align-items-end mt-3">
+          <div className="employee_wrapper">
+            <div className="new_employee_form_group">
+              <label className="">Status</label>
+              <div className="mt-2">
+                <CustomSelectComp
+                  optionsData={[{ value: "active", label: "Active" }]}
+                  changeHandler={(e) => setSearchStatus(e.value)}
+                  value={searchStatus}
+                  placeholder="Active"
+                />
+              </div>
             </div>
           </div>
+
+          <div className="employee_wrapper">
+            <div className="new_employee_form_group">
+              <label className="">Employee</label>
+              <div class="custom-select-wrapper">
+                <select
+                  class="custom-select form-control"
+                  placeholder="Search Employee"
+                  value={searchName}
+                  onChange={(e) => {
+                    setSearchName(e.target.value);
+                  }}
+                >
+                  <option>Search Employee</option>
+                  {all_users_list?.data?.data?.map((user, i) => {
+                    return (
+                      <option key={i} value={user?.name}>
+                        {user?.name}
+                      </option>
+                    );
+                  })}
+                </select>
+                <FaSort className="dropdown-icon " />
+              </div>
+            </div>
+          </div>
+
+          <div className="employee_wrapper text-end serach_add_outer">
+            <button
+              className="cmn_Button_style"
+              onClick={() =>
+                dispatch(
+                  get_all_users_user({ name: searchName, status: searchStatus })
+                )
+              }
+            >
+              Search
+            </button>
+            <button
+              className="cmn_Button_style ms-3"
+              onClick={() => navigate("/addemployee")}
+            >
+              Add
+            </button>
+          </div>
         </div>
 
-        <div className="employee_wrapper text-end serach_add_outer">
-          <button
-            className="cmn_Button_style"
-            onClick={() =>
-              dispatch(
-                get_all_users_user({ name: searchName, status: searchStatus })
-              )
-            }
-          >
-            Search
-          </button>
-          <button
-            className="cmn_Button_style ms-3"
-            onClick={() => navigate("/addemployee")}
-          >
-            Add
-          </button>
+        <div className="table-responsive mt-3 transparent_bg">
+          <table className="employee_detail_table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>DOJ</th>
+                <th>DOB</th>
+                <th>Post</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {all_users_list?.data?.data?.map((user, index) => {
+                return (
+                  <tr key={user?.id}>
+                    <td>{index + 1}</td>
+                    <td>{user?.name}</td>
+                    <td>{user?.email}</td>
+                    <td>{user?.mobile}</td>
+                    <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
+                    <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
+                    <td>{user?.position}</td>
+                    <td>{user?.status}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <div
+                          className="cmn_action_outer dark_gray_bg"
+                          style={{ cursor: "pointer" }}
+                          title="view details"
+                          onClick={() =>
+                            navigate("/viewEmployeeInfo", {
+                              state: { user_id: user?.id },
+                            })
+                          }
+                        >
+                          <FaEye />
+                        </div>
+                        <div
+                          className="cmn_action_outer red_bg"
+                          style={{ cursor: "pointer" }}
+                          title="delete user"
+                        >
+                          <RiDeleteBin6Line
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setuserId(user?.id);
+                              // dispatch(delete_user({ id: user?.id }))
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+        {showDeleteModal && (
+          <CommonDeleteModal
+            heading_text={"Are you sure you want to delete "}
+            paragraph_text={""}
+            show={showDeleteModal}
+            setShow={setShowDeleteModal}
+            deleteHandler={deleteHandler}
+          />
+        )}
       </div>
-
-      <div className="table-responsive mt-3 transparent_bg">
-        <table className="employee_detail_table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Mobile</th>
-              <th>DOJ</th>
-              <th>DOB</th>
-              <th>Post</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {all_users_list?.data?.data?.map((user, index) => {
-              return (
-                <tr key={user?.id}>
-                  <td>{index + 1}</td>
-                  <td>{user?.name}</td>
-                  <td>{user?.email}</td>
-                  <td>{user?.mobile}</td>
-                  <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
-                  <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
-                  <td>{user?.position}</td>
-                  <td>{user?.status}</td>
-                  <td>
-                    <div className="d-flex gap-2">
-                      <div
-                        className="cmn_action_outer dark_gray_bg"
-                        style={{ cursor: "pointer" }}
-                        title="view details"
-                        onClick={() =>
-                          navigate("/viewEmployeeInfo", {
-                            state: { user_id: user?.id },
-                          })
-                        }
-                      >
-                        <FaEye />
-                      </div>
-                      <div
-                        className="cmn_action_outer red_bg"
-                        style={{ cursor: "pointer" }}
-                        title="delete user"
-                      >
-                        <RiDeleteBin6Line
-                          onClick={() => {
-                            setShowDeleteModal(true);
-                            setuserId(user?.id);
-                            // dispatch(delete_user({ id: user?.id }))
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      {showDeleteModal && (
-        <CommonDeleteModal
-          heading_text={"Are you sure you want to delete "}
-          paragraph_text={""}
-          show={showDeleteModal}
-          setShow={setShowDeleteModal}
-          deleteHandler={deleteHandler}
-        />
-      )}
-    </div>
-      <PaginationComp/>
+      <PaginationComp />
     </>
   );
 };

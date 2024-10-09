@@ -33,6 +33,36 @@ import updateAttendance from './attendanceSlice/updateAttendance'
 import getAllLanguage from './testSeries/getAllLanguages'
 import createTestSeries from './testSeries/createTestSeries'
 import getAllSeries from './testSeries/getAllTestSeries'
+import updateTestseries from './testSeries/updatTestSeries'
+import getSeries from './testSeries/getSeries'
+import deleteSeries from './testSeries/deleteSeries'
+import createObjQuestion from './testSeries/objectiveQuestionsSlice/createObjQuestion'
+import getQueAns from './testSeries/getQuestionsAnswer'
+import addSubjectiveQue from './testSeries/subjectiveQue/addSubjectiveQue'
+import addLogicalQue from './testSeries/logicalQuestionSlice/addLogicalQue'
+import getLogicalSubjectiveQuestion from './testSeries/logicalQuestionSlice/getLogicalQuestions'
+import getObjectiveQuestion from './testSeries/objectiveQuestionsSlice/getObjectiveQuestion'
+import updateLogicalQue from './testSeries/logicalQuestionSlice/updateLogicalQuestion'
+import updateObjQue from './testSeries/objectiveQuestionsSlice/updateObjectiveQuestion'
+import deleteLogicalQue from './testSeries/logicalQuestionSlice/deleteLogicalQUestion'
+import deleteObjectiveQue from './testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion'
+import addInterviewLeads from './interviewLeadsSlice/addLeads'
+import getAllLeads from './interviewLeadsSlice/getAllLeads'
+import { updateLead } from './interviewLeadsSlice/updateLead'
+import hrRoundQuestion from './interviewLeadsSlice/hrRound/getHrRoundQuestions'
+import hrRound from './interviewLeadsSlice/hrRound/hrRoundResponse'
+import getHrRoundLeads from './interviewLeadsSlice/hrRound/getHrRoundCandidate'
+import hrUpdateLeadStatus from './interviewLeadsSlice/hrRound/hrUpdateLeadStatus'
+import hrAssinedQuestionsToLead from './interviewLeadsSlice/hrRound/getAssignedQuestionsToLead'
+import updateKeypoint from './interviewLeadsSlice/hrRound/updateKeyPoints'
+import getSelectedLanguageSeries from './interviewLeadsSlice/technicalRound/getAllSelectedTestSeries'
+import sendTestLink from './interviewLeadsSlice/hrRound/sendTestLink'
+import getAllTechLeads from './interviewLeadsSlice/technicalRound/getAllTechRoundLeads'
+import updateTechStatus from './interviewLeadsSlice/technicalRound/updateTechnicalRoundStatus'
+import verifyLead from './interviewLeadsSlice/technicalRound/verifyLead'
+import startTest from './interviewLeadsSlice/technicalRound/startTest'
+import getTestQuestions from './interviewLeadsSlice/technicalRound/getTestQuestions'
+import submitTest from './interviewLeadsSlice/technicalRound/submitTest'
 
 const appStore = configureStore({
     reducer: {
@@ -69,7 +99,37 @@ const appStore = configureStore({
         UPDATE_ATTENDANCE: updateAttendance,
         ALL_LANGUAGES: getAllLanguage,
         CREATE_TEST_SERIES: createTestSeries,
-        ALL_SERIES: getAllSeries
+        ALL_SERIES: getAllSeries,
+        UPDATE_TESTSERIES: updateTestseries,
+        GET_SERIES: getSeries,
+        DELETE_SERIES: deleteSeries,
+        CREATE_OBJ_QUESTION: createObjQuestion,
+        ALL_QUE_ANS: getQueAns,
+        SUBJECTIVE_QUE: addSubjectiveQue,
+        LOGICAL_QUE: addLogicalQue,
+        GET_LOGICAL_SUBJECTIVE_QUESTION: getLogicalSubjectiveQuestion,
+        GET_OBJECTIVE_QUESTION: getObjectiveQuestion,
+        UPDATE_LOGICAL_QUESTION: updateLogicalQue,
+        UPDATE_OBJECTIVE_QUESTION: updateObjQue,
+        DELETE_LOGICAL_QUE: deleteLogicalQue,
+        DELETE_OBJECTIVE_QUE: deleteObjectiveQue,
+        ADD_INTERVIEW_LEADS: addInterviewLeads,
+        ALL_LEADS: getAllLeads,
+        UPDATE_LEAD: updateLead,
+        HR_ROUND_QUESTION: hrRoundQuestion,
+        HR_ROUND_RESULT: hrRound,
+        HR_ROUND_LEAD: getHrRoundLeads,
+        HR_UPDATE_LEAD_STATUS: hrUpdateLeadStatus,
+        HR_ASSIGNED_QUESTION_TO_LEAD: hrAssinedQuestionsToLead,
+        UPDATE_KEY_POINT: updateKeypoint,
+        SELECTED_LANGUAGE_SERIES: getSelectedLanguageSeries,
+        SENT_TEST_LINK: sendTestLink,
+        TECH_LEADS: getAllTechLeads,
+        UPDATE_TECH_STATUS: updateTechStatus,
+        VERIFY_LEAD: verifyLead,
+        START_TEST: startTest,
+        TEST_QUESTIONS: getTestQuestions,
+        SUBMIT_TEST: submitTest
     },
 })
 

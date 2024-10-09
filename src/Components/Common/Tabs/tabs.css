@@ -1,19 +1,24 @@
 .icon_wrapper{
-    /* position: relative; */
+    position: relative;
 }
 .icon_content_outer{
 
-        display: none; /* Hide content initially */
-        position: absolute;
-        left: 8%;
-        white-space: nowrap;
-        z-index: 99999;
-        top: 89%;
-        width: 234px;
 
 }
-.icon_wrapper:hover .icon_content_outer{
-    display: block; 
+.icon_content_outer_wrraper{
+    position: absolute;
+    left: 8%;
+    white-space: nowrap;
+    z-index: 99999;
+    /* top: -20px; */
+    width: 234px;
+    opacity: 0;
+    visibility: hidden;
+    padding-top: 10px;
+}
+.icon_wrapper:hover .icon_content_outer_wrraper{
+   opacity: 1;
+   visibility: visible;
 }
 
 
@@ -46,7 +51,7 @@
     position: absolute; 
     z-index: 999; 
     left: 48%;
-    top: -14px;
+    top: -4px;
 
   }
   .tooltip_content{

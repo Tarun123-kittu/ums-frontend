@@ -8,6 +8,7 @@ import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const TodayAttendence = () => {
   UseAttendanceReport();
@@ -18,6 +19,10 @@ const TodayAttendence = () => {
   const navigate = useNavigate();
 
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  console.log(user_all_permissions);
   const { show } = useAppContext();
 
   const convertTo12Hour = (time24) => {
@@ -29,9 +34,19 @@ const TodayAttendence = () => {
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
   };
 
+  if (user_all_permissions?.roles_data) {
+    if (
+      !(
+        user_all_permissions?.roles_data?.includes("Admin") ||
+        user_all_permissions?.roles_data?.includes("HR")
+      )
+    ) {
+      return <UnauthorizedPage />;
+    }
+  }
+
   return (
     <section className="incomplete_attendence_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
@@ -110,7 +125,7 @@ const TodayAttendence = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
     </section>
   );

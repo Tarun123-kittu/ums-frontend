@@ -52,13 +52,17 @@ const RoleAndPermission = () => {
     }
   }, [is_role_disabled, dispatch]);
 
-  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
 
   return (
     <section className="role_permission_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
@@ -134,7 +138,7 @@ const RoleAndPermission = () => {
             </table>
           </div>
         </div>
-        <PaginationComp/>
+        <PaginationComp />
       </div>
       {showDeleteModal && (
         <CommonDeleteModal
