@@ -68,7 +68,7 @@ const Leadtest = () => {
   };
 
   useEffect(() => {
-    if (formatTime(time) === "00:00:02") {
+    if (formatTime(time) === "00:00:03") {
       dispatch(submit_result({ lead_id, responses: attempted_questions }));
     }
   }, [time]);
@@ -138,7 +138,7 @@ const Leadtest = () => {
         const updatedOptions = data.options.map((opt) => {
           return {
             ...opt,
-            isSelected: opt.option_id === selected_option_id,
+            isSelected: opt.option === selected_option_id,
           };
         });
         return {
@@ -242,7 +242,7 @@ const Leadtest = () => {
                                 onChange={(e) =>
                                   handleSaveAnswer(
                                     ques?.question_id,
-                                    opt?.option_id
+                                    opt?.option
                                   )
                                 }
                               />

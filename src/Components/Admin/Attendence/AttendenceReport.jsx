@@ -99,7 +99,6 @@ const AttendenceReport = () => {
 
   return (
     <section className="attendenceReport_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >

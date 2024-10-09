@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import Notification from "../Notification/Notification";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
@@ -112,7 +111,6 @@ const ViewTestseriesQuestions = () => {
   }, [delete_objective_state]);
   return (
     <section className="test_serie_wrapper">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >

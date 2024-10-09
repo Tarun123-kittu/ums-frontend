@@ -419,6 +419,7 @@ function TabComp({ setCurrentTab }) {
                   </tr>
                 ) : (
                   tech_round_leads?.data?.data?.map((tech_leads, i) => {
+                    console.log(tech_leads, "this is the tech leads");
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -433,7 +434,9 @@ function TabComp({ setCurrentTab }) {
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
-                            navigate("/questionAnswerSheet");
+                            navigate("/questionAnswerSheet", {
+                              state: { lead_id: tech_leads?.id },
+                            });
                           }}
                         >
                           View Questions List

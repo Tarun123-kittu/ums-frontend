@@ -49,7 +49,6 @@ const ViewEmployeeInfo = () => {
 
   return (
     <section>
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
@@ -131,7 +130,6 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">
                   {user_details?.increment_date}
                 </h3>
-                
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Address</h3>

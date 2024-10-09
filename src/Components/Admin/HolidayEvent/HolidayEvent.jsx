@@ -108,7 +108,6 @@ const HolidayEvent = () => {
 
   return (
     <section className="holiday_event_wrapper">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >

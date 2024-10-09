@@ -105,7 +105,6 @@ const AddNewPerson = () => {
 
   return (
     <section>
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >

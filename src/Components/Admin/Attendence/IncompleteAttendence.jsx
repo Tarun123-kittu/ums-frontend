@@ -41,7 +41,6 @@ const IncompleteAttendence = () => {
 
   return (
     <section className="incomplete_attendence_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
