@@ -84,7 +84,6 @@
     color: #282A30;
     font-size: 18px;
     font-weight: 400;
-    margin-top: 20px;
     font-family: 'Open-Sans', sans-serif;
 }
 .question_list_wrapper{
@@ -119,7 +118,7 @@ background: #ECEAF3;
 }
 .check_btn_wrapper button{
 border-radius: 6px;
-padding: 6px 20px;
+padding: 6px 10px;
 font-size: 14px;
 font-weight: 600;
 }
@@ -140,11 +139,28 @@ font-weight: 600;
     font-size: 14px;
     border-radius: 10px;
   }
+  button.not-button {
+    background: #ddd;
+    border: 1px solid #000;
+    color: #000;
+}
 
   .key-point-box:hover .key-point-tooltip {
     display: block; /* Show on hover */
   }
+  .answer_card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+}
+.answer_head {
+    display: flex;
+    justify-content: space-between;
+}
 
+.answer_head h4 {
+    margin: 0;
+}
 @media screen and (max-width:1280px){
     .Interviewlead_outer .employee_detail_table th{
         min-width:200px

@@ -113,14 +113,10 @@ const Leads = () => {
               submitted so please be careful during the test
             </li>
           </ol>
-          <div className="d-flex align-items-center gap2">
-            <input
-              type="checkbox"
-              name="example"
-              checked={checked}
-              onChange={() => setChecked(!checked)}
-            />
-            <label htmlFor="">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked={checked}
+              onChange={() => setChecked(!checked)} />
+            <label class="form-check-label ms-0" for="flexCheckDefault">
               I confirm that I have read and accept the terms and conditions and
               privacy policy.
             </label>

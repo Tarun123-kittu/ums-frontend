@@ -36,6 +36,8 @@ function TabComp({ setCurrentTab }) {
     useState(false);
   const [leadId, setLeadId] = useState(null);
   const [page, setPage] = useState(1);
+  const [language_id, setLanguage_id] = useState(null);
+  const [series_id, setSeries_id] = useState(null);
   const [language, setLanguage] = useState("");
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
@@ -43,7 +45,20 @@ function TabComp({ setCurrentTab }) {
     (store) => store.HR_UPDATE_LEAD_STATUS
   );
   const tech_round_leads = useSelector((store) => store.TECH_LEADS);
+
   const update_tech_status = useSelector((store) => store.UPDATE_TECH_STATUS);
+
+  useEffect(() => {
+    if (tech_round_leads?.isSuccess) {
+      setLanguage_id(
+        tech_round_leads?.data?.data?.series_language_data[0].language_id
+      );
+      setSeries_id(
+        tech_round_leads?.data?.data?.series_language_data[0]
+          .assigned_test_series
+      );
+    }
+  }, [tech_round_leads]);
   const resultData = [
     { value: "selected", label: "Selected" },
     { value: "rejected", label: "Rejected" },
@@ -411,15 +426,14 @@ function TabComp({ setCurrentTab }) {
                 </tr>
               </thead>
               <tbody>
-                {tech_round_leads?.data?.data?.length === 0 ? (
+                {tech_round_leads?.data?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
                       No technical round leads available.
                     </td>
                   </tr>
                 ) : (
-                  tech_round_leads?.data?.data?.map((tech_leads, i) => {
-                    console.log(tech_leads, "this is the tech leads");
+                  tech_round_leads?.data?.data?.data?.map((tech_leads, i) => {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -435,7 +449,11 @@ function TabComp({ setCurrentTab }) {
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
                             navigate("/questionAnswerSheet", {
-                              state: { lead_id: tech_leads?.id },
+                              state: {
+                                lead_id: tech_leads?.id,
+                                language_id: language_id,
+                                series_id: series_id,
+                              },
                             });
                           }}
                         >

@@ -188,3 +188,7 @@ li.question_card .input.group {
 ul.cmn_questions_list .form-control {
     background: transparent;
 }
+
+.cpointer{
+    cursor: pointer;
+}

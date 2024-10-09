@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const get_lead_answer = createAsyncThunk("get_lead_answer", async ({ leadId }, thunkAPI) => {
     try {
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+
         const requestOptions = {
             method: "GET",
+            headers: myHeaders,
             redirect: "follow"
         };
 
