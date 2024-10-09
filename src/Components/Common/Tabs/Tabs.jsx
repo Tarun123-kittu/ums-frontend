@@ -11,6 +11,8 @@ import CustomSelectComp from '../CustomSelectComp';
 function TabComp() {
 const[showHrQuestionModal,setShowHrQuestionModal]=useState(false)
 const[showTechInterviewQuesModal,setShowTechInterviewQuesModal]=useState(false)
+const[result,setResult]=useState(false)
+
 const resultData=[
   { value: 'Selected', label: 'Selected' },
   { value: 'Rejected', label: 'Rejected' },
@@ -175,7 +177,7 @@ const handleNextTab = () => {
               {/* <select className='form-control'>
                 <option>On Hold</option>
               </select> */}
-              <CustomSelectComp optionsData={resultData}/>
+              <CustomSelectComp optionsData={resultData} value={result} changeHandler={(e)=>{setResult(e.value)}}/>
               </div>
             </td>
             <td>

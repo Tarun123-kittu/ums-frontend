@@ -9,7 +9,7 @@ const navigate =useNavigate()
   return (
     <section className='unauthorized_page_outer'>
     <Sidebar/>
-    <div className={`wrapper gray_bg admin_outer  ${show? "cmn_margin":"cmn_margin_outer"}`  }>
+    <div className={`wrapper gray_bg admin_outer  ${show? "cmn_margin":""}`  }>
        <div className='d-flex justify-content-center align-items-center unauthorized_page_content'>
        <div className='text-center unauthorized_wrapper'>
         <h2>Error 401</h2>

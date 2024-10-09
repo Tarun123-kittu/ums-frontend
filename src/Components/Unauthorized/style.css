@@ -14,3 +14,12 @@
     color: #333333;
     font-family: "Inter" ,sans-serif;
 }
+@media screen and (max-width:767px) {
+    .unauthorized_wrapper h2 {
+        font-size: 40px;
+    }
+    .unauthorized_wrapper h3 {
+        font-size: 16px;
+        line-height: 27px;
+    }
+}
