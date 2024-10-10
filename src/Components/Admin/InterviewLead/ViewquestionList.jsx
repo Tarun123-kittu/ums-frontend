@@ -17,7 +17,7 @@ const ViewQuestionList = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { interview_id, lead_id } = location?.state
+  const { interview_id, lead_id, view } = location?.state
     ? location?.state
     : location;
 
@@ -80,7 +80,7 @@ const ViewQuestionList = () => {
                           </div>
                         </div>
 
-                        {showEditModal === ques.question_id && (
+                        {showEditModal === ques.question_id && view && (
                           <EditQuesModal
                             show={true}
                             setShow={setShowEditModal}
@@ -95,17 +95,19 @@ const ViewQuestionList = () => {
                 })}
               </div>
 
-              <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">
-                <button
-                  className="cmn_Button_style cmn_darkgray_btn"
-                  onClick={() =>
-                    navigate("/interviewLead", { state: { tab: "HR" } })
-                  }
-                >
-                  Exit
-                </button>
-                <button className="cmn_Button_style">Save</button>
-              </div>
+              {view && (
+                <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">
+                  <button
+                    className="cmn_Button_style cmn_darkgray_btn"
+                    onClick={() =>
+                      navigate("/interviewLead", { state: { tab: "HR" } })
+                    }
+                  >
+                    Exit
+                  </button>
+                  <button className="cmn_Button_style">Save</button>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
@@ -12,17 +12,58 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import PaginationComp from "../../Pagination/Pagination";
 import { useSelector } from "react-redux";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
+import { useDispatch } from "react-redux";
+import { get_all_leads } from "../../../utils/redux/interviewLeadsSlice/getAllLeads";
 
 const InterviewLead = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [all_languagages, setAll_languages] = useState([]);
+  const [selected_language, setSelected_language] = useState("");
+  const [selected_experience, setSelected_experience] = useState("");
+  const [selected_result, setSelected_result] = useState("");
   const [currentTab, setCurrentTab] = useState("Add Person");
+  const [open_tab, setOpen_tab] = useState("Add Person");
+  const [page, setPage] = useState(1);
+
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
+
+  const experienceObj = [
+    { value: 1, label: "1 Year" },
+    { value: 2, label: "2 Year" },
+    { value: 3, label: "3 Year" },
+    { value: 4, label: "4 Year" },
+    { value: 5, label: "5 Year" },
+  ];
+
+  const resultObj = [
+    { value: "selected", label: "Selected" },
+    { value: "rejected", label: "Rejected" },
+    { value: "on hold", label: "on Hold" },
+    { value: "pending", label: "Pending" },
+  ];
+
+  useEffect(() => {
+    dispatch(get_all_languages());
+  }, []);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({ value: data?.id, label: data?.language });
+        }
+      });
+    }
+  }, [languages]);
 
   if (
     !(
@@ -32,6 +73,42 @@ const InterviewLead = () => {
   ) {
     return <UnauthorizedPage />;
   }
+
+  const changeHandler = (e) => {
+    setSelected_language(e.value);
+  };
+
+  const changeExperienceHandler = (e) => {
+    setSelected_experience(e.value);
+  };
+
+  const changeResultHandler = (e) => {
+    setSelected_result(e.value);
+  };
+
+  const searchHandler = () => {
+    if (open_tab === "Add Person") {
+      dispatch(
+        get_all_leads({
+          page,
+          experience: selected_experience,
+          profile: selected_result,
+        })
+      );
+    }
+  };
+
+  const handleClearResult = () => {
+    if (open_tab === "Add Person") {
+      dispatch(
+        get_all_leads({
+          page,
+          experience: "",
+          profile: "",
+        })
+      );
+    }
+  };
 
   return (
     <section className="Interviewlead_outer">
@@ -49,45 +126,61 @@ const InterviewLead = () => {
               <div className="form-group new_employee_form_group employee_wrapper">
                 <label>Profile</label>
                 <div className="mt-2">
-                  <CustomSelectComp placeholder={"Select Profile"} />
-                </div>
-              </div>
-
-              <div className="new_employee_form_group employee_wrapper">
-                <label className="inter_fontfamily">Date</label>
-                <div class="custom-select-wrapper ">
-                  <input class=" form-control" type="date"></input>
+                  <CustomSelectComp
+                    placeholder={"Select Profile"}
+                    optionsData={all_languagages}
+                    changeHandler={changeHandler}
+                    value={selected_language}
+                  />
                 </div>
               </div>
 
               <div className="form-group new_employee_form_group employee_wrapper">
                 <label>Experience</label>
                 <div className="mt-2">
-                  <CustomSelectComp />
+                  <CustomSelectComp
+                    optionsData={experienceObj}
+                    changeHandler={changeExperienceHandler}
+                    value={selected_experience}
+                  />
                 </div>
               </div>
 
-              <div className="form-group new_employee_form_group employee_wrapper">
-                <label>Result</label>
-                <div className="mt-2">
-                  <CustomSelectComp />
+              {open_tab !== "Add Person" && (
+                <div className="form-group new_employee_form_group employee_wrapper">
+                  <label>Result</label>
+                  <div className="mt-2">
+                    <CustomSelectComp
+                      optionsData={resultObj}
+                      changeHandler={changeResultHandler}
+                      value={selected_result}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="employee_wrapper text-end serach_add_outer d-flex gap-2">
                 <button
                   className="cmn_Button_style cmn_darkgray_btn"
                   onClick={() => {
-                    setShowDeleteModal(true);
+                    handleClearResult();
                   }}
                 >
-                  Delete
+                  Clear
                 </button>
-                <button className="cmn_Button_style">Search</button>
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => searchHandler()}
+                >
+                  Search
+                </button>
               </div>
             </div>
             <div className="inerterview_lead_tabs cmn_border mt-3">
-              <TabComp setCurrentTab={setCurrentTab} />
+              <TabComp
+                setCurrentTab={setCurrentTab}
+                setOpen_tab={setOpen_tab}
+              />
               <div>
                 {currentTab === "Add Person" && (
                   <button
@@ -103,7 +196,6 @@ const InterviewLead = () => {
             </div>
           </div>
         </div>
-        <PaginationComp />
       </div>
       {showDeleteModal && (
         <CommonDeleteModal
