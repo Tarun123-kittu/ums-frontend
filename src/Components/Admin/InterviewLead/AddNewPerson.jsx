@@ -15,6 +15,7 @@ import { indianStates } from "../../Utils/customData/statesData";
 import { ProfileData } from "../../Utils/customData/profileData";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const AddNewPerson = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ const AddNewPerson = () => {
     label: state,
   }));
   const add_lead_state = useSelector((state) => state.ADD_INTERVIEW_LEADS);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -99,6 +103,15 @@ const AddNewPerson = () => {
       dispatch(clear_interview_leads_state());
     }
   }, [add_lead_state]);
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section>

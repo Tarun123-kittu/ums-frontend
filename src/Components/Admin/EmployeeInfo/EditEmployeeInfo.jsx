@@ -15,6 +15,7 @@ import {
   update_user,
   clear_update_user_state,
 } from "../../../utils/redux/userSlice/updateUserSlice";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
@@ -27,7 +28,6 @@ const EditEmployeeInfo = () => {
     { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
   ];
   const { user_details } = location?.state ? location?.state : location;
-  console.log(user_details, "user_details user_details");
 
   useEffect(() => {
     if (
@@ -78,6 +78,9 @@ const EditEmployeeInfo = () => {
   let [username, setUsername] = useState(user_details?.username);
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     if (update_user_details?.isSuccess) {
@@ -124,6 +127,10 @@ const EditEmployeeInfo = () => {
       })
     );
   };
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section className="add_new_emp_container">

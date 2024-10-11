@@ -13,3 +13,7 @@
     font-size: 26px;
     margin-right: 13px;
 }
+
+.notification_outer img.logo_image {
+    width: auto;
+}

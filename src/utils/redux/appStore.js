@@ -70,6 +70,9 @@ import updateFaceRoundStatus from './interviewLeadsSlice/technicalRound/updateFa
 import updateLeadRoundCount from './interviewLeadsSlice/technicalRound/updateInRoundCount'
 import getFaceRoundLeads from './interviewLeadsSlice/getFaceRoundLeads'
 import getFinalRoundLeads from './interviewLeadsSlice/technicalRound/getFinalRoundLeads'
+import MarkAttendence from './attendanceSlice/markAttendances'
+import getTodayAttendanceTime from './attendanceSlice/getUserTodayAttendaceTime'
+import unmarkAttendance from './attendanceSlice/unmarkAttendance'
 
 const appStore = configureStore({
     reducer: {
@@ -143,7 +146,10 @@ const appStore = configureStore({
         FACE_ROUND_STATUS: updateFaceRoundStatus,
         ROUND_COUNT: updateLeadRoundCount,
         FACE_ROUND_LEADS: getFaceRoundLeads,
-        FINAL_ROUND_LEADS: getFinalRoundLeads
+        FINAL_ROUND_LEADS: getFinalRoundLeads,
+        MARK_ATTENDANCE: MarkAttendence,
+        TODAY_ATTENDANCE_TIME: getTodayAttendanceTime,
+        UNMARK_ATTENDANCE: unmarkAttendance
     },
 })
 

@@ -40,7 +40,12 @@ const Login = () => {
       toast.success("Logged in Successfully", { autoClose: 2000 });
       localStorage.setItem("ums_token", login_details?.data?.token);
       localStorage.setItem("roles", login_details?.data?.roles);
-      navigate("/dashboard");
+      console.log(login_details?.data?.roles, "this is the roles");
+      if (login_details?.data?.roles?.includes("Candidate")) {
+        navigate("/mark-attendence");
+      } else {
+        navigate("/dashboard");
+      }
       dispatch(clear_login_state());
     }
     if (login_details?.isError) {

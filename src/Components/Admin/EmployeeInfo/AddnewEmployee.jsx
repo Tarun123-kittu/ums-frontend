@@ -17,6 +17,7 @@ import {
   clear_create_user_state,
 } from "../../../utils/redux/userSlice/createNewUserSlice";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ const AddnewEmployee = () => {
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
   ];
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const [field_data, setField_date] = useState({
     username: "",
     email: "",
@@ -106,6 +110,10 @@ const AddnewEmployee = () => {
     const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
     return nextYear;
   };
+
+  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section className="add_new_emp_container">
