@@ -1,27 +1,16 @@
-import React, { useState } from 'react'
-import {Pagination} from "react-bootstrap"
-import "./pagination.css"
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import React, { useState } from "react";
+import { Pagination } from "react-bootstrap";
+import "./pagination.css";
 const PaginationComp = () => {
-   
   return (
-    <div>
-        <Pagination className="justify-content-center custom_pagination_wapper">
-        <Pagination.Prev>
-          <FaArrowLeft /> Back
-        </Pagination.Prev>
+    <Pagination className="justify-content-center custom_pagination_wapper w-100 mt-3">
+      <Pagination.Prev />
 
-       
-            <Pagination.Item active>
-              1
-            </Pagination.Item>
-       
-            <Pagination.Next>
-          Next <FaArrowRight />
-        </Pagination.Next>
-        </Pagination>
-    </div>
-  )
-}
+      <Pagination.Item active>1</Pagination.Item>
 
-export default PaginationComp
+      <Pagination.Next />
+    </Pagination>
+  );
+};
+
+export default PaginationComp;

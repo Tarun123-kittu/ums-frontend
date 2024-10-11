@@ -157,21 +157,21 @@ const Leadtest = () => {
     dispatch(submit_result({ lead_id, responses: attempted_questions }));
   };
 
-  document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
-  });
+  // document.addEventListener("contextmenu", function (e) {
+  //   e.preventDefault();
+  // });
 
-  document.addEventListener("keydown", function (e) {
-    if (
-      e.key === "F12" ||
-      (e.ctrlKey &&
-        e.shiftKey &&
-        (e.key === "I" || e.key === "C" || e.key === "J")) ||
-      (e.ctrlKey && e.key === "U")
-    ) {
-      e.preventDefault();
-    }
-  });
+  // document.addEventListener("keydown", function (e) {
+  //   if (
+  //     e.key === "F12" ||
+  //     (e.ctrlKey &&
+  //       e.shiftKey &&
+  //       (e.key === "I" || e.key === "C" || e.key === "J")) ||
+  //     (e.ctrlKey && e.key === "U")
+  //   ) {
+  //     e.preventDefault();
+  //   }
+  // });
 
   return (
     <section className="test_serie_wrapper gray_bg min-vh-100">
@@ -194,7 +194,14 @@ const Leadtest = () => {
           </div>
 
           <ul className="question_type">
-            <li>
+            <li
+              className="cpointer"
+              onClick={() => {
+                setSubjective(false);
+                setLogical(false);
+                setObjective(true);
+              }}
+            >
               <img
                 className="me-2"
                 src={objective ? circlefilled : circle_outline}
@@ -203,7 +210,14 @@ const Leadtest = () => {
               <span>Objective Question</span>
             </li>
             <li className="divider_bar"></li>
-            <li>
+            <li
+              className="cpointer"
+              onClick={() => {
+                setSubjective(true);
+                setLogical(false);
+                setObjective(false);
+              }}
+            >
               <img
                 className="me-2"
                 src={subjective ? circlefilled : circle_outline}
@@ -212,7 +226,14 @@ const Leadtest = () => {
               <span>Subjective Question</span>
             </li>
             <li className="divider_bar"></li>
-            <li>
+            <li
+              className="cpointer"
+              onClick={() => {
+                setSubjective(false);
+                setLogical(true);
+                setObjective(false);
+              }}
+            >
               <img
                 className="me-2"
                 src={logical ? circlefilled : circle_outline}
@@ -231,21 +252,23 @@ const Leadtest = () => {
                       <h4 onCopy={handleCopy}>{ques?.question}</h4>
                       {ques?.options?.map((opt, index) => {
                         return (
-                          <div className="input group">
-                            <label htmlFor="">
-                              <input
-                                type="checkbox"
-                                className="me-2"
-                                onCopy={handleCopy}
-                                onPaste={handlePaste}
-                                checked={opt.isSelected || false}
-                                onChange={(e) =>
-                                  handleSaveAnswer(
-                                    ques?.question_id,
-                                    opt?.option
-                                  )
-                                }
-                              />
+                          <div class="form-check" key={index}>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value=""
+                              id={`flexCheckDefault${opt?.option_id}`}
+                              onCopy={handleCopy}
+                              onPaste={handlePaste}
+                              checked={opt.isSelected || false}
+                              onChange={(e) =>
+                                handleSaveAnswer(ques?.question_id, opt?.option)
+                              }
+                            />
+                            <label
+                              class="form-check-label ms-0"
+                              for={`flexCheckDefault${opt?.option_id}`}
+                            >
                               {opt.option}
                             </label>
                           </div>

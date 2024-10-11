@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_lead_answer = createAsyncThunk("get_lead_answer", async ({ leadId }, thunkAPI) => {
+export const get_face_round_leads = createAsyncThunk("get_face_round_leads", async (thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -11,14 +11,13 @@ export const get_lead_answer = createAsyncThunk("get_lead_answer", async ({ lead
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_lead_technical_response?leadId=${leadId}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_face_to_face_round_leads`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
-
         const result = await response.json();
         return result;
     } catch (error) {
@@ -28,26 +27,26 @@ export const get_lead_answer = createAsyncThunk("get_lead_answer", async ({ lead
     }
 })
 
-export const getLeadAnswer = createSlice({
-    name: "getLeadAnswer",
+export const getFaceRoundLeads = createSlice({
+    name: "getFaceRoundLeads",
     initialState: {
         data: [],
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
     },
     extraReducers: (builder) => {
         builder
-            .addCase(get_lead_answer.pending, (state) => {
+            .addCase(get_face_round_leads.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_lead_answer.fulfilled, (state, action) => {
+            .addCase(get_face_round_leads.fulfilled, (state, action) => {
                 state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_lead_answer.rejected, (state, action) => {
+            .addCase(get_face_round_leads.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
@@ -55,4 +54,4 @@ export const getLeadAnswer = createSlice({
     }
 })
 
-export default getLeadAnswer.reducer
+export default getFaceRoundLeads.reducer

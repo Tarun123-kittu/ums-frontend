@@ -65,10 +65,7 @@ const AddNewPerson = () => {
       profile &&
       state &&
       address &&
-      experience &&
-      current_salary &&
-      expected_salary &&
-      last_company
+      experience
     ) {
       dispatch(
         add_interview_leads({

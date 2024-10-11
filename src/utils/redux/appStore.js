@@ -63,6 +63,13 @@ import verifyLead from './interviewLeadsSlice/technicalRound/verifyLead'
 import startTest from './interviewLeadsSlice/technicalRound/startTest'
 import getTestQuestions from './interviewLeadsSlice/technicalRound/getTestQuestions'
 import submitTest from './interviewLeadsSlice/technicalRound/submitTest'
+import getLeadAnswer from './interviewLeadsSlice/technicalRound/getLeadAnswers'
+import checkLeadAnswer from './interviewLeadsSlice/technicalRound/CheckLeadAnswers'
+import submitDeveloperReview from './interviewLeadsSlice/technicalRound/submitDeveloperReview'
+import updateFaceRoundStatus from './interviewLeadsSlice/technicalRound/updateFaceToFaceRoundStatus'
+import updateLeadRoundCount from './interviewLeadsSlice/technicalRound/updateInRoundCount'
+import getFaceRoundLeads from './interviewLeadsSlice/getFaceRoundLeads'
+import getFinalRoundLeads from './interviewLeadsSlice/technicalRound/getFinalRoundLeads'
 
 const appStore = configureStore({
     reducer: {
@@ -129,7 +136,14 @@ const appStore = configureStore({
         VERIFY_LEAD: verifyLead,
         START_TEST: startTest,
         TEST_QUESTIONS: getTestQuestions,
-        SUBMIT_TEST: submitTest
+        SUBMIT_TEST: submitTest,
+        LEAD_ANSWER: getLeadAnswer,
+        CHECK_LEAD_ANSWER: checkLeadAnswer,
+        DEVELOPER_REVIEW: submitDeveloperReview,
+        FACE_ROUND_STATUS: updateFaceRoundStatus,
+        ROUND_COUNT: updateLeadRoundCount,
+        FACE_ROUND_LEADS: getFaceRoundLeads,
+        FINAL_ROUND_LEADS: getFinalRoundLeads
     },
 })
 
