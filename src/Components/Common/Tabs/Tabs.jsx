@@ -33,6 +33,18 @@ import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/
 import PaginationComp from "../../Pagination/Pagination";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
+  const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
+  const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
+    useState(false);
+  const [result, setResult] = useState(false);
+
+  const resultData = [
+    { value: "Selected", label: "Selected" },
+    { value: "Rejected", label: "Rejected" },
+    { value: "On Hold", label: "On Hold" },
+  ];
+  const navigate = useNavigate("/viewQuestionlist");
+  const [activeTab, setActiveTab] = useState("Add Person");
   const dispatch = useDispatch();
   const location = useLocation();
   const { tab } = location?.state ? location?.state : location;
@@ -41,10 +53,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
       setActiveTab(tab);
     }
   }, [tab]);
-
-  const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
-  const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
-    useState(false);
   const [leadId, setLeadId] = useState(null);
   const [page, setPage] = useState(1);
   const [language_id, setLanguage_id] = useState(null);
@@ -81,12 +89,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_round_status]);
 
-  const resultData = [
-    { value: "selected", label: "Selected" },
-    { value: "rejected", label: "Rejected" },
-    { value: "on hold", label: "On Hold" },
-    { value: "pending", label: "Pending" },
-  ];
   const technicalRoundStatus = [
     { value: "selected", label: "Selected" },
     { value: "rejected", label: "Rejected" },
@@ -94,8 +96,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     { value: "pending", label: "Pending" },
     { value: "opened", label: "Opened" },
   ];
-  const navigate = useNavigate("/viewQuestionlist");
-  const [activeTab, setActiveTab] = useState("Add Person");
 
   useEffect(() => {
     dispatch(get_all_leads({ page, experience: "", profile: "" }));

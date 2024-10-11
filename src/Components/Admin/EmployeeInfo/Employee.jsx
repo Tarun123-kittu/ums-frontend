@@ -14,11 +14,9 @@ const EmployeeInfo = () => {
     { name: "Employees", path: "/employee" },
   ];
 
-
-
  
   return (
-    <section>
+    <section className='employee_outer_container'>
       <Sidebar/>
     <div className={`wrapper gray_bg admin_outer ${show?"cmn_margin":""}`  }>
       <Notification/>

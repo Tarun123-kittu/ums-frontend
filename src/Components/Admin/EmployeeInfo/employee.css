@@ -12,6 +12,9 @@
 .employee_wrapper h4{
     font-size: 14px;
 }
+section.employee_outer_container .unauthorized_page_outer .wrapper {
+    margin-left: 0px;
+}
 button.add_document_btn{
     background-color: #555555;
     border-radius: 5px;
