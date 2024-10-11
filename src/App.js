@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
 import Login from "../src/Components/Login/Login"
 import Candidate from './Components/Candidate/Candidate';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
@@ -35,6 +37,7 @@ import Leads from './Components/Admin/LeadTest/leads';
 import LeadTest from './Components/Admin/LeadTest/lead-test';
 import TestThankyou from './Components/Admin/LeadTest/test-thankyou';
 import Sidebar from './Components/Sidebar/Sidebar';
+import MarkAttendence from './Components/Admin/Attendence/MarkAttendence';
 function App() {
 
   return (
@@ -73,6 +76,7 @@ function App() {
         <Route path='/leads/technical-round/:lead_id/:token' element={<Leads />} />
         <Route path='/lead-test/:is_open/:name/:lead_id/:token' element={<LeadTest />} />
         <Route path='/test-thankyou' element={<TestThankyou />} />
+        <Route path='/mark-attendence' element={<MarkAttendence />} />
 
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 

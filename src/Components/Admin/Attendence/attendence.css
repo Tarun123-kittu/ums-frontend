@@ -17,3 +17,45 @@
     font-weight: 500;
 }
  
+button.cmn_bg_btn {
+    border: unset;
+    background: #9E0302;
+    border-radius: 35px;
+    color: #fff;
+    padding: 5px 20px;
+}
+
+.cmn_card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,10%);
+}
+
+.attendence_submit h4 {
+    font-size: 18px;
+}
+
+.attendence_submit label {
+    font-size: 14px;
+    color: #748f74;
+    margin-bottom: 4px;
+    font-weight: 400;
+}
+.cmn_card .rbc-toolbar button {
+    border-color: #a30d03;
+    color: #a30d03;
+}
+
+.cmn_card .rbc-toolbar button.rbc-active {
+    background: #a30d03;
+    color: #fff;
+}
+
+  .cmn_card  .rbc-event, .cmn_card  .rbc-day-slot .rbc-background-event{
+    font-size: 12px;
+  }
+  .cmn_card  .rbc-toolbar button:hover{
+    background: #a30d03;
+    color: #fff;
+  }

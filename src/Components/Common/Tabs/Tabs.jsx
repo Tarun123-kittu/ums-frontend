@@ -21,20 +21,6 @@ import {
   clear_tech_round_status_state,
 } from "../../../utils/redux/interviewLeadsSlice/technicalRound/updateTechnicalRoundStatus";
 
-<<<<<<< HEAD
-function TabComp() {
-const[showHrQuestionModal,setShowHrQuestionModal]=useState(false)
-const[showTechInterviewQuesModal,setShowTechInterviewQuesModal]=useState(false)
-const[result,setResult]=useState(false)
-
-const resultData=[
-  { value: 'Selected', label: 'Selected' },
-  { value: 'Rejected', label: 'Rejected' },
-  { value: 'On Hold', label: 'On Hold'},
-]
-const navigate=useNavigate("/viewQuestionlist")
-const [activeTab, setActiveTab] = useState('Add Person'); // Manage active tab
-=======
 function TabComp({ setCurrentTab }) {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -44,7 +30,6 @@ function TabComp({ setCurrentTab }) {
       setActiveTab(tab);
     }
   }, [tab]);
->>>>>>> 76f03d67a5e7f550e92b058616c26956534aa6be
 
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
   const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
