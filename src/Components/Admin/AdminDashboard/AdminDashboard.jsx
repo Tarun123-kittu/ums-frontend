@@ -1,5 +1,4 @@
-import React from "react";
-import Sidebar from "../../Sidebar/Sidebar";
+import React, { useEffect } from "react";
 import { useAppContext } from "../../Utils/appContecxt";
 import "./adminDashboard.css";
 
@@ -8,12 +7,20 @@ import { FiEdit } from "react-icons/fi";
 import { PiArrowBendDownLeftBold } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const { show } = useAppContext();
+  const navigate = useNavigate()
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
 
   if (!user_all_permissions?.roles_data?.includes("Admin")) {
     return <UnauthorizedPage />;

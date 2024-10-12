@@ -15,7 +15,10 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 import { useDispatch } from "react-redux";
 import { get_all_leads } from "../../../utils/redux/interviewLeadsSlice/getAllLeads";
-
+import { get_hr_round_candidate } from "../../../utils/redux/interviewLeadsSlice/hrRound/getHrRoundCandidate";
+import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
+import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
+import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 const InterviewLead = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
@@ -33,6 +36,11 @@ const InterviewLead = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
 
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
@@ -92,7 +100,50 @@ const InterviewLead = () => {
         get_all_leads({
           page,
           experience: selected_experience,
-          profile: selected_result,
+          profile: selected_language,
+        })
+      );
+    }
+    if (open_tab === "HR") {
+      dispatch(
+        get_hr_round_candidate({
+          pageNumber: page,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result
+        })
+      );
+    }
+    if (open_tab === "Technical") {
+      dispatch(
+        get_all_tech_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result
+        })
+      );
+    }
+    if (open_tab === "Face to face") {
+      dispatch(
+        get_face_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result
+        })
+      );
+    }
+    if (open_tab === "Final Interaction") {
+      dispatch(
+        get_final_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result
         })
       );
     }
@@ -105,6 +156,49 @@ const InterviewLead = () => {
           page,
           experience: "",
           profile: "",
+        })
+      );
+    }
+    if (open_tab === "HR") {
+      dispatch(
+        get_hr_round_candidate({
+          pageNumber: page,
+          experience: "",
+          profile: "",
+          result_status: ""
+        })
+      );
+    }
+    if (open_tab === "Technical") {
+      dispatch(
+        get_all_tech_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: ""
+        })
+      );
+    }
+    if (open_tab === "Face to face") {
+      dispatch(
+        get_face_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: ""
+        })
+      );
+    }
+    if (open_tab === "Final Interaction") {
+      dispatch(
+        get_final_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: ""
         })
       );
     }

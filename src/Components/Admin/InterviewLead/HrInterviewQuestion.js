@@ -23,10 +23,13 @@ const HrInterViewQuestion = () => {
   const update_question = useSelector((store) => store.HR_ROUND_RESULT)
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
-    { name: "Hr Round", path: "/hrRound" },
-    { name: "Interview Question Round", path: "/hrInterViewQuestion" },
   ];
 
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
   useEffect(() => {
     if (!count) {
       navigate("/interviewLead")

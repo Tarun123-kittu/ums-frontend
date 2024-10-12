@@ -13,6 +13,7 @@ import { get_applied_leave_detail } from "../../../utils/redux/leaveSlice/getApp
 const EditLeaveReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+
   const { leave_id } = location?.state ? location?.state : location;
   console.log(leave_id, "this is the leave_id");
   const obj = [

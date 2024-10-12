@@ -17,6 +17,7 @@ const AttendenceReport = () => {
   const [name, setName] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [page, setPage] = useState(1)
   UseUserAttendanceReport({ name, month, year });
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -28,9 +29,20 @@ const AttendenceReport = () => {
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
   );
+  console.log(user_attendance_report, "this is the attendance report")
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    dispatch(get_user_attendance_report({ name, month, year, page }))
+  }, [name, month, year, page])
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -233,7 +245,7 @@ const AttendenceReport = () => {
             </table>
           </div>
         </div>
-        <PaginationComp />
+        <PaginationComp totalPage={user_attendance_report?.data?.totalPages} setPage={setPage} />
       </div>
     </section>
   );

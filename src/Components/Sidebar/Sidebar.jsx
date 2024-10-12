@@ -101,7 +101,7 @@ const Sidebar = () => {
   return (
     <div
       className={
-        user_all_permissions?.roles_data?.includes("Candidate")
+        user_all_permissions?.data?.roles_data?.some(role => ["Admin", "Developer", "HR"].includes(role))
           ? "d-none"
           : `sidebar ${show ? "cmn_width" : ""}`
       }
@@ -131,9 +131,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -142,9 +141,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}

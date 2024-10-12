@@ -1,18 +1,21 @@
 import React from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import InputField from "../../Common/InputField";
-import { PiArrowBendDownLeftBold, PiCalendarPlusDuotone } from "react-icons/pi";
 import "./attendence.css";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { MdStar } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const EditAttendence = () => {
+  const navigate = useNavigate()
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Edit  Attendance Today", path: "/editAttendenceToday" },
   ];
+  if (localStorage.getItem('roles').includes('Employee')) {
+    navigate("/mark-attendence");
+  }
   const { show } = useAppContext();
   return (
     <section className="attendenceReport_outer">

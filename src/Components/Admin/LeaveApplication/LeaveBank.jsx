@@ -11,9 +11,11 @@ import { get_leave_bank_report } from "../../../utils/redux/leaveSlice/getLeaveB
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { useNavigate } from "react-router-dom";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
   const user_all_permissions = useSelector(
@@ -29,6 +31,12 @@ const LeaveBank = () => {
     { name: "Leave Application", path: "" },
     { name: "Leave Bank", path: "/leaveBank" },
   ];
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
 
   const monthDataObj = [
     { value: "01", label: "January" },

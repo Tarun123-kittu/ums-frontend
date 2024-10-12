@@ -37,6 +37,12 @@ const QuestionAnswerSheet = () => {
   ];
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (!lead_id) {
       navigate(-1);
     } else {
@@ -239,24 +245,24 @@ const QuestionAnswerSheet = () => {
                                 </ul>
                               );
                             })}
-                            {answer.answer ? (
-                              <h4 className="correct_ans_heading d-flex justify-content-between">
-                                Correct Answer: {answer.answer}{" "}
-                                <span
-                                  className={
-                                    answer.answer_status === "correct"
-                                      ? "checked"
-                                      : answer.answer_status === "incorrect"
+
+                            {answer.answer_status && <h4 className="correct_ans_heading d-flex justify-content-between">
+                              Correct Answer: {answer.answer}
+                              <span
+                                className={
+                                  answer.answer_status === "correct"
+                                    ? "checked"
+                                    : answer.answer_status === "incorrect"
                                       ? "wrong_checked"
                                       : "not_attempted"
-                                  }
-                                >
-                                  Checked: {answer.answer_status}{" "}
-                                </span>
-                              </h4>
-                            ) : (
-                              <h4>Not Attempted</h4>
-                            )}
+                                }
+                              >
+                                Checked: {answer.answer_status}
+                              </span>
+                            </h4>}
+
+                            <h4>Not Attempted</h4>
+
                           </div>
                         </div>
                       );
@@ -337,24 +343,21 @@ const QuestionAnswerSheet = () => {
                                 )}
                               </div>
                             )}
-                            {answer.answer ? (
-                              <h4 className="correct_ans_heading d-flex justify-content-between">
-                                Correct Answer: {answer.answer}
-                                <span
-                                  className={
-                                    answer.answer_status === "correct"
-                                      ? "checked"
-                                      : answer.answer_status === "incorrect"
+                            {answer.answer_status && <h4 className="correct_ans_heading d-flex justify-content-between">
+                              Correct Answer: {answer.answer}
+                              <span
+                                className={
+                                  answer.answer_status === "correct"
+                                    ? "checked"
+                                    : answer.answer_status === "incorrect"
                                       ? "wrong_checked"
                                       : "not_attempted"
-                                  }
-                                >
-                                  Checked: {answer.answer_status}{" "}
-                                </span>
-                              </h4>
-                            ) : (
-                              <h4>Not Attempted</h4>
-                            )}
+                                }
+                              >
+                                Checked: {answer.answer_status}
+                              </span>
+                            </h4>}
+                            <h4>Not Attempted</h4>
                           </div>
                         </div>
                       );
@@ -433,24 +436,21 @@ const QuestionAnswerSheet = () => {
                                 )}
                               </div>
                             )}
-                            {answer.answer ? (
-                              <h4 className="correct_ans_heading d-flex justify-content-between">
-                                Correct Answer: {answer.answer}
-                                <span
-                                  className={
-                                    answer.answer_status === "correct"
-                                      ? "checked"
-                                      : answer.answer_status === "incorrect"
+                            {answer.answer_status && <h4 className="correct_ans_heading d-flex justify-content-between">
+                              Correct Answer: {answer.answer}
+                              <span
+                                className={
+                                  answer.answer_status === "correct"
+                                    ? "checked"
+                                    : answer.answer_status === "incorrect"
                                       ? "wrong_checked"
                                       : "not_attempted"
-                                  }
-                                >
-                                  Checked: {answer.answer_status}{" "}
-                                </span>
-                              </h4>
-                            ) : (
-                              <h4>Not Attempted</h4>
-                            )}
+                                }
+                              >
+                                Checked: {answer.answer_status}
+                              </span>
+                            </h4>}
+                            <h4>Not Attempted</h4>
                           </div>
                         </div>
                       );

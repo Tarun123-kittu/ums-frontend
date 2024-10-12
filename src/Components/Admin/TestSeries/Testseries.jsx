@@ -42,6 +42,12 @@ const Testseries = () => {
   );
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     dispatch(get_all_languages());
     dispatch(get_all_series({ id }));
   }, []);
@@ -181,13 +187,15 @@ const Testseries = () => {
                         <h3 className="series_created_text">
                           {formatTimeToReadable(series?.time_taken)}
                         </h3>
-                        <RiDeleteBinLine
-                          className="cursor_pointer series_created_heading"
-                          onClick={() => {
-                            setSeriesId(series?.id);
-                            setShowDeleteModal(true);
-                          }}
-                        />
+                        {localStorage?.getItem('userId')?.toString() === series?.createdBy?.toString() && (
+                          <RiDeleteBinLine
+                            className="cursor_pointer series_created_heading"
+                            onClick={() => {
+                              setSeriesId(series?.id);
+                              setShowDeleteModal(true);
+                            }}
+                          />
+                        )}
                       </div>
 
                       <h2 className="card_heading">{series?.series_name}</h2>

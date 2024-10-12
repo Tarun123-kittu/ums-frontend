@@ -31,6 +31,12 @@ const EditAttendenceReport = () => {
   const [enable, setEnable] = useState(false);
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (!id) {
       navigate(-1);
     } else {

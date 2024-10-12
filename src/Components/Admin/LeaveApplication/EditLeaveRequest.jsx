@@ -47,6 +47,12 @@ const EditLeaveRequest = () => {
   }, [leave_id]);
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (leave_details?.isSuccess) {
       setLeaveDetail(leave_details?.data?.data[0]);
     }
@@ -126,10 +132,10 @@ const EditLeaveRequest = () => {
                     value={
                       leaveDetail?.from_date && leaveDetail?.to_date
                         ? `${moment(leaveDetail.from_date).format(
-                            "MM/DD/YYYY"
-                          )} - ${moment(leaveDetail.to_date).format(
-                            "MM/DD/YYYY"
-                          )}`
+                          "MM/DD/YYYY"
+                        )} - ${moment(leaveDetail.to_date).format(
+                          "MM/DD/YYYY"
+                        )}`
                         : ""
                     }
                   />

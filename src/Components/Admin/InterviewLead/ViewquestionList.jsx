@@ -22,6 +22,12 @@ const ViewQuestionList = () => {
     : location;
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (!interview_id && !lead_id) {
       navigate("/interviewLead");
     } else {
@@ -45,9 +51,8 @@ const ViewQuestionList = () => {
   return (
     <section className="Interviewlead_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${
-          show ? "cmn_margin" : "cmn_margin_outer"
-        }`}
+        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : "cmn_margin_outer"
+          }`}
       >
         <Notification />
         <div className="cmn_padding_outer">

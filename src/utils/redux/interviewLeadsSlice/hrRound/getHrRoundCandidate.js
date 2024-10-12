@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_hr_round_candidate = createAsyncThunk("get_hr_round_candidate", async ({ limit }, thunkAPI) => {
+export const get_hr_round_candidate = createAsyncThunk("get_hr_round_candidate", async ({ limit, pageNumber, profile, experience, result_status }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+
+        let queryParams = `limit=${limit}&pageNumber=${pageNumber}`;
+
+        if (profile) queryParams += `&profile=${profile}`;
+        if (experience) queryParams += `&experience=${experience}`;
+        if (result_status) queryParams += `&result_status=${result_status}`;
 
         const requestOptions = {
             method: "GET",
@@ -11,7 +17,8 @@ export const get_hr_round_candidate = createAsyncThunk("get_hr_round_candidate",
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_hr_round_candidate?limit=${limit}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_hr_round_candidate?${queryParams}`, requestOptions);
+
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -26,7 +33,7 @@ export const get_hr_round_candidate = createAsyncThunk("get_hr_round_candidate",
             message: error.message,
         });
     }
-})
+});
 
 export const getHrRoundLeads = createSlice({
     name: "getHrRoundLeads",
@@ -53,6 +60,6 @@ export const getHrRoundLeads = createSlice({
                 state.isLoading = false
             })
     }
-})
+});
 
-export default getHrRoundLeads.reducer
+export default getHrRoundLeads.reducer;

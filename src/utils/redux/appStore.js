@@ -73,6 +73,7 @@ import getFinalRoundLeads from './interviewLeadsSlice/technicalRound/getFinalRou
 import MarkAttendence from './attendanceSlice/markAttendances'
 import getTodayAttendanceTime from './attendanceSlice/getUserTodayAttendaceTime'
 import unmarkAttendance from './attendanceSlice/unmarkAttendance'
+import getHolidayBirthdayEvent from './holidayAndEventsSlice/getAlBirthdayHolidayEvents'
 
 const appStore = configureStore({
     reducer: {
@@ -149,7 +150,8 @@ const appStore = configureStore({
         FINAL_ROUND_LEADS: getFinalRoundLeads,
         MARK_ATTENDANCE: MarkAttendence,
         TODAY_ATTENDANCE_TIME: getTodayAttendanceTime,
-        UNMARK_ATTENDANCE: unmarkAttendance
+        UNMARK_ATTENDANCE: unmarkAttendance,
+        HOLIDAY_BIRTHDAY_EVENT: getAllHolidaysAndEvents
     },
 })
 

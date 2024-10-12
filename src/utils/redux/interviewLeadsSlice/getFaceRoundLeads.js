@@ -1,9 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_face_round_leads = createAsyncThunk("get_face_round_leads", async (thunkAPI) => {
+export const get_face_round_leads = createAsyncThunk("get_face_round_leads", async ({ page, limit, profile, experience, result_status }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+
+        // Create query parameters string based on available filters
+        let queryParams = `page=${page}&limit=${limit}`;
+
+        // Add filters to the query if they exist
+        if (profile) queryParams += `&profile=${profile}`;
+        if (experience) queryParams += `&experience=${experience}`;
+        if (result_status) queryParams += `&result_status=${result_status}`;
 
         const requestOptions = {
             method: "GET",
@@ -11,13 +19,16 @@ export const get_face_round_leads = createAsyncThunk("get_face_round_leads", asy
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_face_to_face_round_leads`, requestOptions)
+        // Fetch data with query parameters
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_face_to_face_round_leads?${queryParams}`, requestOptions);
+
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -25,7 +36,7 @@ export const get_face_round_leads = createAsyncThunk("get_face_round_leads", asy
             message: error.message,
         });
     }
-})
+});
 
 export const getFaceRoundLeads = createSlice({
     name: "getFaceRoundLeads",
@@ -39,19 +50,19 @@ export const getFaceRoundLeads = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(get_face_round_leads.pending, (state) => {
-                state.isLoading = true
+                state.isLoading = true;
             })
             .addCase(get_face_round_leads.fulfilled, (state, action) => {
-                state.data = action.payload
-                state.isSuccess = true
-                state.isLoading = false
+                state.data = action.payload;
+                state.isSuccess = true;
+                state.isLoading = false;
             })
             .addCase(get_face_round_leads.rejected, (state, action) => {
-                state.error = action.payload
-                state.isError = true
-                state.isLoading = false
-            })
+                state.error = action.payload;
+                state.isError = true;
+                state.isLoading = false;
+            });
     }
-})
+});
 
-export default getFaceRoundLeads.reducer
+export default getFaceRoundLeads.reducer;

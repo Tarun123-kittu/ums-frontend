@@ -38,6 +38,12 @@ const RoleAndPermission = () => {
   };
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (is_role_disabled?.isSuccess) {
       toast.success("Role deleted successfully");
       dispatch(clear_disable_role_state());

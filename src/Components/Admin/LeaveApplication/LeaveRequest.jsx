@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
@@ -19,6 +19,11 @@ const LeaveRequest = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
   const obj = [
     { name: "Leave Application", path: "/leaveApplication" },
     { name: "Leave Request", path: "/leaveRequest" },

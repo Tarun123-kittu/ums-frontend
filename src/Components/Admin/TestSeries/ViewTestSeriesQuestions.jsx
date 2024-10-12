@@ -44,6 +44,12 @@ const ViewTestseriesQuestions = () => {
   }, [id]);
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     dispatch(get_question_answer({ language_id: language_id, series_id: id }));
   }, []);
 
@@ -167,26 +173,31 @@ const ViewTestseriesQuestions = () => {
                               />
                             </div>
                           ))}
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            <button
-                              className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(question?.question_id);
-                                setShowDelObjectiveQuesModal(true);
-                              }}
-                            >
-                              Delete
-                            </button>
-                            <button
-                              className="cmn_Button_style cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(question?.question_id);
-                                setShowEditObjectiveQuesModal(true);
-                              }}
-                            >
-                              Edit
-                            </button>
-                          </div>
+                          {
+                            (localStorage?.getItem('userId')?.toString() === question?.createdBy?.toString() || localStorage?.getItem('roles')?.includes('Admin')) && (
+                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(question?.question_id);
+                                    setShowDelObjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(question?.question_id);
+                                    setShowEditObjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            )
+                          }
+
                         </div>
                       );
                     }
@@ -219,26 +230,32 @@ const ViewTestseriesQuestions = () => {
                             />
                           </div>
 
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            <button
-                              className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(ques?.question_id);
-                                setShowDelSubjectiveQuesModal(true);
-                              }}
-                            >
-                              Delete
-                            </button>
-                            <button
-                              className="cmn_Button_style cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(ques?.question_id);
-                                setShowEditSubjectiveQuesModal(true);
-                              }}
-                            >
-                              Edit
-                            </button>
-                          </div>
+                          {
+                            (localStorage?.getItem('userId')?.toString() === ques?.createdBy?.toString() ||
+                              localStorage?.getItem('roles')?.includes('Admin')) && (
+                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowDelSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowEditSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            )
+                          }
+
                         </div>
                       );
                     }
@@ -270,27 +287,32 @@ const ViewTestseriesQuestions = () => {
                               value={ques?.answer}
                             />
                           </div>
+                          {
+                            (localStorage?.getItem('userId')?.toString() === ques?.createdBy?.toString() ||
+                              localStorage?.getItem('roles')?.includes('Admin')) && (
+                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowDelSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowEditLogicalQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            )
+                          }
 
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            <button
-                              className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(ques?.question_id);
-                                setShowDelSubjectiveQuesModal(true);
-                              }}
-                            >
-                              Delete
-                            </button>
-                            <button
-                              className="cmn_Button_style cursor_pointer"
-                              onClick={() => {
-                                setQuestion_id(ques?.question_id);
-                                setShowEditLogicalQuesModal(true);
-                              }}
-                            >
-                              Edit
-                            </button>
-                          </div>
                         </div>
                       );
                     }

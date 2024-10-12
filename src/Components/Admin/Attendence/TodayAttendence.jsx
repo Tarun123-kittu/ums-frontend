@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 
 const TodayAttendence = () => {
-  UseAttendanceReport();
+  UseAttendanceReport({ page: 1 });
+  const dispatch = useDispatch()
+
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Attendance Today", path: "/todayAttendence" },
@@ -19,11 +21,21 @@ const TodayAttendence = () => {
   const navigate = useNavigate();
 
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
+  console.log(attendance_report, "this is the attendance report")
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-  console.log(user_all_permissions);
+  const [page, setPage] = useState(1)
+  useEffect(() => {
+    dispatch(get_attendance_report({ page }))
+  }, [page])
   const { show } = useAppContext();
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -92,16 +104,14 @@ const TodayAttendence = () => {
                       <td>{report?.total_time ? report?.total_time : "--"}</td>
                       <td>
                         {report?.name && report?.login_mobile
-                          ? `${report.name}/mobile ${
-                              report.login_mobile === "1" ? "true" : "false"
-                            }`
+                          ? `${report.name}/mobile ${report.login_mobile === "1" ? "true" : "false"
+                          }`
                           : "--"}
                       </td>
                       <td>
                         {report?.name && report?.logout_mobile
-                          ? `${report.name}/mobile ${
-                              report.logout_mobile === "1" ? "true" : "false"
-                            }`
+                          ? `${report.name}/mobile ${report.logout_mobile === "1" ? "true" : "false"
+                          }`
                           : "--"}
                       </td>
 
@@ -125,7 +135,7 @@ const TodayAttendence = () => {
             </table>
           </div>
         </div>
-        <PaginationComp />
+        <PaginationComp totalPage={attendance_report?.data?.totalPages} setPage={setPage} />
       </div>
     </section>
   );

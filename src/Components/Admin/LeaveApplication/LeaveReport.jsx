@@ -14,11 +14,17 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const LeaveReport = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const obj = [
     { name: "Leave Application", path: "" },
     { name: "Leave Report", path: "/leaveReport" },
   ];
 
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const user_all_permissions = useSelector(
@@ -41,7 +47,6 @@ const LeaveReport = () => {
   }, []);
 
   const { show } = useAppContext();
-  const navigate = useNavigate();
   const formatDate = (dateString) => {
     if (!dateString) return ""; // handle the case when the date is null or undefined
     const date = new Date(dateString);

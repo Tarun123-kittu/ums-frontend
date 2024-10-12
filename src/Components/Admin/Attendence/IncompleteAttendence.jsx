@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
@@ -20,6 +20,12 @@ const IncompleteAttendence = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";

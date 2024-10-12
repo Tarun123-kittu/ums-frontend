@@ -30,6 +30,13 @@ const AddnewEmployee = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
   const [field_data, setField_date] = useState({
     username: "",
     email: "",

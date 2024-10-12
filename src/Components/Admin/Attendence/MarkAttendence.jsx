@@ -16,38 +16,39 @@ import {
   clear_unmark_attendance_slice,
 } from "../../../utils/redux/attendanceSlice/unmarkAttendance";
 import Notification from "../Notification/Notification";
+import { get_all_holidays_and_events } from "../../../utils/redux/holidayAndEventsSlice/getAllHolidaysAndEvents";
 
 const localizer = momentLocalizer(moment);
-const myEventsList = [
-  {
-    id: 0,
-    title: "Morning Meeting",
-    start: new Date(2024, 9, 10, 9, 0),
-    end: new Date(2024, 9, 10, 10, 0),
-    color: "#FF5733", // Custom color for this event
-  },
-  {
-    id: 1,
-    title: "Client Presentation",
-    start: new Date(2024, 9, 10, 10, 30),
-    end: new Date(2024, 9, 10, 11, 30),
-    color: "#33C1FF", // Another custom color
-  },
-  {
-    id: 2,
-    title: "Lunch with Team",
-    start: new Date(2024, 10, 10, 12, 0),
-    end: new Date(2024, 10, 10, 13, 0),
-    color: "#8E44AD",
-  },
-  {
-    id: 3,
-    title: "Project Review",
-    start: new Date(2024, 10, 10, 14, 0),
-    end: new Date(2024, 10, 10, 15, 0),
-    color: "#28B463",
-  },
-];
+// const myEventsList = [
+//   {
+//     id: 0,
+//     title: "Morning Meeting",
+//     start: new Date(2024, 9, 10, 9, 0),
+//     end: new Date(2024, 9, 10, 10, 0),
+//     color: "#FF5733", // Custom color for this event
+//   },
+//   {
+//     id: 1,
+//     title: "Client Presentation",
+//     start: new Date(2024, 9, 10, 10, 30),
+//     end: new Date(2024, 9, 10, 11, 30),
+//     color: "#33C1FF", // Another custom color
+//   },
+//   {
+//     id: 2,
+//     title: "Lunch with Team",
+//     start: new Date(2024, 10, 10, 12, 0),
+//     end: new Date(2024, 10, 10, 13, 0),
+//     color: "#8E44AD",
+//   },
+//   {
+//     id: 3,
+//     title: "Project Review",
+//     start: new Date(2024, 10, 10, 14, 0),
+//     end: new Date(2024, 10, 10, 15, 0),
+//     color: "#28B463",
+//   },
+// ];
 const MarkAttendence = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
@@ -59,8 +60,11 @@ const MarkAttendence = () => {
   const [logout_mobile, setLogout_mobile] = useState(false);
   const [mark_attendance_time, setMark_attendance_time] = useState("");
   const [timeDifference, setTimeDifference] = useState("");
+  const [myEventsList, setMyEventList] = useState([])
   const mark_attendance_state = useSelector((store) => store.MARK_ATTENDANCE);
   const attendance_time = useSelector((store) => store.TODAY_ATTENDANCE_TIME);
+  const events_birthays_holidays = useSelector((store) => store.HOLIDAY_BIRTHDAY_EVENT)
+  console.log(events_birthays_holidays, "this isa")
   const [itemsString, setItemsString] = useState("");
   const [inputValue, setInputValue] = useState("");
 
@@ -79,7 +83,14 @@ const MarkAttendence = () => {
   }, []);
 
   useEffect(() => {
+    if (events_birthays_holidays?.isSuccess) {
+      setMyEventList(events_birthays_holidays?.data?.data)
+    }
+  }, [events_birthays_holidays])
+
+  useEffect(() => {
     dispatch(get_today_attendance_time());
+    dispatch(get_all_holidays_and_events())
   }, []);
 
   useEffect(() => {
@@ -141,6 +152,21 @@ const MarkAttendence = () => {
         logout_mobile,
       })
     );
+  };
+
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    let backgroundColor = event.color || '#3174ad'; // Default color if no color is provided
+    let style = {
+      backgroundColor: backgroundColor,
+      borderRadius: '5px',
+      opacity: 0.8,
+      color: 'white',
+      border: '0px',
+      display: 'block',
+    };
+    return {
+      style: style,
+    };
   };
   return (
     <section>
@@ -300,9 +326,16 @@ const MarkAttendence = () => {
               events={myEventsList}
               startAccessor="start"
               endAccessor="end"
-              //   eventPropGetter={eventStyleGetter}
-              views={["month", "agenda"]}
+              views={{
+                month: true,
+                agenda: true, // Keeping Agenda but customizing
+              }}
+              defaultView="month" // Set agenda as default view
               style={{ height: 850 }}
+              eventPropGetter={eventStyleGetter}
+              messages={{
+                agenda: 'List', // Renaming "Agenda" to "List"
+              }}
             />
           </div>
         </div>

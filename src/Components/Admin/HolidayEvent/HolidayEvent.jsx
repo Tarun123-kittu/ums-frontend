@@ -18,12 +18,15 @@ import {
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { useNavigate } from "react-router-dom";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { show } = useAppContext();
   const [showEventModal, setShowEventModal] = useState(false);
-  const [selected_year, setSelected_year] = useState(2024);
+  const [selected_year, setSelected_year] = useState(new Date().getFullYear());
   const [year, setYear] = useState([]);
+  const [page, setPage] = useState(1)
   const [yearObj, setYearObj] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -32,16 +35,23 @@ const HolidayEvent = () => {
   const holiday_and_events = useSelector(
     (store) => store.ALL_HOLIDAY_AND_EVENT
   );
+  console.log(holiday_and_events, "this is the holiday and events")
   const is_deleted = useSelector((store) => store.DELETE_EVENT);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
-    dispatch(get_all_holidays_and_events({ year: selected_year }));
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    dispatch(get_all_holidays_and_events({ year: selected_year, page }));
     years();
     dispatch(clear_get_selected_holiday_and_event_state());
-  }, []);
+  }, [page]);
 
   const years = (startYear = 2020) => {
     setYear([]);
@@ -128,7 +138,8 @@ const HolidayEvent = () => {
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
-              <button className="cmn_Button_style cmn_darkgray_btn">
+              <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => dispatch(
+                get_all_holidays_and_events({ year: new Date().getFullYear() }))}>
                 Reset
               </button>
               <button
@@ -136,8 +147,8 @@ const HolidayEvent = () => {
                 onClick={() =>
                   isSearched
                     ? dispatch(
-                        get_all_holidays_and_events({ year: selected_year })
-                      )
+                      get_all_holidays_and_events({ year: selected_year })
+                    )
                     : toast.error("Please select year !!")
                 }
               >
@@ -195,7 +206,7 @@ const HolidayEvent = () => {
             </table>
           </div>
         </div>
-        <PaginationComp />
+        <PaginationComp totalPage={holiday_and_events?.data?.totalPages} setPage={setPage} />
 
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />

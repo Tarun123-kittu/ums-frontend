@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const get_all_users_user = createAsyncThunk(
     "get_all_users_user",
-    async ({ name, status }, thunkAPI) => {
+    async ({ name, status, page }, thunkAPI) => {
         try {
+            page = page * 1
             const myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
@@ -14,7 +15,7 @@ export const get_all_users_user = createAsyncThunk(
             };
 
             // Start with the base URL
-            let url = `${process.env.REACT_APP_BACKEN_URL}/get_employees`;
+            let url = `${process.env.REACT_APP_BACKEN_URL}/get_employees?page=${page}`;
 
             // Collect query parameters if name and/or status exist
             const queryParams = [];
@@ -25,12 +26,9 @@ export const get_all_users_user = createAsyncThunk(
                 queryParams.push(`status=${encodeURIComponent(status)}`);
             }
 
-            // Append query parameters to the URL if they exist
             if (queryParams.length > 0) {
-                url += `?${queryParams.join('&')}`;
+                url += `&${queryParams.join('&')}`;
             }
-
-            // Log the final URL for debugging purposes
             console.log("Fetching data from URL:", url);
 
             const response = await fetch(url, requestOptions);

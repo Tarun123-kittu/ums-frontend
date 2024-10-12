@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const get_user_attendance_report = createAsyncThunk(
     "get_user_attendance_report",
-    async ({ name, month, year }, thunkAPI) => {
+    async ({ name, month, year, page }, thunkAPI) => {
         try {
             const myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -14,6 +14,7 @@ export const get_user_attendance_report = createAsyncThunk(
             };
 
             let queryParams = new URLSearchParams();
+            if (page) queryParams.append('page', page)
             if (name) queryParams.append('name', name);
             if (month) queryParams.append('month', month);
             if (year) queryParams.append('year', year);

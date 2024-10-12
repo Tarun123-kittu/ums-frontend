@@ -38,6 +38,12 @@ const EditPerson = () => {
   const update_lead_data = useSelector((store) => store.UPDATE_LEAD);
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     if (!leadData) {
       navigate("/interviewLead");
     } else {

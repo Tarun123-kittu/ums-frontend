@@ -36,8 +36,8 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
     setShow(false);
   };
   const options = [
-    { value: "Holiday", label: "Holiday" },
-    { value: "Events", label: "Events" },
+    { value: "holiday", label: "Holiday" },
+    { value: "event", label: "Event" },
   ];
 
   const handleAddHolidayAndEvents = () => {
@@ -53,8 +53,8 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
           date: date
             ? date
             : new Date(selected_event_details?.data?.data?.date)
-                .toISOString()
-                .split("T")[0],
+              .toISOString()
+              .split("T")[0],
           id: eventId,
         })
       );
@@ -152,7 +152,7 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
             <div className="mt-2">
               <CustomSelectComp
                 optionsData={options}
-                changeHandler={(e)=>setType(e.value)}
+                changeHandler={(e) => setType(e.value)}
                 // setType={setType}
                 // value={date ? date : type}
                 value={type}

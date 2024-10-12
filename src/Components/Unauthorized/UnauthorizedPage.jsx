@@ -15,9 +15,8 @@ const UnauthorizedPage = () => {
     return (
       <section className="unauthorized_page_outer">
         <div
-          className={`wrapper gray_bg admin_outer  ${
-            show ? "cmn_margin" : "cmn_margin_outer"
-          }`}
+          className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : "cmn_margin_outer"
+            }`}
         >
           <div className="d-flex justify-content-center align-items-center unauthorized_page_content">
             <div className="text-center unauthorized_wrapper">
@@ -28,7 +27,7 @@ const UnauthorizedPage = () => {
               <button
                 className="cmn_Button_style mt-4"
                 onClick={() => {
-                  user_all_permissions?.roles_data?.includes("Candidate")
+                  user_all_permissions?.roles_data?.includes("Employee")
                     ? navigate("/mark-attendence")
                     : navigate(-1);
                 }}

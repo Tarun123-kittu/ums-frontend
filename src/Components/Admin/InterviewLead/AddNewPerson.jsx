@@ -39,6 +39,12 @@ const AddNewPerson = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
 
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");

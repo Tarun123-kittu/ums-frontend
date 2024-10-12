@@ -19,6 +19,12 @@ const ViewEmployeeInfo = () => {
   const [user_details, setUser_details] = useState([]);
 
   useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     return () => {
       dispatch(clear_user_detail_slice());
     };

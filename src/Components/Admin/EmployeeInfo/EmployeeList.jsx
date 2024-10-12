@@ -23,10 +23,12 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+  const [page, setPage] = useState(1)
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userId, setuserId] = useState("");
 
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
+  console.log(all_users_list, "this is the list of all users")
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
@@ -51,8 +53,8 @@ const EmployeeList = () => {
   }, [all_users_list]);
 
   useEffect(() => {
-    dispatch(get_all_users_user({ name: searchName, status: searchStatus }));
-  }, []);
+    dispatch(get_all_users_user({ name: searchName, status: searchStatus, page }));
+  }, [page]);
 
   const deleteHandler = () => {
     dispatch(delete_user({ id: userId }));
@@ -111,7 +113,7 @@ const EmployeeList = () => {
               className="cmn_Button_style"
               onClick={() =>
                 dispatch(
-                  get_all_users_user({ name: searchName, status: searchStatus })
+                  get_all_users_user({ name: searchName, status: searchStatus, page })
                 )
               }
             >
@@ -198,7 +200,7 @@ const EmployeeList = () => {
           />
         )}
       </div>
-      <PaginationComp />
+      <PaginationComp totalPage={all_users_list?.data?.total_pages} setPage={setPage} />
     </>
   );
 };

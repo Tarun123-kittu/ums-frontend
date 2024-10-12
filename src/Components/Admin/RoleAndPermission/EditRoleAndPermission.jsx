@@ -37,6 +37,11 @@ const EditRoleAndPermission = () => {
   const role_permissions_data = useSelector(
     (store) => store.GET_ROLE_PERMISSIONS
   );
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
   const is_permissions_updated = useSelector(
     (store) => store.UPDATE_ROLE_PERMISSION
   );

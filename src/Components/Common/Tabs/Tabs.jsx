@@ -39,9 +39,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [result, setResult] = useState(false);
 
   const resultData = [
-    { value: "Selected", label: "Selected" },
-    { value: "Rejected", label: "Rejected" },
-    { value: "On Hold", label: "On Hold" },
+    { value: "selected", label: "Selected" },
+    { value: "rejected", label: "Rejected" },
+    { value: "on hold", label: "On Hold" },
+    { value: "pending", label: "Pending" },
   ];
   const navigate = useNavigate("/viewQuestionlist");
   const [activeTab, setActiveTab] = useState("Add Person");
@@ -58,6 +59,11 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [language_id, setLanguage_id] = useState(null);
   const [series_id, setSeries_id] = useState(null);
   const [language, setLanguage] = useState("");
+  const [allLeadPage, setAllLeadPage] = useState(1)
+  const [hrPage, setHrPages] = useState(1)
+  const [techPage, setTechPage] = useState(1)
+  const [facePage, setFacePage] = useState(1)
+  const [finalPage, setFinalPage] = useState(1)
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
   const hr_round_candidate_status = useSelector(
@@ -98,12 +104,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   ];
 
   useEffect(() => {
-    dispatch(get_all_leads({ page, experience: "", profile: "" }));
-    dispatch(get_hr_round_candidate({ limit: 10 }));
-    dispatch(get_all_tech_round_leads());
-    dispatch(get_face_round_leads());
-    dispatch(get_final_round_leads());
-  }, []);
+    dispatch(get_all_leads({ page: allLeadPage, experience: "", profile: "" }));
+    dispatch(get_hr_round_candidate({ limit: 2, pageNumber: hrPage, profile: "", experience: "", result_status: "" }));
+    dispatch(get_all_tech_round_leads({ page: techPage, limit: 10, profile: "", experience: "", result_status: "" }));
+    dispatch(get_face_round_leads({ page: 1, limit: 10, profile: "", experience: "", result_status: "" }));
+    dispatch(get_final_round_leads({ page: 1, limit: 10, profile: "", experience: "", result_status: "" }));
+  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
 
   useEffect(() => {
     if (hr_round_candidate_status?.isSuccess) {
@@ -168,6 +174,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_round_status?.isSuccess) {
+      toast.success("Candidate successfully moved to next round")
       dispatch(get_face_round_leads());
     }
   }, [update_round_status]);
@@ -371,7 +378,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </tbody>
             </table>
             {all_leads?.data?.data?.some((field) => field.in_round === 0) >
-              0 && <PaginationComp />}
+              0 && <PaginationComp totalPage={all_leads?.data?.pagination?.totalPages} setPage={setAllLeadPage} />}
           </div>
         </Tab>
         <Tab eventKey="HR" title="HR">
@@ -458,7 +465,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </tbody>
             </table>
             {all_hr_round_candidate?.data?.data?.length > 0 && (
-              <PaginationComp />
+              <PaginationComp totalPage={all_hr_round_candidate?.data?.totalPages} setPage={setHrPages} />
             )}
           </div>
         </Tab>
@@ -478,7 +485,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {Array.isArray(tech_round_leads?.data?.data?.data) &&
-                tech_round_leads?.data?.data?.data?.length === 0 ? (
+                  tech_round_leads?.data?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
                       No technical lead found.
@@ -550,7 +557,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </tbody>
             </table>
             {tech_round_leads?.data?.data?.data?.length > 0 && (
-              <PaginationComp />
+              <PaginationComp totalPage={tech_round_leads?.data?.pagination?.totalPages} setPage={setTechPage} />
             )}
           </div>
         </Tab>
@@ -571,8 +578,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(all_leads?.data?.data) &&
-                face_round_leads?.data?.data?.length > 0 ? (
+                {Array.isArray(face_round_leads?.data?.data) &&
+                  face_round_leads?.data?.data?.length > 0 ? (
                   face_round_leads?.data?.data?.map((lead, i) => {
                     return (
                       <tr key={i}>
@@ -661,7 +668,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </table>
-            {face_round_leads?.data?.data?.length > 0 && <PaginationComp />}
+            {face_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={face_round_leads?.data?.pagination?.totalPages} setPage={setTechPage} />}
           </div>
         </Tab>
         <Tab eventKey="Final Interaction" title="Final Interaction">
@@ -682,7 +689,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {Array.isArray(final_round_leads?.data?.data) &&
-                final_round_leads?.data?.data?.length > 0 ? (
+                  final_round_leads?.data?.data?.length > 0 ? (
                   final_round_leads?.data?.data?.map((lead, i) => {
                     return (
                       <tr key={i}>
@@ -756,7 +763,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </table>
-            {final_round_leads?.data?.data?.length > 0 && <PaginationComp />}
+            {final_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={final_round_leads?.data?.totalPages} setPage={setTechPage} />}
           </div>
         </Tab>
       </Tabs>

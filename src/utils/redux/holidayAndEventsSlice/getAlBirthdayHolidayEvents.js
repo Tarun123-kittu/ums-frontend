@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_attendance_report = createAsyncThunk("get_attendance_report", async ({ page }, thunkAPI) => {
+export const get_holiay_birthday_events = createAsyncThunk("get_holiay_birthday_events", async ({ month, year }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -11,13 +11,14 @@ export const get_attendance_report = createAsyncThunk("get_attendance_report", a
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_attendances?page=${page}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_events_and_birthdays`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -27,8 +28,8 @@ export const get_attendance_report = createAsyncThunk("get_attendance_report", a
     }
 })
 
-export const getAttendanceReport = createSlice({
-    name: "getAttendanceReport",
+export const getHolidayBirthdayEvent = createSlice({
+    name: "getHolidayBirthdayEvent",
     initialState: {
         data: [],
         isSuccess: false,
@@ -38,15 +39,15 @@ export const getAttendanceReport = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(get_attendance_report.pending, (state) => {
+            .addCase(get_holiay_birthday_events.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_attendance_report.fulfilled, (state, action) => {
+            .addCase(get_holiay_birthday_events.fulfilled, (state, action) => {
                 state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_attendance_report.rejected, (state, action) => {
+            .addCase(get_holiay_birthday_events.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
@@ -54,4 +55,4 @@ export const getAttendanceReport = createSlice({
     }
 })
 
-export default getAttendanceReport.reducer
+export default getHolidayBirthdayEvent.reducer

@@ -25,6 +25,11 @@ const CreateRole = () => {
     { name: "Role & Permissions", path: "/rolePermission" },
     { name: "Create The New Role", path: "/createtRole" },
   ];
+  useEffect(() => {
+    if (localStorage.getItem('roles')?.includes('Employee')) {
+      navigate("/mark-attendence");
+    }
+  }, [navigate]);
   const { show } = useAppContext();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
