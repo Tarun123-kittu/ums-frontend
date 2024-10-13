@@ -20,6 +20,7 @@ import {
   clear_delete_series_state,
 } from "../../../utils/redux/testSeries/deleteSeries";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif"
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -173,7 +174,7 @@ const Testseries = () => {
 
           <div className="create_series_outer mt-3">
             <div className="row">
-              {all_series?.data?.data?.map((series, i) => {
+              {all_series?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : all_series?.data?.data?.map((series, i) => {
                 return (
                   <div className="col-lg-4 col-sm-12 col-md-6">
                     <div key={i} className="series_card">

@@ -9,6 +9,7 @@ import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllApplied
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif"
 
 const LeaveRequest = () => {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ const LeaveRequest = () => {
                 </tr>
               </thead>
               <tbody>
-                {all_applied_leaves?.data?.data?.map((leaves, i) => {
+                {all_applied_leaves?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_applied_leaves?.data?.data?.map((leaves, i) => {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>

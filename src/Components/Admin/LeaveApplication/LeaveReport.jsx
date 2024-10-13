@@ -11,6 +11,7 @@ import { get_all_user_leave } from "../../../utils/redux/leaveSlice/getUsersAllL
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif"
 
 const LeaveReport = () => {
   const dispatch = useDispatch();
@@ -141,29 +142,6 @@ const LeaveReport = () => {
             </div>
 
             <div className="new_employee_form_group employee_wrapper">
-              {/* <div class="custom-select-wrapper ">
-                <select
-                  class="custom-select form-control"
-                  placeholder="Month"
-                  value={selected_month}
-                  onChange={(e) => setSelected_month(e.target.value)}
-                >
-                  <option disabled>Select</option>
-                  <option value="1">January</option>
-                  <option value="2">Feburary</option>
-                  <option value="3">March</option>
-                  <option value="4">April</option>
-                  <option value="5">May</option>
-                  <option value="6">June</option>
-                  <option value="7">July</option>
-                  <option value="8">August</option>
-                  <option value="9">September</option>
-                  <option value="10">October</option>
-                  <option value="11">November</option>
-                  <option value="12">December</option>
-                </select>
-                <FaSort className="dropdown-icon " />
-              </div> */}
               <div className="form-group new_employee_form_group mt-2">
                 <label className="inter_fontfamily">Month</label>
                 <div className="mt-2">
@@ -178,24 +156,6 @@ const LeaveReport = () => {
 
             <div className="new_employee_form_group employee_wrapper">
               <label className="inter_fontfamily">Year</label>
-              {/* <div class="custom-select-wrapper ">
-                <select
-                  class="custom-select form-control"
-                  placeholder="Year"
-                  value={selected_year}
-                  onChange={(e) => setSelected_year(e.target.value)}
-                >
-                  <option>Select</option>
-                  {year?.map((select_year, i) => {
-                    return (
-                      <option key={i} value={select_year}>
-                        {select_year}
-                      </option>
-                    );
-                  })}
-                </select>
-                <FaSort className="dropdown-icon " />
-              </div> */}
               <div className="mt-2">
                 <CustomSelectComp
                   optionsData={year}
@@ -232,7 +192,7 @@ const LeaveReport = () => {
                 </tr>
               </thead>
               <tbody>
-                {leave_data?.data?.data?.map((leave, i) => {
+                {leave_data?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : leave_data?.data?.data?.map((leave, i) => {
                   return (
                     <tr>
                       <td>{i + 1}</td>

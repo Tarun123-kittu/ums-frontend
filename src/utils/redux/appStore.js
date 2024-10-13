@@ -151,7 +151,7 @@ const appStore = configureStore({
         MARK_ATTENDANCE: MarkAttendence,
         TODAY_ATTENDANCE_TIME: getTodayAttendanceTime,
         UNMARK_ATTENDANCE: unmarkAttendance,
-        HOLIDAY_BIRTHDAY_EVENT: getAllHolidaysAndEvents
+        HOLIDAY_BIRTHDAY_EVENT: getHolidayBirthdayEvent
     },
 })
 

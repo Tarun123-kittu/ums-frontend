@@ -27,6 +27,7 @@ import {
   clear_delete_user_assigned_to_role,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
 import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
+import Loader from "../../assets/Loader.gif"
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
@@ -173,7 +174,7 @@ const EditRoleAndPermission = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {permissions_state?.map((permissions, i) => {
+                      {role_permissions_data?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : permissions_state?.map((permissions, i) => {
                         return (
                           <tr key={i}>
                             <td>{permissions?.permission}</td>

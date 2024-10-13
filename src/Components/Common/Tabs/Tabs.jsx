@@ -31,6 +31,7 @@ import {
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
+import Loader from "../../assets/Loader.gif"
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
@@ -203,10 +204,11 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(all_leads?.data?.data) ? (
-                  all_leads?.data?.data.filter((lead) => lead?.in_round === 0)
-                    .length > 0 ? (
-                    all_leads?.data?.data.map((lead, i) => {
+                {all_leads?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : Array.isArray(all_leads?.data?.data) ? (
+                  all_leads.data.data.filter((lead) => lead?.in_round === 0).length > 0 ? (
+                    all_leads.data.data.map((lead, i) => {
                       if (lead?.in_round === 0) {
                         return (
                           <tr key={i}>
@@ -217,8 +219,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 <div className="icon_wrapper">
                                   <img
                                     src={insight_icon}
-                                    height={"17px"}
-                                    width={"17px"}
+                                    height="17px"
+                                    width="17px"
                                     className="cursor_pointer"
                                     alt=""
                                   />
@@ -227,102 +229,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                       <div className="triangle"></div>
                                       <div className="tooltip_content">
                                         <ul className="user_info_detail_list">
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Name :
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.name}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Phone Number :
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.phone_number}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Email :
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.email}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Gender :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.gender}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              DOB :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.dob}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Expereience :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.experience}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Current Salary :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.current_salary}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Expected Salary
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.expected_salary}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Profile{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.profile}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              Last Company :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.last_company}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              State :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.state}
-                                            </h4>
-                                          </li>
-                                          <li className="d-flex gap-2">
-                                            <h3 className="cmn_text_heading">
-                                              House address :{" "}
-                                            </h3>
-                                            <h4 className="cmn_text_heading">
-                                              {lead?.house_addresss}
-                                            </h4>
-                                          </li>
+                                          {[
+                                            { label: "Name", value: lead?.name },
+                                            { label: "Phone Number", value: lead?.phone_number },
+                                            { label: "Email", value: lead?.email },
+                                            { label: "Gender", value: lead?.gender },
+                                            { label: "DOB", value: lead?.dob },
+                                            { label: "Experience", value: lead?.experience },
+                                            { label: "Current Salary", value: lead?.current_salary },
+                                            { label: "Expected Salary", value: lead?.expected_salary },
+                                            { label: "Profile", value: lead?.profile },
+                                            { label: "Last Company", value: lead?.last_company },
+                                            { label: "State", value: lead?.state },
+                                            { label: "House Address", value: lead?.house_addresss },
+                                          ].map((item, idx) => (
+                                            <li className="d-flex gap-2" key={idx}>
+                                              <h3 className="cmn_text_heading">{item.label} :</h3>
+                                              <h4 className="cmn_text_heading">{item.value}</h4>
+                                            </li>
+                                          ))}
                                         </ul>
                                         <div className="text-end">
                                           <button
@@ -360,6 +285,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </tr>
                         );
                       }
+                      return null; // Return null if the lead is not in round 0 (optional)
                     })
                   ) : (
                     <tr>
@@ -375,6 +301,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
+
               </tbody>
             </table>
             {all_leads?.data?.data?.some((field) => field.in_round === 0) >
@@ -396,7 +323,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {all_hr_round_candidate?.data?.data?.length === 0 ? (
+                {all_hr_round_candidate?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_hr_round_candidate?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
                       No HR round leads available.
@@ -484,16 +411,17 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(tech_round_leads?.data?.data?.data) &&
-                  tech_round_leads?.data?.data?.data?.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={{ textAlign: "center" }}>
-                      No technical lead found.
-                    </td>
-                  </tr>
+                {tech_round_leads?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
                 ) : Array.isArray(tech_round_leads?.data?.data?.data) ? (
-                  tech_round_leads?.data?.data?.data?.map((tech_leads, i) => {
-                    return (
+                  tech_round_leads.data.data.data.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" style={{ textAlign: "center" }}>
+                        No technical lead found.
+                      </td>
+                    </tr>
+                  ) : (
+                    tech_round_leads.data.data.data.map((tech_leads, i) => (
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>
@@ -545,8 +473,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </button>
                         </td>
                       </tr>
-                    );
-                  })
+                    ))
+                  )
                 ) : (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
@@ -554,6 +482,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
+
               </tbody>
             </table>
             {tech_round_leads?.data?.data?.data?.length > 0 && (
@@ -578,87 +507,81 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(face_round_leads?.data?.data) &&
+                {face_round_leads?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : Array.isArray(face_round_leads?.data?.data) &&
                   face_round_leads?.data?.data?.length > 0 ? (
-                  face_round_leads?.data?.data?.map((lead, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>
-                          <div className="d-flex justify-content-between align-items-center">
-                            {lead?.name}
-                          </div>
-                        </td>
-                        <td>{lead?.profile}</td>
-                        <td>{lead?.experience}</td>
-                        <td>{lead?.expected_salary}</td>
-                        <td
-                          style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: lead?.interview_id,
-                                lead_id: lead?.id,
-                              },
-                            });
-                          }}
-                        >
-                          View Questions List
-                        </td>
-                        <td
-                          className="cursor_pointer"
-                          style={{ textDecoration: "underline" }}
-                          onClick={() => {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: lead?.id,
-                                language_id: lead?.language_id,
-                                series_id: lead?.assigned_test_series,
-                                view: true,
-                              },
-                            });
-                          }}
-                        >
-                          View Questions List
-                        </td>
-                        <td>
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={resultData}
-                              value={lead?.face_to_face_result}
-                              changeHandler={(e) =>
-                                changeFaceRoundStatus(
-                                  e,
-                                  lead?.id,
-                                  "face_to_face"
-                                )
-                              }
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <button
-                            className="cmn_Button_style"
-                            onClick={() =>
-                              dispatch(
-                                update_lead_round_count({
-                                  leadId: lead?.id,
-                                  in_round_count: 4,
-                                })
-                              )
+                  face_round_leads.data.data.map((lead, i) => (
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>
+                        <div className="d-flex justify-content-between align-items-center">
+                          {lead?.name}
+                        </div>
+                      </td>
+                      <td>{lead?.profile}</td>
+                      <td>{lead?.experience}</td>
+                      <td>{lead?.expected_salary}</td>
+                      <td
+                        style={{
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          navigate("/viewQuestionlist", {
+                            state: {
+                              interview_id: lead?.interview_id,
+                              lead_id: lead?.id,
+                            },
+                          });
+                        }}
+                      >
+                        View Questions List
+                      </td>
+                      <td
+                        className="cursor_pointer"
+                        style={{ textDecoration: "underline" }}
+                        onClick={() => {
+                          navigate("/questionAnswerSheet", {
+                            state: {
+                              lead_id: lead?.id,
+                              language_id: lead?.language_id,
+                              series_id: lead?.assigned_test_series,
+                              view: true,
+                            },
+                          });
+                        }}
+                      >
+                        View Questions List
+                      </td>
+                      <td>
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.face_to_face_result}
+                            changeHandler={(e) =>
+                              changeFaceRoundStatus(e, lead?.id, "face_to_face")
                             }
-                          >
-                            Start
-                          </button>
-                        </td>
-                      </tr>
-                    );
-
-                    return null;
-                  })
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          className="cmn_Button_style"
+                          onClick={() =>
+                            dispatch(
+                              update_lead_round_count({
+                                leadId: lead?.id,
+                                in_round_count: 4,
+                              })
+                            )
+                          }
+                        >
+                          Start
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 ) : (
                   <tr>
                     <td colSpan="9" className="text-center">
@@ -666,6 +589,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
+
               </tbody>
             </table>
             {face_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={face_round_leads?.data?.pagination?.totalPages} setPage={setTechPage} />}
@@ -688,72 +612,70 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(final_round_leads?.data?.data) &&
+                {final_round_leads?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : Array.isArray(final_round_leads?.data?.data) &&
                   final_round_leads?.data?.data?.length > 0 ? (
-                  final_round_leads?.data?.data?.map((lead, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>
-                          <div className="d-flex justify-content-between align-items-center">
-                            {lead?.name}
-                          </div>
-                        </td>
-                        <td>{lead?.profile}</td>
-                        <td>{lead?.experience}</td>
-                        <td>{lead?.expected_salary}</td>
-                        <td
-                          style={{
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: lead?.interview_id,
-                                lead_id: lead?.id,
-                                view: true,
-                              },
-                            });
-                          }}
-                        >
-                          View Questions List
-                        </td>
-                        <td
-                          className="cursor_pointer"
-                          style={{ textDecoration: "underline" }}
-                          onClick={() => {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: lead?.id,
-                                language_id: lead?.language_id,
-                                series_id: lead?.assigned_test_series,
-                                view: true,
-                              },
-                            });
-                          }}
-                        >
-                          View Questions List
-                        </td>
-                        <td>
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={resultData}
-                              value={lead?.final_result}
-                              changeHandler={(e) =>
-                                changeFaceRoundStatus(e, lead?.id, "final")
-                              }
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <button className="cmn_Button_style">Start</button>
-                        </td>
-                      </tr>
-                    );
-
-                    return null;
-                  })
+                  final_round_leads?.data?.data?.map((lead, i) => (
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>
+                        <div className="d-flex justify-content-between align-items-center">
+                          {lead?.name}
+                        </div>
+                      </td>
+                      <td>{lead?.profile}</td>
+                      <td>{lead?.experience}</td>
+                      <td>{lead?.expected_salary}</td>
+                      <td
+                        style={{
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          navigate("/viewQuestionlist", {
+                            state: {
+                              interview_id: lead?.interview_id,
+                              lead_id: lead?.id,
+                              view: true,
+                            },
+                          });
+                        }}
+                      >
+                        View Questions List
+                      </td>
+                      <td
+                        className="cursor_pointer"
+                        style={{ textDecoration: "underline" }}
+                        onClick={() => {
+                          navigate("/questionAnswerSheet", {
+                            state: {
+                              lead_id: lead?.id,
+                              language_id: lead?.language_id,
+                              series_id: lead?.assigned_test_series,
+                              view: true,
+                            },
+                          });
+                        }}
+                      >
+                        View Questions List
+                      </td>
+                      <td>
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.final_result}
+                            changeHandler={(e) =>
+                              changeFaceRoundStatus(e, lead?.id, "final")
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <button className="cmn_Button_style">Start</button>
+                      </td>
+                    </tr>
+                  ))
                 ) : (
                   <tr>
                     <td colSpan="9" className="text-center">
@@ -761,6 +683,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
+
               </tbody>
             </table>
             {final_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={final_round_leads?.data?.totalPages} setPage={setTechPage} />}

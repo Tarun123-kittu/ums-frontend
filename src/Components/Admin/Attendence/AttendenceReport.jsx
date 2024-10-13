@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif"
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
@@ -192,7 +193,7 @@ const AttendenceReport = () => {
                 </tr>
               </thead>
               <tbody>
-                {user_attendance_report?.data?.data?.map((report, index) => {
+                {user_attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : user_attendance_report?.data?.data?.map((report, index) => {
                   return (
                     <tr>
                       <td>{index + 1}</td>

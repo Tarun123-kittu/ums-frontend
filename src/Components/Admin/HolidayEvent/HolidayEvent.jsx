@@ -19,6 +19,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../assets/Loader.gif"
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -175,7 +176,7 @@ const HolidayEvent = () => {
                 </tr>
               </thead>
               <tbody>
-                {holiday_and_events?.data?.eventsOrHolidays?.map((event, i) => {
+                {holiday_and_events?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : holiday_and_events?.data?.eventsOrHolidays?.map((event, i) => {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>

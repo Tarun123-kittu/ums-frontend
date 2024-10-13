@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
+import Loader from "../../assets/Loader.gif"
 
 const RoleAndPermission = () => {
   const dispatch = useDispatch();
@@ -101,7 +102,7 @@ const RoleAndPermission = () => {
                 </tr>
               </thead>
               <tbody>
-                {user_roles?.data?.data?.map((roles, i) => {
+                {user_roles?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : user_roles?.data?.data?.map((roles, i) => {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>

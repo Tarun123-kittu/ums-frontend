@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_holiay_birthday_events = createAsyncThunk("get_holiay_birthday_events", async ({ month, year }, thunkAPI) => {
+export const get_holiay_birthday_events = createAsyncThunk("get_holiay_birthday_events", async (thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));

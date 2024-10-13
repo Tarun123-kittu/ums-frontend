@@ -9,6 +9,7 @@ import "./attendence.css";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif"
 const IncompleteAttendence = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -71,7 +72,7 @@ const IncompleteAttendence = () => {
                 </tr>
               </thead>
               <tbody>
-                {attendance_report?.data?.data?.map((report, i) => {
+                {attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : attendance_report?.data?.data?.map((report, i) => {
                   if (!report?.out_time) {
                     return (
                       <tr>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSort, FaSortDown } from "react-icons/fa";
-
+import Loader from "../../assets/Loader.gif"
 import { FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaClock } from "react-icons/fa6";
@@ -144,7 +144,7 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {all_users_list?.data?.data?.map((user, index) => {
+              {all_users_list?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_users_list?.data?.data?.map((user, index) => {
                 return (
                   <tr key={user?.id}>
                     <td>{index + 1}</td>

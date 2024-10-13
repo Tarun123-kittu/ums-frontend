@@ -12,6 +12,7 @@ import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../assets/Loader.gif"
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
@@ -206,28 +207,29 @@ const LeaveBank = () => {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(leave_bank_data?.data?.data) &&
-                  leave_bank_data.data.data.map((leave_bank, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{leave_bank?.name}</td>
-                        <td>{leave_bank?.taken_leave}</td>
-                        <td>{leave_bank?.paid_leave}</td>
+                {leave_bank_data?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  Array.isArray(leave_bank_data?.data?.data) &&
+                  leave_bank_data.data.data.map((leave_bank, index) => (
+                    <tr key={leave_bank?.id || index}>
+                      <td>{index + 1}</td>
+                      <td>{leave_bank?.name || 'N/A'}</td>
+                      <td>{leave_bank?.taken_leave || '0'}</td>
+                      <td>{leave_bank?.paid_leave || '0'}</td>
 
-                        <td>
-                          <div
-                            className="cmn_action_outer yellow_bg cusror_pointer"
-                            onClick={() => {
-                              setShowEditLeaveModal(true);
-                            }}
-                          >
-                            <FiEdit />
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                      <td>
+                        <div
+                          className="cmn_action_outer yellow_bg cusror_pointer"
+                          onClick={() => setShowEditLeaveModal(true)}
+                        >
+                          <FiEdit />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+
               </tbody>
             </table>
           </div>

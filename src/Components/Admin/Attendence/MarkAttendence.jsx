@@ -16,7 +16,7 @@ import {
   clear_unmark_attendance_slice,
 } from "../../../utils/redux/attendanceSlice/unmarkAttendance";
 import Notification from "../Notification/Notification";
-import { get_all_holidays_and_events } from "../../../utils/redux/holidayAndEventsSlice/getAllHolidaysAndEvents";
+import { get_holiay_birthday_events } from "../../../utils/redux/holidayAndEventsSlice/getAlBirthdayHolidayEvents";
 
 const localizer = momentLocalizer(moment);
 // const myEventsList = [
@@ -64,7 +64,7 @@ const MarkAttendence = () => {
   const mark_attendance_state = useSelector((store) => store.MARK_ATTENDANCE);
   const attendance_time = useSelector((store) => store.TODAY_ATTENDANCE_TIME);
   const events_birthays_holidays = useSelector((store) => store.HOLIDAY_BIRTHDAY_EVENT)
-  console.log(events_birthays_holidays, "this isa")
+  console.log(events_birthays_holidays, "this is the events birthdaya and events")
   const [itemsString, setItemsString] = useState("");
   const [inputValue, setInputValue] = useState("");
 
@@ -90,7 +90,7 @@ const MarkAttendence = () => {
 
   useEffect(() => {
     dispatch(get_today_attendance_time());
-    dispatch(get_all_holidays_and_events())
+    dispatch(get_holiay_birthday_events())
   }, []);
 
   useEffect(() => {

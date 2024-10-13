@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
+import Loader from "../../assets/Loader.gif"
 
 const TodayAttendence = () => {
   UseAttendanceReport({ page: 1 });
@@ -86,7 +87,7 @@ const TodayAttendence = () => {
                 </tr>
               </thead>
               <tbody>
-                {attendance_report?.data?.data?.map((report, i) => {
+                {attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : attendance_report?.data?.data?.map((report, i) => {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
