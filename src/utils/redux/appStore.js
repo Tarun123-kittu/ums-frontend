@@ -74,6 +74,8 @@ import MarkAttendence from './attendanceSlice/markAttendances'
 import getTodayAttendanceTime from './attendanceSlice/getUserTodayAttendaceTime'
 import unmarkAttendance from './attendanceSlice/unmarkAttendance'
 import getHolidayBirthdayEvent from './holidayAndEventsSlice/getAlBirthdayHolidayEvents'
+import totalPresentEmployees from './attendanceSlice/presentEmployees'
+import getCurrentAndNextMonthRecords from './holidayAndEventsSlice/getCurrentAndNextMonthEvents'
 
 const appStore = configureStore({
     reducer: {
@@ -151,7 +153,9 @@ const appStore = configureStore({
         MARK_ATTENDANCE: MarkAttendence,
         TODAY_ATTENDANCE_TIME: getTodayAttendanceTime,
         UNMARK_ATTENDANCE: unmarkAttendance,
-        HOLIDAY_BIRTHDAY_EVENT: getHolidayBirthdayEvent
+        HOLIDAY_BIRTHDAY_EVENT: getHolidayBirthdayEvent,
+        PRESENT_EMPLOYEES: totalPresentEmployees,
+        CURRENT_AND_NEXT_MONTH_EVENTS: getCurrentAndNextMonthRecords
     },
 })
 
