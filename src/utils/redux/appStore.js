@@ -76,6 +76,10 @@ import unmarkAttendance from './attendanceSlice/unmarkAttendance'
 import getHolidayBirthdayEvent from './holidayAndEventsSlice/getAlBirthdayHolidayEvents'
 import totalPresentEmployees from './attendanceSlice/presentEmployees'
 import getCurrentAndNextMonthRecords from './holidayAndEventsSlice/getCurrentAndNextMonthEvents'
+import getUserMonthlyAttendence from './attendanceSlice/getUserMonthlyReport'
+import userPendingLeaves from './leaveSlice/getUserPendingLeaves'
+import applyLeaveHandler from './leaveSlice/applyLeave'
+import userAppliedLeaves from './leaveSlice/getUserAppliedLeaves'
 
 const appStore = configureStore({
     reducer: {
@@ -155,7 +159,11 @@ const appStore = configureStore({
         UNMARK_ATTENDANCE: unmarkAttendance,
         HOLIDAY_BIRTHDAY_EVENT: getHolidayBirthdayEvent,
         PRESENT_EMPLOYEES: totalPresentEmployees,
-        CURRENT_AND_NEXT_MONTH_EVENTS: getCurrentAndNextMonthRecords
+        CURRENT_AND_NEXT_MONTH_EVENTS: getCurrentAndNextMonthRecords,
+        ATTENDENCE_MONTHLY_REPORT: getUserMonthlyAttendence,
+        USER_PENDING_LEAVES: userPendingLeaves,
+        APPLY_LEAVE: applyLeaveHandler,
+        USER_APPLIED_LEAVES: userAppliedLeaves
     },
 })
 

@@ -11,14 +11,14 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   UseUserAttendanceReport({ name, month, year });
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -30,20 +30,20 @@ const AttendenceReport = () => {
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
   );
-  console.log(user_attendance_report, "this is the attendance report")
+  console.log(user_attendance_report, "this is the attendance report");
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
 
   useEffect(() => {
-    dispatch(get_user_attendance_report({ name, month, year, page }))
-  }, [name, month, year, page])
+    dispatch(get_user_attendance_report({ name, month, year, page }));
+  }, [name, month, year, page]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -66,7 +66,7 @@ const AttendenceReport = () => {
     }
     return years;
   };
-  const years = generateYearOptions(2015, new Date().getFullYear());
+  const years = generateYearOptions(2022, new Date().getFullYear());
 
   const yearDataObj = years;
 
@@ -193,60 +193,67 @@ const AttendenceReport = () => {
                 </tr>
               </thead>
               <tbody>
-                {user_attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : user_attendance_report?.data?.data?.map((report, index) => {
-                  return (
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>
-                        {report?.date}-{report?.date_in_week_day}
-                      </td>
-                      <td>{report?.name}</td>
-                      <td>{convertTo12Hour(report?.in_time)}</td>
-                      <td>
-                        {report?.out_time
-                          ? convertTo12Hour(report?.out_time)
-                          : "--"}
-                      </td>
-                      <td
-                        style={{
-                          color:
-                            timeToHours(report?.total_time) < 9
-                              ? "red"
-                              : "#33b070",
-                        }}
-                      >
-                        {report?.total_time
-                          ? `${report.total_time} hours`
-                          : "--"}
-                      </td>
-                      <td>{report?.report}</td>
-                      <td>NA</td>
-                      <td>{report?.review ? report?.review : "NA"}</td>
-                      <td>{report?.rating}</td>
-                      <td>
-                        {report?.name}:{report?.login_mobile}
-                      </td>
-                      <td>
-                        {report?.id && (
-                          <div className="cmn_action_outer yellow_bg">
-                            <FiEdit
-                              onClick={() => {
-                                navigate("/editAttendenceReport ", {
-                                  state: { id: report?.id },
-                                });
-                              }}
-                            />
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {user_attendance_report?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  user_attendance_report?.data?.data?.map((report, index) => {
+                    return (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>
+                          {report?.date}-{report?.date_in_week_day}
+                        </td>
+                        <td>{report?.name}</td>
+                        <td>{convertTo12Hour(report?.in_time)}</td>
+                        <td>
+                          {report?.out_time
+                            ? convertTo12Hour(report?.out_time)
+                            : "--"}
+                        </td>
+                        <td
+                          style={{
+                            color:
+                              timeToHours(report?.total_time) < 9
+                                ? "red"
+                                : "#33b070",
+                          }}
+                        >
+                          {report?.total_time
+                            ? `${report.total_time} hours`
+                            : "--"}
+                        </td>
+                        <td>{report?.report}</td>
+                        <td>NA</td>
+                        <td>{report?.review ? report?.review : "NA"}</td>
+                        <td>{report?.rating}</td>
+                        <td>
+                          {report?.name}:{report?.login_mobile}
+                        </td>
+                        <td>
+                          {report?.id && (
+                            <div className="cmn_action_outer yellow_bg">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editAttendenceReport ", {
+                                    state: { id: report?.id },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
         </div>
-        <PaginationComp totalPage={user_attendance_report?.data?.totalPages} setPage={setPage} />
+        <PaginationComp
+          totalPage={user_attendance_report?.data?.totalPages}
+          setPage={setPage}
+        />
       </div>
     </section>
   );

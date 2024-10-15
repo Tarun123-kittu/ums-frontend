@@ -1,14 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 export const apply_leave_handler = createAsyncThunk("apply_leave_handler", async ({ from_date, to_date, description, type }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "••••••");
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
-            "from_date": from_date,
-            "to_date": to_date,
+            "from_date": formatDate(from_date),
+            "to_date": formatDate(to_date),
             "description": description,
             "type": type
         });
@@ -46,6 +54,16 @@ export const applyLeaveHandler = createSlice({
         isLoading: false,
         error: null
     },
+    reducers: {
+        clear_apply_leave_state: (state) => {
+            state.data = []
+            state.isSuccess = false
+            state.isLoading = false
+            state.isError = false
+            state.error = null
+            return state
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(apply_leave_handler.pending, (state) => {
@@ -63,5 +81,5 @@ export const applyLeaveHandler = createSlice({
             })
     }
 })
-
+export const { clear_apply_leave_state } = applyLeaveHandler.actions
 export default applyLeaveHandler.reducer

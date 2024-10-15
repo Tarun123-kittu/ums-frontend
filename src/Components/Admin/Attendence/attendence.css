@@ -34,6 +34,8 @@ button.cmn_bg_btn {
 
 .attendence_submit h4 {
     font-size: 18px;
+    color: #05004E;
+    font-weight: 600;
 }
 
 .attendence_submit label {
@@ -59,3 +61,23 @@ button.cmn_bg_btn {
     background: #a30d03;
     color: #fff;
   }
+  /* employee attendence report */
+
+  .report_header {
+    display: flex;
+    gap: 15px;
+}
+.report_table thead tr th {
+    font-weight: 500;
+    font-size: 14px;
+}
+.norecord_found {
+    padding: 3em 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.norecord_found h4 {
+    margin: 0;
+}

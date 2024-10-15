@@ -38,6 +38,9 @@ import LeadTest from './Components/Admin/LeadTest/lead-test';
 import TestThankyou from './Components/Admin/LeadTest/test-thankyou';
 import Sidebar from './Components/Sidebar/Sidebar';
 import MarkAttendence from './Components/Admin/Attendence/MarkAttendence';
+import EmployeeAttendenceReoport from './Components/Admin/Attendence/EmployeeAttendenceReoport';
+import ApplyLeaves from './Components/Admin/Attendence/ApplyLeaves';
+import ForgotPassword from './Components/Login/ForgotPassword';
 function App() {
 
   return (
@@ -77,6 +80,9 @@ function App() {
         <Route path='/lead-test/:is_open/:name/:lead_id/:token' element={<LeadTest />} />
         <Route path='/test-thankyou' element={<TestThankyou />} />
         <Route path='/mark-attendence' element={<MarkAttendence />} />
+        <Route path='/employee-attendence-report' element={<EmployeeAttendenceReoport />} />
+        <Route path='/apply-leaves' element={<ApplyLeaves />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
 
         {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage/>}/> */}
 
