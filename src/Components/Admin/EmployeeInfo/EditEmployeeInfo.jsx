@@ -16,6 +16,8 @@ import {
   clear_update_user_state,
 } from "../../../utils/redux/userSlice/updateUserSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { ProfileData } from "../../Utils/customData/profileData";
+import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
@@ -28,6 +30,11 @@ const EditEmployeeInfo = () => {
     { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
   ];
   const { user_details } = location?.state ? location?.state : location;
+  console.log(user_details, "this is the user details");
+
+  useEffect(() => {
+    dispatch(get_all_roles());
+  }, []);
 
   useEffect(() => {
     if (
@@ -81,6 +88,8 @@ const EditEmployeeInfo = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  const roles = useSelector((store) => store.ALL_ROLES);
+  console.log(roles, "this is the all roles");
 
   useEffect(() => {
     if (update_user_details?.isSuccess) {
@@ -306,8 +315,8 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
-                    labelname={"Skepe"}
-                    placeholder={"Skepe"}
+                    labelname={"Skype"}
+                    placeholder={"Skype"}
                     classname={"new_employee_form_group"}
                     type={"text"}
                     value={skype_email}
@@ -371,6 +380,10 @@ const EditEmployeeInfo = () => {
                     >
                       <option>Select</option>
                       <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
                     </select>
                   </div>
                 </div>
@@ -404,7 +417,11 @@ const EditEmployeeInfo = () => {
                       onChange={(e) => setDepartment(e.target.value)}
                     >
                       <option>Select</option>
-                      <option value={"mern"}>MERN</option>
+                      {ProfileData?.map((data, i) => {
+                        return (
+                          <option value={data?.value}>{data?.label}</option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -420,7 +437,7 @@ const EditEmployeeInfo = () => {
                       onChange={(e) => setStatus(e.target.value)}
                     >
                       <option>Select</option>
-                      <option value="active">ACTIVE</option>
+                      <option value="Active">ACTIVE</option>
                     </select>
                   </div>
                 </div>
@@ -444,7 +461,9 @@ const EditEmployeeInfo = () => {
                       onChange={(e) => setRole(e.target.value)}
                     >
                       <option>Select Role</option>
-                      <option value={"admin"}>ADMIN</option>
+                      {roles?.data?.data?.map((role, i) => {
+                        return <option value={role?.role}>{role?.role}</option>;
+                      })}
                     </select>
                   </div>
                 </div>

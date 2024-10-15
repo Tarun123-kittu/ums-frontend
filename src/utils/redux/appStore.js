@@ -80,6 +80,7 @@ import getUserMonthlyAttendence from './attendanceSlice/getUserMonthlyReport'
 import userPendingLeaves from './leaveSlice/getUserPendingLeaves'
 import applyLeaveHandler from './leaveSlice/applyLeave'
 import userAppliedLeaves from './leaveSlice/getUserAppliedLeaves'
+import getAllRoles from './rolesAndPermissionSlice/getAllRoles'
 
 const appStore = configureStore({
     reducer: {
@@ -163,7 +164,8 @@ const appStore = configureStore({
         ATTENDENCE_MONTHLY_REPORT: getUserMonthlyAttendence,
         USER_PENDING_LEAVES: userPendingLeaves,
         APPLY_LEAVE: applyLeaveHandler,
-        USER_APPLIED_LEAVES: userAppliedLeaves
+        USER_APPLIED_LEAVES: userAppliedLeaves,
+        ALL_ROLES: getAllRoles
     },
 })
 
