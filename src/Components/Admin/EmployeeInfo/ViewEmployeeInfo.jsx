@@ -9,6 +9,7 @@ import {
   get_user_details,
   clear_user_detail_slice,
 } from "../../../utils/redux/userSlice/userDetailsSlice";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const ViewEmployeeInfo = () => {
   const location = useLocation();
@@ -17,6 +18,9 @@ const ViewEmployeeInfo = () => {
   const dispatch = useDispatch();
   const { user_id } = location.state ? location?.state : location;
   const [user_details, setUser_details] = useState([]);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     if (localStorage.getItem('roles')?.includes('Employee')) {
@@ -52,6 +56,10 @@ const ViewEmployeeInfo = () => {
     { name: "Employee", path: "/employee" },
     { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
   ];
+
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+    return <UnauthorizedPage />;
+  }
 
   return (
     <section>

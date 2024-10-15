@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import Notification from "../Notification/Notification";
 
@@ -61,15 +59,21 @@ const HrInterViewQuestion = () => {
   };
 
   const handleSave = () => {
-    dispatch(hr_round_response({ responses: questions, lead_id: leadId }))
-  }
+    const allAnswered = questions?.every(question => question.answer !== "");
+    if (!allAnswered) {
+      toast.error("Please provide a rating for all questions");
+    } else {
+      dispatch(hr_round_response({ responses: questions, lead_id: leadId }));
+    }
+  };
+
 
   useEffect(() => {
     if (update_question?.isSuccess) {
       toast.success(update_question?.message?.message)
       dispatch(clear_hr_round())
       dispatch(clear_hr_round_questions_state())
-      navigate("/interviewLead")
+      navigate("/interviewLead", { state: { tab: "HR" } })
     }
     if (update_question?.isError) {
       toast.error(update_question?.error?.message)
@@ -112,7 +116,7 @@ const HrInterViewQuestion = () => {
                 })}
               </div>
               <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">
-                <button className="cmn_Button_style cmn_darkgray_btn">
+                <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => navigate("/interviewLead", { state: { tab: "Add Person" } })}>
                   Exit
                 </button>
                 <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>
