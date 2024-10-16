@@ -123,9 +123,10 @@ const Testseries = () => {
     dispatch(delete_series({ id: seriesId }));
   };
 
-  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
     return <UnauthorizedPage />;
   }
+
 
   return (
     <section className="test_serie_wrapper">

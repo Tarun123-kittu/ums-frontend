@@ -73,12 +73,7 @@ const InterviewLead = () => {
     }
   }, [languages]);
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
     return <UnauthorizedPage />;
   }
 
@@ -275,8 +270,8 @@ const InterviewLead = () => {
                 setCurrentTab={setCurrentTab}
                 setOpen_tab={setOpen_tab}
               />
-              <div>
-                {currentTab === "Add Person" && (
+              {<div>
+                {((user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) && currentTab === "Add Person" && (
                   <button
                     className="cmn_Button_style addnew_btn_outer"
                     onClick={() => {
@@ -286,7 +281,7 @@ const InterviewLead = () => {
                     Add New
                   </button>
                 )}
-              </div>
+              </div>}
             </div>
           </div>
         </div>

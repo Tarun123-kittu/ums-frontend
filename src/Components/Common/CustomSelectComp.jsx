@@ -4,7 +4,7 @@ import { TiArrowUnsorted } from "react-icons/ti";
 
 import Select, { components } from "react-select";
 
-const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
+const CustomSelectComp = ({ optionsData, changeHandler, value, placeholder, disabled }) => {
   const valueObj = optionsData?.find(option => option.value === value);
 
   const customStyles = {
@@ -17,8 +17,8 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
       backgroundColor: state.isSelected
         ? "#9e0302"
         : state.isFocused
-        ? "#f6f6f6"
-        : "#f6f6f6", // Change the background color
+          ? "#f6f6f6"
+          : "#f6f6f6",
       color: state.isSelected ? "#ffffff" : "#687281",
       padding: 10,
       display: "flex",
@@ -41,14 +41,14 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
       "&:hover": {
         border: "1px solid #D9D9D9",
       },
-      backgroundColor:"transparent"
+      backgroundColor: "transparent"
     }),
     placeholder: (provided) => ({
       ...provided,
       fontSize: 14,
       color: "#798398",
       fontWeight: 500,
-      
+
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -71,6 +71,7 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
       zIndex: 9999,
     }),
   };
+
   const CustomOption = (props) => (
     <components.Option {...props}>
       {props.data.label}
@@ -78,7 +79,6 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
     </components.Option>
   );
 
-  // Custom Dropdown Indicator (icon)
   const DropdownIndicator = (props) => {
     return (
       <components.DropdownIndicator {...props}>
@@ -86,9 +86,6 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
       </components.DropdownIndicator>
     );
   };
-  // const handleSetType = (e) => {
-  //   setType(e.value);
-  // };
 
   return (
     <Select
@@ -98,8 +95,8 @@ const CustomSelectComp = ({ optionsData,changeHandler,value,placeholder }) => {
       menuPortalTarget={document.body}
       onChange={changeHandler}
       placeholder={placeholder}
-      value={valueObj|| null}
-    
+      value={valueObj || null}
+      isDisabled={disabled} // Use isDisabled to control the select box's disabled state
     />
   );
 };

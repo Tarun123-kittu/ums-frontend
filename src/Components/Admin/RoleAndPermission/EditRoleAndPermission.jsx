@@ -28,6 +28,7 @@ import {
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
 import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
 import Loader from "../../assets/Loader.gif"
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
@@ -76,6 +77,9 @@ const EditRoleAndPermission = () => {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteRoleModal, setShowDeleteRoleModal] = useState(false);
   const [deleted_id, setDeleted_id] = useState(null);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   const handleChangePermissions = (index, valueKey) => {
     const updatedPermissions = permissions_state.map((state, idx) => {
@@ -129,6 +133,11 @@ const EditRoleAndPermission = () => {
       setShowDeleteModal(false);
     }
   }, [deleted_users_state]);
+
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+    return <UnauthorizedPage />;
+  }
+
 
   return (
     <section className="role_permission_outer">

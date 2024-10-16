@@ -109,7 +109,7 @@ const CreateRole = () => {
     }
   }, [is_new_role_created]);
 
-  if (!user_all_permissions?.roles_data?.includes("Admin")) {
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
     return <UnauthorizedPage />;
   }
 

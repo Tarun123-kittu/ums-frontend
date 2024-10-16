@@ -32,6 +32,7 @@ import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/g
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif"
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
@@ -76,6 +77,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const face_round_leads = useSelector((store) => store.FACE_ROUND_LEADS);
   const update_face_round = useSelector((store) => store.FACE_ROUND_STATUS);
   const final_round_leads = useSelector((store) => store.FINAL_ROUND_LEADS);
+
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -180,6 +185,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_round_status]);
 
+  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
+    return <UnauthorizedPage />;
+  }
+
   return (
     <div>
       <Tabs
@@ -272,7 +281,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <td>{lead?.current_salary}</td>
                             <td>{lead?.expected_salary}</td>
                             <td>
-                              <button
+                              {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
                                 className="cmn_Button_style"
                                 onClick={() => {
                                   setLeadId(lead?.id);
@@ -280,12 +289,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 }}
                               >
                                 Start
-                              </button>
+                              </button>}
                             </td>
                           </tr>
                         );
                       }
-                      return null; // Return null if the lead is not in round 0 (optional)
+                      return null;
                     })
                   ) : (
                     <tr>
@@ -347,21 +356,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: candidate?.interview_id,
-                                lead_id: candidate?.id,
-                              },
-                            });
+                            if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                              navigate("/viewQuestionlist", {
+                                state: {
+                                  interview_id: candidate?.interview_id,
+                                  lead_id: candidate?.id,
+                                },
+                              });
+                            }
                           }}
                         >
                           View Questions List
                         </td>
+
                         <td>
                           <div className="form-group new_employee_form_group">
                             <CustomSelectComp
                               optionsData={resultData}
                               value={candidate?.hr_round_result}
+                              disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
                               changeHandler={(e) =>
                                 dispatch(
                                   hr_update_lead_status({
@@ -374,7 +387,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </div>
                         </td>
                         <td>
-                          <button
+                          {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
                             className="cmn_Button_style"
                             onClick={() => {
                               setLeadId(candidate?.id);
@@ -383,7 +396,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             }}
                           >
                             Start
-                          </button>
+                          </button>}
                         </td>
                       </tr>
                     );
@@ -435,13 +448,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: tech_leads?.id,
-                                language_id: language_id,
-                                series_id: series_id,
-                              },
-                            });
+                            if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                              navigate("/questionAnswerSheet", {
+                                state: {
+                                  lead_id: tech_leads?.id,
+                                  language_id: language_id,
+                                  series_id: series_id,
+                                },
+                              });
+                            }
                           }}
                         >
                           View Questions List
@@ -451,6 +466,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <CustomSelectComp
                               optionsData={technicalRoundStatus}
                               value={tech_leads?.technical_round_result}
+                              disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
                               changeHandler={(e) =>
                                 changeTechStatus(e, tech_leads?.interview_id)
                               }
@@ -458,7 +474,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </div>
                         </td>
                         <td>
-                          <button
+                          {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
                             className="cmn_Button_style"
                             onClick={() =>
                               dispatch(
@@ -470,7 +486,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             }
                           >
                             Start
-                          </button>
+                          </button>}
                         </td>
                       </tr>
                     ))
@@ -528,12 +544,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          navigate("/viewQuestionlist", {
-                            state: {
-                              interview_id: lead?.interview_id,
-                              lead_id: lead?.id,
-                            },
-                          });
+                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                              },
+                            });
+                          }
                         }}
                       >
                         View Questions List
@@ -542,14 +560,16 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          navigate("/questionAnswerSheet", {
-                            state: {
-                              lead_id: lead?.id,
-                              language_id: lead?.language_id,
-                              series_id: lead?.assigned_test_series,
-                              view: true,
-                            },
-                          });
+                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
+                          }
                         }}
                       >
                         View Questions List
@@ -559,6 +579,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           <CustomSelectComp
                             optionsData={resultData}
                             value={lead?.face_to_face_result}
+                            disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
                             changeHandler={(e) =>
                               changeFaceRoundStatus(e, lead?.id, "face_to_face")
                             }
@@ -566,7 +587,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         </div>
                       </td>
                       <td>
-                        <button
+                        {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
                           className="cmn_Button_style"
                           onClick={() =>
                             dispatch(
@@ -578,7 +599,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           }
                         >
                           Start
-                        </button>
+                        </button>}
                       </td>
                     </tr>
                   ))
@@ -633,13 +654,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          navigate("/viewQuestionlist", {
-                            state: {
-                              interview_id: lead?.interview_id,
-                              lead_id: lead?.id,
-                              view: true,
-                            },
-                          });
+                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                                view: true,
+                              },
+                            });
+                          }
                         }}
                       >
                         View Questions List
@@ -648,14 +671,16 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          navigate("/questionAnswerSheet", {
-                            state: {
-                              lead_id: lead?.id,
-                              language_id: lead?.language_id,
-                              series_id: lead?.assigned_test_series,
-                              view: true,
-                            },
-                          });
+                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
+                          }
                         }}
                       >
                         View Questions List
@@ -668,11 +693,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             changeHandler={(e) =>
                               changeFaceRoundStatus(e, lead?.id, "final")
                             }
+                            disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))} // Pass disabled condition
                           />
                         </div>
                       </td>
                       <td>
-                        <button className="cmn_Button_style">Start</button>
+                        {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button className="cmn_Button_style">Start</button>}
                       </td>
                     </tr>
                   ))
