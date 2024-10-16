@@ -9,4 +9,7 @@ export const ProfileData = [
     { value: "TESTER", label: "TESTER" },
     { value: "FRONTEND", label: "FRONTEND" },
     { value: "DESIGNER", label: "DESIGNER" },
+    { value: "PYTHON", label: "PYTHON" },
+    { value: "FLUTTER", label: "FLUTTER" },
+    { value: "BUBBLE", label: "BUBBLE" },
 ]

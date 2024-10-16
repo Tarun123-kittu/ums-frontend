@@ -18,11 +18,14 @@ import {
 } from "../../../utils/redux/userSlice/createNewUserSlice";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { ProfileData } from "../../Utils/customData/profileData";
+import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const navigate = useNavigate();
+  const [role, setRole] = useState([]);
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -31,11 +34,33 @@ const AddnewEmployee = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
 
+  const roles = useSelector((store) => store.ALL_ROLES);
+
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (roles?.isSuccess) {
+      if (roles?.data?.data?.length !== 0) {
+        roles?.data?.data?.forEach((data) => {
+          if (!role.some((item) => item.value === data?.role)) {
+            role.push({ value: data?.role, label: data?.role });
+          }
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  const installmentObj = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 },
+    { value: 3, label: 3 },
+    { value: 4, label: 4 },
+    { value: 5, label: 5 },
+  ];
 
   const [field_data, setField_date] = useState({
     username: "",
@@ -405,23 +430,13 @@ const AddnewEmployee = () => {
                     <label> Installment</label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{ value: 1, label: 1 }]}
+                        optionsData={installmentObj}
                         changeHandler={(e) =>
                           handleInputChange("installments", e.value)
                         }
                         value={field_data.installments}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.installments}
-                      onChange={(e) =>
-                        handleInputChange("installments", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value={1}>1</option>
-                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -459,7 +474,7 @@ const AddnewEmployee = () => {
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{ value: "mern", label: "MERN" }]}
+                        optionsData={ProfileData}
                         changeHandler={(e) =>
                           handleInputChange("department", e.value)
                         }
@@ -547,7 +562,7 @@ const AddnewEmployee = () => {
                     <label> Role</label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{ value: "admin", label: "ADMIN" }]}
+                        optionsData={role}
                         changeHandler={(e) =>
                           handleInputChange("role", e.value)
                         }

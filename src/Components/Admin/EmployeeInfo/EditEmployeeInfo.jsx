@@ -30,7 +30,6 @@ const EditEmployeeInfo = () => {
     { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
   ];
   const { user_details } = location?.state ? location?.state : location;
-  console.log(user_details, "this is the user details");
 
   useEffect(() => {
     dispatch(get_all_roles());
@@ -515,7 +514,6 @@ const EditEmployeeInfo = () => {
               >
                 <button className="cmn_Button_style">Update</button>
               </div>
-              {/* edit user code end*/}
             </form>
           </div>
         </div>
