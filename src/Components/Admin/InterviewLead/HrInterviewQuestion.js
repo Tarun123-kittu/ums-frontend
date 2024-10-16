@@ -16,9 +16,14 @@ const HrInterViewQuestion = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const [questions, setQuestions] = useState([])
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const { count, leadId } = location?.state ? location?.state : location;
   const all_question = useSelector((store) => store.HR_ROUND_QUESTION)
   const update_question = useSelector((store) => store.HR_ROUND_RESULT)
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
   ];
@@ -36,6 +41,13 @@ const HrInterViewQuestion = () => {
       dispatch(get_hr_round_questions({ count }))
     }
   }, [count]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Interviews"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     let newArr = []
@@ -119,7 +131,8 @@ const HrInterViewQuestion = () => {
                 <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => navigate("/interviewLead", { state: { tab: "Add Person" } })}>
                   Exit
                 </button>
-                <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>
+                {(user_all_permissions?.roles_data?.includes("Admin") ||
+                  hr_user_permissions?.can_create) && <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>}
               </div>
             </div>
           </div>

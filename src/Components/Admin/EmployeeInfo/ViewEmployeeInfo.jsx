@@ -10,6 +10,7 @@ import {
   clear_user_detail_slice,
 } from "../../../utils/redux/userSlice/userDetailsSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_user_documents } from "../../../utils/redux/userSlice/getUserDocuments";
 
 const ViewEmployeeInfo = () => {
   const location = useLocation();
@@ -21,9 +22,11 @@ const ViewEmployeeInfo = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  const documents = useSelector((store) => store.USER_DOCUMENT);
+  console.log(documents, "this is the all user documents");
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -40,7 +43,16 @@ const ViewEmployeeInfo = () => {
     }
   }, [user_id]);
 
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
   useEffect(() => {
+    dispatch(get_user_documents({ userId: user_id }));
     dispatch(get_user_details({ id: user_id }));
   }, [user_id]);
 
@@ -57,7 +69,12 @@ const ViewEmployeeInfo = () => {
     { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
   ];
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
 
@@ -89,15 +106,29 @@ const ViewEmployeeInfo = () => {
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">DOB</h3>
-                <h3 className="heading_style">{user_details?.dob}</h3>
+                <h3 className="heading_style">
+                  {" "}
+                  {user_details?.dob
+                    ? new Date(user_details.dob).toLocaleDateString("en-GB")
+                    : "No Date Available"}
+                </h3>
                 <h3 className="heading_style">DOJ</h3>
-                <h3 className="heading_style">{user_details?.doj}</h3>
+                <h3 className="heading_style">
+                  {" "}
+                  {user_details?.dob
+                    ? new Date(user_details.doj).toLocaleDateString("en-GB")
+                    : "No Date Available"}
+                </h3>
               </li>
               <li className="d-flex  info_content">
-                <h3 className="heading_style">Skepe</h3>
-                <h3 className="heading_style">{user_details?.skype_email}</h3>
+                <h3 className="heading_style">Skype</h3>
+                <h3 className="heading_style">
+                  {user_details?.skype_email || "Not Availabele"}
+                </h3>
                 <h3 className="heading_style">Ultivic email</h3>
-                <h3 className="heading_style">{user_details?.ultivic_email}</h3>
+                <h3 className="heading_style">
+                  {user_details?.ultivic_email || "Not Available"}
+                </h3>
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Position</h3>
@@ -106,43 +137,64 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">{user_details?.department}</h3>
               </li>
               <li className="d-flex  info_content">
-                <h3 className="heading_style">Staus</h3>
-                <h3 className="heading_style">{user_details?.status}</h3>
+                <h3 className="heading_style">Status</h3>
+                <h3 className="heading_style">
+                  {" "}
+                  {statusObj?.map((data) => {
+                    if (
+                      data?.value?.toString() ===
+                      user_details?.status?.toString()
+                    ) {
+                      return data.label;
+                    }
+                  })}
+                </h3>
                 <h3 className="heading_style">Salary</h3>
-                <h3 className="heading_style">{user_details?.salary}</h3>
+                <h3 className="heading_style">
+                  {user_details?.salary || "Not Available"}
+                </h3>
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">
                   Emergency Contact Relationship
                 </h3>
                 <h3 className="heading_style">
-                  {user_details?.emergency_contact_relationship}
+                  {user_details?.emergency_contact_relationship ||
+                    "Not Available"}
                 </h3>
                 <h3 className="heading_style">Emergency Contact Name</h3>
                 <h3 className="heading_style">
-                  {user_details?.emergency_contact_name}
+                  {user_details?.emergency_contact_name || "Not Available"}
                 </h3>
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Emergency Contact</h3>
                 <h3 className="heading_style">
-                  {user_details?.emergency_contact}
+                  {user_details?.emergency_contact || "Not Available"}
                 </h3>
                 <h3 className="heading_style">Bank Name</h3>
-                <h3 className="heading_style">{user_details?.bank_name}</h3>
+                <h3 className="heading_style">
+                  {user_details?.bank_name || "Not Available"}
+                </h3>
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Account Number</h3>
                 <h3 className="heading_style">
-                  {user_details?.account_number}
+                  {user_details?.account_number || "Not Available"}
                 </h3>
                 <h3 className="heading_style">Bank IFC Code</h3>
-                <h3 className="heading_style">{user_details?.ifsc}</h3>
+                <h3 className="heading_style">
+                  {user_details?.ifsc || "Not Available"}
+                </h3>
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Increment Date</h3>
                 <h3 className="heading_style">
-                  {user_details?.increment_date}
+                  {user_details?.dob
+                    ? new Date(user_details.increment_date).toLocaleDateString(
+                        "en-GB"
+                      )
+                    : "No Date Available"}
                 </h3>
               </li>
               <li className="d-flex  info_content">
@@ -156,28 +208,36 @@ const ViewEmployeeInfo = () => {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Name</th>
                     <th>Document Name</th>
-                    <th>Verified At</th>
                     <th>Status</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>sd</td>
-                    <td>12:00</td>
-                    <td>Pending</td>
-                  </tr>
-                </tbody>
+                {documents?.data?.data?.length == 0 ? (
+                  <h4 className="text-center">No Document Found</h4>
+                ) : (
+                  <tbody>
+                    {documents?.data?.data?.map((doc, i) => {
+                      return (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{doc.document_name}</td>
+                          <td>
+                            <input type="checkbox" checked />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                )}
               </table>
             </div>
             <div className="mt-3 text-end">
               <button
                 className="cmn_Button_style"
                 onClick={() => {
-                  navigate("/editEmployee", { state: { user_details } });
+                  navigate("/editEmployee", {
+                    state: { user_details, documents },
+                  });
                 }}
               >
                 Edit

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaBars, FaRegUser } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import toast from "react-hot-toast";
@@ -64,8 +64,8 @@ const Sidebar = () => {
     availableMenuItems = menuitems; // Admin and HR see all menu items
   } else if (uniqueRoles?.includes("Developer")) {
     availableMenuItems = menuitems.filter(
-      (item) => (item.name === "Test Series" || item.name === "InterView Leads")
-    ); // Developer sees only Test Series
+      (item) => item.name === "Test Series" || item.name === "InterView Leads"
+    ); // Developer sees only specific menu items
   }
 
   const [expanded, setExpanded] = useState(null);
@@ -87,6 +87,10 @@ const Sidebar = () => {
     });
   }, [path.pathname, menuitems]);
 
+  if (uniqueRoles?.includes("Employee")) {
+    return null;
+  }
+
   return (
     <div className={`sidebar ${show ? "cmn_width" : ""}`}>
       <div>
@@ -98,7 +102,9 @@ const Sidebar = () => {
         >
           {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
         </h3>
-        <div className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}>
+        <div
+          className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}
+        >
           <img src={logo} height={"40px"} width={"158px"} />
         </div>
 
@@ -107,14 +113,23 @@ const Sidebar = () => {
             const isActive = path.pathname === data?.pathname;
 
             return (
-              <div key={i} className={`sidebar-button ${isActive ? "active-pathname" : ""}`}>
+              <div
+                key={i}
+                className={`sidebar-button ${
+                  isActive ? "active-pathname" : ""
+                }`}
+              >
                 {data.subItems ? (
                   <>
                     <div
                       className="sidebar_content justify-content-between"
                       onClick={() => handleToggle(i)}
                     >
-                      <div className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "}`}>
+                      <div
+                        className={`transition_class ${
+                          show ? "" : "d-flex flex-grow-1 gap-2 "
+                        }`}
+                      >
                         <img
                           src={data?.icon}
                           alt={data?.name}
@@ -124,12 +139,27 @@ const Sidebar = () => {
                         />
                         <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
-                      {show ? "" : expanded === i ? (
-                        <MdOutlineKeyboardArrowUp onClick={() => handleToggle(i)} />
+                      {show ? (
+                        ""
+                      ) : expanded === i ? (
+                        <MdOutlineKeyboardArrowUp
+                          onClick={() => handleToggle(i)}
+                        />
                       ) : (
                         <MdOutlineKeyboardArrowDown />
                       )}
                     </div>
+                    {expanded === i && (
+                      <div className="subItems">
+                        {data.subItems.map((subItem, subIndex) => (
+                          <Link to={subItem.pathname} key={subIndex}>
+                            <div className="sidebar_content subItem">
+                              <h5>{subItem.name}</h5>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </>
                 ) : (
                   <Link to={data?.pathname}>
@@ -148,6 +178,20 @@ const Sidebar = () => {
               </div>
             );
           })}
+          {uniqueRoles?.includes("Developer") && (
+            <div
+              className={`sidebar-button`}
+              onClick={() => navigate("/mark-attendence")}
+            >
+              <div className="sidebar_content">
+                <IoIosLogOut className="sidebar_content" />
+                <h4 className={show ? "d-none" : "sidebar_content"}>
+                  {" "}
+                  Attendance
+                </h4>
+              </div>
+            </div>
+          )}
           <div className={`sidebar-button`} onClick={handleLogout}>
             <div className="sidebar_content">
               <IoIosLogOut className="sidebar_content" />

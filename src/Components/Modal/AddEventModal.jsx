@@ -22,7 +22,9 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   const dispatch = useDispatch();
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [description, setDiscription] = useState("");
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_holiday_created = useSelector(
     (store) => store.ADD_HOLIDAY_AND_EVENT
   );
@@ -32,9 +34,20 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   const is_holiday_updated = useSelector(
     (store) => store.UPDATE_SELECTED_EVENT
   );
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const handleClose = () => {
     setShow(false);
   };
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Events"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
   const options = [
     { value: "holiday", label: "Holiday" },
     { value: "event", label: "Event" },
@@ -53,8 +66,8 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
           date: date
             ? date
             : new Date(selected_event_details?.data?.data?.date)
-              .toISOString()
-              .split("T")[0],
+                .toISOString()
+                .split("T")[0],
           id: eventId,
         })
       );
@@ -170,12 +183,26 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button
-            className="cmn_Button_style"
-            onClick={() => handleAddHolidayAndEvents()}
-          >
-            {edit ? "update" : " Add Event"}
-          </button>
+          {!edit &&
+            (user_all_permissions?.roles_data?.includes("Admin") ||
+              hr_user_permissions?.can_create) && (
+              <button
+                className="cmn_Button_style"
+                onClick={() => handleAddHolidayAndEvents()}
+              >
+                {"Add Event"}
+              </button>
+            )}
+          {edit &&
+            (user_all_permissions?.roles_data?.includes("Admin") ||
+              hr_user_permissions?.can_edit) && (
+              <button
+                className="cmn_Button_style"
+                onClick={() => handleAddHolidayAndEvents()}
+              >
+                {"update"}
+              </button>
+            )}
         </Modal.Footer>
       </Modal>
     </div>

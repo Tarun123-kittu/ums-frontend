@@ -27,13 +27,21 @@ const AttendenceReport = () => {
   let [all_names, setAllNames] = useState([]);
   const navigate = useNavigate();
   const { show } = useAppContext();
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
   );
-  console.log(user_attendance_report, "this is the attendance report");
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Attandance"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -230,17 +238,21 @@ const AttendenceReport = () => {
                           {report?.name}:{report?.login_mobile}
                         </td>
                         <td>
-                          {report?.id && (
-                            <div className="cmn_action_outer yellow_bg">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editAttendenceReport ", {
-                                    state: { id: report?.id },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_view) &&
+                            report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport ", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
                         </td>
                       </tr>
                     );

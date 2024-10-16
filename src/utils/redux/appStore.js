@@ -81,6 +81,7 @@ import userPendingLeaves from './leaveSlice/getUserPendingLeaves'
 import applyLeaveHandler from './leaveSlice/applyLeave'
 import userAppliedLeaves from './leaveSlice/getUserAppliedLeaves'
 import getAllRoles from './rolesAndPermissionSlice/getAllRoles'
+import getUserDocument from './userSlice/getUserDocuments'
 
 const appStore = configureStore({
     reducer: {
@@ -165,7 +166,8 @@ const appStore = configureStore({
         USER_PENDING_LEAVES: userPendingLeaves,
         APPLY_LEAVE: applyLeaveHandler,
         USER_APPLIED_LEAVES: userAppliedLeaves,
-        ALL_ROLES: getAllRoles
+        ALL_ROLES: getAllRoles,
+        USER_DOCUMENT: getUserDocument
     },
 })
 

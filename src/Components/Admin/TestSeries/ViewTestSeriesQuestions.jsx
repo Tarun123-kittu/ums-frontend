@@ -30,12 +30,17 @@ const ViewTestseriesQuestions = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [developer_permissions, setDeveloper_permissions] = useState({});
   const { id, language_id } = location.state ? location.state : location;
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
   const delete_logical_state = useSelector((store) => store.DELETE_LOGICAL_QUE);
   const delete_objective_state = useSelector(
     (store) => store.DELETE_OBJECTIVE_QUE
   );
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
 
   useEffect(() => {
     if (!id) {
@@ -44,10 +49,17 @@ const ViewTestseriesQuestions = () => {
   }, [id]);
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "Developer" && el.permission === "Test"
+    );
+    setDeveloper_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     dispatch(get_question_answer({ language_id: language_id, series_id: id }));
@@ -139,14 +151,17 @@ const ViewTestseriesQuestions = () => {
                   title="Objective"
                   className=" cmn_padding_wrapper cmn_border"
                 >
-                  <button
-                    className="add_question_btn cmn_Button_style"
-                    onClick={() => {
-                      setShowObjectiveQuesModal(true);
-                    }}
-                  >
-                    Add
-                  </button>
+                  {(user_all_permissions?.roles_data?.includes("Admin") ||
+                    developer_permissions?.can_create) && (
+                    <button
+                      className="add_question_btn cmn_Button_style"
+                      onClick={() => {
+                        setShowObjectiveQuesModal(true);
+                      }}
+                    >
+                      Add
+                    </button>
+                  )}
                   {all_questions?.data?.data?.map((question, questionIndex) => {
                     if (question?.question_type === "objective") {
                       return (
@@ -173,31 +188,41 @@ const ViewTestseriesQuestions = () => {
                               />
                             </div>
                           ))}
-                          {
-                            (localStorage?.getItem('userId')?.toString() === question?.createdBy?.toString() || localStorage?.getItem('roles')?.includes('Admin')) && (
-                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                                <button
-                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                                  onClick={() => {
-                                    setQuestion_id(question?.question_id);
-                                    setShowDelObjectiveQuesModal(true);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                                <button
-                                  className="cmn_Button_style cursor_pointer"
-                                  onClick={() => {
-                                    setQuestion_id(question?.question_id);
-                                    setShowEditObjectiveQuesModal(true);
-                                  }}
-                                >
-                                  Edit
-                                </button>
-                              </div>
-                            )
-                          }
+                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                            {(user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                              (localStorage?.getItem("userId")?.toString() ===
+                                question?.createdBy?.toString() &&
+                                developer_permissions?.can_delete)) && (
+                              <button
+                                className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                onClick={() => {
+                                  setQuestion_id(question?.question_id);
+                                  setShowDelObjectiveQuesModal(true);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            )}
 
+                            {(user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                              (localStorage?.getItem("userId")?.toString() ===
+                                question?.createdBy?.toString() &&
+                                developer_permissions?.can_edit)) && (
+                              <button
+                                className="cmn_Button_style cursor_pointer"
+                                onClick={() => {
+                                  setQuestion_id(question?.question_id);
+                                  setShowEditObjectiveQuesModal(true);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
                         </div>
                       );
                     }
@@ -230,10 +255,18 @@ const ViewTestseriesQuestions = () => {
                             />
                           </div>
 
-                          {
-                            (localStorage?.getItem('userId')?.toString() === ques?.createdBy?.toString() ||
-                              localStorage?.getItem('roles')?.includes('Admin')) && (
-                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                          {(localStorage?.getItem("userId")?.toString() ===
+                            ques?.createdBy?.toString() ||
+                            localStorage
+                              ?.getItem("roles")
+                              ?.includes("Admin")) && (
+                            <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                (localStorage?.getItem("userId")?.toString() ===
+                                  ques?.createdBy?.toString() &&
+                                  developer_permissions?.can_delete)) && (
                                 <button
                                   className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                                   onClick={() => {
@@ -243,6 +276,13 @@ const ViewTestseriesQuestions = () => {
                                 >
                                   Delete
                                 </button>
+                              )}
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                (localStorage?.getItem("userId")?.toString() ===
+                                  ques?.createdBy?.toString() &&
+                                  developer_permissions?.can_edit)) && (
                                 <button
                                   className="cmn_Button_style cursor_pointer"
                                   onClick={() => {
@@ -252,10 +292,9 @@ const ViewTestseriesQuestions = () => {
                                 >
                                   Edit
                                 </button>
-                              </div>
-                            )
-                          }
-
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     }
@@ -287,10 +326,18 @@ const ViewTestseriesQuestions = () => {
                               value={ques?.answer}
                             />
                           </div>
-                          {
-                            (localStorage?.getItem('userId')?.toString() === ques?.createdBy?.toString() ||
-                              localStorage?.getItem('roles')?.includes('Admin')) && (
-                              <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                          {(localStorage?.getItem("userId")?.toString() ===
+                            ques?.createdBy?.toString() ||
+                            localStorage
+                              ?.getItem("roles")
+                              ?.includes("Admin")) && (
+                            <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                (localStorage?.getItem("userId")?.toString() ===
+                                  ques?.createdBy?.toString() &&
+                                  developer_permissions?.can_delete)) && (
                                 <button
                                   className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                                   onClick={() => {
@@ -300,6 +347,13 @@ const ViewTestseriesQuestions = () => {
                                 >
                                   Delete
                                 </button>
+                              )}
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                (localStorage?.getItem("userId")?.toString() ===
+                                  ques?.createdBy?.toString() &&
+                                  developer_permissions?.can_edit)) && (
                                 <button
                                   className="cmn_Button_style cursor_pointer"
                                   onClick={() => {
@@ -309,10 +363,9 @@ const ViewTestseriesQuestions = () => {
                                 >
                                   Edit
                                 </button>
-                              </div>
-                            )
-                          }
-
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     }

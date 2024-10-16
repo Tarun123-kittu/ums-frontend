@@ -20,7 +20,7 @@ import {
   clear_delete_series_state,
 } from "../../../utils/redux/testSeries/deleteSeries";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ const Testseries = () => {
   const [id, setId] = useState("");
   const [all_languagages, setAll_languages] = useState([]);
   const [search_enable, setSearch_enable] = useState(false);
+  const [developer_permissions, setDeveloper_permissions] = useState({});
   const [seriesId, setSeriesId] = useState(null);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const all_series = useSelector((store) => store.ALL_SERIES);
@@ -41,12 +42,20 @@ const Testseries = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "Developer" && el.permission === "Test"
+    );
+    setDeveloper_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     dispatch(get_all_languages());
@@ -123,10 +132,15 @@ const Testseries = () => {
     dispatch(delete_series({ id: seriesId }));
   };
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR") ||
+      user_all_permissions?.roles_data?.includes("Developer")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
-
 
   return (
     <section className="test_serie_wrapper">
@@ -162,74 +176,101 @@ const Testseries = () => {
               >
                 Search
               </button>
-              <button
-                onClick={() => {
-                  setShowCreateTestSeriesModal(true);
-                }}
-                className="cmn_Button_style"
-              >
-                Add
-              </button>
+              {(user_all_permissions?.roles_data?.includes("Admin") ||
+                developer_permissions?.can_create) && (
+                <button
+                  onClick={() => {
+                    setShowCreateTestSeriesModal(true);
+                  }}
+                  className="cmn_Button_style"
+                >
+                  Add
+                </button>
+              )}
             </div>
           </div>
 
           <div className="create_series_outer mt-3">
             <div className="row">
-              {all_series?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : all_series?.data?.data?.map((series, i) => {
-                return (
-                  <div className="col-lg-4 col-sm-12 col-md-6">
-                    <div key={i} className="series_card">
-                      <div className="d-flex justify-content-end gap-1 align-items-center series_description_outer">
-                        <h3 className="series_created_text">
-                          <FaRegUser /> {series?.name}
-                        </h3>
-                        <h3 className="series_created_text">
-                          {series?.language}
-                        </h3>
-                        <h3 className="series_created_text">
-                          {formatTimeToReadable(series?.time_taken)}
-                        </h3>
-                        {localStorage?.getItem('userId')?.toString() === series?.createdBy?.toString() && (
-                          <RiDeleteBinLine
-                            className="cursor_pointer series_created_heading"
-                            onClick={() => {
-                              setSeriesId(series?.id);
-                              setShowDeleteModal(true);
-                            }}
-                          />
-                        )}
-                      </div>
+              {all_series?.isLoading ? (
+                <img src={Loader} alt="loader" className="loader_gif" />
+              ) : (
+                all_series?.data?.data?.map((series, i) => {
+                  return (
+                    <div className="col-lg-4 col-sm-12 col-md-6">
+                      <div key={i} className="series_card">
+                        <div className="d-flex justify-content-end gap-1 align-items-center series_description_outer">
+                          <h3 className="series_created_text">
+                            <FaRegUser /> {series?.name}
+                          </h3>
+                          <h3 className="series_created_text">
+                            {series?.language}
+                          </h3>
+                          <h3 className="series_created_text">
+                            {formatTimeToReadable(series?.time_taken)}
+                          </h3>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            (localStorage?.getItem("userId")?.toString() ===
+                              series?.createdBy?.toString() &&
+                              developer_permissions?.can_delete)) && (
+                            <RiDeleteBinLine
+                              className="cursor_pointer series_created_heading"
+                              onClick={() => {
+                                setSeriesId(series?.id);
+                                setShowDeleteModal(true);
+                              }}
+                            />
+                          )}
+                        </div>
 
-                      <h2 className="card_heading">{series?.series_name}</h2>
-                      <h6>{series?.description}</h6>
-                      <div className="create_series_btn_outer">
-                        <button
-                          className="cmn_cancel_btn"
-                          onClick={() => {
-                            setSeriesId(series?.id);
-                            setShowEditSeriesModal(true);
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="cmn_Button_style mt-3"
-                          onClick={() => {
-                            navigate("/viewTestSeriesQuestion", {
-                              state: {
-                                id: series?.id,
-                                language_id: series?.language_id,
-                              },
-                            });
-                          }}
-                        >
-                          View Questions
-                        </button>
+                        <h2 className="card_heading">{series?.series_name}</h2>
+                        <h6>{series?.description}</h6>
+                        <div className="create_series_btn_outer">
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            (localStorage?.getItem("userId")?.toString() ===
+                              series?.createdBy?.toString() &&
+                              developer_permissions?.can_edit)) && (
+                            <button
+                              className="cmn_cancel_btn"
+                              onClick={() => {
+                                setSeriesId(series?.id);
+                                setShowEditSeriesModal(true);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          )}
+
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            (localStorage?.getItem("userId")?.toString() ===
+                              series?.createdBy?.toString() &&
+                              developer_permissions?.can_view)) && (
+                            <button
+                              className="cmn_Button_style mt-3"
+                              onClick={() => {
+                                navigate("/viewTestSeriesQuestion", {
+                                  state: {
+                                    id: series?.id,
+                                    language_id: series?.language_id,
+                                  },
+                                });
+                              }}
+                            >
+                              View Questions
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

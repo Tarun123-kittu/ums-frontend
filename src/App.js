@@ -79,7 +79,7 @@ function App() {
         <Route path='/leads/technical-round/:lead_id/:token' element={<Leads />} />
         <Route path='/lead-test/:is_open/:name/:lead_id/:token' element={<LeadTest />} />
         <Route path='/test-thankyou' element={<TestThankyou />} />
-        <Route path='/mark-attendence' element={<MarkAttendence />} />
+        <Route path='/mark-attendence' element={<><Sidebar /><MarkAttendence /></>} />
         <Route path='/employee-attendence-report' element={<EmployeeAttendenceReoport />} />
         <Route path='/apply-leaves' element={<ApplyLeaves />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />

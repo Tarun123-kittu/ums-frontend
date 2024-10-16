@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSort, FaSortDown } from "react-icons/fa";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 import { FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaClock } from "react-icons/fa6";
@@ -23,12 +23,12 @@ const EmployeeList = () => {
   const navigate = useNavigate();
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userId, setuserId] = useState("");
-
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
-  console.log(all_users_list, "this is the list of all users")
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
@@ -53,7 +53,9 @@ const EmployeeList = () => {
   }, [all_users_list]);
 
   useEffect(() => {
-    dispatch(get_all_users_user({ name: searchName, status: searchStatus, page }));
+    dispatch(
+      get_all_users_user({ name: searchName, status: searchStatus, page })
+    );
   }, [page]);
 
   const deleteHandler = () => {
@@ -61,7 +63,27 @@ const EmployeeList = () => {
     setShowDeleteModal(false);
   };
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Users"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
   return (
@@ -113,18 +135,25 @@ const EmployeeList = () => {
               className="cmn_Button_style"
               onClick={() =>
                 dispatch(
-                  get_all_users_user({ name: searchName, status: searchStatus, page })
+                  get_all_users_user({
+                    name: searchName,
+                    status: searchStatus,
+                    page,
+                  })
                 )
               }
             >
               Search
             </button>
-            <button
-              className="cmn_Button_style ms-3"
-              onClick={() => navigate("/addemployee")}
-            >
-              Add
-            </button>
+            {(user_all_permissions?.roles_data?.includes("Admin") ||
+              hr_user_permissions?.can_create) && (
+              <button
+                className="cmn_Button_style ms-3"
+                onClick={() => navigate("/addemployee")}
+              >
+                Add
+              </button>
+            )}
           </div>
         </div>
 
@@ -144,49 +173,70 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {all_users_list?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_users_list?.data?.data?.map((user, index) => {
-                return (
-                  <tr key={user?.id}>
-                    <td>{index + 1}</td>
-                    <td>{user?.name}</td>
-                    <td>{user?.email}</td>
-                    <td>{user?.mobile}</td>
-                    <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
-                    <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
-                    <td>{user?.position}</td>
-                    <td>{user?.status}</td>
-                    <td>
-                      <div className="d-flex gap-2">
-                        <div
-                          className="cmn_action_outer dark_gray_bg"
-                          style={{ cursor: "pointer" }}
-                          title="view details"
-                          onClick={() =>
-                            navigate("/viewEmployeeInfo", {
-                              state: { user_id: user?.id },
-                            })
+              {all_users_list?.isLoading ? (
+                <img className="loader_gif" src={Loader} alt="loader" />
+              ) : (
+                all_users_list?.data?.data?.map((user, index) => {
+                  return (
+                    <tr key={user?.id}>
+                      <td>{index + 1}</td>
+                      <td>{user?.name}</td>
+                      <td>{user?.email}</td>
+                      <td>{user?.mobile}</td>
+                      <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
+                      <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
+                      <td>{user?.position}</td>
+                      <td>
+                        {statusObj?.map((data) => {
+                          if (
+                            data?.value?.toString() === user?.status?.toString()
+                          ) {
+                            return data.label;
                           }
-                        >
-                          <FaEye />
+                        })}
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_view) && (
+                            <div
+                              className="cmn_action_outer dark_gray_bg"
+                              style={{ cursor: "pointer" }}
+                              title="view details"
+                              onClick={() =>
+                                navigate("/viewEmployeeInfo", {
+                                  state: { user_id: user?.id },
+                                })
+                              }
+                            >
+                              <FaEye />
+                            </div>
+                          )}
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_delete) && (
+                            <div
+                              className="cmn_action_outer red_bg"
+                              style={{ cursor: "pointer" }}
+                              title="delete user"
+                            >
+                              <RiDeleteBin6Line
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setuserId(user?.id);
+                                }}
+                              />
+                            </div>
+                          )}
                         </div>
-                        <div
-                          className="cmn_action_outer red_bg"
-                          style={{ cursor: "pointer" }}
-                          title="delete user"
-                        >
-                          <RiDeleteBin6Line
-                            onClick={() => {
-                              setShowDeleteModal(true);
-                              setuserId(user?.id);
-                              // dispatch(delete_user({ id: user?.id }))
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -200,7 +250,10 @@ const EmployeeList = () => {
           />
         )}
       </div>
-      <PaginationComp totalPage={all_users_list?.data?.total_pages} setPage={setPage} />
+      <PaginationComp
+        totalPage={all_users_list?.data?.total_pages}
+        setPage={setPage}
+      />
     </>
   );
 };

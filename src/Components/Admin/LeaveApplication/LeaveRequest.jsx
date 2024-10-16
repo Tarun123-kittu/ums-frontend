@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
@@ -9,19 +9,29 @@ import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllApplied
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const LeaveRequest = () => {
   const navigate = useNavigate();
   UseFetchAllAppliedLeaves();
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const all_applied_leaves = useSelector(
     (store) => store.GET_ALL_APPLIED_LEAVES
   );
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Leave"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
+  useEffect(() => {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -82,43 +92,52 @@ const LeaveRequest = () => {
                 </tr>
               </thead>
               <tbody>
-                {all_applied_leaves?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_applied_leaves?.data?.data?.map((leaves, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{leaves?.name}</td>
-                      <td>{leaves?.type}</td>
-                      <td>{formatDate(leaves?.applied_on)}</td>
-                      <td>{leaves?.date_from}</td>
-                      <td>{leaves?.to_date}</td>
-                      <td>{leaves?.count}</td>
-                      <td>{leaves?.description}</td>
-                      <td>{leaves?.status}</td>
-                      <td>{leaves?.remark}</td>
-                      <td>
-                        <div className="cmn_action_outer yellow_bg">
-                          <FiEdit
-                            onClick={() => {
-                              navigate("/editLeaveRequest", {
-                                state: {
-                                  leave_id: leaves?.id,
-                                  leave_status: leaves?.status,
-                                  leave_remark: leaves?.remark,
-                                  from_date: leaves?.date_from,
-                                  to_date: leaves?.to_date,
-                                  leave_count: leaves?.count,
-                                  user_id: leaves?.user_id,
-                                  name: leaves?.name,
-                                  email: leaves?.email,
-                                },
-                              });
-                            }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {all_applied_leaves?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  all_applied_leaves?.data?.data?.map((leaves, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{leaves?.name}</td>
+                        <td>{leaves?.type}</td>
+                        <td>{formatDate(leaves?.applied_on)}</td>
+                        <td>{leaves?.date_from}</td>
+                        <td>{leaves?.to_date}</td>
+                        <td>{leaves?.count}</td>
+                        <td>{leaves?.description}</td>
+                        <td>{leaves?.status}</td>
+                        <td>{leaves?.remark}</td>
+                        <td>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_view) && (
+                            <div className="cmn_action_outer yellow_bg">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editLeaveRequest", {
+                                    state: {
+                                      leave_id: leaves?.id,
+                                      leave_status: leaves?.status,
+                                      leave_remark: leaves?.remark,
+                                      from_date: leaves?.date_from,
+                                      to_date: leaves?.to_date,
+                                      leave_count: leaves?.count,
+                                      user_id: leaves?.user_id,
+                                      name: leaves?.name,
+                                      email: leaves?.email,
+                                    },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>

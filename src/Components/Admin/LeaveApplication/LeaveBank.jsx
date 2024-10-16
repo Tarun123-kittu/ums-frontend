@@ -12,19 +12,21 @@ import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const [session, setSession] = useState("");
   const [selected_year, setSelected_year] = useState("");
   const [selected_month, setSelected_month] = useState("");
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [year, setYear] = useState([]);
   const [yearObj, setYearObj] = useState([]);
   const [financial_year, setFinancial_year] = useState([]);
@@ -34,10 +36,17 @@ const LeaveBank = () => {
   ];
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Leave"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -214,22 +223,24 @@ const LeaveBank = () => {
                   leave_bank_data.data.data.map((leave_bank, index) => (
                     <tr key={leave_bank?.id || index}>
                       <td>{index + 1}</td>
-                      <td>{leave_bank?.name || 'N/A'}</td>
-                      <td>{leave_bank?.taken_leave || '0'}</td>
-                      <td>{leave_bank?.paid_leave || '0'}</td>
+                      <td>{leave_bank?.name || "N/A"}</td>
+                      <td>{leave_bank?.taken_leave || "0"}</td>
+                      <td>{leave_bank?.paid_leave || "0"}</td>
 
                       <td>
-                        <div
-                          className="cmn_action_outer yellow_bg cusror_pointer"
-                          onClick={() => setShowEditLeaveModal(true)}
-                        >
-                          <FiEdit />
-                        </div>
+                        {(user_all_permissions?.roles_data?.includes("Admin") ||
+                          hr_user_permissions?.can_view) && (
+                          <div
+                            className="cmn_action_outer yellow_bg cusror_pointer"
+                            onClick={() => setShowEditLeaveModal(true)}
+                          >
+                            <FiEdit />
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))
                 )}
-
               </tbody>
             </table>
           </div>

@@ -38,8 +38,14 @@ const EditLeaveRequest = () => {
   const [status, setStatus] = useState(leave_status);
   const [remark, setRemark] = useState(leave_remark);
   const [showToast, setShowToast] = useState(false);
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [toastMessage, setToastMessage] = useState("");
   const [type, setType] = useState("");
+
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
 
   useEffect(() => {
     if (!leave_id) navigate("/leaveRequest");
@@ -47,7 +53,14 @@ const EditLeaveRequest = () => {
   }, [leave_id]);
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Leave"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
+  useEffect(() => {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -132,10 +145,10 @@ const EditLeaveRequest = () => {
                     value={
                       leaveDetail?.from_date && leaveDetail?.to_date
                         ? `${moment(leaveDetail.from_date).format(
-                          "MM/DD/YYYY"
-                        )} - ${moment(leaveDetail.to_date).format(
-                          "MM/DD/YYYY"
-                        )}`
+                            "MM/DD/YYYY"
+                          )} - ${moment(leaveDetail.to_date).format(
+                            "MM/DD/YYYY"
+                          )}`
                         : ""
                     }
                   />
@@ -207,14 +220,17 @@ const EditLeaveRequest = () => {
                 />
               </div>
 
-              <div className="text-center mt-4">
-                <button
-                  className="cmn_Button_style"
-                  onClick={() => handleUpdateLeave()}
-                >
-                  Update
-                </button>
-              </div>
+              {(user_all_permissions?.roles_data?.includes("Admin") ||
+                hr_user_permissions?.can_update) && (
+                <div className="text-center mt-4">
+                  <button
+                    className="cmn_Button_style"
+                    onClick={() => handleUpdateLeave()}
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

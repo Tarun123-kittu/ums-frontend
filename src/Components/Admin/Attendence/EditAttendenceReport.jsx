@@ -28,10 +28,11 @@ const EditAttendenceReport = () => {
   const [out_time, setOut_time] = useState("");
   const [report, setReport] = useState("");
   const [remark, setRemark] = useState("");
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [enable, setEnable] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -51,11 +52,21 @@ const EditAttendenceReport = () => {
 
   const { show } = useAppContext();
 
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
   const attendance_detail = useSelector(
     (store) => store.SELECTED_ATTENDANCE_DETAIL
   );
-
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_attendance_updated = useSelector((store) => store.UPDATE_ATTENDANCE);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Attandance"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     if (attendance_detail.isSuccess) {
@@ -197,14 +208,17 @@ const EditAttendenceReport = () => {
                 <MdStar />
                 <MdStar />
               </div>
-              <div className="text-center mt-4">
-                <button
-                  className="cmn_Button_style"
-                  onClick={() => handleUpdate()}
-                >
-                  Update
-                </button>
-              </div>
+              {(user_all_permissions?.roles_data?.includes("Admin") ||
+                hr_user_permissions?.can_update) && (
+                <div className="text-center mt-4">
+                  <button
+                    className="cmn_Button_style"
+                    onClick={() => handleUpdate()}
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

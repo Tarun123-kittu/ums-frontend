@@ -6,6 +6,7 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({ fiel
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+        console.log(field_data, "this is from redux")
 
         const raw = JSON.stringify({
             "username": field_data?.username,
@@ -34,7 +35,8 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({ fiel
             "address": field_data?.address,
             "role": field_data?.role,
             "confirm_password": field_data?.confirm_password,
-            "password": field_data?.password
+            "password": field_data?.password,
+            "documents": field_data?.documents
         });
 
         const requestOptions = {

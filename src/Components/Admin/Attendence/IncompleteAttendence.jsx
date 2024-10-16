@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
@@ -9,7 +9,7 @@ import "./attendence.css";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 const IncompleteAttendence = () => {
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -17,16 +17,25 @@ const IncompleteAttendence = () => {
   ];
   const navigate = useNavigate();
   const { show } = useAppContext();
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Attandance"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -72,34 +81,42 @@ const IncompleteAttendence = () => {
                 </tr>
               </thead>
               <tbody>
-                {attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : attendance_report?.data?.data?.map((report, i) => {
-                  if (!report?.out_time) {
-                    return (
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>
-                          {report?.data} -{report?.date_in_week_day}
-                        </td>
-                        <td>{report?.name}</td>
-                        <td>{convertTo12Hour(report?.in_time)}</td>
-                        <td>--</td>
-                        <td>
-                          {report?.id && (
-                            <div className="cmn_action_outer yellow_bg cursor_pointer">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editAttendenceReport", {
-                                    state: { id: report?.id },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  }
-                })}
+                {attendance_report?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  attendance_report?.data?.data?.map((report, i) => {
+                    if (!report?.out_time) {
+                      return (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>
+                            {report?.data} -{report?.date_in_week_day}
+                          </td>
+                          <td>{report?.name}</td>
+                          <td>{convertTo12Hour(report?.in_time)}</td>
+                          <td>--</td>
+                          <td>
+                            {(user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                              hr_user_permissions?.can_view) &&
+                              report?.id && (
+                                <div className="cmn_action_outer yellow_bg cursor_pointer">
+                                  <FiEdit
+                                    onClick={() => {
+                                      navigate("/editAttendenceReport", {
+                                        state: { id: report?.id },
+                                      });
+                                    }}
+                                  />
+                                </div>
+                              )}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  })
+                )}
               </tbody>
             </table>
           </div>

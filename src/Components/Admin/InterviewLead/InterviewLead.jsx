@@ -28,19 +28,27 @@ const InterviewLead = () => {
   const [selected_language, setSelected_language] = useState("");
   const [selected_experience, setSelected_experience] = useState("");
   const [selected_result, setSelected_result] = useState("");
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [currentTab, setCurrentTab] = useState("Add Person");
   const [open_tab, setOpen_tab] = useState("Add Person");
   const [page, setPage] = useState(1);
-
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Interviews"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
@@ -73,7 +81,13 @@ const InterviewLead = () => {
     }
   }, [languages]);
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR") ||
+      user_all_permissions?.roles_data?.includes("Developer")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
 
@@ -105,7 +119,7 @@ const InterviewLead = () => {
           pageNumber: page,
           experience: selected_experience,
           profile: selected_language,
-          result_status: selected_result
+          result_status: selected_result,
         })
       );
     }
@@ -116,7 +130,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: selected_experience,
           profile: selected_language,
-          result_status: selected_result
+          result_status: selected_result,
         })
       );
     }
@@ -127,7 +141,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: selected_experience,
           profile: selected_language,
-          result_status: selected_result
+          result_status: selected_result,
         })
       );
     }
@@ -138,7 +152,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: selected_experience,
           profile: selected_language,
-          result_status: selected_result
+          result_status: selected_result,
         })
       );
     }
@@ -160,7 +174,7 @@ const InterviewLead = () => {
           pageNumber: page,
           experience: "",
           profile: "",
-          result_status: ""
+          result_status: "",
         })
       );
     }
@@ -171,7 +185,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: "",
           profile: "",
-          result_status: ""
+          result_status: "",
         })
       );
     }
@@ -182,7 +196,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: "",
           profile: "",
-          result_status: ""
+          result_status: "",
         })
       );
     }
@@ -193,7 +207,7 @@ const InterviewLead = () => {
           limit: 10,
           experience: "",
           profile: "",
-          result_status: ""
+          result_status: "",
         })
       );
     }
@@ -270,18 +284,22 @@ const InterviewLead = () => {
                 setCurrentTab={setCurrentTab}
                 setOpen_tab={setOpen_tab}
               />
-              {<div>
-                {((user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) && currentTab === "Add Person" && (
-                  <button
-                    className="cmn_Button_style addnew_btn_outer"
-                    onClick={() => {
-                      navigate("/addNewPerson");
-                    }}
-                  >
-                    Add New
-                  </button>
-                )}
-              </div>}
+              {
+                <div>
+                  {(user_all_permissions?.roles_data?.includes("Admin") ||
+                    hr_user_permissions?.can_create) &&
+                    currentTab === "Add Person" && (
+                      <button
+                        className="cmn_Button_style addnew_btn_outer"
+                        onClick={() => {
+                          navigate("/addNewPerson");
+                        }}
+                      >
+                        Add New
+                      </button>
+                    )}
+                </div>
+              }
             </div>
           </div>
         </div>

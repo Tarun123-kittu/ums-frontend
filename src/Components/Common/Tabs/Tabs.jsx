@@ -31,7 +31,7 @@ import {
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
@@ -61,13 +61,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [language_id, setLanguage_id] = useState(null);
   const [series_id, setSeries_id] = useState(null);
   const [language, setLanguage] = useState("");
-  const [allLeadPage, setAllLeadPage] = useState(1)
-  const [hrPage, setHrPages] = useState(1)
-  const [techPage, setTechPage] = useState(1)
-  const [facePage, setFacePage] = useState(1)
-  const [finalPage, setFinalPage] = useState(1)
+  const [allLeadPage, setAllLeadPage] = useState(1);
+  const [hrPage, setHrPages] = useState(1);
+  const [techPage, setTechPage] = useState(1);
+  const [facePage, setFacePage] = useState(1);
+  const [finalPage, setFinalPage] = useState(1);
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
+  const [developer_permissions, setDeveloper_permissions] = useState({});
+  console.log(hr_user_permissions, "hr Permissions");
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  console.log(all_permissions, "all permissions");
+
   const hr_round_candidate_status = useSelector(
     (store) => store.HR_UPDATE_LEAD_STATUS
   );
@@ -81,6 +87,17 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Interviews"
+    );
+    const developerPermissions = all_permissions?.data?.data?.find(
+      (el) => el.role === "Developer" && el.permission === "Interviews"
+    );
+    setHr_user_permissions(can_hr_create);
+    setDeveloper_permissions(developerPermissions);
+  }, [all_permissions]);
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -111,10 +128,42 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     dispatch(get_all_leads({ page: allLeadPage, experience: "", profile: "" }));
-    dispatch(get_hr_round_candidate({ limit: 2, pageNumber: hrPage, profile: "", experience: "", result_status: "" }));
-    dispatch(get_all_tech_round_leads({ page: techPage, limit: 10, profile: "", experience: "", result_status: "" }));
-    dispatch(get_face_round_leads({ page: 1, limit: 10, profile: "", experience: "", result_status: "" }));
-    dispatch(get_final_round_leads({ page: 1, limit: 10, profile: "", experience: "", result_status: "" }));
+    dispatch(
+      get_hr_round_candidate({
+        limit: 2,
+        pageNumber: hrPage,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_all_tech_round_leads({
+        page: techPage,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_face_round_leads({
+        page: 1,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_final_round_leads({
+        page: 1,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
   }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
 
   useEffect(() => {
@@ -180,12 +229,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_round_status?.isSuccess) {
-      toast.success("Candidate successfully moved to next round")
+      toast.success("Candidate successfully moved to next round");
       dispatch(get_face_round_leads());
     }
   }, [update_round_status]);
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR") ||
+      user_all_permissions?.roles_data?.includes("Developer")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
 
@@ -216,7 +271,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {all_leads?.isLoading ? (
                   <img className="loader_gif" src={Loader} alt="loader" />
                 ) : Array.isArray(all_leads?.data?.data) ? (
-                  all_leads.data.data.filter((lead) => lead?.in_round === 0).length > 0 ? (
+                  all_leads.data.data.filter((lead) => lead?.in_round === 0)
+                    .length > 0 ? (
                     all_leads.data.data.map((lead, i) => {
                       if (lead?.in_round === 0) {
                         return (
@@ -239,22 +295,62 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                       <div className="tooltip_content">
                                         <ul className="user_info_detail_list">
                                           {[
-                                            { label: "Name", value: lead?.name },
-                                            { label: "Phone Number", value: lead?.phone_number },
-                                            { label: "Email", value: lead?.email },
-                                            { label: "Gender", value: lead?.gender },
+                                            {
+                                              label: "Name",
+                                              value: lead?.name,
+                                            },
+                                            {
+                                              label: "Phone Number",
+                                              value: lead?.phone_number,
+                                            },
+                                            {
+                                              label: "Email",
+                                              value: lead?.email,
+                                            },
+                                            {
+                                              label: "Gender",
+                                              value: lead?.gender,
+                                            },
                                             { label: "DOB", value: lead?.dob },
-                                            { label: "Experience", value: lead?.experience },
-                                            { label: "Current Salary", value: lead?.current_salary },
-                                            { label: "Expected Salary", value: lead?.expected_salary },
-                                            { label: "Profile", value: lead?.profile },
-                                            { label: "Last Company", value: lead?.last_company },
-                                            { label: "State", value: lead?.state },
-                                            { label: "House Address", value: lead?.house_addresss },
+                                            {
+                                              label: "Experience",
+                                              value: lead?.experience,
+                                            },
+                                            {
+                                              label: "Current Salary",
+                                              value: lead?.current_salary,
+                                            },
+                                            {
+                                              label: "Expected Salary",
+                                              value: lead?.expected_salary,
+                                            },
+                                            {
+                                              label: "Profile",
+                                              value: lead?.profile,
+                                            },
+                                            {
+                                              label: "Last Company",
+                                              value: lead?.last_company,
+                                            },
+                                            {
+                                              label: "State",
+                                              value: lead?.state,
+                                            },
+                                            {
+                                              label: "House Address",
+                                              value: lead?.house_addresss,
+                                            },
                                           ].map((item, idx) => (
-                                            <li className="d-flex gap-2" key={idx}>
-                                              <h3 className="cmn_text_heading">{item.label} :</h3>
-                                              <h4 className="cmn_text_heading">{item.value}</h4>
+                                            <li
+                                              className="d-flex gap-2"
+                                              key={idx}
+                                            >
+                                              <h3 className="cmn_text_heading">
+                                                {item.label} :
+                                              </h3>
+                                              <h4 className="cmn_text_heading">
+                                                {item.value}
+                                              </h4>
                                             </li>
                                           ))}
                                         </ul>
@@ -281,15 +377,20 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <td>{lead?.current_salary}</td>
                             <td>{lead?.expected_salary}</td>
                             <td>
-                              {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
-                                className="cmn_Button_style"
-                                onClick={() => {
-                                  setLeadId(lead?.id);
-                                  setShowHrQuestionModal(true);
-                                }}
-                              >
-                                Start
-                              </button>}
+                              {user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                (hr_user_permissions?.can_create && (
+                                  <button
+                                    className="cmn_Button_style"
+                                    onClick={() => {
+                                      setLeadId(lead?.id);
+                                      setShowHrQuestionModal(true);
+                                    }}
+                                  >
+                                    Start
+                                  </button>
+                                ))}
                             </td>
                           </tr>
                         );
@@ -310,11 +411,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
-
               </tbody>
             </table>
             {all_leads?.data?.data?.some((field) => field.in_round === 0) >
-              0 && <PaginationComp totalPage={all_leads?.data?.pagination?.totalPages} setPage={setAllLeadPage} />}
+              0 && (
+              <PaginationComp
+                totalPage={all_leads?.data?.pagination?.totalPages}
+                setPage={setAllLeadPage}
+              />
+            )}
           </div>
         </Tab>
         <Tab eventKey="HR" title="HR">
@@ -332,7 +437,9 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 </tr>
               </thead>
               <tbody>
-                {all_hr_round_candidate?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : all_hr_round_candidate?.data?.data?.length === 0 ? (
+                {all_hr_round_candidate?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : all_hr_round_candidate?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
                       No HR round leads available.
@@ -356,7 +463,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                            if (
+                              user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                              hr_user_permissions?.can_view
+                            ) {
                               navigate("/viewQuestionlist", {
                                 state: {
                                   interview_id: candidate?.interview_id,
@@ -370,33 +482,42 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         </td>
 
                         <td>
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={resultData}
-                              value={candidate?.hr_round_result}
-                              disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
-                              changeHandler={(e) =>
-                                dispatch(
-                                  hr_update_lead_status({
-                                    interview_id: candidate?.interview_id,
-                                    hr_round_result: e.value,
-                                  })
-                                )
-                              }
-                            />
-                          </div>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_update) && (
+                            <div className="form-group new_employee_form_group">
+                              <CustomSelectComp
+                                optionsData={resultData}
+                                value={candidate?.hr_round_result}
+                                changeHandler={(e) =>
+                                  dispatch(
+                                    hr_update_lead_status({
+                                      interview_id: candidate?.interview_id,
+                                      hr_round_result: e.value,
+                                    })
+                                  )
+                                }
+                              />
+                            </div>
+                          )}
                         </td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
-                            className="cmn_Button_style"
-                            onClick={() => {
-                              setLeadId(candidate?.id);
-                              setLanguage(candidate?.profile);
-                              setShowTechInterviewQuesModal(true);
-                            }}
-                          >
-                            Start
-                          </button>}
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_create) && (
+                            <button
+                              className="cmn_Button_style"
+                              onClick={() => {
+                                setLeadId(candidate?.id);
+                                setLanguage(candidate?.profile);
+                                setShowTechInterviewQuesModal(true);
+                              }}
+                            >
+                              Start
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
@@ -405,7 +526,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </tbody>
             </table>
             {all_hr_round_candidate?.data?.data?.length > 0 && (
-              <PaginationComp totalPage={all_hr_round_candidate?.data?.totalPages} setPage={setHrPages} />
+              <PaginationComp
+                totalPage={all_hr_round_candidate?.data?.totalPages}
+                setPage={setHrPages}
+              />
             )}
           </div>
         </Tab>
@@ -448,7 +572,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
-                            if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                            if (
+                              user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                              hr_user_permissions?.can_view ||
+                              developer_permissions?.can_view
+                            ) {
                               navigate("/questionAnswerSheet", {
                                 state: {
                                   lead_id: tech_leads?.id,
@@ -462,31 +592,40 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           View Questions List
                         </td>
                         <td>
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={technicalRoundStatus}
-                              value={tech_leads?.technical_round_result}
-                              disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
-                              changeHandler={(e) =>
-                                changeTechStatus(e, tech_leads?.interview_id)
-                              }
-                            />
-                          </div>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_update) && (
+                            <div className="form-group new_employee_form_group">
+                              <CustomSelectComp
+                                optionsData={technicalRoundStatus}
+                                value={tech_leads?.technical_round_result}
+                                changeHandler={(e) =>
+                                  changeTechStatus(e, tech_leads?.interview_id)
+                                }
+                              />
+                            </div>
+                          )}
                         </td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
-                            className="cmn_Button_style"
-                            onClick={() =>
-                              dispatch(
-                                update_lead_round_count({
-                                  leadId: tech_leads?.id,
-                                  in_round_count: 3,
-                                })
-                              )
-                            }
-                          >
-                            Start
-                          </button>}
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_update) && (
+                            <button
+                              className="cmn_Button_style"
+                              onClick={() =>
+                                dispatch(
+                                  update_lead_round_count({
+                                    leadId: tech_leads?.id,
+                                    in_round_count: 3,
+                                  })
+                                )
+                              }
+                            >
+                              Start
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))
@@ -498,11 +637,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
-
               </tbody>
             </table>
             {tech_round_leads?.data?.data?.data?.length > 0 && (
-              <PaginationComp totalPage={tech_round_leads?.data?.pagination?.totalPages} setPage={setTechPage} />
+              <PaginationComp
+                totalPage={tech_round_leads?.data?.pagination?.totalPages}
+                setPage={setTechPage}
+              />
             )}
           </div>
         </Tab>
@@ -544,7 +685,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                          if (
+                            user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                            hr_user_permissions?.can_view
+                          ) {
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
@@ -560,7 +706,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                          if (
+                            user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                            hr_user_permissions?.can_view ||
+                            developer_permissions?.can_view
+                          ) {
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -575,31 +727,40 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         View Questions List
                       </td>
                       <td>
-                        <div className="form-group new_employee_form_group">
-                          <CustomSelectComp
-                            optionsData={resultData}
-                            value={lead?.face_to_face_result}
-                            disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))}
-                            changeHandler={(e) =>
-                              changeFaceRoundStatus(e, lead?.id, "face_to_face")
-                            }
-                          />
-                        </div>
+                        {(user_all_permissions?.roles_data?.includes("Admin") ||
+                          hr_user_permissions?.can_update) && (
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={resultData}
+                              value={lead?.face_to_face_result}
+                              changeHandler={(e) =>
+                                changeFaceRoundStatus(
+                                  e,
+                                  lead?.id,
+                                  "face_to_face"
+                                )
+                              }
+                            />
+                          </div>
+                        )}
                       </td>
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button
-                          className="cmn_Button_style"
-                          onClick={() =>
-                            dispatch(
-                              update_lead_round_count({
-                                leadId: lead?.id,
-                                in_round_count: 4,
-                              })
-                            )
-                          }
-                        >
-                          Start
-                        </button>}
+                        {(user_all_permissions?.roles_data?.includes("Admin") ||
+                          hr_user_permissions?.can_update) && (
+                          <button
+                            className="cmn_Button_style"
+                            onClick={() =>
+                              dispatch(
+                                update_lead_round_count({
+                                  leadId: lead?.id,
+                                  in_round_count: 4,
+                                })
+                              )
+                            }
+                          >
+                            Start
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -610,10 +771,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
-
               </tbody>
             </table>
-            {face_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={face_round_leads?.data?.pagination?.totalPages} setPage={setTechPage} />}
+            {face_round_leads?.data?.data?.length > 0 && (
+              <PaginationComp
+                totalPage={face_round_leads?.data?.pagination?.totalPages}
+                setPage={setTechPage}
+              />
+            )}
           </div>
         </Tab>
         <Tab eventKey="Final Interaction" title="Final Interaction">
@@ -654,7 +819,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) {
+                          if (
+                            user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                            hr_user_permissions?.can_view
+                          ) {
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
@@ -671,7 +841,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          if (user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR") || user_all_permissions?.roles_data?.includes("Developer")) {
+                          if (
+                            user_all_permissions?.roles_data?.includes(
+                              "Admin"
+                            ) ||
+                            hr_user_permissions?.can_view ||
+                            developer_permissions?.can_view
+                          ) {
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -686,19 +862,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         View Questions List
                       </td>
                       <td>
-                        <div className="form-group new_employee_form_group">
-                          <CustomSelectComp
-                            optionsData={resultData}
-                            value={lead?.final_result}
-                            changeHandler={(e) =>
-                              changeFaceRoundStatus(e, lead?.id, "final")
-                            }
-                            disabled={!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))} // Pass disabled condition
-                          />
-                        </div>
+                        {(user_all_permissions?.roles_data?.includes("Admin") ||
+                          hr_user_permissions?.can_update) && (
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={resultData}
+                              value={lead?.final_result}
+                              changeHandler={(e) =>
+                                changeFaceRoundStatus(e, lead?.id, "final")
+                              }
+                            />
+                          </div>
+                        )}
                       </td>
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR")) && <button className="cmn_Button_style">Start</button>}
+                        {(user_all_permissions?.roles_data?.includes("Admin") ||
+                          user_all_permissions?.roles_data?.includes("HR")) && (
+                          <button className="cmn_Button_style">Start</button>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -709,10 +890,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                     </td>
                   </tr>
                 )}
-
               </tbody>
             </table>
-            {final_round_leads?.data?.data?.length > 0 && <PaginationComp totalPage={final_round_leads?.data?.totalPages} setPage={setTechPage} />}
+            {final_round_leads?.data?.data?.length > 0 && (
+              <PaginationComp
+                totalPage={final_round_leads?.data?.totalPages}
+                setPage={setTechPage}
+              />
+            )}
           </div>
         </Tab>
       </Tabs>

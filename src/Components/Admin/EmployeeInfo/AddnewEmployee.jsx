@@ -26,6 +26,8 @@ const AddnewEmployee = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const [role, setRole] = useState([]);
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+  console.log(selectedDocuments, "get_employeesss");
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -37,6 +39,10 @@ const AddnewEmployee = () => {
   const roles = useSelector((store) => store.ALL_ROLES);
 
   useEffect(() => {
+    dispatch(get_all_roles());
+  }, []);
+
+  useEffect(() => {
     if (roles?.isSuccess) {
       if (roles?.data?.data?.length !== 0) {
         roles?.data?.data?.forEach((data) => {
@@ -46,7 +52,7 @@ const AddnewEmployee = () => {
         });
       }
     }
-  }, []);
+  }, [roles]);
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -62,6 +68,26 @@ const AddnewEmployee = () => {
     { value: 5, label: 5 },
   ];
 
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
   const [field_data, setField_date] = useState({
     username: "",
     email: "",
@@ -73,10 +99,10 @@ const AddnewEmployee = () => {
     bank_name: "",
     account_number: "",
     ifsc: "",
-    increment_date: "",
+    increment_date: null,
     gender: "",
-    dob: "",
-    doj: "",
+    dob: null,
+    doj: null,
     skype_email: "",
     ultivic_email: "",
     salary: "",
@@ -90,7 +116,10 @@ const AddnewEmployee = () => {
     role: "",
     confirm_password: "",
     password: "",
+    documents: selectedDocuments,
   });
+
+  console.log(field_data, "this is the field_data");
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -111,28 +140,49 @@ const AddnewEmployee = () => {
   }, [is_user_created]);
 
   const handleInputChange = (name, value) => {
-    const dateFields = ["increment_date", "dob", "doj"];
-    const newValue =
-      dateFields.includes(name) && value
-        ? moment(value).format("DD/MM/YYYY")
-        : value;
-
     setField_date({
       ...field_data,
-      [name]: newValue,
+      [name]: value,
     });
   };
 
   const handleSaveUser = (e) => {
     e.preventDefault();
 
-    const hasEmptyFields = Object.values(field_data).some((value) => {
-      return typeof value === "string" ? value.trim() === "" : false;
-    });
+    const optionalFields = [
+      "emergency_contact",
+      "emergency_contact_relationship",
+      "emergency_contact_name",
+      "bank_name",
+      "account_number",
+      "ifsc",
+      "increment_date",
+      "skype_email",
+      "ultivic_email",
+      "salary",
+      "security",
+      "total_security",
+      "installments",
+      "address",
+      "role",
+      "documents",
+    ];
 
-    if (hasEmptyFields) {
-      alert("Fields can't be empty");
+    const missingFields = Object.entries(field_data)
+      .filter(([key, value]) => {
+        if (optionalFields.includes(key)) {
+          return false;
+        }
+        return typeof value === "string" ? value.trim() === "" : value === null;
+      })
+      .map(([key]) => key);
+
+    if (missingFields.length > 0) {
+      alert(
+        `The following required fields are missing: ${missingFields.join(", ")}`
+      );
     } else {
+      console.log("Documents in field_data: ", field_data.documents); // Check if documents exist here
       dispatch(create_new_user({ field_data }));
     }
   };
@@ -143,9 +193,43 @@ const AddnewEmployee = () => {
     return nextYear;
   };
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
+
+  const documents = [
+    { id: 1, name: "Aadhar Card" },
+    { id: 2, name: "PAN Card" },
+    { id: 3, name: "Qualification" },
+    { id: 4, name: "Experience" },
+    { id: 5, name: "Bank Statement" },
+    { id: 6, name: "Training Certificate" },
+  ];
+
+  const handleCheckboxChange = (name) => {
+    if (field_data?.documents.includes(name)) {
+      const updatedDocuments = field_data.documents.filter(
+        (doc) => doc !== name
+      );
+      setSelectedDocuments(updatedDocuments);
+      setField_date({
+        ...field_data,
+        documents: updatedDocuments,
+      });
+    } else {
+      const updatedDocuments = [...field_data.documents, name];
+      setSelectedDocuments(updatedDocuments);
+      setField_date({
+        ...field_data,
+        documents: updatedDocuments,
+      });
+    }
+  };
 
   return (
     <section className="add_new_emp_container">
@@ -281,19 +365,26 @@ const AddnewEmployee = () => {
                     <label htmlFor="">Increment Date</label>
                     <DatePicker
                       selected={
-                        field_data.increment_date
-                          ? new Date(field_data.increment_date)
-                          : null
+                        field_data.increment_date && field_data.increment_date
                       }
-                      onChange={(date) =>
-                        handleInputChange("increment_date", date)
-                      }
+                      onSelect={(date) => {
+                        if (
+                          date instanceof Date &&
+                          !isNaN(date) &&
+                          date <= getMaxDate()
+                        ) {
+                          handleInputChange("increment_date", date);
+                        } else {
+                          alert("Invalid date. Please select a valid date.");
+                        }
+                      }}
                       placeholderText="DD/MM/YYYY"
                       onKeyDown={(e) => e.preventDefault()}
                       dateFormat="dd/MM/yyyy"
                       showYearDropdown
                       scrollableYearDropdown
                       maxDate={getMaxDate()}
+                      minDate={new Date()}
                       className="form-control"
                     />
                   </div>
@@ -337,7 +428,6 @@ const AddnewEmployee = () => {
                       dateFormat="dd/MM/yyyy"
                       showYearDropdown
                       scrollableYearDropdown
-                      maxDate={new Date()}
                       className="form-control"
                     />
                   </div>
@@ -354,14 +444,13 @@ const AddnewEmployee = () => {
                       dateFormat="dd/MM/yyyy"
                       showYearDropdown
                       scrollableYearDropdown
-                      maxDate={new Date()}
                     />
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
-                    labelname={"Skepe"}
-                    placeholder={"Skepe"}
+                    labelname={"Skype"}
+                    placeholder={"Skype"}
                     classname={"new_employee_form_group"}
                     type={"text"}
                     value={field_data.skype_email}
@@ -446,23 +535,13 @@ const AddnewEmployee = () => {
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{ value: "intern", label: "Intern" }]}
+                        optionsData={positionData}
                         changeHandler={(e) =>
                           handleInputChange("position", e.value)
                         }
                         value={field_data.position}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.position}
-                      onChange={(e) =>
-                        handleInputChange("position", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="intern">Intern</option>
-                    </select> */}
                   </div>
                 </div>
 
@@ -481,16 +560,6 @@ const AddnewEmployee = () => {
                         value={field_data.department}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.department}
-                      onChange={(e) =>
-                        handleInputChange("department", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value={"mern"}>MERN</option>
-                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -501,23 +570,13 @@ const AddnewEmployee = () => {
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={[{ value: "active", label: "ACTIVE" }]}
+                        optionsData={statusObj}
                         changeHandler={(e) =>
                           handleInputChange("status", e.value)
                         }
                         value={field_data.status}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.status}
-                      onChange={(e) =>
-                        handleInputChange("status", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="active">ACTIVE</option>
-                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -569,16 +628,6 @@ const AddnewEmployee = () => {
                         value={field_data.role}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.role}
-                      onChange={(e) =>
-                        handleInputChange("role", e.target.value)
-                      }
-                    >
-                      <option>Select Role</option>
-                      <option value={"admin"}>ADMIN</option>
-                    </select> */}
                   </div>
                 </div>
               </div>
@@ -592,6 +641,34 @@ const AddnewEmployee = () => {
                   value={field_data.address}
                   onChange={(e) => handleInputChange("address", e.target.value)}
                 />
+              </div>
+
+              <div className="text-end mt-3"></div>
+              <div className="table-responsive mt-4 transparent_bg">
+                <table className="employee_detail_table mt-3">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Document Name</th>
+                      <th>Checked</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {documents.map((doc) => (
+                      <tr key={doc.id}>
+                        <td>{doc.id}</td>
+                        <td>{doc.name}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={selectedDocuments.includes(doc.name)}
+                            onChange={() => handleCheckboxChange(doc.name)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
               <div className="text-end mt-3">

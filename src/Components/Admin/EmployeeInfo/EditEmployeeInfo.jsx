@@ -24,12 +24,12 @@ const EditEmployeeInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const obj = [
-    { name: "Employees", path: "/employee" },
-    { name: "Information aAout Dinesh Kumar", path: "/viewEmployeeInfo" },
-    { name: "Edit Dinesh Kumar Information", path: "/editEmployee" },
-  ];
-  const { user_details } = location?.state ? location?.state : location;
+  const obj = [{ name: "Employees", path: "/employee" }];
+  const { user_details, documents } = location?.state
+    ? location?.state
+    : location;
+
+  console.log(documents);
 
   useEffect(() => {
     dispatch(get_all_roles());
@@ -82,6 +82,11 @@ const EditEmployeeInfo = () => {
   );
   let [ultivic_email, setUltivicEmail] = useState(user_details?.ultivic_email);
   let [username, setUsername] = useState(user_details?.username);
+  let [selected_documents, setSelected_documents] = useState([]);
+  console.log(
+    selected_documents,
+    "selected_documents selected_documents selected_documents"
+  );
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
   const user_all_permissions = useSelector(
@@ -103,42 +108,163 @@ const EditEmployeeInfo = () => {
     }
   }, [update_user_details]);
 
+  useEffect(() => {
+    if (documents?.data?.data?.length > 0) {
+      let newArr = [];
+      documents.data.data.map((data) => {
+        const documentName = data.document_name;
+        if (!newArr.includes(documentName)) {
+          newArr.push(documentName);
+        }
+      });
+      console.log(newArr, "this is the new Arr");
+      setSelected_documents(newArr);
+    }
+  }, [documents]);
+
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
   const handleUpdate = (e) => {
     e.preventDefault();
-    dispatch(
-      update_user({
-        name,
-        username,
-        email,
-        mobile,
-        emergency_contact_relationship,
-        emergency_contact_name,
-        emergency_contact,
-        bank_name,
-        account_number,
-        ifsc,
-        increment_date,
-        gender,
-        dob,
-        doj,
-        skype_email,
-        ultivic_email,
-        salary,
-        security,
-        total_security,
-        installments,
-        position,
-        department,
-        status,
-        address,
-        id,
+
+    const optionalFields = [
+      "emergency_contact",
+      "emergency_contact_relationship",
+      "emergency_contact_name",
+      "bank_name",
+      "account_number",
+      "ifsc",
+      "increment_date",
+      "gender",
+      "dob",
+      "doj",
+      "skype_email",
+      "ultivic_email",
+      "salary",
+      "security",
+      "total_security",
+      "installments",
+      "address",
+    ];
+
+    const field_data = {
+      name,
+      username,
+      email,
+      mobile,
+      emergency_contact_relationship,
+      emergency_contact_name,
+      emergency_contact,
+      bank_name,
+      account_number,
+      ifsc,
+      increment_date,
+      gender,
+      dob,
+      doj,
+      skype_email,
+      ultivic_email,
+      salary,
+      security,
+      total_security,
+      installments,
+      position,
+      department,
+      status,
+      address,
+      documents: selected_documents,
+    };
+
+    const missingFields = Object.entries(field_data)
+      .filter(([key, value]) => {
+        if (optionalFields.includes(key)) {
+          return false;
+        }
+        return typeof value === "string" ? value.trim() === "" : value === null;
       })
-    );
+      .map(([key]) => key);
+
+    if (missingFields.length > 0) {
+      alert(
+        `The following required fields are missing: ${missingFields.join(", ")}`
+      );
+    } else {
+      dispatch(
+        update_user({
+          ...field_data,
+          id,
+        })
+      );
+    }
   };
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
+
+  const documentsName = [
+    { id: 1, name: "Aadhar Card" },
+    { id: 2, name: "PAN Card" },
+    { id: 3, name: "Qualification" },
+    { id: 4, name: "Experience" },
+    { id: 5, name: "Bank Statement" },
+    { id: 6, name: "Training Certificate" },
+  ];
+
+  // const handleCheckboxChange = (name) => {
+  //   if (field_data?.documents.includes(name)) {
+  //     const updatedDocuments = field_data.documents.filter(
+  //       (doc) => doc !== name
+  //     );
+  //     setSelectedDocuments(updatedDocuments);
+  //     setField_date({
+  //       ...field_data,
+  //       documents: updatedDocuments,
+  //     });
+  //   } else {
+  //     const updatedDocuments = [...field_data.documents, name];
+  //     setSelectedDocuments(updatedDocuments);
+  //     setField_date({
+  //       ...field_data,
+  //       documents: updatedDocuments,
+  //     });
+  //   }
+  // };
+
+  const handleCheckboxChange = (documentName) => {
+    setSelected_documents((prevSelected) => {
+      if (prevSelected.includes(documentName)) {
+        // If already selected, remove it
+        return prevSelected.filter((item) => item !== documentName);
+      } else {
+        // Otherwise, add it
+        return [...prevSelected, documentName];
+      }
+    });
+  };
 
   return (
     <section className="add_new_emp_container">
@@ -397,8 +523,14 @@ const EditEmployeeInfo = () => {
                       value={position}
                       onChange={(e) => setPosition(e.target.value)}
                     >
-                      <option>Select</option>
-                      <option value="intern">Intern</option>
+                      <option value="">Select</option>{" "}
+                      {positionData.map((data, i) => {
+                        return (
+                          <option key={i} value={data?.value}>
+                            {data?.label}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -436,7 +568,13 @@ const EditEmployeeInfo = () => {
                       onChange={(e) => setStatus(e.target.value)}
                     >
                       <option>Select</option>
-                      <option value="Active">ACTIVE</option>
+                      {statusObj?.map((data, i) => {
+                        return (
+                          <option key={i} value={data?.value}>
+                            {data?.label}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -493,18 +631,25 @@ const EditEmployeeInfo = () => {
                       <th>#</th>
                       <th>Document Name</th>
                       <th>Status</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Aadhar Card</td>
-                      <td>N/A</td>
-                      <td>
-                        <input type="checkbox" />
-                      </td>
-                    </tr>
+                    {documentsName.map((document) => (
+                      <tr key={document.id}>
+                        <td>{document.id}</td>
+                        <td>{document.name}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={
+                              Array.isArray(selected_documents) &&
+                              selected_documents.includes(document.name)
+                            }
+                            onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
+                          />
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

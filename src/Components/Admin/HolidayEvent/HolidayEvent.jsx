@@ -19,31 +19,39 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { show } = useAppContext();
   const [showEventModal, setShowEventModal] = useState(false);
   const [selected_year, setSelected_year] = useState(new Date().getFullYear());
   const [year, setYear] = useState([]);
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [yearObj, setYearObj] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [event_id, setEvent_id] = useState(null);
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const holiday_and_events = useSelector(
     (store) => store.ALL_HOLIDAY_AND_EVENT
   );
-  console.log(holiday_and_events, "this is the holiday and events")
   const is_deleted = useSelector((store) => store.DELETE_EVENT);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Events"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
+  useEffect(() => {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -139,8 +147,16 @@ const HolidayEvent = () => {
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
-              <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => dispatch(
-                get_all_holidays_and_events({ year: new Date().getFullYear() }))}>
+              <button
+                className="cmn_Button_style cmn_darkgray_btn"
+                onClick={() =>
+                  dispatch(
+                    get_all_holidays_and_events({
+                      year: new Date().getFullYear(),
+                    })
+                  )
+                }
+              >
                 Reset
               </button>
               <button
@@ -148,21 +164,24 @@ const HolidayEvent = () => {
                 onClick={() =>
                   isSearched
                     ? dispatch(
-                      get_all_holidays_and_events({ year: selected_year })
-                    )
+                        get_all_holidays_and_events({ year: selected_year })
+                      )
                     : toast.error("Please select year !!")
                 }
               >
                 Search
               </button>
-              <button
-                className="cmn_Button_style"
-                onClick={() => {
-                  setShowEventModal(true);
-                }}
-              >
-                Add Event
-              </button>
+              {(user_all_permissions?.roles_data?.includes("Admin") ||
+                hr_user_permissions?.can_create) && (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    setShowEventModal(true);
+                  }}
+                >
+                  Add Event
+                </button>
+              )}
             </div>
           </div>
           <div className="table-responsive mt-3 transparent_bg">
@@ -176,38 +195,59 @@ const HolidayEvent = () => {
                 </tr>
               </thead>
               <tbody>
-                {holiday_and_events?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : holiday_and_events?.data?.eventsOrHolidays?.map((event, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{formatDate(event?.date)}</td>
-                      <td>{event?.occasion_name}</td>
+                {holiday_and_events?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  holiday_and_events?.data?.eventsOrHolidays?.map(
+                    (event, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>{formatDate(event?.date)}</td>
+                          <td>{event?.occasion_name}</td>
 
-                      <td>
-                        <div className="d-flex gap-2 justify-content-center">
-                          <div className="cmn_action_outer yellow_bg">
-                            <FaRegEdit
-                              onClick={() => handleShowEditModal(event?.id)}
-                            />
-                          </div>
-                          <div className="cmn_action_outer red_bg">
-                            <RiDeleteBin6Line
-                              onClick={() => {
-                                setShowDeleteModal(true);
-                                setEvent_id(event?.id);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                          <td>
+                            <div className="d-flex gap-2 justify-content-center">
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                hr_user_permissions?.can_view) && (
+                                <div className="cmn_action_outer yellow_bg">
+                                  <FaRegEdit
+                                    onClick={() =>
+                                      handleShowEditModal(event?.id)
+                                    }
+                                  />
+                                </div>
+                              )}
+                              {(user_all_permissions?.roles_data?.includes(
+                                "Admin"
+                              ) ||
+                                hr_user_permissions?.can_delete) && (
+                                <div className="cmn_action_outer red_bg">
+                                  <RiDeleteBin6Line
+                                    onClick={() => {
+                                      setShowDeleteModal(true);
+                                      setEvent_id(event?.id);
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )
+                )}
               </tbody>
             </table>
           </div>
         </div>
-        <PaginationComp totalPage={holiday_and_events?.data?.totalPages} setPage={setPage} />
+        <PaginationComp
+          totalPage={holiday_and_events?.data?.totalPages}
+          setPage={setPage}
+        />
 
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />

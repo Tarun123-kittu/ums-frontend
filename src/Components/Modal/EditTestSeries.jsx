@@ -20,15 +20,27 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
   const [series_time, setSeries_time] = useState("");
   const [series_language, setSeries_language] = useState("");
   const [series_description, setSeries_description] = useState("");
+  const [developer_permissions, setDeveloper_permissions] = useState({});
   const [all_languagages, setAll_languages] = useState([]);
   const series_data = useSelector((store) => store.GET_SERIES);
   const updated_state = useSelector((store) => store.UPDATE_TESTSERIES);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
 
   useEffect(() => {
     return () => {
       dispatch(clear_get_series_state());
     };
   }, []);
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "Developer" && el.permission === "Test"
+    );
+    setDeveloper_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     if (seriesId) {
@@ -148,12 +160,15 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button
-            className="cmn_Button_style"
-            onClick={() => handleCreateTestSeries()}
-          >
-            Edit
-          </button>
+          {(user_all_permissions?.roles_data?.includes("Admin") ||
+            developer_permissions?.can_edit) && (
+            <button
+              className="cmn_Button_style"
+              onClick={() => handleCreateTestSeries()}
+            >
+              Edit
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
     </div>

@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const TodayAttendence = () => {
   UseAttendanceReport({ page: 1 });
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
@@ -22,18 +22,27 @@ const TodayAttendence = () => {
   const navigate = useNavigate();
 
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
-  console.log(attendance_report, "this is the attendance report")
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-  const [page, setPage] = useState(1)
+
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   useEffect(() => {
-    dispatch(get_attendance_report({ page }))
-  }, [page])
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Attandance"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
+
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    dispatch(get_attendance_report({ page }));
+  }, [page]);
   const { show } = useAppContext();
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -87,56 +96,71 @@ const TodayAttendence = () => {
                 </tr>
               </thead>
               <tbody>
-                {attendance_report?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : attendance_report?.data?.data?.map((report, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{report?.name}</td>
-                      <td>
-                        {report?.in_time
-                          ? convertTo12Hour(report.in_time)
-                          : "--"}
-                      </td>
-                      <td>
-                        {report?.out_time
-                          ? convertTo12Hour(report?.out_time)
-                          : "--"}
-                      </td>
-                      <td>{report?.total_time ? report?.total_time : "--"}</td>
-                      <td>
-                        {report?.name && report?.login_mobile
-                          ? `${report.name}/mobile ${report.login_mobile === "1" ? "true" : "false"
-                          }`
-                          : "--"}
-                      </td>
-                      <td>
-                        {report?.name && report?.logout_mobile
-                          ? `${report.name}/mobile ${report.logout_mobile === "1" ? "true" : "false"
-                          }`
-                          : "--"}
-                      </td>
+                {attendance_report?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  attendance_report?.data?.data?.map((report, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{report?.name}</td>
+                        <td>
+                          {report?.in_time
+                            ? convertTo12Hour(report.in_time)
+                            : "--"}
+                        </td>
+                        <td>
+                          {report?.out_time
+                            ? convertTo12Hour(report?.out_time)
+                            : "--"}
+                        </td>
+                        <td>
+                          {report?.total_time ? report?.total_time : "--"}
+                        </td>
+                        <td>
+                          {report?.name && report?.login_mobile
+                            ? `${report.name}/mobile ${
+                                report.login_mobile === "1" ? "true" : "false"
+                              }`
+                            : "--"}
+                        </td>
+                        <td>
+                          {report?.name && report?.logout_mobile
+                            ? `${report.name}/mobile ${
+                                report.logout_mobile === "1" ? "true" : "false"
+                              }`
+                            : "--"}
+                        </td>
 
-                      <td>
-                        {report?.id && (
-                          <div className="cmn_action_outer yellow_bg">
-                            <FiEdit
-                              onClick={() => {
-                                navigate("/editAttendenceReport", {
-                                  state: { id: report?.id },
-                                });
-                              }}
-                            />
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                        <td>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_view) &&
+                            report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
         </div>
-        <PaginationComp totalPage={attendance_report?.data?.totalPages} setPage={setPage} />
+        <PaginationComp
+          totalPage={attendance_report?.data?.totalPages}
+          setPage={setPage}
+        />
       </div>
     </section>
   );

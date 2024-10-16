@@ -11,7 +11,7 @@ import { get_all_user_leave } from "../../../utils/redux/leaveSlice/getUsersAllL
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 
 const LeaveReport = () => {
   const dispatch = useDispatch();
@@ -22,19 +22,28 @@ const LeaveReport = () => {
   ];
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [year, setYear] = useState([]);
   const [selected_employee, setSelected_employee] = useState();
   const [selected_month, setSelected_month] = useState();
   const [selected_year, setSelected_year] = useState();
+
+  useEffect(() => {
+    const can_hr_create = all_permissions?.data?.data?.find(
+      (el) => el.role === "HR" && el.permission === "Leave"
+    );
+    setHr_user_permissions(can_hr_create);
+  }, [all_permissions]);
 
   useEffect(() => {
     dispatch(
@@ -192,38 +201,47 @@ const LeaveReport = () => {
                 </tr>
               </thead>
               <tbody>
-                {leave_data?.isLoading ? <img className="loader_gif" src={Loader} alt="loader" /> : leave_data?.data?.data?.map((leave, i) => {
-                  return (
-                    <tr>
-                      <td>{i + 1}</td>
-                      <td>{leave?.name}</td>
-                      <td>{leave?.type}</td>
-                      <td>{formatDate(leave?.createdAt)}</td>
-                      <td>{leave?.from_date}</td>
-                      <td>{leave?.to_date}</td>
-                      <td>{leave?.count}</td>
-                      <td>{leave?.description}</td>
-                      <td>{leave?.status}</td>
-                      <td>{leave?.remark}</td>
-                      <td>
-                        <div className="cmn_action_outer yellow_bg cursor_pointer">
-                          <FiEdit
-                            onClick={() => {
-                              navigate("/editLeaveRequest", {
-                                state: {
-                                  leave_id: leave?.id,
-                                  back_to_report: true,
-                                  leave_status: leave?.status,
-                                  leave_remark: leave?.remark,
-                                },
-                              });
-                            }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {leave_data?.isLoading ? (
+                  <img className="loader_gif" src={Loader} alt="loader" />
+                ) : (
+                  leave_data?.data?.data?.map((leave, i) => {
+                    return (
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>{leave?.name}</td>
+                        <td>{leave?.type}</td>
+                        <td>{formatDate(leave?.createdAt)}</td>
+                        <td>{leave?.from_date}</td>
+                        <td>{leave?.to_date}</td>
+                        <td>{leave?.count}</td>
+                        <td>{leave?.description}</td>
+                        <td>{leave?.status}</td>
+                        <td>{leave?.remark}</td>
+                        <td>
+                          {(user_all_permissions?.roles_data?.includes(
+                            "Admin"
+                          ) ||
+                            hr_user_permissions?.can_view) && (
+                            <div className="cmn_action_outer yellow_bg cursor_pointer">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editLeaveRequest", {
+                                    state: {
+                                      leave_id: leave?.id,
+                                      back_to_report: true,
+                                      leave_status: leave?.status,
+                                      leave_remark: leave?.remark,
+                                    },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
