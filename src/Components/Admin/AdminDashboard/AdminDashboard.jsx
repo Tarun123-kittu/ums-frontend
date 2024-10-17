@@ -32,15 +32,15 @@ const AdminDashboard = () => {
     (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
   );
   const [permissions, setPermissions] = useState({
-    canView: false,
-    canCreate: false,
-    canDelete: false,
-    canUpdate: false,
+    can_view: false,
+    can_create: false,
+    can_delete: false,
+    can_update: false,
   });
 
   useEffect(() => {
     const permissionStatus = checkPermissions(
-      "Salary",
+      "Dashboard",
       user_all_permissions?.roles_data,
       user_all_permissions?.permission_data
     );

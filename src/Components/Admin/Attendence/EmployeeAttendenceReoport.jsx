@@ -21,6 +21,8 @@ const EmployeeAttendenceReoport = () => {
   const monthly_report = useSelector(
     (store) => store.ATTENDENCE_MONTHLY_REPORT
   );
+
+  console.log(monthly_report, "this is the monthly report");
   const monthDataObj = [
     { value: "01", label: "January" },
     { value: "02", label: "February" },
@@ -130,7 +132,7 @@ const EmployeeAttendenceReoport = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {monthly_report?.data?.reportData?.map((report, i) => {
+                  {monthly_report?.data?.message?.map((report, i) => {
                     if (report?.isHoliday || report?.isWeekend) {
                       return (
                         <tr>

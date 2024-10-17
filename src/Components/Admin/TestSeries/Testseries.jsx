@@ -207,6 +207,9 @@ const Testseries = () => {
                             {series?.language}
                           </h3>
                           <h3 className="series_created_text">
+                            {series?.experience_level}
+                          </h3>
+                          <h3 className="series_created_text">
                             {formatTimeToReadable(series?.time_taken)}
                           </h3>
                           {(user_all_permissions?.roles_data?.includes(

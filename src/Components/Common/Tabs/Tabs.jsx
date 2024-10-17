@@ -33,6 +33,7 @@ import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import checkPermissions from "../../Utils/checkPermissions";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
@@ -66,9 +67,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [techPage, setTechPage] = useState(1);
   const [facePage, setFacePage] = useState(1);
   const [finalPage, setFinalPage] = useState(1);
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
-  const [developer_permissions, setDeveloper_permissions] = useState({});
-  console.log(hr_user_permissions, "hr Permissions");
+  const [permissions, setPermissions] = useState({
+    can_view: false,
+    can_create: false,
+    can_delete: false,
+    can_update: false,
+  });
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
@@ -89,15 +93,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   );
 
   useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Interviews"
+    const permissionStatus = checkPermissions(
+      "Interviews",
+      user_all_permissions?.roles_data,
+      user_all_permissions?.permission_data
     );
-    const developerPermissions = all_permissions?.data?.data?.find(
-      (el) => el.role === "Developer" && el.permission === "Interviews"
-    );
-    setHr_user_permissions(can_hr_create);
-    setDeveloper_permissions(developerPermissions);
-  }, [all_permissions]);
+    setPermissions(permissionStatus);
+  }, [user_all_permissions]);
+
+  console.log(permissions, "this is the permissions");
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -377,20 +381,17 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <td>{lead?.current_salary}</td>
                             <td>{lead?.expected_salary}</td>
                             <td>
-                              {user_all_permissions?.roles_data?.includes(
-                                "Admin"
-                              ) ||
-                                (hr_user_permissions?.can_create && (
-                                  <button
-                                    className="cmn_Button_style"
-                                    onClick={() => {
-                                      setLeadId(lead?.id);
-                                      setShowHrQuestionModal(true);
-                                    }}
-                                  >
-                                    Start
-                                  </button>
-                                ))}
+                              {permissions?.can_view && (
+                                <button
+                                  className="cmn_Button_style"
+                                  onClick={() => {
+                                    setLeadId(lead?.id);
+                                    setShowHrQuestionModal(true);
+                                  }}
+                                >
+                                  Start
+                                </button>
+                              )}
                             </td>
                           </tr>
                         );
@@ -463,50 +464,35 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            if (
-                              user_all_permissions?.roles_data?.includes(
-                                "Admin"
-                              ) ||
-                              hr_user_permissions?.can_view
-                            ) {
-                              navigate("/viewQuestionlist", {
-                                state: {
-                                  interview_id: candidate?.interview_id,
-                                  lead_id: candidate?.id,
-                                },
-                              });
-                            }
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: candidate?.interview_id,
+                                lead_id: candidate?.id,
+                              },
+                            });
                           }}
                         >
                           View Questions List
                         </td>
 
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_update) && (
-                            <div className="form-group new_employee_form_group">
-                              <CustomSelectComp
-                                optionsData={resultData}
-                                value={candidate?.hr_round_result}
-                                changeHandler={(e) =>
-                                  dispatch(
-                                    hr_update_lead_status({
-                                      interview_id: candidate?.interview_id,
-                                      hr_round_result: e.value,
-                                    })
-                                  )
-                                }
-                              />
-                            </div>
-                          )}
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={resultData}
+                              value={candidate?.hr_round_result}
+                              changeHandler={(e) =>
+                                dispatch(
+                                  hr_update_lead_status({
+                                    interview_id: candidate?.interview_id,
+                                    hr_round_result: e.value,
+                                  })
+                                )
+                              }
+                            />
+                          </div>
                         </td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_create) && (
+                          {permissions?.can_view && (
                             <button
                               className="cmn_Button_style"
                               onClick={() => {
@@ -572,46 +558,31 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
-                            if (
-                              user_all_permissions?.roles_data?.includes(
-                                "Admin"
-                              ) ||
-                              hr_user_permissions?.can_view ||
-                              developer_permissions?.can_view
-                            ) {
-                              navigate("/questionAnswerSheet", {
-                                state: {
-                                  lead_id: tech_leads?.id,
-                                  language_id: language_id,
-                                  series_id: series_id,
-                                },
-                              });
-                            }
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: tech_leads?.id,
+                                language_id: language_id,
+                                series_id: series_id,
+                              },
+                            });
                           }}
                         >
                           View Questions List
                         </td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_update) && (
-                            <div className="form-group new_employee_form_group">
-                              <CustomSelectComp
-                                optionsData={technicalRoundStatus}
-                                value={tech_leads?.technical_round_result}
-                                changeHandler={(e) =>
-                                  changeTechStatus(e, tech_leads?.interview_id)
-                                }
-                              />
-                            </div>
-                          )}
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={technicalRoundStatus}
+                              value={tech_leads?.technical_round_result}
+                              changeHandler={(e) =>
+                                changeTechStatus(e, tech_leads?.interview_id)
+                              }
+                            />
+                          </div>
                         </td>
+
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_update) && (
+                          {permissions?.can_view && (
                             <button
                               className="cmn_Button_style"
                               onClick={() =>
@@ -685,68 +656,48 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          if (
-                            user_all_permissions?.roles_data?.includes(
-                              "Admin"
-                            ) ||
-                            hr_user_permissions?.can_view
-                          ) {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: lead?.interview_id,
-                                lead_id: lead?.id,
-                              },
-                            });
-                          }
+                          navigate("/viewQuestionlist", {
+                            state: {
+                              interview_id: lead?.interview_id,
+                              lead_id: lead?.id,
+                            },
+                          });
                         }}
                       >
                         View Questions List
                       </td>
+
                       <td
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          if (
-                            user_all_permissions?.roles_data?.includes(
-                              "Admin"
-                            ) ||
-                            hr_user_permissions?.can_view ||
-                            developer_permissions?.can_view
-                          ) {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: lead?.id,
-                                language_id: lead?.language_id,
-                                series_id: lead?.assigned_test_series,
-                                view: true,
-                              },
-                            });
-                          }
+                          navigate("/questionAnswerSheet", {
+                            state: {
+                              lead_id: lead?.id,
+                              language_id: lead?.language_id,
+                              series_id: lead?.assigned_test_series,
+                              view: true,
+                            },
+                          });
                         }}
                       >
                         View Questions List
                       </td>
+
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") ||
-                          hr_user_permissions?.can_update) && (
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={resultData}
-                              value={lead?.face_to_face_result}
-                              changeHandler={(e) =>
-                                changeFaceRoundStatus(
-                                  e,
-                                  lead?.id,
-                                  "face_to_face"
-                                )
-                              }
-                            />
-                          </div>
-                        )}
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.face_to_face_result}
+                            changeHandler={(e) =>
+                              changeFaceRoundStatus(e, lead?.id, "face_to_face")
+                            }
+                          />
+                        </div>
                       </td>
+
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") ||
-                          hr_user_permissions?.can_update) && (
+                        {permissions?.can_view && (
                           <button
                             className="cmn_Button_style"
                             onClick={() =>
@@ -819,65 +770,49 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          if (
-                            user_all_permissions?.roles_data?.includes(
-                              "Admin"
-                            ) ||
-                            hr_user_permissions?.can_view
-                          ) {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: lead?.interview_id,
-                                lead_id: lead?.id,
-                                view: true,
-                              },
-                            });
-                          }
+                          navigate("/viewQuestionlist", {
+                            state: {
+                              interview_id: lead?.interview_id,
+                              lead_id: lead?.id,
+                              view: true,
+                            },
+                          });
                         }}
                       >
                         View Questions List
                       </td>
+
                       <td
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          if (
-                            user_all_permissions?.roles_data?.includes(
-                              "Admin"
-                            ) ||
-                            hr_user_permissions?.can_view ||
-                            developer_permissions?.can_view
-                          ) {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: lead?.id,
-                                language_id: lead?.language_id,
-                                series_id: lead?.assigned_test_series,
-                                view: true,
-                              },
-                            });
-                          }
+                          navigate("/questionAnswerSheet", {
+                            state: {
+                              lead_id: lead?.id,
+                              language_id: lead?.language_id,
+                              series_id: lead?.assigned_test_series,
+                              view: true,
+                            },
+                          });
                         }}
                       >
                         View Questions List
                       </td>
+
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") ||
-                          hr_user_permissions?.can_update) && (
-                          <div className="form-group new_employee_form_group">
-                            <CustomSelectComp
-                              optionsData={resultData}
-                              value={lead?.final_result}
-                              changeHandler={(e) =>
-                                changeFaceRoundStatus(e, lead?.id, "final")
-                              }
-                            />
-                          </div>
-                        )}
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.final_result}
+                            changeHandler={(e) =>
+                              changeFaceRoundStatus(e, lead?.id, "final")
+                            }
+                          />
+                        </div>
                       </td>
+
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") ||
-                          user_all_permissions?.roles_data?.includes("HR")) && (
+                        {permissions?.can_view && (
                           <button className="cmn_Button_style">Start</button>
                         )}
                       </td>

@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import "./login.css";
 import logo from "../assets/logo.png";
@@ -23,10 +21,16 @@ const Login = () => {
   const login_details = useSelector((store) => store.LOGIN);
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
-    if (localStorage.getItem("ums_token") && localStorage.getItem('roles')?.split(',').some(role => ["Admin", "Developer", "HR"].includes(role))) {
+    if (
+      localStorage.getItem("ums_token") &&
+      localStorage
+        .getItem("roles")
+        ?.split(",")
+        .some((role) => ["Admin", "Developer", "HR"].includes(role))
+    ) {
       navigate("/dashboard");
     }
   }, []);
@@ -46,6 +50,7 @@ const Login = () => {
       localStorage.setItem("ums_token", login_details?.data?.token);
       localStorage.setItem("roles", login_details?.data?.roles);
       localStorage.setItem("userId", login_details?.data?.id);
+      localStorage.setItem("tokenIssueTime", Date.now());
       console.log(login_details?.data?.roles, "this is the roles");
       if (login_details?.data?.roles?.includes("Admin")) {
         navigate("/dashboard");

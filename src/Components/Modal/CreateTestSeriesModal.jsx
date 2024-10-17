@@ -11,8 +11,10 @@ import {
 import { get_all_series } from "../../utils/redux/testSeries/getAllTestSeries";
 
 const CreateTestSeriesModal = ({ show, setShow, languages }) => {
+  console.log(languages, "from modal");
   const dispatch = useDispatch();
   const [all_languagages, setAll_languages] = useState([]);
+  console.log(all_languagages, "all languages");
   const [series_name, setSeries_name] = useState("");
   const [series_time, setSeries_time] = useState("");
   const [series_language, setSeries_language] = useState("");
@@ -25,7 +27,10 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
     if (languages?.length !== 0) {
       languages?.forEach((data) => {
         if (!all_languagages.some((item) => item.value === data?.id)) {
-          all_languagages.push({ value: data?.id, label: data?.language });
+          all_languagages.push({
+            value: data?.id,
+            label: data?.language,
+          });
         }
       });
     }
@@ -49,7 +54,13 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
 
   const handleCreateTestSeries = () => {
     const timeFormatRegex = /^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
-    if (series_name && series_time && series_language && series_description) {
+    if (
+      series_name &&
+      series_time &&
+      series_language &&
+      series_description &&
+      experience
+    ) {
       if (!timeFormatRegex.test(series_time)) {
         toast.error("Please input time in HH:MM:SS fromat");
       } else {
@@ -59,6 +70,7 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
             series_name: series_name,
             time_taken: series_time,
             description: series_description,
+            experience_level: experience,
           })
         );
       }
@@ -112,6 +124,7 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
               <CustomSelectComp
                 optionsData={experienceObj}
                 changeHandler={changeExperienceHandler}
+                value={experience}
               />
             </div>
           </div>
@@ -121,6 +134,7 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
               <CustomSelectComp
                 optionsData={all_languagages}
                 changeHandler={changeHandler}
+                value={series_language}
               />
             </div>
           </div>

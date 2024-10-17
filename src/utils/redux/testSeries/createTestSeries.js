@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const create_test_series = createAsyncThunk("create_test_series", async ({ language_id, series_name, time_taken, description }, thunkAPI) => {
+export const create_test_series = createAsyncThunk("create_test_series", async ({ language_id, series_name, time_taken, description, experience_level }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -10,7 +10,8 @@ export const create_test_series = createAsyncThunk("create_test_series", async (
             "language_id": language_id,
             "series_name": series_name,
             "time_taken": time_taken,
-            "description": description
+            "description": description,
+            "experience_level": experience_level
         });
 
         const requestOptions = {

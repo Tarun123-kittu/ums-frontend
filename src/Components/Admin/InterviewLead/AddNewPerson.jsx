@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import InputField from "../../Common/InputField";
 import Notification from "../Notification/Notification";
-import Select from "../../Common/Select";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,6 +14,7 @@ import { ProfileData } from "../../Utils/customData/profileData";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 
 const AddNewPerson = () => {
   const dispatch = useDispatch();
@@ -35,12 +34,17 @@ const AddNewPerson = () => {
     label: state,
   }));
   const add_lead_state = useSelector((state) => state.ADD_INTERVIEW_LEADS);
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    dispatch(get_all_languages());
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -57,6 +61,7 @@ const AddNewPerson = () => {
   const [current_salary, setCurrent_salary] = useState("");
   const [expected_salary, setExpected_salary] = useState("");
   const [last_company, setLast_company] = useState("");
+  const [all_languagages, setAll_languages] = useState([]);
 
   const changeHandler = (field, e) => {
     if (field === "gender") setGender(e.value);
@@ -109,6 +114,19 @@ const AddNewPerson = () => {
       dispatch(clear_interview_leads_state());
     }
   }, [add_lead_state]);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.id,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
 
   if (
     !(
@@ -230,7 +248,7 @@ const AddNewPerson = () => {
                   <div className="mt-2">
                     <CustomSelectComp
                       placeholder={"Select profile"}
-                      optionsData={ProfileData}
+                      optionsData={all_languagages}
                       changeHandler={(e) => changeHandler("profile", e)}
                       value={profile}
                     />

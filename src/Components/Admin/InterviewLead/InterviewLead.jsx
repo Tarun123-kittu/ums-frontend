@@ -19,6 +19,7 @@ import { get_hr_round_candidate } from "../../../utils/redux/interviewLeadsSlice
 import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
+import checkPermissions from "../../Utils/checkPermissions";
 const InterviewLead = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
@@ -28,7 +29,12 @@ const InterviewLead = () => {
   const [selected_language, setSelected_language] = useState("");
   const [selected_experience, setSelected_experience] = useState("");
   const [selected_result, setSelected_result] = useState("");
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
+  const [permissions, setPermissions] = useState({
+    can_view: false,
+    can_create: false,
+    can_delete: false,
+    can_update: false,
+  });
   const [currentTab, setCurrentTab] = useState("Add Person");
   const [open_tab, setOpen_tab] = useState("Add Person");
   const [page, setPage] = useState(1);
@@ -44,11 +50,15 @@ const InterviewLead = () => {
   }, [navigate]);
 
   useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Interviews"
+    const permissionStatus = checkPermissions(
+      "Interviews",
+      user_all_permissions?.roles_data,
+      user_all_permissions?.permission_data
     );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
+    setPermissions(permissionStatus);
+  }, [user_all_permissions]);
+
+  console.log(permissions, "this is the permissions");
 
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
@@ -286,18 +296,16 @@ const InterviewLead = () => {
               />
               {
                 <div>
-                  {(user_all_permissions?.roles_data?.includes("Admin") ||
-                    hr_user_permissions?.can_create) &&
-                    currentTab === "Add Person" && (
-                      <button
-                        className="cmn_Button_style addnew_btn_outer"
-                        onClick={() => {
-                          navigate("/addNewPerson");
-                        }}
-                      >
-                        Add New
-                      </button>
-                    )}
+                  {permissions?.can_create && currentTab === "Add Person" && (
+                    <button
+                      className="cmn_Button_style addnew_btn_outer"
+                      onClick={() => {
+                        navigate("/addNewPerson");
+                      }}
+                    >
+                      Add New
+                    </button>
+                  )}
                 </div>
               }
             </div>
