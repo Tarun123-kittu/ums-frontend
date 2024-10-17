@@ -17,6 +17,7 @@ const ViewEmployeeInfo = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let [selected_documents, setSelected_documents] = useState([]);
   const { user_id } = location.state ? location?.state : location;
   const [user_details, setUser_details] = useState([]);
   const user_all_permissions = useSelector(
@@ -24,6 +25,20 @@ const ViewEmployeeInfo = () => {
   );
   const documents = useSelector((store) => store.USER_DOCUMENT);
   console.log(documents, "this is the all user documents");
+
+  useEffect(() => {
+    if (documents?.data?.data?.length > 0) {
+      let newArr = [];
+      documents.data.data.map((data) => {
+        const documentName = data.document_name;
+        if (!newArr.includes(documentName)) {
+          newArr.push(documentName);
+        }
+      });
+      console.log(newArr, "this is the new Arr");
+      setSelected_documents(newArr);
+    }
+  }, [documents]);
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -67,6 +82,15 @@ const ViewEmployeeInfo = () => {
   const obj = [
     { name: "Employee", path: "/employee" },
     { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
+  ];
+
+  const documentsName = [
+    { id: 1, name: "Aadhar Card" },
+    { id: 2, name: "PAN Card" },
+    { id: 3, name: "Qualification" },
+    { id: 4, name: "Experience" },
+    { id: 5, name: "Bank Statement" },
+    { id: 6, name: "Training Certificate" },
   ];
 
   if (
@@ -212,23 +236,25 @@ const ViewEmployeeInfo = () => {
                     <th>Status</th>
                   </tr>
                 </thead>
-                {documents?.data?.data?.length == 0 ? (
-                  <h4 className="text-center">No Document Found</h4>
-                ) : (
-                  <tbody>
-                    {documents?.data?.data?.map((doc, i) => {
-                      return (
-                        <tr>
-                          <td>{i + 1}</td>
-                          <td>{doc.document_name}</td>
-                          <td>
-                            <input type="checkbox" checked />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                )}
+                <tbody>
+                  {documentsName.map((document) => (
+                    <tr key={document.id}>
+                      <td>{document.id}</td>
+                      <td>{document.name}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          disabled
+                          checked={
+                            Array.isArray(selected_documents) &&
+                            selected_documents.includes(document.name)
+                          }
+                          // onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
             <div className="mt-3 text-end">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../Utils/appContecxt";
 import "./adminDashboard.css";
 
@@ -15,6 +15,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { total_present_employees } from "../../../utils/redux/attendanceSlice/presentEmployees";
 import { get_current_and_next_month_events } from "../../../utils/redux/holidayAndEventsSlice/getCurrentAndNextMonthEvents";
+import checkPermissions from "../../Utils/checkPermissions";
 
 const AdminDashboard = () => {
   UseAllUsernames();
@@ -24,12 +25,29 @@ const AdminDashboard = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  console.log(user_all_permissions, "this is the user all permission");
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const present_employee = useSelector((store) => store.PRESENT_EMPLOYEES);
   const current_and_next_month_events = useSelector(
     (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
   );
-  console.log(current_and_next_month_events, "this is the present employees");
+  const [permissions, setPermissions] = useState({
+    canView: false,
+    canCreate: false,
+    canDelete: false,
+    canUpdate: false,
+  });
+
+  useEffect(() => {
+    const permissionStatus = checkPermissions(
+      "Salary",
+      user_all_permissions?.roles_data,
+      user_all_permissions?.permission_data
+    );
+    setPermissions(permissionStatus);
+  }, [user_all_permissions]);
+
+  console.log(permissions, "this is the permissions");
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -40,10 +58,6 @@ const AdminDashboard = () => {
     dispatch(total_present_employees());
     dispatch(get_current_and_next_month_events());
   }, []);
-
-  if (!user_all_permissions?.roles_data?.includes("Admin")) {
-    return <UnauthorizedPage />;
-  }
 
   const options = {
     chart: {

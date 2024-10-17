@@ -17,6 +17,7 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
   const [series_time, setSeries_time] = useState("");
   const [series_language, setSeries_language] = useState("");
   const [series_description, setSeries_description] = useState("");
+  const [experience, setExperience] = useState("");
   const is_series_created = useSelector((store) => store.CREATE_TEST_SERIES);
   const [id, setId] = useState("");
 
@@ -29,12 +30,21 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
       });
     }
   }, [languages]);
+
+  const experienceObj = [
+    { value: "Fresher", label: "Fresher" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Professional", label: "Professional" },
+  ];
   const handleClose = () => {
     setShow(false);
   };
 
   const changeHandler = (e) => {
     setSeries_language(e.value);
+  };
+  const changeExperienceHandler = (e) => {
+    setExperience(e.value);
   };
 
   const handleCreateTestSeries = () => {
@@ -96,6 +106,15 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
             classname={"new_employee_form_group"}
             onChange={(e) => setSeries_time(e?.target?.value)}
           />
+          <div className="form-group new_employee_form_group">
+            <label>Experience</label>
+            <div className="mt-2">
+              <CustomSelectComp
+                optionsData={experienceObj}
+                changeHandler={changeExperienceHandler}
+              />
+            </div>
+          </div>
           <div className="form-group new_employee_form_group">
             <label>Profile</label>
             <div className="mt-2">

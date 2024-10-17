@@ -135,14 +135,14 @@ const MarkAttendence = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addItem();
+      setInputValue((prevValue) => prevValue + "\n");
     }
   };
 
   const handleUnmarkAttendance = () => {
     dispatch(
       unmark_attendance({
-        report: itemsString,
+        report: inputValue,
         logout_device: deviceType,
         logout_mobile,
       })
@@ -279,7 +279,7 @@ const MarkAttendence = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-md-12">
+                  {/* <div className="col-md-12">
                     <div className="form-group">
                       <label htmlFor="addTask">Add Your task</label>
                       <input
@@ -291,7 +291,7 @@ const MarkAttendence = () => {
                         onKeyDown={handleKeyDown}
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-md-12">
                     <div className="form-group">
                       <label htmlFor="searchtask">Add task</label>
@@ -299,8 +299,10 @@ const MarkAttendence = () => {
                         name=""
                         id=""
                         className="form-control"
-                        value={itemsString}
+                        value={inputValue}
                         rows={itemsString.split("\n").length + 1}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         cols={30}
                       ></textarea>
                     </div>

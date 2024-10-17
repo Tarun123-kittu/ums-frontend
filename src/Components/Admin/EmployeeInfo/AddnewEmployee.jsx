@@ -20,6 +20,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
+import validator from "validator";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -45,14 +46,20 @@ const AddnewEmployee = () => {
   useEffect(() => {
     if (roles?.isSuccess) {
       if (roles?.data?.data?.length !== 0) {
-        roles?.data?.data?.forEach((data) => {
-          if (!role.some((item) => item.value === data?.role)) {
+        roles.data.data.forEach((data) => {
+          const shouldAddAdmin =
+            !user_all_permissions?.roles_data?.includes("HR") ||
+            data?.role !== "Admin";
+          if (
+            shouldAddAdmin &&
+            !role.some((item) => item.value === data?.role)
+          ) {
             role.push({ value: data?.role, label: data?.role });
           }
         });
       }
     }
-  }, [roles]);
+  }, [roles, user_all_permissions]);
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -88,6 +95,23 @@ const AddnewEmployee = () => {
     { value: 4, label: "None" },
   ];
 
+  const [missingData, setMissingData] = useState({
+    username: false,
+    name: false,
+    email: false,
+    mobile: false,
+    position: false,
+    department: false,
+    dob: false,
+    doj: false,
+    status: false,
+    gender: false,
+    role: false,
+    confirm_password: false,
+    password: false,
+  });
+  console.log(missingData, "this is the missing data");
+
   const [field_data, setField_date] = useState({
     username: "",
     email: "",
@@ -119,8 +143,6 @@ const AddnewEmployee = () => {
     documents: selectedDocuments,
   });
 
-  console.log(field_data, "this is the field_data");
-
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
   useEffect(() => {
@@ -140,6 +162,24 @@ const AddnewEmployee = () => {
   }, [is_user_created]);
 
   const handleInputChange = (name, value) => {
+    if (name === "mobile" || name === "emergency_contact") {
+      value = value.replace(/\D/g, "");
+      if (value.length > 10) {
+        value = value.slice(0, 10);
+      }
+    }
+
+    if (
+      name === "salary" ||
+      name === "security" ||
+      name === "total_security" ||
+      name === "account_number"
+    ) {
+      if (value < 0) {
+        return;
+      }
+    }
+
     setField_date({
       ...field_data,
       [name]: value,
@@ -149,6 +189,23 @@ const AddnewEmployee = () => {
   const handleSaveUser = (e) => {
     e.preventDefault();
 
+    const emails = [
+      { field: field_data?.email, name: "email" },
+      { field: field_data?.skype_email, name: "skype_email" },
+      { field: field_data?.ultivic_email, name: "ultivic_email" },
+    ];
+
+    for (const { field, name } of emails) {
+      if (field && !validator.isEmail(field)) {
+        toast.error(`${name} is not valid`);
+        return;
+      }
+    }
+
+    handleSave();
+  };
+
+  const handleSave = () => {
     const optionalFields = [
       "emergency_contact",
       "emergency_contact_relationship",
@@ -178,11 +235,24 @@ const AddnewEmployee = () => {
       .map(([key]) => key);
 
     if (missingFields.length > 0) {
-      alert(
-        `The following required fields are missing: ${missingFields.join(", ")}`
-      );
+      console.log(missingFields);
+
+      setMissingData((prevState) => ({
+        ...prevState,
+        username: missingFields.includes("username"),
+        name: missingFields.includes("name"),
+        email: missingFields.includes("email"),
+        mobile: missingFields.includes("mobile"),
+        gender: missingFields.includes("gender"),
+        dob: missingFields.includes("dob"),
+        doj: missingFields.includes("doj"),
+        position: missingFields.includes("position"),
+        department: missingFields.includes("department"),
+        confirm_password: missingFields.includes("confirm_password"),
+        password: missingFields.includes("password"),
+        status: missingFields.includes("status"),
+      }));
     } else {
-      console.log("Documents in field_data: ", field_data.documents); // Check if documents exist here
       dispatch(create_new_user({ field_data }));
     }
   };
@@ -245,7 +315,7 @@ const AddnewEmployee = () => {
           <div className="new_employee_wrapper cmn_border">
             <form>
               <div className="row">
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" id="name">
                   <InputField
                     labelname={"Name"}
                     span={true}
@@ -255,6 +325,7 @@ const AddnewEmployee = () => {
                     name="name"
                     value={field_data.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
+                    styleTrue={missingData?.name}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -266,6 +337,7 @@ const AddnewEmployee = () => {
                     type={"text"}
                     value={field_data.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
+                    styleTrue={missingData?.email}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -279,6 +351,7 @@ const AddnewEmployee = () => {
                     onChange={(e) =>
                       handleInputChange("mobile", e.target.value)
                     }
+                    styleTrue={missingData?.mobile}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -392,7 +465,14 @@ const AddnewEmployee = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label> Gender </label>
-                    <div className="mt-2">
+                    <div
+                      className="mt-2"
+                      style={
+                        missingData?.gender
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
                       <CustomSelectComp
                         optionsData={[
                           { value: "male", label: "Male" },
@@ -404,47 +484,52 @@ const AddnewEmployee = () => {
                         value={field_data.gender}
                       />
                     </div>
-                    {/* <select
-                      className="form-control"
-                      value={field_data.gender}
-                      onChange={(e) =>
-                        handleInputChange("gender", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select> */}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
                     <label htmlFor="">Date of Birth</label>
-                    <DatePicker
-                      selected={field_data.dob}
-                      onChange={(date) => handleInputChange("dob", date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      className="form-control"
-                    />
+                    <div
+                      style={
+                        missingData?.dob
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <DatePicker
+                        selected={field_data.dob}
+                        onChange={(date) => handleInputChange("dob", date)}
+                        placeholderText="DD/MM/YYYY"
+                        onKeyDown={(e) => e.preventDefault()}
+                        dateFormat="dd/MM/yyyy"
+                        showYearDropdown
+                        scrollableYearDropdown
+                        className="form-control"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
                     <label htmlFor="">Date of joining </label>
-                    <DatePicker
-                      className={"form-control"}
-                      selected={field_data.doj}
-                      onChange={(date) => handleInputChange("doj", date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                    />
+                    <div
+                      style={
+                        missingData?.doj
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <DatePicker
+                        className={"form-control"}
+                        selected={field_data.doj}
+                        onChange={(date) => handleInputChange("doj", date)}
+                        placeholderText="DD/MM/YYYY"
+                        onKeyDown={(e) => e.preventDefault()}
+                        dateFormat="dd/MM/yyyy"
+                        showYearDropdown
+                        scrollableYearDropdown
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -533,7 +618,14 @@ const AddnewEmployee = () => {
                     <label>
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div className="mt-2">
+                    <div
+                      className="mt-2"
+                      style={
+                        missingData?.position
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
                       <CustomSelectComp
                         optionsData={positionData}
                         changeHandler={(e) =>
@@ -551,7 +643,14 @@ const AddnewEmployee = () => {
                       Technology/Department{" "}
                       <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div className="mt-2">
+                    <div
+                      className="mt-2"
+                      style={
+                        missingData?.department
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
                       <CustomSelectComp
                         optionsData={ProfileData}
                         changeHandler={(e) =>
@@ -568,7 +667,14 @@ const AddnewEmployee = () => {
                       {" "}
                       Status <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div className="mt-2">
+                    <div
+                      className="mt-2"
+                      style={
+                        missingData?.status
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
                       <CustomSelectComp
                         optionsData={statusObj}
                         changeHandler={(e) =>
@@ -590,6 +696,7 @@ const AddnewEmployee = () => {
                     onChange={(e) =>
                       handleInputChange("username", e.target.value)
                     }
+                    styleTrue={missingData?.username}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -602,6 +709,7 @@ const AddnewEmployee = () => {
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
                     }
+                    styleTrue={missingData?.password}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -614,6 +722,7 @@ const AddnewEmployee = () => {
                     onChange={(e) =>
                       handleInputChange("confirm_password", e.target.value)
                     }
+                    styleTrue={missingData?.confirm_password}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -640,6 +749,9 @@ const AddnewEmployee = () => {
                   rows={5}
                   value={field_data.address}
                   onChange={(e) => handleInputChange("address", e.target.value)}
+                  style={
+                    missingData?.username ? { border: "1px solid red" } : {}
+                  }
                 />
               </div>
 

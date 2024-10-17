@@ -12,6 +12,7 @@ const InputField = ({
   value,
   onChange,
   disabled, // Destructure the disabled prop
+  styleTrue,
 }) => {
   return (
     <div className={`form-group ${classname}`}>
@@ -33,6 +34,7 @@ const InputField = ({
             onChange={onChange}
             disabled={disabled}
             step="1"
+            style={styleTrue ? { border: "1px solid red" } : {}}
           />
           <div className="symbol_wrapper">{symbol}</div>
         </div>
@@ -46,6 +48,7 @@ const InputField = ({
           onChange={onChange}
           disabled={disabled} // Set the disabled attribute based on the prop
           step="1"
+          style={styleTrue ? { border: "1px solid red" } : {}}
         />
       )}
     </div>

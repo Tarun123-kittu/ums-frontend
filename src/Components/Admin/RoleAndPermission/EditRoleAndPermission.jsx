@@ -27,8 +27,9 @@ import {
   clear_delete_user_assigned_to_role,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
 import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_logged_in_user_permissions } from "../../../utils/redux/userPermissionSlice/userpermissionSlice";
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const EditRoleAndPermission = () => {
     (store) => store.GET_ROLE_PERMISSIONS
   );
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -102,6 +103,7 @@ const EditRoleAndPermission = () => {
   useEffect(() => {
     if (is_permissions_updated?.isSuccess) {
       dispatch(get_role_permissions({ id }));
+      dispatch(get_logged_in_user_permissions());
       toast.success("Permission updated Successfully");
       dispatch(clear_update_role_permissions_slice());
       navigate("/rolePermission");
@@ -134,10 +136,14 @@ const EditRoleAndPermission = () => {
     }
   }, [deleted_users_state]);
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
+  if (
+    !(
+      user_all_permissions?.roles_data?.includes("Admin") ||
+      user_all_permissions?.roles_data?.includes("HR")
+    )
+  ) {
     return <UnauthorizedPage />;
   }
-
 
   return (
     <section className="role_permission_outer">
@@ -183,52 +189,56 @@ const EditRoleAndPermission = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {role_permissions_data?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : permissions_state?.map((permissions, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>{permissions?.permission}</td>
-                            <td>
-                              <input
-                                type="checkbox"
-                                checked={permissions?.can_update}
-                                onChange={() =>
-                                  handleChangePermissions(i, "can_update")
-                                }
-                              />
-                            </td>
-                            <td>
-                              {" "}
-                              <input
-                                type="checkbox"
-                                checked={permissions?.can_delete}
-                                onChange={() =>
-                                  handleChangePermissions(i, "can_delete")
-                                }
-                              />
-                            </td>
-                            <td>
-                              {" "}
-                              <input
-                                type="checkbox"
-                                checked={permissions?.can_view}
-                                onChange={() =>
-                                  handleChangePermissions(i, "can_view")
-                                }
-                              />
-                            </td>
-                            <td>
-                              {" "}
-                              <input
-                                type="checkbox"
-                                checked={permissions?.can_create}
-                                onChange={() =>
-                                  handleChangePermissions(i, "can_create")
-                                }
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      {role_permissions_data?.isLoading ? (
+                        <img src={Loader} alt="loader" className="loader_gif" />
+                      ) : (
+                        permissions_state?.map((permissions, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>{permissions?.permission}</td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  checked={permissions?.can_update}
+                                  onChange={() =>
+                                    handleChangePermissions(i, "can_update")
+                                  }
+                                />
+                              </td>
+                              <td>
+                                {" "}
+                                <input
+                                  type="checkbox"
+                                  checked={permissions?.can_delete}
+                                  onChange={() =>
+                                    handleChangePermissions(i, "can_delete")
+                                  }
+                                />
+                              </td>
+                              <td>
+                                {" "}
+                                <input
+                                  type="checkbox"
+                                  checked={permissions?.can_view}
+                                  onChange={() =>
+                                    handleChangePermissions(i, "can_view")
+                                  }
+                                />
+                              </td>
+                              <td>
+                                {" "}
+                                <input
+                                  type="checkbox"
+                                  checked={permissions?.can_create}
+                                  onChange={() =>
+                                    handleChangePermissions(i, "can_create")
+                                  }
+                                />
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>

@@ -18,6 +18,7 @@ import {
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
+import validator from "validator";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
@@ -93,7 +94,6 @@ const EditEmployeeInfo = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
   const roles = useSelector((store) => store.ALL_ROLES);
-  console.log(roles, "this is the all roles");
 
   useEffect(() => {
     if (update_user_details?.isSuccess) {
@@ -141,6 +141,22 @@ const EditEmployeeInfo = () => {
     { value: 3, label: "Resignation" },
     { value: 4, label: "None" },
   ];
+
+  const [missingData, setMissingData] = useState({
+    username: false,
+    name: false,
+    email: false,
+    mobile: false,
+    position: false,
+    department: false,
+    dob: false,
+    doj: false,
+    status: false,
+    gender: false,
+    role: false,
+    confirm_password: false,
+    password: false,
+  });
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -202,10 +218,42 @@ const EditEmployeeInfo = () => {
       })
       .map(([key]) => key);
 
-    if (missingFields.length > 0) {
-      alert(
-        `The following required fields are missing: ${missingFields.join(", ")}`
-      );
+    // Validate email fields
+    const invalidEmails = [];
+    if (field_data.skype_email && !validator.isEmail(field_data.skype_email)) {
+      invalidEmails.push("Skype Email");
+    }
+    if (
+      field_data.ultivic_email &&
+      !validator.isEmail(field_data.ultivic_email)
+    ) {
+      invalidEmails.push("Ultivic Email");
+    }
+    if (field_data.email && !validator.isEmail(field_data.email)) {
+      invalidEmails.push("Email");
+    }
+
+    // Check if there are invalid emails
+    if (invalidEmails.length > 0) {
+      toast.error(`Invalid ${invalidEmails.join(", ")}`);
+    } else if (missingFields.length > 0) {
+      console.log(missingFields);
+
+      setMissingData((prevState) => ({
+        ...prevState,
+        username: missingFields.includes("username"),
+        name: missingFields.includes("name"),
+        email: missingFields.includes("email"),
+        mobile: missingFields.includes("mobile"),
+        gender: missingFields.includes("gender"),
+        dob: missingFields.includes("dob"),
+        doj: missingFields.includes("doj"),
+        position: missingFields.includes("position"),
+        department: missingFields.includes("department"),
+        confirm_password: missingFields.includes("confirm_password"),
+        password: missingFields.includes("password"),
+        status: missingFields.includes("status"),
+      }));
     } else {
       dispatch(
         update_user({
@@ -234,33 +282,11 @@ const EditEmployeeInfo = () => {
     { id: 6, name: "Training Certificate" },
   ];
 
-  // const handleCheckboxChange = (name) => {
-  //   if (field_data?.documents.includes(name)) {
-  //     const updatedDocuments = field_data.documents.filter(
-  //       (doc) => doc !== name
-  //     );
-  //     setSelectedDocuments(updatedDocuments);
-  //     setField_date({
-  //       ...field_data,
-  //       documents: updatedDocuments,
-  //     });
-  //   } else {
-  //     const updatedDocuments = [...field_data.documents, name];
-  //     setSelectedDocuments(updatedDocuments);
-  //     setField_date({
-  //       ...field_data,
-  //       documents: updatedDocuments,
-  //     });
-  //   }
-  // };
-
   const handleCheckboxChange = (documentName) => {
     setSelected_documents((prevSelected) => {
       if (prevSelected.includes(documentName)) {
-        // If already selected, remove it
         return prevSelected.filter((item) => item !== documentName);
       } else {
-        // Otherwise, add it
         return [...prevSelected, documentName];
       }
     });
@@ -290,6 +316,7 @@ const EditEmployeeInfo = () => {
                     name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    styleTrue={missingData?.name}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -301,6 +328,7 @@ const EditEmployeeInfo = () => {
                     type={"text"}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    styleTrue={missingData?.email}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -311,7 +339,15 @@ const EditEmployeeInfo = () => {
                     classname={"new_employee_form_group"}
                     type={"text"}
                     value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      input = input.replace(/\D/g, "");
+                      if (input.length > 10) {
+                        input = input.slice(0, 10);
+                      }
+                      setMobile(input);
+                    }}
+                    styleTrue={missingData?.mobile}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -365,7 +401,12 @@ const EditEmployeeInfo = () => {
                     classname={"new_employee_form_group"}
                     type={"number"}
                     value={account_number}
-                    onChange={(e) => setAccountNumber(e.target.value)}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 0) {
+                        setAccountNumber(value);
+                      }
+                    }}
                   />
                 </div>
 
@@ -400,6 +441,11 @@ const EditEmployeeInfo = () => {
                       className="form-control"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
+                      style={
+                        missingData?.gender
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
                     >
                       <option>Select</option>
                       <option value="male">Male</option>
@@ -410,32 +456,48 @@ const EditEmployeeInfo = () => {
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
                     <label htmlFor="">Date of Birth</label>
-                    <DatePicker
-                      selected={dob}
-                      onChange={(date) => setDob(date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={new Date()}
-                    />
+                    <div
+                      style={
+                        missingData?.dob
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <DatePicker
+                        selected={dob}
+                        onChange={(date) => setDob(date)}
+                        placeholderText="DD/MM/YYYY"
+                        onKeyDown={(e) => e.preventDefault()}
+                        dateFormat="dd/MM/yyyy"
+                        showYearDropdown
+                        scrollableYearDropdown
+                        maxDate={new Date()}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
                     <label htmlFor="">Date of joining </label>
-                    <DatePicker
-                      classname={"form-control"}
-                      selected={doj}
-                      onChange={(date) => setDoj(date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={new Date()}
-                    />
+                    <div
+                      style={
+                        missingData?.doj
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <DatePicker
+                        classname={"form-control"}
+                        selected={doj}
+                        onChange={(date) => setDoj(date)}
+                        placeholderText="DD/MM/YYYY"
+                        onKeyDown={(e) => e.preventDefault()}
+                        dateFormat="dd/MM/yyyy"
+                        showYearDropdown
+                        scrollableYearDropdown
+                        maxDate={new Date()}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -468,9 +530,15 @@ const EditEmployeeInfo = () => {
                     classname={"new_employee_form_group"}
                     type={"number"}
                     value={salary}
-                    onChange={(e) => setSalary(e.target.value)}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 0) {
+                        setSalary(value);
+                      }
+                    }}
                   />
                 </div>
+
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     isRequred={true}
@@ -480,7 +548,12 @@ const EditEmployeeInfo = () => {
                     classname={"new_employee_form_group"}
                     type={"number"}
                     value={security}
-                    onChange={(e) => setSecurity(e.target.value)}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 0) {
+                        setSecurity(value);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -492,7 +565,12 @@ const EditEmployeeInfo = () => {
                     classname={"new_employee_form_group"}
                     type={"number"}
                     value={total_security}
-                    onChange={(e) => setTotalSecurity(e.target.value)}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 0) {
+                        setTotalSecurity(value);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -522,6 +600,11 @@ const EditEmployeeInfo = () => {
                       className="form-control"
                       value={position}
                       onChange={(e) => setPosition(e.target.value)}
+                      style={
+                        missingData?.position
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
                     >
                       <option value="">Select</option>{" "}
                       {positionData.map((data, i) => {
@@ -546,6 +629,11 @@ const EditEmployeeInfo = () => {
                       className="form-control"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
+                      style={
+                        missingData?.department
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
                     >
                       <option>Select</option>
                       {ProfileData?.map((data, i) => {
@@ -566,6 +654,11 @@ const EditEmployeeInfo = () => {
                       className="form-control"
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
+                      style={
+                        missingData?.status
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
                     >
                       <option>Select</option>
                       {statusObj?.map((data, i) => {
@@ -587,6 +680,7 @@ const EditEmployeeInfo = () => {
                     type={"text"}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    styleTrue={missingData?.username}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -599,7 +693,17 @@ const EditEmployeeInfo = () => {
                     >
                       <option>Select Role</option>
                       {roles?.data?.data?.map((role, i) => {
-                        return <option value={role?.role}>{role?.role}</option>;
+                        if (
+                          role?.role === "Admin" &&
+                          user_all_permissions?.roles_data?.includes("HR")
+                        ) {
+                          return null;
+                        }
+                        return (
+                          <option key={i} value={role?.role}>
+                            {role?.role}
+                          </option>
+                        );
                       })}
                     </select>
                   </div>
@@ -616,13 +720,10 @@ const EditEmployeeInfo = () => {
                   rows={5}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  style={
+                    missingData?.username ? { border: "1px solid red" } : {}
+                  }
                 />
-              </div>
-              {/* edit user code */}
-              <div className="text-end mt-3">
-                <button className="cmn_Button_style add_document_btn">
-                  Add Document
-                </button>
               </div>
               <div className="table-responsive mt-4 transparent_bg">
                 <table className="employee_detail_table mt-3">

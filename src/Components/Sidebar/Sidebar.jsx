@@ -65,7 +65,7 @@ const Sidebar = () => {
   } else if (uniqueRoles?.includes("Developer")) {
     availableMenuItems = menuitems.filter(
       (item) => item.name === "Test Series" || item.name === "InterView Leads"
-    ); // Developer sees only specific menu items
+    );
   }
 
   const [expanded, setExpanded] = useState(null);

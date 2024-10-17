@@ -95,10 +95,10 @@ const EmployeeList = () => {
               <label className="">Status</label>
               <div className="mt-2">
                 <CustomSelectComp
-                  optionsData={[{ value: "active", label: "Active" }]}
+                  optionsData={statusObj}
                   changeHandler={(e) => setSearchStatus(e.value)}
                   value={searchStatus}
-                  placeholder="Active"
+                  placeholder="Select"
                 />
               </div>
             </div>
