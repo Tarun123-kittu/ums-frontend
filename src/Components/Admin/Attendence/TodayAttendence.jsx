@@ -50,6 +50,12 @@ const TodayAttendence = () => {
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
   };
 
+  const timeToHours = (time) => {
+    if (!time || time === "--") return 0;
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    return hours + minutes / 60 + seconds / 3600;
+  };
+
   return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
@@ -97,8 +103,17 @@ const TodayAttendence = () => {
                             ? convertTo12Hour(report?.out_time)
                             : "--"}
                         </td>
-                        <td>
-                          {report?.total_time ? report?.total_time : "--"}
+                        <td
+                          style={{
+                            color:
+                              timeToHours(report?.total_time) < 9
+                                ? "red"
+                                : "#33b070",
+                          }}
+                        >
+                          {report?.total_time
+                            ? `${report.total_time} hours`
+                            : "--"}
                         </td>
                         <td>
                           {report?.name && report?.login_mobile

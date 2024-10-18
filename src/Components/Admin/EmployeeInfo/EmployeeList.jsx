@@ -28,13 +28,10 @@ const EmployeeList = () => {
   const [page, setPage] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userId, setuserId] = useState("");
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
+  const all_users = useSelector((store) => store.ALL_USERNAMES);
+  console.log(all_users, "this is the list of all users");
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
@@ -104,7 +101,7 @@ const EmployeeList = () => {
                   }}
                 >
                   <option>Search Employee</option>
-                  {all_users_list?.data?.data?.map((user, i) => {
+                  {all_users?.data?.data?.map((user, i) => {
                     return (
                       <option key={i} value={user?.name}>
                         {user?.name}

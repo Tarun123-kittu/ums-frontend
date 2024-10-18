@@ -22,12 +22,6 @@ const ViewQuestionList = () => {
     : location;
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
     if (!interview_id && !lead_id) {
       navigate("/interviewLead");
     } else {
@@ -42,17 +36,14 @@ const ViewQuestionList = () => {
 
   const { show } = useAppContext();
 
-  const obj = [
-    { name: "Interview Leads", path: "/interviewLead" },
-    { name: "Hr Round", path: "/hrRound" },
-    { name: "Interview Question Round", path: "/hrInterViewQuestion" },
-  ];
+  const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
   return (
     <section className="Interviewlead_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : "cmn_margin_outer"
-          }`}
+        className={`wrapper gray_bg admin_outer  ${
+          show ? "cmn_margin" : "cmn_margin_outer"
+        }`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -85,7 +76,7 @@ const ViewQuestionList = () => {
                           </div>
                         </div>
 
-                        {showEditModal === ques.question_id && view && (
+                        {showEditModal === ques.question_id && (
                           <EditQuesModal
                             show={true}
                             setShow={setShowEditModal}

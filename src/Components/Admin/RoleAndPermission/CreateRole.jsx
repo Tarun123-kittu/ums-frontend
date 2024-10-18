@@ -17,36 +17,25 @@ import {
 } from "../../../utils/redux/rolesAndPermissionSlice/createNewRole";
 import { useNavigate } from "react-router-dom";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const CreateRole = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const obj = [
-    { name: "Role & Permissions", path: "/rolePermission" },
-    { name: "Create The New Role", path: "/createtRole" },
-  ];
-  useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
+  const permissions = UsePermissions("Teams");
+  const obj = [{ name: "Role & Permissions", path: "/rolePermission" }];
   const { show } = useAppContext();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteRoleModal, setShowDeleteRoleModal] = useState(false);
   const [all_permission, setAll_permission] = useState(permissionsList);
   const [role, setRole] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   const [name_assigned, setName_assigned] = useState([]);
   const [user_ids, setUser_ids] = useState([]);
   const [type, setType] = useState("");
   const [deleted_id, setDeleted_id] = useState(null);
   const is_new_role_created = useSelector(
     (store) => store.CREATE_NEW_ROLE_AND_PERMISSIONS
-  );
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
   );
   const all_userNames = useSelector((store) => store.ALL_USERNAMES?.data?.data);
 
@@ -103,17 +92,12 @@ const CreateRole = () => {
   useEffect(() => {
     if (is_new_role_created?.isSuccess) {
       toast.success(is_new_role_created?.message?.message);
-      setShowToast(true);
       dispatch(clear_new_role_permission_state());
       navigate("/rolePermission");
     }
   }, [is_new_role_created]);
 
-  if (!(user_all_permissions?.roles_data?.includes("Admin") || user_all_permissions?.roles_data?.includes("HR"))) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -152,19 +136,19 @@ const CreateRole = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {all_permission?.map((permission, i) => {
+                      {all_permission?.map((per, i) => {
                         return (
                           <tr>
-                            <td>{permission?.permission}</td>
+                            <td>{per?.permission}</td>
                             <td>
                               <input
                                 type="checkbox"
-                                checked={permission?.can_update}
+                                checked={per?.can_update}
                                 onChange={() =>
                                   handleChangePermissions(
                                     i,
                                     "can_update",
-                                    permission?.permission_id
+                                    per?.permission_id
                                   )
                                 }
                               />
@@ -173,12 +157,12 @@ const CreateRole = () => {
                               {" "}
                               <input
                                 type="checkbox"
-                                checked={permission?.can_delete}
+                                checked={per?.can_delete}
                                 onChange={() =>
                                   handleChangePermissions(
                                     i,
                                     "can_delete",
-                                    permission?.permission_id
+                                    per?.permission_id
                                   )
                                 }
                               />
@@ -187,12 +171,12 @@ const CreateRole = () => {
                               {" "}
                               <input
                                 type="checkbox"
-                                checked={permission?.can_view}
+                                checked={per?.can_view}
                                 onChange={() =>
                                   handleChangePermissions(
                                     i,
                                     "can_view",
-                                    permission?.permission_id
+                                    per?.permission_id
                                   )
                                 }
                               />
@@ -201,12 +185,12 @@ const CreateRole = () => {
                               {" "}
                               <input
                                 type="checkbox"
-                                checked={permission?.can_create}
+                                checked={per?.can_create}
                                 onChange={() =>
                                   handleChangePermissions(
                                     i,
                                     "can_create",
-                                    permission?.permission_id
+                                    per?.permission_id
                                   )
                                 }
                               />
@@ -222,12 +206,14 @@ const CreateRole = () => {
                   <button className="cmn_Button_style cmn_darkgray_btn">
                     Exit
                   </button>
-                  <button
-                    className="cmn_Button_style"
-                    onClick={() => handleCreateNewRole()}
-                  >
-                    Save
-                  </button>
+                  {permissions?.can_create && (
+                    <button
+                      className="cmn_Button_style"
+                      onClick={() => handleCreateNewRole()}
+                    >
+                      Save
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -236,14 +222,16 @@ const CreateRole = () => {
                 <div className="d-flex  assign_role_header">
                   <h3 className="cmn_text_heading">Assigned Role List Names</h3>
                   <div>
-                    <button
-                      className="dark_red_bg add_role_btn"
-                      onClick={() => {
-                        setShowAssignModal(true);
-                      }}
-                    >
-                      <IoMdAdd />
-                    </button>
+                    {permissions?.can_create && (
+                      <button
+                        className="dark_red_bg add_role_btn"
+                        onClick={() => {
+                          setShowAssignModal(true);
+                        }}
+                      >
+                        <IoMdAdd />
+                      </button>
+                    )}
                   </div>
                 </div>
                 <ul className="role_list">
@@ -252,13 +240,16 @@ const CreateRole = () => {
                       <li key={i}>
                         <div className="d-flex role_list_wrapper">
                           <h3 className="cmn_text_heading">{name?.name}</h3>
-                          <RiDeleteBin6Line
-                            className="cursor_pointer"
-                            onClick={() => {
-                              setShowDeleteModal(true);
-                              setDeleted_id(name?.id);
-                            }}
-                          />
+                          {permissions?.can_create &&
+                            permissions?.can_update && (
+                              <RiDeleteBin6Line
+                                className="cursor_pointer"
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setDeleted_id(name?.id);
+                                }}
+                              />
+                            )}
                         </div>
                       </li>
                     ))
@@ -302,6 +293,8 @@ const CreateRole = () => {
         )}
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

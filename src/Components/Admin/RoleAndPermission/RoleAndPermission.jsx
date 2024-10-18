@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
@@ -18,9 +17,11 @@ import toast from "react-hot-toast";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
-import Loader from "../../assets/Loader.gif"
+import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const RoleAndPermission = () => {
+  const permissions = UsePermissions("Teams");
   const dispatch = useDispatch();
   UseAllUserRoles();
   const obj = [{ name: "Role & Permissions", path: "/rolePermission" }];
@@ -29,9 +30,6 @@ const RoleAndPermission = () => {
   const navigate = useNavigate();
   const [role_id, setRole_id] = useState("");
   const is_role_disabled = useSelector((store) => store.DISABLE_ROLE);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
   const user_roles = useSelector((store) => store.GET_ALL_USER_ROLES);
 
   const handleDelete = () => {
@@ -39,7 +37,7 @@ const RoleAndPermission = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
+    if (localStorage.getItem("roles")?.includes("Employee")) {
       navigate("/mark-attendence");
     }
   }, [navigate]);
@@ -59,16 +57,7 @@ const RoleAndPermission = () => {
     }
   }, [is_role_disabled, dispatch]);
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -81,14 +70,16 @@ const RoleAndPermission = () => {
             classname={"inter_fontfamily employee_heading"}
           />
           <div className="text-end">
-            <button
-              className="cmn_Button_style"
-              onClick={() => {
-                navigate("/createRole");
-              }}
-            >
-              Add
-            </button>
+            {permissions?.can_create && (
+              <button
+                className="cmn_Button_style"
+                onClick={() => {
+                  navigate("/createRole");
+                }}
+              >
+                Add
+              </button>
+            )}
           </div>
 
           <div className="table-responsive mt-3 transparent_bg">
@@ -102,45 +93,53 @@ const RoleAndPermission = () => {
                 </tr>
               </thead>
               <tbody>
-                {user_roles?.isLoading ? <img src={Loader} alt="loader" className="loader_gif" /> : user_roles?.data?.data?.map((roles, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{roles?.role}</td>
-                      <td>
-                        {roles?.users?.map((name, index) => {
-                          console.log(name, "name name");
-                          return <span key={index}>{name?.username}</span>;
-                        })}
-                      </td>
-                      <td>
-                        <div className="d-flex gap-2">
-                          <div
-                            className="cmn_action_outer yellow_bg cursor_pointer"
-                            onClick={() => {
-                              navigate("/editRole", {
-                                state: {
-                                  id: roles?.role_id,
-                                  name: roles?.role,
-                                },
-                              });
-                            }}
-                          >
-                            <FiEdit />
+                {user_roles?.isLoading ? (
+                  <img src={Loader} alt="loader" className="loader_gif" />
+                ) : (
+                  user_roles?.data?.data?.map((roles, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{roles?.role}</td>
+                        <td>
+                          {roles?.users?.map((name, index) => {
+                            console.log(name, "name name");
+                            return <span key={index}>{name?.username}</span>;
+                          })}
+                        </td>
+                        <td>
+                          <div className="d-flex gap-2">
+                            {permissions?.can_update && (
+                              <div
+                                className="cmn_action_outer yellow_bg cursor_pointer"
+                                onClick={() => {
+                                  navigate("/editRole", {
+                                    state: {
+                                      id: roles?.role_id,
+                                      name: roles?.role,
+                                    },
+                                  });
+                                }}
+                              >
+                                <FiEdit />
+                              </div>
+                            )}
+                            {permissions?.can_delete && (
+                              <div className="cmn_action_outer red_bg cursor_pointer">
+                                <RiDeleteBin6Line
+                                  onClick={() => {
+                                    setRole_id(roles?.role_id);
+                                    setShowDeleteModal(true);
+                                  }}
+                                />
+                              </div>
+                            )}
                           </div>
-                          <div className="cmn_action_outer red_bg cursor_pointer">
-                            <RiDeleteBin6Line
-                              onClick={() => {
-                                setRole_id(roles?.role_id);
-                                setShowDeleteModal(true);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -158,6 +157,8 @@ const RoleAndPermission = () => {
         />
       )}
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

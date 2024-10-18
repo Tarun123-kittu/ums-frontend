@@ -30,21 +30,18 @@ import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSli
 import Loader from "../../assets/Loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_logged_in_user_permissions } from "../../../utils/redux/userPermissionSlice/userpermissionSlice";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const EditRoleAndPermission = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Teams");
   const { id, name } = location?.state ? location?.state : location;
   const [permissions_state, setPermissions_state] = useState([]);
   const role_permissions_data = useSelector(
     (store) => store.GET_ROLE_PERMISSIONS
   );
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
   const is_permissions_updated = useSelector(
     (store) => store.UPDATE_ROLE_PERMISSION
   );
@@ -69,18 +66,12 @@ const EditRoleAndPermission = () => {
     dispatch(get_users_assigned_to_role({ role_id: id }));
   }, [id, dispatch]);
 
-  const obj = [
-    { name: "Role & Permissions", path: "/rolePermission" },
-    { name: "Edit the Ux/Ui Designer Role", path: "/editRole" },
-  ];
+  const obj = [{ name: "Role & Permissions", path: "/rolePermission" }];
   const { show } = useAppContext();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteRoleModal, setShowDeleteRoleModal] = useState(false);
   const [deleted_id, setDeleted_id] = useState(null);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
 
   const handleChangePermissions = (index, valueKey) => {
     const updatedPermissions = permissions_state.map((state, idx) => {
@@ -136,16 +127,7 @@ const EditRoleAndPermission = () => {
     }
   }, [deleted_users_state]);
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -166,14 +148,16 @@ const EditRoleAndPermission = () => {
                     <input className="form-control" value={name} disabled />
                   </div>
                   <div className="edit_role_delete_outer">
-                    <button
-                      className="cmn_Button_style cmn_darkgray_btn"
-                      onClick={() => {
-                        setShowDeleteRoleModal(true);
-                      }}
-                    >
-                      Delete
-                    </button>
+                    {permissions?.can_delete && (
+                      <button
+                        className="cmn_Button_style cmn_darkgray_btn"
+                        onClick={() => {
+                          setShowDeleteRoleModal(true);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
                 {/* permissions */}
@@ -250,12 +234,14 @@ const EditRoleAndPermission = () => {
                   >
                     Exit
                   </button>
-                  <button
-                    className="cmn_Button_style"
-                    onClick={() => handleUpdatePermissions()}
-                  >
-                    Save
-                  </button>
+                  {permissions?.can_update && (
+                    <button
+                      className="cmn_Button_style"
+                      onClick={() => handleUpdatePermissions()}
+                    >
+                      Save
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -264,14 +250,16 @@ const EditRoleAndPermission = () => {
                 <div className="d-flex  assign_role_header">
                   <h3 className="cmn_text_heading">Assigned Role List Names</h3>
                   <div>
-                    <button
-                      className="dark_red_bg add_role_btn"
-                      onClick={() => {
-                        setShowAssignModal(true);
-                      }}
-                    >
-                      <IoMdAdd />
-                    </button>
+                    {permissions?.can_create && permissions?.can_update && (
+                      <button
+                        className="dark_red_bg add_role_btn"
+                        onClick={() => {
+                          setShowAssignModal(true);
+                        }}
+                      >
+                        <IoMdAdd />
+                      </button>
+                    )}
                   </div>
                 </div>
                 <ul className="role_list">
@@ -280,13 +268,15 @@ const EditRoleAndPermission = () => {
                       <li key={i}>
                         <div className="d-flex role_list_wrapper">
                           <h3 className="cmn_text_heading">{name?.name}</h3>
-                          <RiDeleteBin6Line
-                            className="cursor_pointer"
-                            onClick={() => {
-                              setDeleted_id(name?.id);
-                              setShowDeleteModal(true);
-                            }}
-                          />
+                          {permissions?.can_delete && (
+                            <RiDeleteBin6Line
+                              className="cursor_pointer"
+                              onClick={() => {
+                                setDeleted_id(name?.id);
+                                setShowDeleteModal(true);
+                              }}
+                            />
+                          )}
                         </div>
                       </li>
                     );
@@ -330,6 +320,8 @@ const EditRoleAndPermission = () => {
         )}
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

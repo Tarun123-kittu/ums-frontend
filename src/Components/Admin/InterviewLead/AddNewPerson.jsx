@@ -217,7 +217,12 @@ const AddNewPerson = () => {
                   classname={"new_employee_form_group"}
                   type={"number"}
                   value={experience}
-                  onChange={(e) => setExperience(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setExperience(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">

@@ -131,12 +131,10 @@ const Sidebar = () => {
         {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
       </h3>
       <div className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}>
-        <img src={logo} height={"40px"} width={"158px"} />
-        {/* <h3 className="mt-1">TECHNOLOGIES</h3> */}
+        <img src={logo} height={"40px"} width={"158px"} alt="" />
       </div>
 
       <div className="mt-4">
-        {/* admin sidebar */}
         {uniqueRoles?.includes("Admin") &&
           menuitems.map((data, i) => {
             const isActive = path.pathname === data?.pathname;

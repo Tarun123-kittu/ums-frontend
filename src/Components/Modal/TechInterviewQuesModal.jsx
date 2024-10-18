@@ -13,15 +13,18 @@ import {
   clear_sent_test_link_state,
 } from "../../utils/redux/interviewLeadsSlice/hrRound/sendTestLink";
 import { get_hr_round_candidate } from "../../utils/redux/interviewLeadsSlice/hrRound/getHrRoundCandidate";
+import { get_all_tech_round_leads } from "../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
+import { get_all_languages } from "../../utils/redux/testSeries/getAllLanguages";
 
 const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [series, setSeries] = useState([]);
+  const [selected_language, setSelected_language] = useState("");
   const [selected_series, setSelected_series] = useState(null);
   const series_data = useSelector((store) => store.SELECTED_LANGUAGE_SERIES);
   const test_link_status = useSelector((store) => store.SENT_TEST_LINK);
-  console.log(test_link_status, "this is the series data");
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
 
   const handleClose = () => {
     setShow(false);
@@ -32,8 +35,19 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
   };
 
   useEffect(() => {
-    dispatch(get_selected_language_series({ language }));
+    dispatch(get_all_languages());
   }, [language]);
+
+  useEffect(() => {
+    const languageRecord = languages?.find((el) => el?.id == language);
+    setSelected_language(languageRecord?.language);
+  }, [languages]);
+
+  useEffect(() => {
+    if (selected_language) {
+      dispatch(get_selected_language_series({ language: selected_language }));
+    }
+  }, [selected_language]);
 
   useEffect(() => {
     if (series_data?.isSuccess) {
@@ -66,6 +80,15 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
     if (test_link_status?.isSuccess) {
       toast.success("Test link sent successfully");
       dispatch(get_hr_round_candidate({ limit: 10 }));
+      dispatch(
+        get_all_tech_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
       dispatch(clear_sent_test_link_state());
       setShow(false);
     }
@@ -96,7 +119,7 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
             labelname={"Profile"}
             type={"text"}
             classname={"new_employee_form_group"}
-            value={language}
+            value={selected_language}
           />
           <div className="new_employee_form_group form-group">
             <label>Test Series</label>

@@ -25,12 +25,6 @@ const HrInterViewQuestion = () => {
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
   ];
-
-  useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
   useEffect(() => {
     if (!count) {
       navigate("/interviewLead")
@@ -53,22 +47,29 @@ const HrInterViewQuestion = () => {
   }, [all_question]);
 
   const handleEdit = (i, e) => {
-    if (e.target.value?.length > 1 || e.target.value > 5) toast.error("You can only input 1 to 5")
-    const updatedQuestions = [...questions];
+    const value = e.target.value;
 
-    updatedQuestions[i] = { ...updatedQuestions[i], answer: e.target.value };
+    if (value < 0 || value.length > 1 || value > 5) return;
+
+    const updatedQuestions = [...questions];
+    updatedQuestions[i] = { ...updatedQuestions[i], answer: value };
 
     setQuestions(updatedQuestions);
   };
 
+
   const handleSave = () => {
-    const allAnswered = questions?.every(question => question.answer !== "" || question.answer > 5);
+    const allAnswered = questions?.every(
+      (question) => question.answer !== "" && question.answer >= 1 && question.answer <= 5
+    );
+
     if (!allAnswered) {
-      toast.error("Please provide a rating for all questions and rating must be less than and equal to 5");
+      toast.error("Please provide a valid rating between 1 and 5 for all questions.");
     } else {
       dispatch(hr_round_response({ responses: questions, lead_id: leadId }));
     }
   };
+
 
 
   useEffect(() => {

@@ -48,7 +48,7 @@ import deleteLogicalQue from './testSeries/logicalQuestionSlice/deleteLogicalQUe
 import deleteObjectiveQue from './testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion'
 import addInterviewLeads from './interviewLeadsSlice/addLeads'
 import getAllLeads from './interviewLeadsSlice/getAllLeads'
-import { updateLead } from './interviewLeadsSlice/updateLead'
+import updateLead from './interviewLeadsSlice/updateLead'
 import hrRoundQuestion from './interviewLeadsSlice/hrRound/getHrRoundQuestions'
 import hrRound from './interviewLeadsSlice/hrRound/hrRoundResponse'
 import getHrRoundLeads from './interviewLeadsSlice/hrRound/getHrRoundCandidate'
@@ -82,6 +82,7 @@ import applyLeaveHandler from './leaveSlice/applyLeave'
 import userAppliedLeaves from './leaveSlice/getUserAppliedLeaves'
 import getAllRoles from './rolesAndPermissionSlice/getAllRoles'
 import getUserDocument from './userSlice/getUserDocuments'
+import Interviews from './dashboardSlice/getAllINterviewCount'
 
 const appStore = configureStore({
     reducer: {
@@ -167,7 +168,8 @@ const appStore = configureStore({
         APPLY_LEAVE: applyLeaveHandler,
         USER_APPLIED_LEAVES: userAppliedLeaves,
         ALL_ROLES: getAllRoles,
-        USER_DOCUMENT: getUserDocument
+        USER_DOCUMENT: getUserDocument,
+        INTERVIEWS: Interviews
     },
 })
 

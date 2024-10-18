@@ -33,6 +33,8 @@ const QuestionAnswerSheet = () => {
   const [showDeveloperModal, setShowDeveloperModal] = useState(false);
   const [allAnswersFilled, setAllAnswersFilled] = useState(false);
   const [interview_id, setInterview_id] = useState(null);
+  console.log(interview_id, "this is the lead interview_id");
+
   const { show } = useAppContext();
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
@@ -62,21 +64,24 @@ const QuestionAnswerSheet = () => {
   }, [check_answer]);
 
   useEffect(() => {
-    if (lead_answers?.data) {
-      const allFilled = lead_answers.data.every((ans) => {
-        return Object.values(ans).every((key) => key !== "");
-      });
-      if (allFilled) {
-        setAllAnswersFilled(true);
-      } else {
-        setAllAnswersFilled(false);
+    lead_answers?.data?.map((lead) => {
+      if (lead?.interview_id) {
+        setInterview_id(lead?.interview_id);
       }
+    });
+  }, [lead_answers]);
+
+  useEffect(() => {
+    if (lead_answers?.data) {
+      const allFilled = lead_answers.data.every(
+        (lead) => lead.answer_status !== null
+      );
+      setAllAnswersFilled(allFilled);
     }
   }, [lead_answers, interview_id]);
 
   return permissions?.can_view ? (
     <section className="Interviewlead_outer">
-      <Sidebar />
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
@@ -167,6 +172,7 @@ const QuestionAnswerSheet = () => {
                   <h3>OBJECTIVE</h3>
                   {lead_answers?.data?.map((answer, i) => {
                     if (answer.question_type === "objective") {
+                      console.log(answer, "this is the answer");
                       return (
                         <div key={i}>
                           <div className="answer_card">
@@ -183,14 +189,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="correct_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "correct",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "correct",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -199,14 +207,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="incorrect_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "incorrect",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "incorrect",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -218,14 +228,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="not-button"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "not_attempted",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "not_attempted",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -235,14 +247,13 @@ const QuestionAnswerSheet = () => {
                                 )}
                               </div>
                             )}
-                            {answer?.options?.map((opt, index) => {
-                              return (
-                                <ul className="question_list_wrapper">
-                                  <li>{opt?.option}</li>
-                                </ul>
-                              );
-                            })}
-
+                            {answer?.options?.length > 0 && (
+                              <ul className="question_list_wrapper">
+                                {answer.options.map((opt, index) => (
+                                  <li key={index}>{opt?.option}</li>
+                                ))}
+                              </ul>
+                            )}
                             {answer.answer_status && (
                               <h4 className="correct_ans_heading d-flex justify-content-between">
                                 Correct Answer: {answer.answer}
@@ -259,8 +270,8 @@ const QuestionAnswerSheet = () => {
                                 </span>
                               </h4>
                             )}
-
-                            <h4>Not Attempted</h4>
+                            <h4>Lead Answer: {answer?.answer}</h4>
+                            {!answer?.answer && <h4>Not Attempted</h4>}
                           </div>
                         </div>
                       );
@@ -289,14 +300,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="correct_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "correct",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "correct",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -305,14 +318,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="incorrect_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "incorrect",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "incorrect",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -323,14 +338,15 @@ const QuestionAnswerSheet = () => {
                                   <div
                                     className="d-flex gap-2 justify-content-end check_btn_wrapper"
                                     onClick={() => {
-                                      dispatch(
-                                        check_lead_answers({
-                                          question_id: answer?.question_id,
-                                          interview_id: answer?.interview_id,
-                                          lead_id: lead_id,
-                                          answer_status: "not_attempted",
-                                        })
-                                      );
+                                      permissions?.can_update &&
+                                        dispatch(
+                                          check_lead_answers({
+                                            question_id: answer?.question_id,
+                                            interview_id: answer?.interview_id,
+                                            lead_id: lead_id,
+                                            answer_status: "not_attempted",
+                                          })
+                                        );
                                       setInterview_id(answer?.interview_id);
                                     }}
                                   >
@@ -357,7 +373,8 @@ const QuestionAnswerSheet = () => {
                                 </span>
                               </h4>
                             )}
-                            <h4>Not Attempted</h4>
+                            <h4>Lead Answer: {answer?.answer}</h4>
+                            {!answer?.answer && <h4>Not Attempted</h4>}
                           </div>
                         </div>
                       );
@@ -384,14 +401,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="correct_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "correct",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "correct",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -400,14 +419,16 @@ const QuestionAnswerSheet = () => {
                                     <button
                                       className="incorrect_btn"
                                       onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "incorrect",
-                                          })
-                                        );
+                                        permissions?.can_update &&
+                                          dispatch(
+                                            check_lead_answers({
+                                              question_id: answer?.question_id,
+                                              interview_id:
+                                                answer?.interview_id,
+                                              lead_id: lead_id,
+                                              answer_status: "incorrect",
+                                            })
+                                          );
                                         setInterview_id(answer?.interview_id);
                                       }}
                                     >
@@ -418,14 +439,15 @@ const QuestionAnswerSheet = () => {
                                   <div
                                     className="d-flex gap-2 justify-content-end check_btn_wrapper"
                                     onClick={() => {
-                                      dispatch(
-                                        check_lead_answers({
-                                          question_id: answer?.question_id,
-                                          interview_id: answer?.interview_id,
-                                          lead_id: lead_id,
-                                          answer_status: "not_attempted",
-                                        })
-                                      );
+                                      permissions?.can_update &&
+                                        dispatch(
+                                          check_lead_answers({
+                                            question_id: answer?.question_id,
+                                            interview_id: answer?.interview_id,
+                                            lead_id: lead_id,
+                                            answer_status: "not_attempted",
+                                          })
+                                        );
                                       setInterview_id(answer?.interview_id);
                                     }}
                                   >
@@ -452,7 +474,8 @@ const QuestionAnswerSheet = () => {
                                 </span>
                               </h4>
                             )}
-                            <h4>Not Attempted</h4>
+                            <h4>Lead Answer: {answer?.answer}</h4>
+                            {!answer?.answer && <h4>Not Attempted</h4>}
                           </div>
                         </div>
                       );
@@ -460,7 +483,7 @@ const QuestionAnswerSheet = () => {
                   })}
                 </div>
               </div>
-              {!view && (
+              {!view && permissions?.can_update && (
                 <div>
                   <button
                     onClick={() => {

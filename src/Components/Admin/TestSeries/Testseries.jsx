@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import Notification from "../Notification/Notification";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
@@ -21,11 +20,12 @@ import {
 } from "../../../utils/redux/testSeries/deleteSeries";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const Testseries = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const permissions = UsePermissions("Test");
   const { show } = useAppContext();
   const [showCreateTestSeriesModal, setShowCreateTestSeriesModal] =
     useState(false);
@@ -34,28 +34,10 @@ const Testseries = () => {
   const [id, setId] = useState("");
   const [all_languagages, setAll_languages] = useState([]);
   const [search_enable, setSearch_enable] = useState(false);
-  const [developer_permissions, setDeveloper_permissions] = useState({});
   const [seriesId, setSeriesId] = useState(null);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const all_series = useSelector((store) => store.ALL_SERIES);
   const deleted_state = useSelector((store) => store.DELETE_SERIES);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "Developer" && el.permission === "Test"
-    );
-    setDeveloper_permissions(can_hr_create);
-  }, [all_permissions]);
 
   useEffect(() => {
     dispatch(get_all_languages());
@@ -132,17 +114,7 @@ const Testseries = () => {
     dispatch(delete_series({ id: seriesId }));
   };
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR") ||
-      user_all_permissions?.roles_data?.includes("Developer")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="test_serie_wrapper">
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -176,8 +148,7 @@ const Testseries = () => {
               >
                 Search
               </button>
-              {(user_all_permissions?.roles_data?.includes("Admin") ||
-                developer_permissions?.can_create) && (
+              {permissions?.can_create && (
                 <button
                   onClick={() => {
                     setShowCreateTestSeriesModal(true);
@@ -212,12 +183,7 @@ const Testseries = () => {
                           <h3 className="series_created_text">
                             {formatTimeToReadable(series?.time_taken)}
                           </h3>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            (localStorage?.getItem("userId")?.toString() ===
-                              series?.createdBy?.toString() &&
-                              developer_permissions?.can_delete)) && (
+                          {permissions?.can_delete && (
                             <RiDeleteBinLine
                               className="cursor_pointer series_created_heading"
                               onClick={() => {
@@ -231,12 +197,7 @@ const Testseries = () => {
                         <h2 className="card_heading">{series?.series_name}</h2>
                         <h6>{series?.description}</h6>
                         <div className="create_series_btn_outer">
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            (localStorage?.getItem("userId")?.toString() ===
-                              series?.createdBy?.toString() &&
-                              developer_permissions?.can_edit)) && (
+                          {permissions?.can_update && (
                             <button
                               className="cmn_cancel_btn"
                               onClick={() => {
@@ -248,12 +209,7 @@ const Testseries = () => {
                             </button>
                           )}
 
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            (localStorage?.getItem("userId")?.toString() ===
-                              series?.createdBy?.toString() &&
-                              developer_permissions?.can_view)) && (
+                          {permissions?.can_view && (
                             <button
                               className="cmn_Button_style mt-3"
                               onClick={() => {
@@ -306,6 +262,8 @@ const Testseries = () => {
         />
       )}
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

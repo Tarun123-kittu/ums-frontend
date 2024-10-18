@@ -27,12 +27,6 @@ const DeveloperReviewModal = ({
   ];
 
   useEffect(() => {
-    if (interview_id === null) {
-      setShow(false);
-    }
-  }, [interview_id]);
-
-  useEffect(() => {
     if (submit_result?.isSuccess) {
       toast.success("Result submitted successfully");
       dispatch(get_all_tech_round_leads());

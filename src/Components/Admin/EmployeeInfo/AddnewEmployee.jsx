@@ -20,7 +20,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
-import validator from "validator";
+import UserValidations from "../../Utils/UserValidations";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,6 @@ const AddnewEmployee = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
-  console.log(selectedDocuments, "get_employeesss");
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -61,12 +60,6 @@ const AddnewEmployee = () => {
     }
   }, [roles, user_all_permissions]);
 
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
   const installmentObj = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
@@ -95,53 +88,37 @@ const AddnewEmployee = () => {
     { value: 4, label: "None" },
   ];
 
-  const [missingData, setMissingData] = useState({
-    username: false,
-    name: false,
-    email: false,
-    mobile: false,
-    position: false,
-    department: false,
-    dob: false,
-    doj: false,
-    status: false,
-    gender: false,
-    role: false,
-    confirm_password: false,
-    password: false,
-  });
-  console.log(missingData, "this is the missing data");
-
-  const [field_data, setField_date] = useState({
-    username: "",
-    email: "",
-    name: "",
-    mobile: "",
-    emergency_contact: "",
-    emergency_contact_relationship: "",
-    emergency_contact_name: "",
-    bank_name: "",
-    account_number: "",
-    ifsc: "",
-    increment_date: null,
-    gender: "",
-    dob: null,
-    doj: null,
-    skype_email: "",
-    ultivic_email: "",
-    salary: "",
-    security: "",
-    total_security: "",
-    installments: "",
-    position: "",
-    department: "",
-    status: "",
-    address: "",
-    role: "",
-    confirm_password: "",
-    password: "",
-    documents: selectedDocuments,
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [emergency_contact, setEmergencyContact] = useState("");
+  const [emergency_contact_relationship, setEmergencyContactRelationship] =
+    useState("");
+  const [emergency_contact_name, setEmergencyContactName] = useState("");
+  const [bank_name, setBankName] = useState("");
+  const [account_number, setAccountNumber] = useState("");
+  const [ifsc, setIfsc] = useState("");
+  const [increment_date, setIncrementDate] = useState(null);
+  const [gender, setGender] = useState("");
+  const [dob, setDob] = useState(null);
+  const [doj, setDoj] = useState(null);
+  const [skype_email, setSkypeEmail] = useState("");
+  const [ultivic_email, setUltivicEmail] = useState("");
+  const [salary, setSalary] = useState("");
+  const [security, setSecurity] = useState("");
+  const [total_security, setTotalSecurity] = useState("");
+  const [installments, setInstallments] = useState("");
+  const [position, setPosition] = useState("");
+  const [department, setDepartment] = useState("");
+  const [status, setStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [selected_role, setSelected_role] = useState("");
+  const [confirm_password, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [Alldocuments, setAllDocuments] = useState(selectedDocuments);
+  const [validationErrors, setValidationErrors] = useState({});
+  console.log(validationErrors, "this is the validation error");
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -161,101 +138,200 @@ const AddnewEmployee = () => {
     }
   }, [is_user_created]);
 
-  const handleInputChange = (name, value) => {
-    if (name === "mobile" || name === "emergency_contact") {
-      value = value.replace(/\D/g, "");
-      if (value.length > 10) {
-        value = value.slice(0, 10);
-      }
-    }
-
-    if (
-      name === "salary" ||
-      name === "security" ||
-      name === "total_security" ||
-      name === "account_number"
-    ) {
-      if (value < 0) {
-        return;
-      }
-    }
-
-    setField_date({
-      ...field_data,
-      [name]: value,
-    });
-  };
-
-  const handleSaveUser = (e) => {
+  const handleSaveUser = (
+    e,
+    name,
+    email,
+    mobile,
+    emergency_contact_relationship,
+    emergency_contact_name,
+    emergency_contact,
+    bank_name,
+    account_number,
+    ifsc,
+    increment_date,
+    gender,
+    dob,
+    doj,
+    skype_email,
+    ultivic_email,
+    salary,
+    security,
+    total_security,
+    installments,
+    position,
+    department,
+    status,
+    username,
+    password,
+    confirm_password,
+    role,
+    address,
+    selectedDocuments
+  ) => {
     e.preventDefault();
+    const checkValidations = UserValidations(
+      name,
+      email,
+      mobile,
+      emergency_contact_relationship,
+      emergency_contact_name,
+      emergency_contact,
+      bank_name,
+      account_number,
+      ifsc,
+      increment_date,
+      gender,
+      dob,
+      doj,
+      skype_email,
+      ultivic_email,
+      salary,
+      security,
+      total_security,
+      installments,
+      position,
+      department,
+      status,
+      username,
+      password,
+      confirm_password,
+      role,
+      address,
+      selectedDocuments
+    );
 
-    const emails = [
-      { field: field_data?.email, name: "email" },
-      { field: field_data?.skype_email, name: "skype_email" },
-      { field: field_data?.ultivic_email, name: "ultivic_email" },
-    ];
-
-    for (const { field, name } of emails) {
-      if (field && !validator.isEmail(field)) {
-        toast.error(`${name} is not valid`);
-        return;
-      }
-    }
-
-    handleSave();
-  };
-
-  const handleSave = () => {
-    const optionalFields = [
-      "emergency_contact",
-      "emergency_contact_relationship",
-      "emergency_contact_name",
-      "bank_name",
-      "account_number",
-      "ifsc",
-      "increment_date",
-      "skype_email",
-      "ultivic_email",
-      "salary",
-      "security",
-      "total_security",
-      "installments",
-      "address",
-      "role",
-      "documents",
-    ];
-
-    const missingFields = Object.entries(field_data)
-      .filter(([key, value]) => {
-        if (optionalFields.includes(key)) {
-          return false;
-        }
-        return typeof value === "string" ? value.trim() === "" : value === null;
-      })
-      .map(([key]) => key);
-
-    if (missingFields.length > 0) {
-      console.log(missingFields);
-
-      setMissingData((prevState) => ({
-        ...prevState,
-        username: missingFields.includes("username"),
-        name: missingFields.includes("name"),
-        email: missingFields.includes("email"),
-        mobile: missingFields.includes("mobile"),
-        gender: missingFields.includes("gender"),
-        dob: missingFields.includes("dob"),
-        doj: missingFields.includes("doj"),
-        position: missingFields.includes("position"),
-        department: missingFields.includes("department"),
-        confirm_password: missingFields.includes("confirm_password"),
-        password: missingFields.includes("password"),
-        status: missingFields.includes("status"),
-      }));
+    if (Object.keys(checkValidations).length === 0) {
+      create_new_user({
+        name,
+        email,
+        mobile,
+        emergency_contact_relationship,
+        emergency_contact_name,
+        emergency_contact,
+        bank_name,
+        account_number,
+        ifsc,
+        increment_date,
+        gender,
+        dob,
+        doj,
+        skype_email,
+        ultivic_email,
+        salary,
+        security,
+        total_security,
+        installments,
+        position,
+        department,
+        status,
+        username,
+        password,
+        confirm_password,
+        role,
+        address,
+        selectedDocuments,
+      });
     } else {
-      dispatch(create_new_user({ field_data }));
+      setValidationErrors(checkValidations); // Ensure this function is defined in your component
     }
   };
+
+  // const handleInputChange = (name, value) => {
+  //   if (name === "mobile" || name === "emergency_contact") {
+  //     value = value.replace(/\D/g, "");
+  //     if (value.length > 10) {
+  //       value = value.slice(0, 10);
+  //     }
+  //   }
+
+  //   if (
+  //     name === "salary" ||
+  //     name === "security" ||
+  //     name === "total_security" ||
+  //     name === "account_number"
+  //   ) {
+  //     if (value < 0) {
+  //       return;
+  //     }
+  //   }
+
+  //   setField_date({
+  //     ...field_data,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const handleSaveUser = (e) => {
+  //   e.preventDefault();
+
+  //   const emails = [
+  //     { field: field_data?.email, name: "email" },
+  //     { field: field_data?.skype_email, name: "skype_email" },
+  //     { field: field_data?.ultivic_email, name: "ultivic_email" },
+  //   ];
+
+  //   for (const { field, name } of emails) {
+  //     if (field && !validator.isEmail(field)) {
+  //       toast.error(`${name} is not valid`);
+  //       return;
+  //     }
+  //   }
+
+  //   handleSave();
+  // };
+
+  // const handleSave = () => {
+  //   const optionalFields = [
+  //     "emergency_contact",
+  //     "emergency_contact_relationship",
+  //     "emergency_contact_name",
+  //     "bank_name",
+  //     "account_number",
+  //     "ifsc",
+  //     "increment_date",
+  //     "skype_email",
+  //     "ultivic_email",
+  //     "salary",
+  //     "security",
+  //     "total_security",
+  //     "installments",
+  //     "address",
+  //     "role",
+  //     "documents",
+  //   ];
+
+  //   const missingFields = Object.entries(field_data)
+  //     .filter(([key, value]) => {
+  //       if (optionalFields.includes(key)) {
+  //         return false;
+  //       }
+  //       return typeof value === "string" ? value.trim() === "" : value === null;
+  //     })
+  //     .map(([key]) => key);
+
+  //   if (missingFields.length > 0) {
+  //     console.log(missingFields);
+
+  //     setvalidationErrors((prevState) => ({
+  //       ...prevState,
+  //       username: missingFields.includes("username"),
+  //       name: missingFields.includes("name"),
+  //       email: missingFields.includes("email"),
+  //       mobile: missingFields.includes("mobile"),
+  //       gender: missingFields.includes("gender"),
+  //       dob: missingFields.includes("dob"),
+  //       doj: missingFields.includes("doj"),
+  //       position: missingFields.includes("position"),
+  //       department: missingFields.includes("department"),
+  //       confirm_password: missingFields.includes("confirm_password"),
+  //       password: missingFields.includes("password"),
+  //       status: missingFields.includes("status"),
+  //     }));
+  //   } else {
+  //     dispatch(create_new_user({ field_data }));
+  //   }
+  // };
 
   const getMaxDate = () => {
     const today = new Date();
@@ -282,23 +358,25 @@ const AddnewEmployee = () => {
   ];
 
   const handleCheckboxChange = (name) => {
-    if (field_data?.documents.includes(name)) {
-      const updatedDocuments = field_data.documents.filter(
-        (doc) => doc !== name
-      );
+    if (documents.includes(name)) {
+      const updatedDocuments = documents.filter((doc) => doc !== name);
       setSelectedDocuments(updatedDocuments);
-      setField_date({
-        ...field_data,
-        documents: updatedDocuments,
+      setSelectedDocuments({
+        ...selectedDocuments,
+        updatedDocuments,
       });
     } else {
-      const updatedDocuments = [...field_data.documents, name];
+      const updatedDocuments = [...selectedDocuments, name];
       setSelectedDocuments(updatedDocuments);
-      setField_date({
-        ...field_data,
-        documents: updatedDocuments,
+      setSelectedDocuments({
+        ...selectedDocuments,
+        updatedDocuments,
       });
     }
+  };
+
+  const handleGender = (e) => {
+    setGender(e.value);
   };
 
   return (
@@ -323,10 +401,12 @@ const AddnewEmployee = () => {
                     classname={"new_employee_form_group"}
                     type={"text"}
                     name="name"
-                    value={field_data.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    styleTrue={missingData?.name}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.name}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -335,10 +415,13 @@ const AddnewEmployee = () => {
                     placeholder={"Email of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    styleTrue={missingData?.email}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    styleTrue={validationErrors?.email}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.email}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -347,12 +430,18 @@ const AddnewEmployee = () => {
                     placeholder={"Mobile of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.mobile}
-                    onChange={(e) =>
-                      handleInputChange("mobile", e.target.value)
-                    }
-                    styleTrue={missingData?.mobile}
+                    value={mobile}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue)) {
+                        setMobile(newValue);
+                      }
+                    }}
                   />
+
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.mobile}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -360,14 +449,14 @@ const AddnewEmployee = () => {
                     placeholder={"Relationship of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_relationship}
+                    value={emergency_contact_relationship}
                     onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_relationship",
-                        e.target.value
-                      )
+                      setEmergencyContactRelationship(e.target.value)
                     }
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.emergency_contact_relationship}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -375,13 +464,8 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency Contact Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_name}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_name",
-                        e.target.value
-                      )
-                    }
+                    value={emergency_contact_name}
+                    onChange={(e) => setEmergencyContactName(e.target.value)}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -390,11 +474,17 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency mobile no of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact}
-                    onChange={(e) =>
-                      handleInputChange("emergency_contact", e.target.value)
-                    }
+                    value={emergency_contact}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue)) {
+                        setEmergencyContact(newValue);
+                      }
+                    }}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.emergency_contact}
+                  </span>
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -403,10 +493,8 @@ const AddnewEmployee = () => {
                     placeholder={"Bank Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.bank_name}
-                    onChange={(e) =>
-                      handleInputChange("bank_name", e.target.value)
-                    }
+                    value={bank_name}
+                    onChange={(e) => setBankName(e.target.value)}
                   />
                 </div>
 
@@ -416,10 +504,13 @@ const AddnewEmployee = () => {
                     placeholder={"Account Number"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.account_number}
-                    onChange={(e) =>
-                      handleInputChange("account_number", e.target.value)
-                    }
+                    value={account_number}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue)) {
+                        setAccountNumber(newValue);
+                      }
+                    }}
                   />
                 </div>
 
@@ -429,24 +520,22 @@ const AddnewEmployee = () => {
                     placeholder={"Bank IFCE Code"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ifsc}
-                    onChange={(e) => handleInputChange("ifsc", e.target.value)}
+                    value={ifsc}
+                    onChange={(e) => setIfsc(e.target.value)}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label htmlFor="">Increment Date</label>
                     <DatePicker
-                      selected={
-                        field_data.increment_date && field_data.increment_date
-                      }
+                      selected={increment_date && increment_date}
                       onSelect={(date) => {
                         if (
                           date instanceof Date &&
                           !isNaN(date) &&
                           date <= getMaxDate()
                         ) {
-                          handleInputChange("increment_date", date);
+                          setIncrementDate(date);
                         } else {
                           alert("Invalid date. Please select a valid date.");
                         }
@@ -460,6 +549,9 @@ const AddnewEmployee = () => {
                       minDate={new Date()}
                       className="form-control"
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {validationErrors?.increment_date}
+                    </span>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -468,7 +560,7 @@ const AddnewEmployee = () => {
                     <div
                       className="mt-2"
                       style={
-                        missingData?.gender
+                        validationErrors?.gender
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
@@ -478,11 +570,12 @@ const AddnewEmployee = () => {
                           { value: "male", label: "Male" },
                           { value: "female", label: "Female" },
                         ]}
-                        changeHandler={(e) =>
-                          handleInputChange("gender", e.value)
-                        }
-                        value={field_data.gender}
+                        changeHandler={(e) => handleGender(e)}
+                        value={gender}
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.gender}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -491,14 +584,14 @@ const AddnewEmployee = () => {
                     <label htmlFor="">Date of Birth</label>
                     <div
                       style={
-                        missingData?.dob
+                        validationErrors?.dob
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
                     >
                       <DatePicker
-                        selected={field_data.dob}
-                        onChange={(date) => handleInputChange("dob", date)}
+                        selected={dob}
+                        onChange={(date) => setDob(date)}
                         placeholderText="DD/MM/YYYY"
                         onKeyDown={(e) => e.preventDefault()}
                         dateFormat="dd/MM/yyyy"
@@ -506,6 +599,9 @@ const AddnewEmployee = () => {
                         scrollableYearDropdown
                         className="form-control"
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.dob}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -514,21 +610,24 @@ const AddnewEmployee = () => {
                     <label htmlFor="">Date of joining </label>
                     <div
                       style={
-                        missingData?.doj
+                        validationErrors?.doj
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
                     >
                       <DatePicker
                         className={"form-control"}
-                        selected={field_data.doj}
-                        onChange={(date) => handleInputChange("doj", date)}
+                        selected={doj}
+                        onChange={(date) => setDoj(date)}
                         placeholderText="DD/MM/YYYY"
                         onKeyDown={(e) => e.preventDefault()}
                         dateFormat="dd/MM/yyyy"
                         showYearDropdown
                         scrollableYearDropdown
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.doj}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -538,11 +637,12 @@ const AddnewEmployee = () => {
                     placeholder={"Skype"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.skype_email}
-                    onChange={(e) =>
-                      handleInputChange("skype_email", e.target.value)
-                    }
+                    value={skype_email}
+                    onChange={(e) => setSkypeEmail(e.target.value)}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.skype_email}
+                  </span>
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -551,11 +651,12 @@ const AddnewEmployee = () => {
                     placeholder={"Ultivic Email"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ultivic_email}
-                    onChange={(e) =>
-                      handleInputChange("ultivic_email", e.target.value)
-                    }
+                    value={ultivic_email}
+                    onChange={(e) => setUltivicEmail(e.target.value)}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.ultivic_email}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -565,10 +666,13 @@ const AddnewEmployee = () => {
                     placeholder={"Salary"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.salary}
-                    onChange={(e) =>
-                      handleInputChange("salary", e.target.value)
-                    }
+                    value={salary}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                        setSalary(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -579,10 +683,13 @@ const AddnewEmployee = () => {
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.security}
-                    onChange={(e) =>
-                      handleInputChange("security", e.target.value)
-                    }
+                    value={security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                        setSecurity(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -593,10 +700,13 @@ const AddnewEmployee = () => {
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
                     type={"number"}
-                    value={field_data.total_security}
-                    onChange={(e) =>
-                      handleInputChange("total_security", e.target.value)
-                    }
+                    value={total_security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                        setTotalSecurity(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -605,10 +715,8 @@ const AddnewEmployee = () => {
                     <div className="mt-2">
                       <CustomSelectComp
                         optionsData={installmentObj}
-                        changeHandler={(e) =>
-                          handleInputChange("installments", e.value)
-                        }
-                        value={field_data.installments}
+                        changeHandler={(e) => setInstallments(e.value)}
+                        value={installments}
                       />
                     </div>
                   </div>
@@ -621,18 +729,19 @@ const AddnewEmployee = () => {
                     <div
                       className="mt-2"
                       style={
-                        missingData?.position
+                        validationErrors?.position
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
                     >
                       <CustomSelectComp
                         optionsData={positionData}
-                        changeHandler={(e) =>
-                          handleInputChange("position", e.value)
-                        }
-                        value={field_data.position}
+                        changeHandler={(e) => setPosition(e.value)}
+                        value={position}
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.position}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -646,18 +755,19 @@ const AddnewEmployee = () => {
                     <div
                       className="mt-2"
                       style={
-                        missingData?.department
+                        validationErrors?.department
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
                     >
                       <CustomSelectComp
                         optionsData={ProfileData}
-                        changeHandler={(e) =>
-                          handleInputChange("department", e.value)
-                        }
-                        value={field_data.department}
+                        changeHandler={(e) => setDepartment(e.value)}
+                        value={department}
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.department}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -670,18 +780,19 @@ const AddnewEmployee = () => {
                     <div
                       className="mt-2"
                       style={
-                        missingData?.status
+                        validationErrors?.status
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
                     >
                       <CustomSelectComp
                         optionsData={statusObj}
-                        changeHandler={(e) =>
-                          handleInputChange("status", e.value)
-                        }
-                        value={field_data.status}
+                        changeHandler={(e) => setStatus(e.value)}
+                        value={status}
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.status}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -692,12 +803,13 @@ const AddnewEmployee = () => {
                     placeholder={"Username"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.username}
-                    onChange={(e) =>
-                      handleInputChange("username", e.target.value)
-                    }
-                    styleTrue={missingData?.username}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    styleTrue={validationErrors?.username}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.username}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -705,12 +817,13 @@ const AddnewEmployee = () => {
                     placeholder={"Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
-                    styleTrue={missingData?.password}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    styleTrue={validationErrors?.password}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.password}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -718,12 +831,13 @@ const AddnewEmployee = () => {
                     placeholder={"Confirm Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.confirm_password}
-                    onChange={(e) =>
-                      handleInputChange("confirm_password", e.target.value)
-                    }
-                    styleTrue={missingData?.confirm_password}
+                    value={confirm_password}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    styleTrue={validationErrors?.confirm_password}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.confirm_password}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
@@ -731,11 +845,12 @@ const AddnewEmployee = () => {
                     <div className="mt-2">
                       <CustomSelectComp
                         optionsData={role}
-                        changeHandler={(e) =>
-                          handleInputChange("role", e.value)
-                        }
-                        value={field_data.role}
+                        changeHandler={(e) => setSelected_role(e.value)}
+                        value={selected_role}
                       />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.role}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -747,12 +862,17 @@ const AddnewEmployee = () => {
                   className="form-control mt-3"
                   placeholder="Address"
                   rows={5}
-                  value={field_data.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   style={
-                    missingData?.username ? { border: "1px solid red" } : {}
+                    validationErrors?.username
+                      ? { border: "1px solid red" }
+                      : {}
                   }
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {validationErrors?.address}
+                </span>
               </div>
 
               <div className="text-end mt-3"></div>
@@ -786,7 +906,39 @@ const AddnewEmployee = () => {
               <div className="text-end mt-3">
                 <button
                   className="cmn_Button_style"
-                  onClick={(e) => handleSaveUser(e)}
+                  onClick={(e) =>
+                    handleSaveUser(
+                      e,
+                      name,
+                      email,
+                      mobile,
+                      emergency_contact_relationship,
+                      emergency_contact_name,
+                      emergency_contact,
+                      bank_name,
+                      account_number,
+                      ifsc,
+                      increment_date,
+                      gender,
+                      dob,
+                      doj,
+                      skype_email,
+                      ultivic_email,
+                      salary,
+                      security,
+                      total_security,
+                      installments,
+                      position,
+                      department,
+                      status,
+                      username,
+                      password,
+                      confirm_password,
+                      role,
+                      address,
+                      selectedDocuments
+                    )
+                  }
                 >
                   Save
                 </button>

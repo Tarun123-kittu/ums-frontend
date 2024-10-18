@@ -94,7 +94,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_round_status?.isSuccess) {
-      dispatch(get_all_tech_round_leads());
+      dispatch(
+        get_all_tech_round_leads({
+          page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
       dispatch(clear_lead_round_status());
     }
   }, [update_round_status]);
@@ -198,8 +206,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   useEffect(() => {
     if (update_face_round?.isSuccess) {
       toast.success(" Status Updated Successfully");
-      dispatch(get_face_round_leads());
-      dispatch(get_final_round_leads());
+      dispatch(
+        get_face_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_final_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
       dispatch(clear_face_round_state());
     }
     if (update_face_round?.isError) {
@@ -211,7 +235,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   useEffect(() => {
     if (update_round_status?.isSuccess) {
       toast.success("Candidate successfully moved to next round");
-      dispatch(get_face_round_leads());
+      dispatch(
+        get_face_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
     }
   }, [update_round_status]);
 
@@ -467,19 +499,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         <td>
                           {permissions?.can_view &&
                             permissions?.can_update &&
-                            candidate?.hr_round_result ===
-                              "selected"(
-                                <button
-                                  className="cmn_Button_style"
-                                  onClick={() => {
-                                    setLeadId(candidate?.id);
-                                    setLanguage(candidate?.profile);
-                                    setShowTechInterviewQuesModal(true);
-                                  }}
-                                >
-                                  Start
-                                </button>
-                              )}
+                            candidate?.hr_round_result === "selected" && (
+                              <button
+                                className="cmn_Button_style"
+                                onClick={() => {
+                                  setLeadId(candidate?.id);
+                                  setLanguage(candidate?.profile);
+                                  setShowTechInterviewQuesModal(true);
+                                }}
+                              >
+                                Start
+                              </button>
+                            )}
                         </td>
                       </tr>
                     );

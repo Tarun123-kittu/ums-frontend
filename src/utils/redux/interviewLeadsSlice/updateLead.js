@@ -54,7 +54,7 @@ export const updateLead = createSlice({
         isError: false,
         error: null
     },
-    reducer: {
+    reducers: {
         clear_update_lead_state: (state) => {
             state.message = {}
             state.isSuccess = false

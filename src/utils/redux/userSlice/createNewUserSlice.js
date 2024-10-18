@@ -1,42 +1,70 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import moment from "moment";
 
-export const create_new_user = createAsyncThunk("create_new_user", async ({ field_data }, thunkAPI) => {
+export const create_new_user = createAsyncThunk("create_new_user", async ({
+    name,
+    email,
+    mobile,
+    emergency_contact_relationship,
+    emergency_contact_name,
+    emergency_contact,
+    bank_name,
+    account_number,
+    ifsc,
+    increment_date,
+    gender,
+    dob,
+    doj,
+    skype_email,
+    ultivic_email,
+    salary,
+    security,
+    total_security,
+    installments,
+    position,
+    department,
+    status,
+    username,
+    password,
+    confirm_password,
+    role,
+    address,
+    selectedDocuments,
+}, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
-        console.log(field_data, "this is from redux")
 
         const raw = JSON.stringify({
-            "username": field_data?.username,
-            "email": field_data?.email,
-            "name": field_data?.name,
-            "mobile": field_data?.mobile,
-            "emergency_contact": field_data?.emergency_contact,
-            "emergency_contact_relationship": field_data?.emergency_contact_relationship,
-            "emergency_contact_name": field_data?.emergency_contact_name,
-            "bank_name": field_data?.bank_name,
-            "account_number": field_data?.account_number,
-            "ifsc": field_data?.ifsc,
-            "increment_date": moment(field_data?.increment_date).format('YYYY-MM-DD'),
-            "gender": field_data?.gender,
-            "dob": moment(field_data.dob).format('YYYY-MM-DD'),
-            "doj": moment(field_data.doj).format('YYYY-MM-DD'),
-            "skype_email": field_data?.skype_email,
-            "ultivic_email": field_data?.ultivic_email,
-            "salary": field_data?.salary * 1,
-            "security": field_data?.security * 1,
-            "total_security": field_data?.total_security * 1,
-            "installments": field_data?.installments * 1,
-            "position": field_data?.position,
-            "department": field_data?.department,
-            "status": field_data?.status,
-            "address": field_data?.address,
-            "role": field_data?.role,
-            "confirm_password": field_data?.confirm_password,
-            "password": field_data?.password,
-            "documents": field_data?.documents
+            username: username,
+            email: email,
+            name: name,
+            mobile: mobile,
+            emergency_contact: emergency_contact,
+            emergency_contact_relationship: emergency_contact_relationship,
+            emergency_contact_name: emergency_contact_name,
+            bank_name: bank_name,
+            account_number: account_number,
+            ifsc: ifsc,
+            increment_date: moment(increment_date).format('YYYY-MM-DD'),
+            gender: gender,
+            dob: moment(dob).format('YYYY-MM-DD'),
+            doj: moment(doj).format('YYYY-MM-DD'),
+            skype_email: skype_email,
+            ultivic_email: ultivic_email,
+            salary: salary * 1,
+            security: security * 1,
+            total_security: total_security * 1,
+            installments: installments * 1,
+            position: position,
+            department: department,
+            status: status,
+            address: address,
+            role: role,
+            confirm_password: confirm_password,
+            password: password,
+            documents: selectedDocuments // assuming selectedDocuments is meant to represent the documents
         });
 
         const requestOptions = {
@@ -46,7 +74,7 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({ fiel
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/create_user`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/create_user`, requestOptions);
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -60,7 +88,7 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({ fiel
             message: error.message,
         });
     }
-})
+});
 
 export const createNewUser = createSlice({
     name: "createNewUser",
@@ -73,30 +101,31 @@ export const createNewUser = createSlice({
     },
     reducers: {
         clear_create_user_state: (state) => {
-            state.message = {}
-            state.isError = false
-            state.isSuccess = false
-            state.isLoading = false
-            state.error = null
-            return state
+            state.message = {};
+            state.isError = false;
+            state.isSuccess = false;
+            state.isLoading = false;
+            state.error = null;
+            return state;
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(create_new_user?.pending, (state) => {
-                state.isLoading = true
+            .addCase(create_new_user.pending, (state) => {
+                state.isLoading = true;
             })
-            .addCase(create_new_user?.fulfilled, (state, action) => {
-                state.message = action.payload
-                state.isLoading = false
-                state.isSuccess = true
+            .addCase(create_new_user.fulfilled, (state, action) => {
+                state.message = action.payload;
+                state.isLoading = false;
+                state.isSuccess = true;
             })
-            .addCase(create_new_user?.rejected, (state, action) => {
-                state.error = action.payload
-                state.isError = true
-                state.isLoading = false
-            })
+            .addCase(create_new_user.rejected, (state, action) => {
+                state.error = action.payload;
+                state.isError = true;
+                state.isLoading = false;
+            });
     }
-})
-export const { clear_create_user_state } = createNewUser.actions
-export default createNewUser.reducer
+});
+
+export const { clear_create_user_state } = createNewUser.actions;
+export default createNewUser.reducer;

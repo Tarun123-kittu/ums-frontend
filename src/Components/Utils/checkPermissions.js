@@ -9,7 +9,6 @@ const checkPermissions = (requestedPermission, roles, permissions) => {
     roles.forEach((role) => {
         permissions.forEach((perm) => {
             if (perm.role === role && perm.permission === requestedPermission) {
-                console.log(perm, "this is from the middleware");
                 perm?.can_view === 0 ? permissionFlags.can_view = false : permissionFlags.can_view = true
                 perm?.can_create === 0 ? permissionFlags.can_create = false : permissionFlags.can_create = true
                 perm?.can_delete === 0 ? permissionFlags.can_delete = false : permissionFlags.can_delete = true
