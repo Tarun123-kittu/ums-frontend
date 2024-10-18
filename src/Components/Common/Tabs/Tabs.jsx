@@ -33,13 +33,13 @@ import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import checkPermissions from "../../Utils/checkPermissions";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
+  const permissions = UsePermissions("Interviews");
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
   const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
     useState(false);
-  const [result, setResult] = useState(false);
 
   const resultData = [
     { value: "selected", label: "Selected" },
@@ -67,16 +67,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [techPage, setTechPage] = useState(1);
   const [facePage, setFacePage] = useState(1);
   const [finalPage, setFinalPage] = useState(1);
-  const [permissions, setPermissions] = useState({
-    can_view: false,
-    can_create: false,
-    can_delete: false,
-    can_update: false,
-  });
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  console.log(all_permissions, "all permissions");
 
   const hr_round_candidate_status = useSelector(
     (store) => store.HR_UPDATE_LEAD_STATUS
@@ -87,21 +79,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const face_round_leads = useSelector((store) => store.FACE_ROUND_LEADS);
   const update_face_round = useSelector((store) => store.FACE_ROUND_STATUS);
   const final_round_leads = useSelector((store) => store.FINAL_ROUND_LEADS);
-
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-
-  useEffect(() => {
-    const permissionStatus = checkPermissions(
-      "Interviews",
-      user_all_permissions?.roles_data,
-      user_all_permissions?.permission_data
-    );
-    setPermissions(permissionStatus);
-  }, [user_all_permissions]);
-
-  console.log(permissions, "this is the permissions");
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -238,17 +215,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_round_status]);
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR") ||
-      user_all_permissions?.roles_data?.includes("Developer")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <div>
       <Tabs
         defaultActiveKey="Add Person"
@@ -359,16 +326,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                           ))}
                                         </ul>
                                         <div className="text-end">
-                                          <button
-                                            className="cmn_Button_style"
-                                            onClick={() => {
-                                              navigate("/editPerson", {
-                                                state: { leadData: lead },
-                                              });
-                                            }}
-                                          >
-                                            Edit
-                                          </button>
+                                          {permissions?.can_update && (
+                                            <button
+                                              className="cmn_Button_style"
+                                              onClick={() => {
+                                                navigate("/editPerson", {
+                                                  state: { leadData: lead },
+                                                });
+                                              }}
+                                            >
+                                              Edit
+                                            </button>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -381,17 +350,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <td>{lead?.current_salary}</td>
                             <td>{lead?.expected_salary}</td>
                             <td>
-                              {permissions?.can_view && (
-                                <button
-                                  className="cmn_Button_style"
-                                  onClick={() => {
-                                    setLeadId(lead?.id);
-                                    setShowHrQuestionModal(true);
-                                  }}
-                                >
-                                  Start
-                                </button>
-                              )}
+                              {permissions?.can_view &&
+                                permissions?.can_update && (
+                                  <button
+                                    className="cmn_Button_style"
+                                    onClick={() => {
+                                      setLeadId(lead?.id);
+                                      setShowHrQuestionModal(true);
+                                    }}
+                                  >
+                                    Start
+                                  </button>
+                                )}
                             </td>
                           </tr>
                         );
@@ -464,12 +434,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             cursor: "pointer",
                           }}
                           onClick={() => {
-                            navigate("/viewQuestionlist", {
-                              state: {
-                                interview_id: candidate?.interview_id,
-                                lead_id: candidate?.id,
-                              },
-                            });
+                            permissions?.can_view &&
+                              permissions?.can_update &&
+                              navigate("/viewQuestionlist", {
+                                state: {
+                                  interview_id: candidate?.interview_id,
+                                  lead_id: candidate?.id,
+                                },
+                              });
                           }}
                         >
                           View Questions List
@@ -481,6 +453,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               optionsData={resultData}
                               value={candidate?.hr_round_result}
                               changeHandler={(e) =>
+                                permissions?.can_update &&
                                 dispatch(
                                   hr_update_lead_status({
                                     interview_id: candidate?.interview_id,
@@ -492,18 +465,21 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </div>
                         </td>
                         <td>
-                          {permissions?.can_view && (
-                            <button
-                              className="cmn_Button_style"
-                              onClick={() => {
-                                setLeadId(candidate?.id);
-                                setLanguage(candidate?.profile);
-                                setShowTechInterviewQuesModal(true);
-                              }}
-                            >
-                              Start
-                            </button>
-                          )}
+                          {permissions?.can_view &&
+                            permissions?.can_update &&
+                            candidate?.hr_round_result ===
+                              "selected"(
+                                <button
+                                  className="cmn_Button_style"
+                                  onClick={() => {
+                                    setLeadId(candidate?.id);
+                                    setLanguage(candidate?.profile);
+                                    setShowTechInterviewQuesModal(true);
+                                  }}
+                                >
+                                  Start
+                                </button>
+                              )}
                         </td>
                       </tr>
                     );
@@ -558,13 +534,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
-                            navigate("/questionAnswerSheet", {
-                              state: {
-                                lead_id: tech_leads?.id,
-                                language_id: language_id,
-                                series_id: series_id,
-                              },
-                            });
+                            permissions?.can_view &&
+                              permissions?.can_update &&
+                              navigate("/questionAnswerSheet", {
+                                state: {
+                                  lead_id: tech_leads?.id,
+                                  language_id: language_id,
+                                  series_id: series_id,
+                                },
+                              });
                           }}
                         >
                           View Questions List
@@ -575,6 +553,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               optionsData={technicalRoundStatus}
                               value={tech_leads?.technical_round_result}
                               changeHandler={(e) =>
+                                permissions?.can_update &&
                                 changeTechStatus(e, tech_leads?.interview_id)
                               }
                             />
@@ -582,21 +561,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         </td>
 
                         <td>
-                          {permissions?.can_view && (
-                            <button
-                              className="cmn_Button_style"
-                              onClick={() =>
-                                dispatch(
-                                  update_lead_round_count({
-                                    leadId: tech_leads?.id,
-                                    in_round_count: 3,
-                                  })
-                                )
-                              }
-                            >
-                              Start
-                            </button>
-                          )}
+                          {permissions?.can_view &&
+                            permissions?.can_update &&
+                            tech_leads?.technical_round_result ===
+                              "selected" && (
+                              <button
+                                className="cmn_Button_style"
+                                onClick={() =>
+                                  dispatch(
+                                    update_lead_round_count({
+                                      leadId: tech_leads?.id,
+                                      in_round_count: 3,
+                                    })
+                                  )
+                                }
+                              >
+                                Start
+                              </button>
+                            )}
                         </td>
                       </tr>
                     ))
@@ -656,12 +638,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          navigate("/viewQuestionlist", {
-                            state: {
-                              interview_id: lead?.interview_id,
-                              lead_id: lead?.id,
-                            },
-                          });
+                          permissions?.can_view &&
+                            permissions?.can_update &&
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                              },
+                            });
                         }}
                       >
                         View Questions List
@@ -671,14 +655,16 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          navigate("/questionAnswerSheet", {
-                            state: {
-                              lead_id: lead?.id,
-                              language_id: lead?.language_id,
-                              series_id: lead?.assigned_test_series,
-                              view: true,
-                            },
-                          });
+                          permissions?.can_view &&
+                            permissions?.can_update &&
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
                         }}
                       >
                         View Questions List
@@ -690,6 +676,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             optionsData={resultData}
                             value={lead?.face_to_face_result}
                             changeHandler={(e) =>
+                              permissions?.can_update &&
+                              permissions?.can_view &&
                               changeFaceRoundStatus(e, lead?.id, "face_to_face")
                             }
                           />
@@ -697,21 +685,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                       </td>
 
                       <td>
-                        {permissions?.can_view && (
-                          <button
-                            className="cmn_Button_style"
-                            onClick={() =>
-                              dispatch(
-                                update_lead_round_count({
-                                  leadId: lead?.id,
-                                  in_round_count: 4,
-                                })
-                              )
-                            }
-                          >
-                            Start
-                          </button>
-                        )}
+                        {permissions?.can_view &&
+                          permissions?.can_update &&
+                          lead?.face_to_face_result === "selected" && (
+                            <button
+                              className="cmn_Button_style"
+                              onClick={() =>
+                                dispatch(
+                                  update_lead_round_count({
+                                    leadId: lead?.id,
+                                    in_round_count: 4,
+                                  })
+                                )
+                              }
+                            >
+                              Start
+                            </button>
+                          )}
                       </td>
                     </tr>
                   ))
@@ -770,13 +760,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          navigate("/viewQuestionlist", {
-                            state: {
-                              interview_id: lead?.interview_id,
-                              lead_id: lead?.id,
-                              view: true,
-                            },
-                          });
+                          permissions?.can_view &&
+                            permissions?.can_update &&
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                                view: true,
+                              },
+                            });
                         }}
                       >
                         View Questions List
@@ -786,14 +778,16 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          navigate("/questionAnswerSheet", {
-                            state: {
-                              lead_id: lead?.id,
-                              language_id: lead?.language_id,
-                              series_id: lead?.assigned_test_series,
-                              view: true,
-                            },
-                          });
+                          permissions?.can_view &&
+                            permissions?.can_update &&
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
                         }}
                       >
                         View Questions List
@@ -805,6 +799,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             optionsData={resultData}
                             value={lead?.final_result}
                             changeHandler={(e) =>
+                              permissions?.can_view &&
+                              permissions?.can_update &&
                               changeFaceRoundStatus(e, lead?.id, "final")
                             }
                           />
@@ -812,9 +808,11 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                       </td>
 
                       <td>
-                        {permissions?.can_view && (
-                          <button className="cmn_Button_style">Start</button>
-                        )}
+                        {permissions?.can_view &&
+                          permissions?.can_update &&
+                          lead?.final_result === "selected" && (
+                            <button className="cmn_Button_style">Start</button>
+                          )}
                       </td>
                     </tr>
                   ))
@@ -852,6 +850,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
         />
       )}
     </div>
+  ) : (
+    <UnauthorizedPage />
   );
 }
 

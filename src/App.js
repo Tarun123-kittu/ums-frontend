@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './App.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ProtectedRoute from './Components/Utils/verifyToken';
@@ -44,7 +45,6 @@ import ApplyLeaves from './Components/Admin/Attendence/ApplyLeaves';
 import ForgotPassword from './Components/Login/ForgotPassword';
 
 function App() {
-
   const secureComponent = (Component) => <ProtectedRoute element={() => <><Sidebar /><Component /></>} />;
 
   return (

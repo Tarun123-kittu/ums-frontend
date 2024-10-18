@@ -19,18 +19,18 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 import validator from "validator";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Users");
   const obj = [{ name: "Employees", path: "/employee" }];
   const { user_details, documents } = location?.state
     ? location?.state
     : location;
-
-  console.log(documents);
 
   useEffect(() => {
     dispatch(get_all_roles());
@@ -84,10 +84,6 @@ const EditEmployeeInfo = () => {
   let [ultivic_email, setUltivicEmail] = useState(user_details?.ultivic_email);
   let [username, setUsername] = useState(user_details?.username);
   let [selected_documents, setSelected_documents] = useState([]);
-  console.log(
-    selected_documents,
-    "selected_documents selected_documents selected_documents"
-  );
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
   const user_all_permissions = useSelector(
@@ -292,7 +288,7 @@ const EditEmployeeInfo = () => {
     });
   };
 
-  return (
+  return permissions?.can_view ? (
     <section className="add_new_emp_container">
       <div
         className={`wrapper admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
@@ -765,6 +761,8 @@ const EditEmployeeInfo = () => {
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

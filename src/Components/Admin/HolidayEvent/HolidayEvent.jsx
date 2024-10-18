@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../Sidebar/Sidebar";
 import Notification from "../Notification/Notification";
 import { useAppContext } from "../../Utils/appContecxt";
+
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import "./holiday.css";
@@ -20,9 +21,11 @@ import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const permissions = UsePermissions("Events");
   const { show } = useAppContext();
   const [showEventModal, setShowEventModal] = useState(false);
   const [selected_year, setSelected_year] = useState(new Date().getFullYear());
@@ -171,8 +174,7 @@ const HolidayEvent = () => {
               >
                 Search
               </button>
-              {(user_all_permissions?.roles_data?.includes("Admin") ||
-                hr_user_permissions?.can_create) && (
+              {permissions?.can_create && (
                 <button
                   className="cmn_Button_style"
                   onClick={() => {
@@ -208,10 +210,7 @@ const HolidayEvent = () => {
 
                           <td>
                             <div className="d-flex gap-2 justify-content-center">
-                              {(user_all_permissions?.roles_data?.includes(
-                                "Admin"
-                              ) ||
-                                hr_user_permissions?.can_view) && (
+                              {permissions?.can_update && (
                                 <div className="cmn_action_outer yellow_bg">
                                   <FaRegEdit
                                     onClick={() =>
@@ -220,10 +219,7 @@ const HolidayEvent = () => {
                                   />
                                 </div>
                               )}
-                              {(user_all_permissions?.roles_data?.includes(
-                                "Admin"
-                              ) ||
-                                hr_user_permissions?.can_delete) && (
+                              {permissions?.can_delete && (
                                 <div className="cmn_action_outer red_bg">
                                   <RiDeleteBin6Line
                                     onClick={() => {

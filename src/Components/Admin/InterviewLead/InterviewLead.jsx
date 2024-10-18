@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import Notification from "../Notification/Notification";
 import TabComp from "../../Common/Tabs/Tabs";
@@ -9,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import CommonDeleteModal from "../../Modal/CommonDeleteModal";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import CustomSelectComp from "../../Common/CustomSelectComp";
-import PaginationComp from "../../Pagination/Pagination";
 import { useSelector } from "react-redux";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
@@ -19,47 +16,22 @@ import { get_hr_round_candidate } from "../../../utils/redux/interviewLeadsSlice
 import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
-import checkPermissions from "../../Utils/checkPermissions";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+
 const InterviewLead = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Interviews");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [all_languagages, setAll_languages] = useState([]);
   const [selected_language, setSelected_language] = useState("");
   const [selected_experience, setSelected_experience] = useState("");
   const [selected_result, setSelected_result] = useState("");
-  const [permissions, setPermissions] = useState({
-    can_view: false,
-    can_create: false,
-    can_delete: false,
-    can_update: false,
-  });
   const [currentTab, setCurrentTab] = useState("Add Person");
   const [open_tab, setOpen_tab] = useState("Add Person");
   const [page, setPage] = useState(1);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    const permissionStatus = checkPermissions(
-      "Interviews",
-      user_all_permissions?.roles_data,
-      user_all_permissions?.permission_data
-    );
-    setPermissions(permissionStatus);
-  }, [user_all_permissions]);
-
-  console.log(permissions, "this is the permissions");
-
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
   const experienceObj = [
@@ -90,16 +62,6 @@ const InterviewLead = () => {
       });
     }
   }, [languages]);
-
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR") ||
-      user_all_permissions?.roles_data?.includes("Developer")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
 
   const changeHandler = (e) => {
     setSelected_language(e.value);
@@ -223,7 +185,7 @@ const InterviewLead = () => {
     }
   };
 
-  return (
+  return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -324,6 +286,8 @@ const InterviewLead = () => {
         />
       )}
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

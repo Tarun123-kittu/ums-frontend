@@ -12,6 +12,7 @@ import {
   get_selected_holiday_and_event_details,
   clear_get_selected_holiday_and_event_state,
 } from "../../utils/redux/holidayAndEventsSlice/getSelectedHolidayAndEvent";
+import checkPermissions from "../Utils/checkPermissions";
 import {
   update_holiday_and_event,
   clear_updated_holiday_and_event_state,
@@ -22,8 +23,13 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   const dispatch = useDispatch();
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [description, setDiscription] = useState("");
+  const [permissions, setPermissions] = useState({
+    can_view: false,
+    can_create: false,
+    can_delete: false,
+    can_update: false,
+  });
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_holiday_created = useSelector(
     (store) => store.ADD_HOLIDAY_AND_EVENT
@@ -42,11 +48,15 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   };
 
   useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Events"
+    const permissionStatus = checkPermissions(
+      "Events",
+      user_all_permissions?.roles_data,
+      user_all_permissions?.permission_data
     );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
+    setPermissions(permissionStatus);
+  }, [user_all_permissions]);
+
+  console.log(permissions, "this is the permissions");
 
   const options = [
     { value: "holiday", label: "Holiday" },
@@ -81,7 +91,7 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
           })
         );
       } else {
-        toast.error("All fields are required to add new holiday !!");
+        toast.error(`All fields are required to add new ${type} !!`);
       }
     }
   };
@@ -166,8 +176,6 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
               <CustomSelectComp
                 optionsData={options}
                 changeHandler={(e) => setType(e.value)}
-                // setType={setType}
-                // value={date ? date : type}
                 value={type}
               />
             </div>
@@ -183,26 +191,22 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          {!edit &&
-            (user_all_permissions?.roles_data?.includes("Admin") ||
-              hr_user_permissions?.can_create) && (
-              <button
-                className="cmn_Button_style"
-                onClick={() => handleAddHolidayAndEvents()}
-              >
-                {"Add Event"}
-              </button>
-            )}
-          {edit &&
-            (user_all_permissions?.roles_data?.includes("Admin") ||
-              hr_user_permissions?.can_edit) && (
-              <button
-                className="cmn_Button_style"
-                onClick={() => handleAddHolidayAndEvents()}
-              >
-                {"update"}
-              </button>
-            )}
+          {!edit && permissions?.can_create && (
+            <button
+              className="cmn_Button_style"
+              onClick={() => handleAddHolidayAndEvents()}
+            >
+              {"Add Event"}
+            </button>
+          )}
+          {edit && permissions?.can_update && (
+            <button
+              className="cmn_Button_style"
+              onClick={() => handleAddHolidayAndEvents()}
+            >
+              {"update"}
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
     </div>

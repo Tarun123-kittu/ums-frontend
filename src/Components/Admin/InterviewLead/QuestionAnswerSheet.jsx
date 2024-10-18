@@ -16,8 +16,11 @@ import {
 } from "../../../utils/redux/interviewLeadsSlice/technicalRound/CheckLeadAnswers";
 import toast from "react-hot-toast";
 import DeveloperReviewModal from "../../Modal/developerReviewModal";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const QuestionAnswerSheet = () => {
+  const permissions = UsePermissions("Interviews");
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,26 +30,14 @@ const QuestionAnswerSheet = () => {
   const lead_answers = useSelector((store) => store.LEAD_ANSWER);
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
   const check_answer = useSelector((store) => store.CHECK_LEAD_ANSWER);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const [showDeveloperModal, setShowDeveloperModal] = useState(false);
   const [allAnswersFilled, setAllAnswersFilled] = useState(false);
   const [interview_id, setInterview_id] = useState(null);
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
-  const [developer_permissions, setDeveloper_permissions] = useState({});
   const { show } = useAppContext();
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
     { name: "Technical Round", path: "" },
   ];
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (!lead_id) {
@@ -58,17 +49,6 @@ const QuestionAnswerSheet = () => {
       );
     }
   }, [lead_id]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Interviews"
-    );
-    const developerPermissions = all_permissions?.data?.data?.find(
-      (el) => el.role === "Developer" && el.permission === "Interviews"
-    );
-    setHr_user_permissions(can_hr_create);
-    setDeveloper_permissions(developerPermissions);
-  }, [all_permissions]);
 
   useEffect(() => {
     if (check_answer?.isSuccess) {
@@ -94,7 +74,7 @@ const QuestionAnswerSheet = () => {
     }
   }, [lead_answers, interview_id]);
 
-  return (
+  return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <Sidebar />
       <div
@@ -198,11 +178,7 @@ const QuestionAnswerSheet = () => {
                             {!view && (
                               <div className="answer_head">
                                 <h4>{answer?.question}</h4>
-                                {(user_all_permissions?.roles_data?.includes(
-                                  "Admin"
-                                ) ||
-                                  developer_permissions?.can_update) &&
-                                answer.answer ? (
+                                {answer.answer ? (
                                   <div className="d-flex gap-2 justify-content-end check_btn_wrapper">
                                     <button
                                       className="correct_btn"
@@ -238,30 +214,24 @@ const QuestionAnswerSheet = () => {
                                     </button>
                                   </div>
                                 ) : (
-                                  (user_all_permissions?.roles_data?.includes(
-                                    "Admin"
-                                  ) ||
-                                    developer_permissions?.can_update) && (
-                                    <div className="d-flex gap-2 justify-content-end check_btn_wrapper">
-                                      <button
-                                        className="not-button"
-                                        onClick={() => {
-                                          dispatch(
-                                            check_lead_answers({
-                                              question_id: answer?.question_id,
-                                              interview_id:
-                                                answer?.interview_id,
-                                              lead_id: lead_id,
-                                              answer_status: "not_attempted",
-                                            })
-                                          );
-                                          setInterview_id(answer?.interview_id);
-                                        }}
-                                      >
-                                        <PiProhibit size={20} />
-                                      </button>
-                                    </div>
-                                  )
+                                  <div className="d-flex gap-2 justify-content-end check_btn_wrapper">
+                                    <button
+                                      className="not-button"
+                                      onClick={() => {
+                                        dispatch(
+                                          check_lead_answers({
+                                            question_id: answer?.question_id,
+                                            interview_id: answer?.interview_id,
+                                            lead_id: lead_id,
+                                            answer_status: "not_attempted",
+                                          })
+                                        );
+                                        setInterview_id(answer?.interview_id);
+                                      }}
+                                    >
+                                      <PiProhibit size={20} />
+                                    </button>
+                                  </div>
                                 )}
                               </div>
                             )}
@@ -314,11 +284,7 @@ const QuestionAnswerSheet = () => {
                                 <h4>
                                   {answer?.question} ({answer.answer_status})
                                 </h4>
-                                {(user_all_permissions?.roles_data?.includes(
-                                  "Admin"
-                                ) ||
-                                  developer_permissions?.can_update) &&
-                                answer.answer ? (
+                                {answer.answer ? (
                                   <div className="d-flex gap-2 justify-content-end check_btn_wrapper">
                                     <button
                                       className="correct_btn"
@@ -354,29 +320,24 @@ const QuestionAnswerSheet = () => {
                                     </button>
                                   </div>
                                 ) : (
-                                  (user_all_permissions?.roles_data?.includes(
-                                    "Admin"
-                                  ) ||
-                                    developer_permissions?.can_update) && (
-                                    <div
-                                      className="d-flex gap-2 justify-content-end check_btn_wrapper"
-                                      onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "not_attempted",
-                                          })
-                                        );
-                                        setInterview_id(answer?.interview_id);
-                                      }}
-                                    >
-                                      <button className="not-button">
-                                        <PiProhibit size={20} />
-                                      </button>
-                                    </div>
-                                  )
+                                  <div
+                                    className="d-flex gap-2 justify-content-end check_btn_wrapper"
+                                    onClick={() => {
+                                      dispatch(
+                                        check_lead_answers({
+                                          question_id: answer?.question_id,
+                                          interview_id: answer?.interview_id,
+                                          lead_id: lead_id,
+                                          answer_status: "not_attempted",
+                                        })
+                                      );
+                                      setInterview_id(answer?.interview_id);
+                                    }}
+                                  >
+                                    <button className="not-button">
+                                      <PiProhibit size={20} />
+                                    </button>
+                                  </div>
                                 )}
                               </div>
                             )}
@@ -418,11 +379,7 @@ const QuestionAnswerSheet = () => {
                             {!view && (
                               <div className="answer_head">
                                 <h4>{answer?.question}</h4>
-                                {(user_all_permissions?.roles_data?.includes(
-                                  "Admin"
-                                ) ||
-                                  developer_permissions?.can_update) &&
-                                answer.answer ? (
+                                {answer.answer ? (
                                   <div className="d-flex gap-2 justify-content-end check_btn_wrapper">
                                     <button
                                       className="correct_btn"
@@ -458,29 +415,24 @@ const QuestionAnswerSheet = () => {
                                     </button>
                                   </div>
                                 ) : (
-                                  (user_all_permissions?.roles_data?.includes(
-                                    "Admin"
-                                  ) ||
-                                    developer_permissions?.can_update) && (
-                                    <div
-                                      className="d-flex gap-2 justify-content-end check_btn_wrapper"
-                                      onClick={() => {
-                                        dispatch(
-                                          check_lead_answers({
-                                            question_id: answer?.question_id,
-                                            interview_id: answer?.interview_id,
-                                            lead_id: lead_id,
-                                            answer_status: "not_attempted",
-                                          })
-                                        );
-                                        setInterview_id(answer?.interview_id);
-                                      }}
-                                    >
-                                      <button className="not-button">
-                                        <PiProhibit size={20} />
-                                      </button>
-                                    </div>
-                                  )
+                                  <div
+                                    className="d-flex gap-2 justify-content-end check_btn_wrapper"
+                                    onClick={() => {
+                                      dispatch(
+                                        check_lead_answers({
+                                          question_id: answer?.question_id,
+                                          interview_id: answer?.interview_id,
+                                          lead_id: lead_id,
+                                          answer_status: "not_attempted",
+                                        })
+                                      );
+                                      setInterview_id(answer?.interview_id);
+                                    }}
+                                  >
+                                    <button className="not-button">
+                                      <PiProhibit size={20} />
+                                    </button>
+                                  </div>
                                 )}
                               </div>
                             )}
@@ -508,23 +460,19 @@ const QuestionAnswerSheet = () => {
                   })}
                 </div>
               </div>
-              {(user_all_permissions?.roles_data?.includes("Admin") ||
-                developer_permissions?.can_update) &&
-                !view && (
-                  <div>
-                    <button
-                      onClick={() => {
-                        allAnswersFilled
-                          ? setShowDeveloperModal(true)
-                          : toast.error(
-                              "Please give feedback to all questions"
-                            );
-                      }}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                )}
+              {!view && (
+                <div>
+                  <button
+                    onClick={() => {
+                      allAnswersFilled
+                        ? setShowDeveloperModal(true)
+                        : toast.error("Please give feedback to all questions");
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -537,6 +485,8 @@ const QuestionAnswerSheet = () => {
         />
       )}
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

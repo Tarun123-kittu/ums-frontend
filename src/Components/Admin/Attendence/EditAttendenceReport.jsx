@@ -18,6 +18,7 @@ import {
   update_attendance,
   clear_update_attendance_state,
 } from "../../../utils/redux/attendanceSlice/updateAttendance";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const EditAttendenceReport = () => {
   const location = useLocation();
@@ -62,13 +63,6 @@ const EditAttendenceReport = () => {
   const is_attendance_updated = useSelector((store) => store.UPDATE_ATTENDANCE);
 
   useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Attandance"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
-
-  useEffect(() => {
     if (attendance_detail.isSuccess) {
       setIn_time(attendance_detail?.data?.in_time);
       setOut_time(attendance_detail?.data?.out_time);
@@ -111,7 +105,7 @@ const EditAttendenceReport = () => {
     }
   }, [is_attendance_updated]);
 
-  return (
+  return Permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -208,8 +202,7 @@ const EditAttendenceReport = () => {
                 <MdStar />
                 <MdStar />
               </div>
-              {(user_all_permissions?.roles_data?.includes("Admin") ||
-                hr_user_permissions?.can_update) && (
+              {Permissions?.can_update && (
                 <div className="text-center mt-4">
                   <button
                     className="cmn_Button_style"
@@ -224,6 +217,8 @@ const EditAttendenceReport = () => {
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

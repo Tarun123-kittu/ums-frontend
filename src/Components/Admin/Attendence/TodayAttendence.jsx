@@ -10,8 +10,10 @@ import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const TodayAttendence = () => {
+  const permissions = UsePermissions("Attandance");
   UseAttendanceReport({ page: 1 });
   const dispatch = useDispatch();
 
@@ -26,14 +28,6 @@ const TodayAttendence = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Attandance"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
 
   const [page, setPage] = useState(1);
   useEffect(() => {
@@ -56,18 +50,7 @@ const TodayAttendence = () => {
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
   };
 
-  if (user_all_permissions?.roles_data) {
-    if (
-      !(
-        user_all_permissions?.roles_data?.includes("Admin") ||
-        user_all_permissions?.roles_data?.includes("HR")
-      )
-    ) {
-      return <UnauthorizedPage />;
-    }
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -133,21 +116,17 @@ const TodayAttendence = () => {
                         </td>
 
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_view) &&
-                            report?.id && (
-                              <div className="cmn_action_outer yellow_bg">
-                                <FiEdit
-                                  onClick={() => {
-                                    navigate("/editAttendenceReport", {
-                                      state: { id: report?.id },
-                                    });
-                                  }}
-                                />
-                              </div>
-                            )}
+                          {permissions?.can_update && report?.id && (
+                            <div className="cmn_action_outer yellow_bg">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editAttendenceReport", {
+                                    state: { id: report?.id },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
                         </td>
                       </tr>
                     );
@@ -163,6 +142,8 @@ const TodayAttendence = () => {
         />
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

@@ -9,21 +9,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_hr_round_questions, clear_hr_round_questions_state } from "../../../utils/redux/interviewLeadsSlice/hrRound/getHrRoundQuestions";
 import toast from "react-hot-toast";
 import { hr_round_response, clear_hr_round } from "../../../utils/redux/interviewLeadsSlice/hrRound/hrRoundResponse";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const HrInterViewQuestion = () => {
+  const permissions = UsePermissions("Interviews");
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const [questions, setQuestions] = useState([])
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const { count, leadId } = location?.state ? location?.state : location;
   const all_question = useSelector((store) => store.HR_ROUND_QUESTION)
   const update_question = useSelector((store) => store.HR_ROUND_RESULT)
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
   const obj = [
     { name: "Interview Leads", path: "/interviewLead" },
   ];
@@ -41,13 +39,6 @@ const HrInterViewQuestion = () => {
       dispatch(get_hr_round_questions({ count }))
     }
   }, [count]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Interviews"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
 
   useEffect(() => {
     let newArr = []
@@ -71,9 +62,9 @@ const HrInterViewQuestion = () => {
   };
 
   const handleSave = () => {
-    const allAnswered = questions?.every(question => question.answer !== "");
+    const allAnswered = questions?.every(question => question.answer !== "" || question.answer > 5);
     if (!allAnswered) {
-      toast.error("Please provide a rating for all questions");
+      toast.error("Please provide a rating for all questions and rating must be less than and equal to 5");
     } else {
       dispatch(hr_round_response({ responses: questions, lead_id: leadId }));
     }
@@ -94,7 +85,7 @@ const HrInterViewQuestion = () => {
   }, [update_question])
 
 
-  return (
+  return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -131,15 +122,14 @@ const HrInterViewQuestion = () => {
                 <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => navigate("/interviewLead", { state: { tab: "Add Person" } })}>
                   Exit
                 </button>
-                {(user_all_permissions?.roles_data?.includes("Admin") ||
-                  hr_user_permissions?.can_create) && <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>}
+                {permissions?.can_update && <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
+  ) : <UnauthorizedPage />;
 };
 
 export default HrInterViewQuestion;

@@ -11,12 +11,14 @@ import {
 } from "../../../utils/redux/userSlice/userDetailsSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_user_documents } from "../../../utils/redux/userSlice/getUserDocuments";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const ViewEmployeeInfo = () => {
   const location = useLocation();
   const { show } = useAppContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Users");
   let [selected_documents, setSelected_documents] = useState([]);
   const { user_id } = location.state ? location?.state : location;
   const [user_details, setUser_details] = useState([]);
@@ -24,7 +26,6 @@ const ViewEmployeeInfo = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
   const documents = useSelector((store) => store.USER_DOCUMENT);
-  console.log(documents, "this is the all user documents");
 
   useEffect(() => {
     if (documents?.data?.data?.length > 0) {
@@ -93,16 +94,7 @@ const ViewEmployeeInfo = () => {
     { id: 6, name: "Training Certificate" },
   ];
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section>
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -258,21 +250,25 @@ const ViewEmployeeInfo = () => {
               </table>
             </div>
             <div className="mt-3 text-end">
-              <button
-                className="cmn_Button_style"
-                onClick={() => {
-                  navigate("/editEmployee", {
-                    state: { user_details, documents },
-                  });
-                }}
-              >
-                Edit
-              </button>
+              {permissions?.can_update && (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    navigate("/editEmployee", {
+                      state: { user_details, documents },
+                    });
+                  }}
+                >
+                  Edit
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

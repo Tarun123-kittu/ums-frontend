@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import InputField from "../../Common/InputField";
 import Notification from "../Notification/Notification";
-import Select from "../../Common/Select";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import { indianStates } from "../../Utils/customData/statesData";
 import { ProfileData } from "../../Utils/customData/profileData";
@@ -16,8 +14,11 @@ import {
   clear_update_lead_state,
 } from "../../../utils/redux/interviewLeadsSlice/updateLead";
 import toast from "react-hot-toast";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const EditPerson = () => {
+  const permissions = UsePermissions("Interviews");
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,12 +37,6 @@ const EditPerson = () => {
   const [last_company, setLast_company] = useState("");
   const [id, setId] = useState(null);
   const update_lead_data = useSelector((store) => store.UPDATE_LEAD);
-
-  useEffect(() => {
-    if (localStorage.getItem('roles')?.includes('Employee')) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (!leadData) {
@@ -116,7 +111,7 @@ const EditPerson = () => {
     }
   }, [update_lead_data]);
 
-  return (
+  return permissions?.can_view ? (
     <section>
       <div
         className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
@@ -280,17 +275,21 @@ const EditPerson = () => {
               >
                 Exit
               </button>
-              <button
-                className="cmn_Button_style"
-                onClick={() => handleUpdate()}
-              >
-                Save
-              </button>
+              {permissions?.can_update && (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => handleUpdate()}
+                >
+                  Save
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

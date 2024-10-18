@@ -15,11 +15,14 @@ import {
   clear_update_leave_state,
 } from "../../../utils/redux/leaveSlice/updateLeaves";
 import toast from "react-hot-toast";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const EditLeaveRequest = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const permissions = UsePermissions("Leaves");
   const {
     leave_id,
     back_to_report,
@@ -37,33 +40,11 @@ const EditLeaveRequest = () => {
   const [leaveDetail, setLeaveDetail] = useState();
   const [status, setStatus] = useState(leave_status);
   const [remark, setRemark] = useState(leave_remark);
-  const [showToast, setShowToast] = useState(false);
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
-  const [toastMessage, setToastMessage] = useState("");
-  const [type, setType] = useState("");
-
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
 
   useEffect(() => {
     if (!leave_id) navigate("/leaveRequest");
     leave_id && dispatch(get_applied_leave_detail({ leave_id }));
   }, [leave_id]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Leave"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (leave_details?.isSuccess) {
@@ -104,7 +85,7 @@ const EditLeaveRequest = () => {
       })
     );
   };
-  return (
+  return permissions?.can_view ? (
     <section className="editLeave_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -220,8 +201,7 @@ const EditLeaveRequest = () => {
                 />
               </div>
 
-              {(user_all_permissions?.roles_data?.includes("Admin") ||
-                hr_user_permissions?.can_update) && (
+              {permissions?.can_update && (
                 <div className="text-center mt-4">
                   <button
                     className="cmn_Button_style"
@@ -236,6 +216,8 @@ const EditLeaveRequest = () => {
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import { FaSort } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
@@ -12,8 +11,10 @@ import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const LeaveReport = () => {
+  const permissions = UsePermissions("Leaves");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const obj = [
@@ -28,22 +29,10 @@ const LeaveReport = () => {
   }, [navigate]);
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [year, setYear] = useState([]);
   const [selected_employee, setSelected_employee] = useState();
   const [selected_month, setSelected_month] = useState();
   const [selected_year, setSelected_year] = useState();
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Leave"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
 
   useEffect(() => {
     dispatch(
@@ -58,11 +47,11 @@ const LeaveReport = () => {
 
   const { show } = useAppContext();
   const formatDate = (dateString) => {
-    if (!dateString) return ""; // handle the case when the date is null or undefined
+    if (!dateString) return "";
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with '0' if needed
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (months are 0-based)
-    const year = date.getFullYear(); // Get the year
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   };
 
@@ -71,7 +60,6 @@ const LeaveReport = () => {
     let result = [];
 
     while (startYear <= currentYear) {
-      // result.push(startYear++);
       result.push({ label: startYear, value: startYear });
       startYear++;
     }
@@ -104,16 +92,7 @@ const LeaveReport = () => {
     { value: "12", label: "December" },
   ];
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="leaveReport_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -218,10 +197,7 @@ const LeaveReport = () => {
                         <td>{leave?.status}</td>
                         <td>{leave?.remark}</td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_view) && (
+                          {permissions?.can_update && (
                             <div className="cmn_action_outer yellow_bg cursor_pointer">
                               <FiEdit
                                 onClick={() => {
@@ -249,6 +225,8 @@ const LeaveReport = () => {
         <PaginationComp />
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

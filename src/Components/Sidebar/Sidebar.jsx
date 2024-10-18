@@ -27,7 +27,7 @@ const AllPermissions = [
   "Test",
   "Leaves",
   "Dashboard",
-  "Teams"
+  "Teams",
 ];
 
 const Sidebar = () => {
@@ -38,27 +38,17 @@ const Sidebar = () => {
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
-  console.log(uniqueRoles, "uniqueRoles uniqueRoles uniqueRoles");
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  console.log(
-    all_permissions,
-    "all_permissions all_permissions all_permissions"
-  );
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
 
   const [permissions, setPermissions] = useState({});
-
-  console.log(permissions, "this is ths all")
   const checkPermissions = (permission, rolesData, permissionData) => {
-    // Check if any role in rolesData has the specified permission
-    return rolesData.some(role => {
-      // Find the userPermission where the permission matches and the role matches
-      const userPermission = permissionData.find(up =>
-        up.permission === permission && up.role === role
+    return rolesData.some((role) => {
+      const userPermission = permissionData.find(
+        (up) => up.permission === permission && up.role === role
       );
-      // Return true if the userPermission exists and can_view is true (1)
       return userPermission ? !!userPermission.can_view : false;
     });
   };
@@ -73,10 +63,8 @@ const Sidebar = () => {
       );
     });
 
-    setPermissions(permissionsStatus); // Update state with all permissions
+    setPermissions(permissionsStatus);
   }, [user_all_permissions]);
-
-
 
   useEffect(() => {
     if (!localStorage.getItem("ums_token")) {
@@ -151,16 +139,15 @@ const Sidebar = () => {
         {/* admin sidebar */}
         {uniqueRoles?.includes("Admin") &&
           menuitems.map((data, i) => {
-            console.log(data, "this is the data from the data and data")
             const isActive = path.pathname === data?.pathname;
-            if (permissions?.Dashboard_can_view
-              && data?.name === "Dashboard") {
+            if (permissions?.Dashboard_can_view && data?.name === "Dashboard") {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -169,8 +156,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -179,7 +167,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -230,14 +220,14 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Users_can_view
-              && data?.name === "Employees") {
+            if (permissions?.Users_can_view && data?.name === "Employees") {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -246,8 +236,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -256,7 +247,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -307,14 +300,17 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Attandance_can_view
-              && data?.name === "Attendance Report") {
+            if (
+              permissions?.Attandance_can_view &&
+              data?.name === "Attendance Report"
+            ) {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -323,8 +319,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -333,7 +330,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -384,14 +383,17 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Events_can_view
-              && data?.name === "Holiday & Events") {
+            if (
+              permissions?.Events_can_view &&
+              data?.name === "Holiday & Events"
+            ) {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -400,8 +402,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -410,7 +413,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -461,14 +466,17 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Leaves_can_view
-              && data?.name === "Leave Application") {
+            if (
+              permissions?.Leaves_can_view &&
+              data?.name === "Leave Application"
+            ) {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -477,8 +485,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -487,7 +496,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -538,14 +549,17 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Interviews_can_view
-              && data?.name === "InterView Leads") {
+            if (
+              permissions?.Interviews_can_view &&
+              data?.name === "InterView Leads"
+            ) {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -554,8 +568,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -564,7 +579,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -615,14 +632,14 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Test_can_view
-              && data?.name === "Test Series") {
+            if (permissions?.Test_can_view && data?.name === "Test Series") {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -631,8 +648,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -641,7 +659,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -692,14 +712,14 @@ const Sidebar = () => {
                 </>
               );
             }
-            if (permissions?.Teams_can_view
-              && data?.name === "Teams & Roles") {
+            if (permissions?.Teams_can_view && data?.name === "Teams & Roles") {
               return (
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
+                    className={`sidebar-button ${
+                      isActive ? "active-pathname" : ""
+                    }`}
                   >
                     {data.subItems ? (
                       <>
@@ -708,8 +728,9 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
+                            className={`transition_class ${
+                              show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                           >
                             <img
                               src={data?.icon}
@@ -718,7 +739,9 @@ const Sidebar = () => {
                               width="18px"
                               className={isActive ? "filterClass" : ""}
                             />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                            <h4 className={show ? "d-none" : ""}>
+                              {data?.name}
+                            </h4>
                           </div>
                           {show ? (
                             ""
@@ -770,7 +793,8 @@ const Sidebar = () => {
               );
             }
 
-            {/* else {
+            {
+              /* else {
               return (
                 <>
                   <div
@@ -845,9 +869,8 @@ const Sidebar = () => {
                   )}
                 </>
               );
-            } */}
-
-
+            } */
+            }
           })}
         <div className={`sidebar-button`} onClick={handleLogout}>
           <div className="sidebar_content">
@@ -855,7 +878,6 @@ const Sidebar = () => {
             <h4 className={show ? "d-none" : "sidebar_content"}> Logout</h4>
           </div>
         </div>
-
       </div>
     </div>
   );

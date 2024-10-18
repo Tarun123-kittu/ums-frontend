@@ -10,32 +10,20 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+
 const IncompleteAttendence = () => {
+  const permissions = UsePermissions("Attandance");
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Incomplete Attendance", path: "/incompleteAttendence" },
   ];
   const navigate = useNavigate();
   const { show } = useAppContext();
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Attandance"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -46,16 +34,7 @@ const IncompleteAttendence = () => {
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
   };
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -96,21 +75,17 @@ const IncompleteAttendence = () => {
                           <td>{convertTo12Hour(report?.in_time)}</td>
                           <td>--</td>
                           <td>
-                            {(user_all_permissions?.roles_data?.includes(
-                              "Admin"
-                            ) ||
-                              hr_user_permissions?.can_view) &&
-                              report?.id && (
-                                <div className="cmn_action_outer yellow_bg cursor_pointer">
-                                  <FiEdit
-                                    onClick={() => {
-                                      navigate("/editAttendenceReport", {
-                                        state: { id: report?.id },
-                                      });
-                                    }}
-                                  />
-                                </div>
-                              )}
+                            {permissions?.can_update && report?.id && (
+                              <div className="cmn_action_outer yellow_bg cursor_pointer">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
                           </td>
                         </tr>
                       );
@@ -124,6 +99,8 @@ const IncompleteAttendence = () => {
         <PaginationComp />
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

@@ -2,31 +2,24 @@ import React, { useState, useEffect } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
-import Select from "../../Common/Select";
 import EditLeaveBankModal from "../../Modal/EditLeaveBankModal";
 import { useDispatch, useSelector } from "react-redux";
 import { get_leave_bank_report } from "../../../utils/redux/leaveSlice/getLeaveBankReport";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const permissions = UsePermissions("Leaves");
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const [session, setSession] = useState("");
   const [selected_year, setSelected_year] = useState("");
   const [selected_month, setSelected_month] = useState("");
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [year, setYear] = useState([]);
   const [yearObj, setYearObj] = useState([]);
   const [financial_year, setFinancial_year] = useState([]);
@@ -34,19 +27,6 @@ const LeaveBank = () => {
     { name: "Leave Application", path: "" },
     { name: "Leave Bank", path: "/leaveBank" },
   ];
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Leave"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -106,16 +86,7 @@ const LeaveBank = () => {
     if (filter === "year") setSelected_year(e.value);
   };
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="attendenceBank_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -131,12 +102,6 @@ const LeaveBank = () => {
 
           <div className="d-flex employee_container align-items-end mt-3">
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Select Financial Year"}
-                labelClass={""}
-                options={financial_year}
-                onChange={(e) => handleFilter(e, "financial_year")}
-              /> */}
               <div className="form-group new_employee_form_group mt-2">
                 <label className="modal_label">Select Financial Year</label>
                 <div className="mt-2">
@@ -150,12 +115,6 @@ const LeaveBank = () => {
             </div>
 
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Month"}
-                labelClass={""}
-                options={monthDataObj}
-                onChange={(e) => handleFilter(e, "month")}
-              /> */}
               <div className="form-group new_employee_form_group mt-2">
                 <label className="modal_label">Month</label>
                 <div className="mt-2">
@@ -168,12 +127,6 @@ const LeaveBank = () => {
               </div>
             </div>
             <div className="employee_wrapper">
-              {/* <Select
-                labelname={"Year"}
-                labelClass={""}
-                options={yearObj}
-                onChange={(e) => handleFilter(e, "year")}
-              /> */}
               <div className="form-group new_employee_form_group mt-2">
                 <label className="modal_label">Year</label>
                 <div className="mt-2">
@@ -228,8 +181,7 @@ const LeaveBank = () => {
                       <td>{leave_bank?.paid_leave || "0"}</td>
 
                       <td>
-                        {(user_all_permissions?.roles_data?.includes("Admin") ||
-                          hr_user_permissions?.can_view) && (
+                        {permissions?.can_update && (
                           <div
                             className="cmn_action_outer yellow_bg cusror_pointer"
                             onClick={() => setShowEditLeaveModal(true)}
@@ -255,6 +207,8 @@ const LeaveBank = () => {
         )}
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

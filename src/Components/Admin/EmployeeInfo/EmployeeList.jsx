@@ -18,9 +18,11 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import CommonDeleteModal from "../../Modal/CommonDeleteModal";
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const permissions = UsePermissions("Users");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [page, setPage] = useState(1);
@@ -71,22 +73,7 @@ const EmployeeList = () => {
     { value: 4, label: "None" },
   ];
 
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Users"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
-
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-  return (
+  return permissions?.can_view ? (
     <>
       <div className="employee_list_outer minheight">
         <div className="d-flex employee_container align-items-end mt-3">
@@ -145,8 +132,7 @@ const EmployeeList = () => {
             >
               Search
             </button>
-            {(user_all_permissions?.roles_data?.includes("Admin") ||
-              hr_user_permissions?.can_create) && (
+            {permissions?.can_create && (
               <button
                 className="cmn_Button_style ms-3"
                 onClick={() => navigate("/addemployee")}
@@ -197,10 +183,7 @@ const EmployeeList = () => {
                       </td>
                       <td>
                         <div className="d-flex gap-2">
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_view) && (
+                          {permissions?.can_view && (
                             <div
                               className="cmn_action_outer dark_gray_bg"
                               style={{ cursor: "pointer" }}
@@ -214,10 +197,7 @@ const EmployeeList = () => {
                               <FaEye />
                             </div>
                           )}
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_delete) && (
+                          {permissions?.can_delete && (
                             <div
                               className="cmn_action_outer red_bg"
                               style={{ cursor: "pointer" }}
@@ -255,6 +235,8 @@ const EmployeeList = () => {
         setPage={setPage}
       />
     </>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

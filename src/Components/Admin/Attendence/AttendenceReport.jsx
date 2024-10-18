@@ -12,9 +12,11 @@ import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Attandance");
   const [name, setName] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -27,7 +29,6 @@ const AttendenceReport = () => {
   let [all_names, setAllNames] = useState([]);
   const navigate = useNavigate();
   const { show } = useAppContext();
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
@@ -35,19 +36,6 @@ const AttendenceReport = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "HR" && el.permission === "Attandance"
-    );
-    setHr_user_permissions(can_hr_create);
-  }, [all_permissions]);
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
@@ -109,16 +97,7 @@ const AttendenceReport = () => {
     field === "year" && setYear(e.value);
   };
 
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
-
-  return (
+  return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
         className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
@@ -238,21 +217,17 @@ const AttendenceReport = () => {
                           {report?.name}:{report?.login_mobile}
                         </td>
                         <td>
-                          {(user_all_permissions?.roles_data?.includes(
-                            "Admin"
-                          ) ||
-                            hr_user_permissions?.can_view) &&
-                            report?.id && (
-                              <div className="cmn_action_outer yellow_bg">
-                                <FiEdit
-                                  onClick={() => {
-                                    navigate("/editAttendenceReport ", {
-                                      state: { id: report?.id },
-                                    });
-                                  }}
-                                />
-                              </div>
-                            )}
+                          {permissions?.can_update && report?.id && (
+                            <div className="cmn_action_outer yellow_bg">
+                              <FiEdit
+                                onClick={() => {
+                                  navigate("/editAttendenceReport ", {
+                                    state: { id: report?.id },
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
                         </td>
                       </tr>
                     );
@@ -268,6 +243,8 @@ const AttendenceReport = () => {
         />
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 
