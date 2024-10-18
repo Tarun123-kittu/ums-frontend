@@ -28,6 +28,7 @@ const AddnewEmployee = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
+  console.log(selectedDocuments, "this is the selected documents");
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -116,9 +117,7 @@ const AddnewEmployee = () => {
   const [selected_role, setSelected_role] = useState("");
   const [confirm_password, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
-  const [Alldocuments, setAllDocuments] = useState(selectedDocuments);
   const [validationErrors, setValidationErrors] = useState({});
-  console.log(validationErrors, "this is the validation error");
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -358,20 +357,12 @@ const AddnewEmployee = () => {
   ];
 
   const handleCheckboxChange = (name) => {
-    if (documents.includes(name)) {
-      const updatedDocuments = documents.filter((doc) => doc !== name);
+    if (selectedDocuments.includes(name)) {
+      const updatedDocuments = selectedDocuments.filter((doc) => doc !== name);
       setSelectedDocuments(updatedDocuments);
-      setSelectedDocuments({
-        ...selectedDocuments,
-        updatedDocuments,
-      });
     } else {
       const updatedDocuments = [...selectedDocuments, name];
       setSelectedDocuments(updatedDocuments);
-      setSelectedDocuments({
-        ...selectedDocuments,
-        updatedDocuments,
-      });
     }
   };
 
@@ -893,7 +884,9 @@ const AddnewEmployee = () => {
                         <td>
                           <input
                             type="checkbox"
-                            checked={selectedDocuments.includes(doc.name)}
+                            checked={selectedDocuments?.updatedDocuments?.includes(
+                              doc.name
+                            )}
                             onChange={() => handleCheckboxChange(doc.name)}
                           />
                         </td>
