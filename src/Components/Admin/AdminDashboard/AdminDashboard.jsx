@@ -17,6 +17,8 @@ import { total_present_employees } from "../../../utils/redux/attendanceSlice/pr
 import { get_current_and_next_month_events } from "../../../utils/redux/holidayAndEventsSlice/getCurrentAndNextMonthEvents";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { get_employee_leave_count } from "../../../utils/redux/dashboardSlice/getEmployeesOnLeave";
+import { get_dashboard_interview_overview } from "../../../utils/redux/dashboardSlice/getDashboardInterviewOverview";
+import { get_dashboard_attendence_graph } from "../../../utils/redux/dashboardSlice/getDashboardAttendenceGraph";
 
 const AdminDashboard = () => {
   UseAllUsernames();
@@ -25,20 +27,24 @@ const AdminDashboard = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
   const [interview_count, setInterview_count] = useState(null)
-  console.log(interview_count, "tis sis te inddndn")
+  const [attendence_graph_data, setAttendence_graph_data] = useState()
+  console.log(attendence_graph_data, "attendence_graph_data overview")
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const present_employee = useSelector((store) => store.PRESENT_EMPLOYEES);
   const current_and_next_month_events = useSelector(
     (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
   );
   const employee_on_leave = useSelector((store) => store.EMPLOYEE_LEAVE_COUNT)
-  console.log(employee_on_leave, "this is the leave count")
+  const interviews_overview = useSelector((store) => store.DASHBOARD_INTERVIEWOVERVIEW)
+  const attendence_graph = useSelector((store) => store.DASHBOARD_ATTENDENCE_GRAPH)
 
   useEffect(() => {
     dispatch(total_present_employees());
     dispatch(get_current_and_next_month_events());
     getInterviews()
     dispatch(get_employee_leave_count())
+    dispatch(get_dashboard_interview_overview())
+    dispatch(get_dashboard_attendence_graph())
   }, []);
 
 
@@ -58,6 +64,17 @@ const AdminDashboard = () => {
     setInterview_count(result?.data?.interviewCount)
   }
 
+  useEffect(() => {
+    let newArr = [];
+    if (attendence_graph?.isSuccess) {
+      attendence_graph?.data?.message?.map((time) => {
+        newArr.push([time?.user_name, parseFloat(time?.total_time)]);
+      });
+    }
+    setAttendence_graph_data(newArr);
+  }, [attendence_graph]);
+
+
   const options = {
     chart: {
       type: "pie",
@@ -69,17 +86,15 @@ const AdminDashboard = () => {
         name: "Share",
         colorByPoint: true,
         data: [
-          { name: "Samsung", y: 27.79, selected: true, sliced: true },
-          { name: "Apple", y: 27.34 },
-          { name: "Xiaomi", y: 10.87 },
-          { name: "Huawei", y: 8.48 },
-          { name: "Oppo", y: 5.38 },
-          { name: "Vivo", y: 4.17 },
-          { name: "Realme", y: 2.57 },
-          { name: "Unknown", y: 2.45 },
-          { name: "Motorola", y: 2.22 },
-          { name: "LG", y: 1.53 },
-          { name: "Other", y: 7.2 },
+          { name: "Face to Face Round", y: parseInt(interviews_overview?.data?.data?.faceToFaceRound || 0) },
+          { name: "Final Round", y: parseInt(interviews_overview?.data?.data?.finalRound || 0) },
+          { name: "HR Round", y: parseInt(interviews_overview?.data?.data?.hrRound || 0) },
+          { name: "Technical Round", y: parseInt(interviews_overview?.data?.data?.technicalRound || 0) },
+          { name: "On Hold", y: parseInt(interviews_overview?.data?.data?.onHold || 0) },
+          { name: "Pending", y: parseInt(interviews_overview?.data?.data?.pending || 0) },
+          { name: "Rejected", y: parseInt(interviews_overview?.data?.data?.rejected || 0) },
+          { name: "Selected", y: parseInt(interviews_overview?.data?.data?.selected || 0) },
+          { name: "Total Leads", y: parseInt(interviews_overview?.data?.data?.totalLeads || 0) }
         ],
       },
     ],
@@ -106,14 +121,14 @@ const AdminDashboard = () => {
     yAxis: {
       min: 0,
       title: {
-        text: "Population (millions)",
+        text: "Login Hours",
       },
     },
     legend: {
       enabled: false,
     },
     tooltip: {
-      pointFormat: "Population in 2021: <b>{point.y:.1f} million</b>",
+      pointFormat: "Total login time: <b>{point.y:.1f} hours</b>",
     },
     series: [
       {
@@ -141,28 +156,7 @@ const AdminDashboard = () => {
           "#03c69b",
           "#00f194",
         ],
-        data: [
-          ["Tokyo", 37.33],
-          ["Delhi", 31.18],
-          ["Shanghai", 27.79],
-          ["Sao Paulo", 22.23],
-          ["Mexico City", 21.91],
-          ["Dhaka", 21.74],
-          ["Cairo", 21.32],
-          ["Beijing", 20.89],
-          ["Mumbai", 20.67],
-          ["Osaka", 19.11],
-          ["Karachi", 16.45],
-          ["Chongqing", 16.38],
-          ["Istanbul", 15.41],
-          ["Buenos Aires", 15.25],
-          ["Kolkata", 14.974],
-          ["Kinshasa", 14.97],
-          ["Lagos", 14.86],
-          ["Manila", 14.16],
-          ["Tianjin", 13.79],
-          ["Guangzhou", 13.64],
-        ],
+        data: attendence_graph_data,
         dataLabels: {
           enabled: true,
           rotation: -90,
