@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_today_interviews = createAsyncThunk("get_today_interviews", async (thunkAPI) => {
+export const get_employee_leave_count = createAsyncThunk("get_employee_leave_count", async (thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -11,7 +11,7 @@ export const get_today_interviews = createAsyncThunk("get_today_interviews", asy
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_interviews`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_on_leave_employees`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -28,26 +28,26 @@ export const get_today_interviews = createAsyncThunk("get_today_interviews", asy
     }
 })
 
-export const Interviews = createSlice({
-    name: "Interviews",
+export const getEmployeeLeaveCount = createSlice({
+    name: "getEmployeeLeaveCount",
     initialState: {
         data: {},
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
     },
     extraReducers: (builder) => {
         builder
-            .addCase(get_today_interviews.pending, (state) => {
+            .addCase(get_employee_leave_count.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_today_interviews.fulfilled, (state, action) => {
+            .addCase(get_employee_leave_count.fulfilled, (state, action) => {
                 state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_today_interviews.rejected, (state, action) => {
+            .addCase(get_employee_leave_count.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
@@ -55,4 +55,4 @@ export const Interviews = createSlice({
     }
 })
 
-export default Interviews.reducer
+export default getEmployeeLeaveCount.reducer

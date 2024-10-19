@@ -112,7 +112,7 @@ const ViewTestseriesQuestions = () => {
   return (
     <section className="test_serie_wrapper">
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

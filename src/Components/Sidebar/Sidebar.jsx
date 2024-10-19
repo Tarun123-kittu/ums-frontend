@@ -38,6 +38,7 @@ const Sidebar = () => {
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
+  console.log(uniqueRoles, "this is the unique roles")
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
@@ -120,7 +121,8 @@ const Sidebar = () => {
       }
     });
   }, [path.pathname, menuitems]);
-  return (
+
+  return uniqueRoles?.length === 1 && uniqueRoles?.includes('Employee') ? null : (
     <div className={`sidebar ${show ? "cmn_width" : ""}`}>
       <h3
         className={`bar ${show ? "text-center" : "pe-3"}`}
@@ -143,9 +145,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -154,9 +155,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -223,9 +223,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -234,9 +233,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -306,9 +304,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -317,9 +314,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -389,9 +385,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -400,9 +395,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -472,9 +466,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -483,9 +476,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -555,9 +547,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -566,9 +557,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -635,9 +625,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -646,9 +635,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}
@@ -715,9 +703,8 @@ const Sidebar = () => {
                 <>
                   <div
                     key={i}
-                    className={`sidebar-button ${
-                      isActive ? "active-pathname" : ""
-                    }`}
+                    className={`sidebar-button ${isActive ? "active-pathname" : ""
+                      }`}
                   >
                     {data.subItems ? (
                       <>
@@ -726,9 +713,8 @@ const Sidebar = () => {
                           onClick={() => handleToggle(i)}
                         >
                           <div
-                            className={`transition_class ${
-                              show ? "" : "d-flex flex-grow-1 gap-2 "
-                            }`}
+                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                              }`}
                           >
                             <img
                               src={data?.icon}

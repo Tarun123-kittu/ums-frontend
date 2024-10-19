@@ -16,7 +16,7 @@ import HighchartsReact from "highcharts-react-official";
 import { total_present_employees } from "../../../utils/redux/attendanceSlice/presentEmployees";
 import { get_current_and_next_month_events } from "../../../utils/redux/holidayAndEventsSlice/getCurrentAndNextMonthEvents";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
-import { get_today_interviews } from "../../../utils/redux/dashboardSlice/getAllINterviewCount";
+import { get_employee_leave_count } from "../../../utils/redux/dashboardSlice/getEmployeesOnLeave";
 
 const AdminDashboard = () => {
   UseAllUsernames();
@@ -24,19 +24,39 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const navigate = useNavigate();
+  const [interview_count, setInterview_count] = useState(null)
+  console.log(interview_count, "tis sis te inddndn")
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const present_employee = useSelector((store) => store.PRESENT_EMPLOYEES);
   const current_and_next_month_events = useSelector(
     (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
   );
-  const today_interviews = useSelector((store) => store.INTERVIEWS);
-  console.log((today_interviews, "this is the today interviews"));
+  const employee_on_leave = useSelector((store) => store.EMPLOYEE_LEAVE_COUNT)
+  console.log(employee_on_leave, "this is the leave count")
 
   useEffect(() => {
     dispatch(total_present_employees());
     dispatch(get_current_and_next_month_events());
-    dispatch(get_today_interviews());
+    getInterviews()
+    dispatch(get_employee_leave_count())
   }, []);
+
+
+  const getInterviews = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_interviews`, requestOptions)
+
+    const result = await response.json();
+    setInterview_count(result?.data?.interviewCount)
+  }
 
   const options = {
     chart: {
@@ -172,9 +192,8 @@ const AdminDashboard = () => {
     <section>
       <Notification />
       <div
-        className={`min-vh-100 lightgray_bg ${
-          show ? "cmn_margin" : "cmn_margin_outer"
-        }`}
+        className={`min-vh-100 lightgray_bg ${show ? "cmn_margin" : "cmn_margin_outer"
+          }`}
       >
         <div className="dashboard_outer pt-3">
           <Row className="m-0 mb-3">
@@ -205,15 +224,15 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <img src={TotalEmployee} alt="employee" />
-                    <h4>40</h4>
-                    <p>Total Employee</p>
-                    <span>View Details</span>
+                    <h4>{employee_on_leave?.data?.data?.totalAcceptedLeaves}</h4>
+                    <p>Total Leave</p>
+                    <span onClick={() => navigate("/leaveRequest")}>View Details</span>
                   </li>
                   <li>
                     <img src={TotalEmployee} alt="employee" />
-                    <h4>40</h4>
-                    <p>Total Employee</p>
-                    <span>View Details</span>
+                    <h4>{interview_count || 0}</h4>
+                    <p>Total Interviews</p>
+                    <span onClick={() => navigate("/interviewLead")}>View Details</span>
                   </li>
                 </ul>
               </div>

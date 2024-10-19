@@ -16,7 +16,7 @@ const EditIncompleteAttendence = () => {
   return (
     <section className="attendenceReport_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

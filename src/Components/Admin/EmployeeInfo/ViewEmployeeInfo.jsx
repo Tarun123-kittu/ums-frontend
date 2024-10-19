@@ -97,7 +97,7 @@ const ViewEmployeeInfo = () => {
   return permissions?.can_view ? (
     <section>
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -208,8 +208,8 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">
                   {user_details?.dob
                     ? new Date(user_details.increment_date).toLocaleDateString(
-                        "en-GB"
-                      )
+                      "en-GB"
+                    )
                     : "No Date Available"}
                 </h3>
               </li>
@@ -241,7 +241,7 @@ const ViewEmployeeInfo = () => {
                             Array.isArray(selected_documents) &&
                             selected_documents.includes(document.name)
                           }
-                          // onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
+                        // onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
                         />
                       </td>
                     </tr>

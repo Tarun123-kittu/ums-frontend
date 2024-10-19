@@ -59,7 +59,7 @@ const TodayAttendence = () => {
   return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -117,16 +117,14 @@ const TodayAttendence = () => {
                         </td>
                         <td>
                           {report?.name && report?.login_mobile
-                            ? `${report.name}/mobile ${
-                                report.login_mobile === "1" ? "true" : "false"
-                              }`
+                            ? `${report.name}/mobile ${report.login_mobile === "1" ? "true" : "false"
+                            }`
                             : "--"}
                         </td>
                         <td>
                           {report?.name && report?.logout_mobile
-                            ? `${report.name}/mobile ${
-                                report.logout_mobile === "1" ? "true" : "false"
-                              }`
+                            ? `${report.name}/mobile ${report.logout_mobile === "1" ? "true" : "false"
+                            }`
                             : "--"}
                         </td>
 

@@ -83,7 +83,7 @@ const QuestionAnswerSheet = () => {
   return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -262,8 +262,8 @@ const QuestionAnswerSheet = () => {
                                     answer.answer_status === "correct"
                                       ? "checked"
                                       : answer.answer_status === "incorrect"
-                                      ? "wrong_checked"
-                                      : "not_attempted"
+                                        ? "wrong_checked"
+                                        : "not_attempted"
                                   }
                                 >
                                   Checked: {answer.answer_status}
@@ -365,8 +365,8 @@ const QuestionAnswerSheet = () => {
                                     answer.answer_status === "correct"
                                       ? "checked"
                                       : answer.answer_status === "incorrect"
-                                      ? "wrong_checked"
-                                      : "not_attempted"
+                                        ? "wrong_checked"
+                                        : "not_attempted"
                                   }
                                 >
                                   Checked: {answer.answer_status}
@@ -466,8 +466,8 @@ const QuestionAnswerSheet = () => {
                                     answer.answer_status === "correct"
                                       ? "checked"
                                       : answer.answer_status === "incorrect"
-                                      ? "wrong_checked"
-                                      : "not_attempted"
+                                        ? "wrong_checked"
+                                        : "not_attempted"
                                   }
                                 >
                                   Checked: {answer.answer_status}

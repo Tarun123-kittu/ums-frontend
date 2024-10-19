@@ -16,17 +16,11 @@ const EmployeeInfo = () => {
   const permissions = UsePermissions("Users");
   const obj = [{ name: "Employees", path: "/employee" }];
 
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
-
   return (
     <section className="employee_outer_container">
       <Sidebar />
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

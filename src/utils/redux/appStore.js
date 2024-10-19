@@ -82,7 +82,7 @@ import applyLeaveHandler from './leaveSlice/applyLeave'
 import userAppliedLeaves from './leaveSlice/getUserAppliedLeaves'
 import getAllRoles from './rolesAndPermissionSlice/getAllRoles'
 import getUserDocument from './userSlice/getUserDocuments'
-import Interviews from './dashboardSlice/getAllINterviewCount'
+import getEmployeeLeaveCount from './dashboardSlice/getEmployeesOnLeave'
 
 const appStore = configureStore({
     reducer: {
@@ -169,7 +169,7 @@ const appStore = configureStore({
         USER_APPLIED_LEAVES: userAppliedLeaves,
         ALL_ROLES: getAllRoles,
         USER_DOCUMENT: getUserDocument,
-        INTERVIEWS: Interviews
+        EMPLOYEE_LEAVE_COUNT: getEmployeeLeaveCount
     },
 })
 

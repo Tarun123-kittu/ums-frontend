@@ -24,7 +24,7 @@ const EditLeaveReport = () => {
   return (
     <section className="editLeave_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

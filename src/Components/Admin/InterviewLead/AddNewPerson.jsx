@@ -140,7 +140,7 @@ const AddNewPerson = () => {
   return (
     <section>
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

@@ -28,7 +28,6 @@ const AddnewEmployee = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
-  console.log(selectedDocuments, "this is the selected documents");
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -118,6 +117,7 @@ const AddnewEmployee = () => {
   const [confirm_password, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+  console.log(validationErrors, "this is the validations error")
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -201,7 +201,7 @@ const AddnewEmployee = () => {
     );
 
     if (Object.keys(checkValidations).length === 0) {
-      create_new_user({
+      dispatch(create_new_user({
         name,
         email,
         mobile,
@@ -227,125 +227,20 @@ const AddnewEmployee = () => {
         username,
         password,
         confirm_password,
-        role,
+        selected_role,
         address,
         selectedDocuments,
-      });
+      }));
     } else {
-      setValidationErrors(checkValidations); // Ensure this function is defined in your component
+      setValidationErrors(checkValidations);
     }
   };
-
-  // const handleInputChange = (name, value) => {
-  //   if (name === "mobile" || name === "emergency_contact") {
-  //     value = value.replace(/\D/g, "");
-  //     if (value.length > 10) {
-  //       value = value.slice(0, 10);
-  //     }
-  //   }
-
-  //   if (
-  //     name === "salary" ||
-  //     name === "security" ||
-  //     name === "total_security" ||
-  //     name === "account_number"
-  //   ) {
-  //     if (value < 0) {
-  //       return;
-  //     }
-  //   }
-
-  //   setField_date({
-  //     ...field_data,
-  //     [name]: value,
-  //   });
-  // };
-
-  // const handleSaveUser = (e) => {
-  //   e.preventDefault();
-
-  //   const emails = [
-  //     { field: field_data?.email, name: "email" },
-  //     { field: field_data?.skype_email, name: "skype_email" },
-  //     { field: field_data?.ultivic_email, name: "ultivic_email" },
-  //   ];
-
-  //   for (const { field, name } of emails) {
-  //     if (field && !validator.isEmail(field)) {
-  //       toast.error(`${name} is not valid`);
-  //       return;
-  //     }
-  //   }
-
-  //   handleSave();
-  // };
-
-  // const handleSave = () => {
-  //   const optionalFields = [
-  //     "emergency_contact",
-  //     "emergency_contact_relationship",
-  //     "emergency_contact_name",
-  //     "bank_name",
-  //     "account_number",
-  //     "ifsc",
-  //     "increment_date",
-  //     "skype_email",
-  //     "ultivic_email",
-  //     "salary",
-  //     "security",
-  //     "total_security",
-  //     "installments",
-  //     "address",
-  //     "role",
-  //     "documents",
-  //   ];
-
-  //   const missingFields = Object.entries(field_data)
-  //     .filter(([key, value]) => {
-  //       if (optionalFields.includes(key)) {
-  //         return false;
-  //       }
-  //       return typeof value === "string" ? value.trim() === "" : value === null;
-  //     })
-  //     .map(([key]) => key);
-
-  //   if (missingFields.length > 0) {
-  //     console.log(missingFields);
-
-  //     setvalidationErrors((prevState) => ({
-  //       ...prevState,
-  //       username: missingFields.includes("username"),
-  //       name: missingFields.includes("name"),
-  //       email: missingFields.includes("email"),
-  //       mobile: missingFields.includes("mobile"),
-  //       gender: missingFields.includes("gender"),
-  //       dob: missingFields.includes("dob"),
-  //       doj: missingFields.includes("doj"),
-  //       position: missingFields.includes("position"),
-  //       department: missingFields.includes("department"),
-  //       confirm_password: missingFields.includes("confirm_password"),
-  //       password: missingFields.includes("password"),
-  //       status: missingFields.includes("status"),
-  //     }));
-  //   } else {
-  //     dispatch(create_new_user({ field_data }));
-  //   }
-  // };
 
   const getMaxDate = () => {
     const today = new Date();
     const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
     return nextYear;
   };
-
-  if (
-    !(
-      user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
-    )
-  ) {
-    return <UnauthorizedPage />;
-  }
 
   const documents = [
     { id: 1, name: "Aadhar Card" },
@@ -373,7 +268,7 @@ const AddnewEmployee = () => {
   return (
     <section className="add_new_emp_container">
       <div
-        className={`wrapper admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={` admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -384,7 +279,11 @@ const AddnewEmployee = () => {
           <div className="new_employee_wrapper cmn_border">
             <form>
               <div className="row">
-                <div className="col-lg-4 col-sm-12 col-md-12" id="name">
+                <div className="col-lg-4 col-sm-12 col-md-12" id="name" style={
+                  validationErrors?.name
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Name"}
                     span={true}
@@ -393,13 +292,22 @@ const AddnewEmployee = () => {
                     type={"text"}
                     name="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      const capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
+                      setName(capitalizedValue);
+                    }}
                   />
+
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.name}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.email
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Email"}
                     span={true}
@@ -411,7 +319,7 @@ const AddnewEmployee = () => {
                     styleTrue={validationErrors?.email}
                   />
                   <span style={{ color: "red", fontSize: "13px" }}>
-                    {validationErrors?.email}
+                    {validationErrors?.mobile}
                   </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -424,17 +332,20 @@ const AddnewEmployee = () => {
                     value={mobile}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      if (/^\d*$/.test(newValue)) {
+                      if (/^\d*$/.test(newValue) && newValue.length <= 10) {
                         setMobile(newValue);
                       }
                     }}
                   />
-
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.mobile}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.emergency_contact_relationship
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Emergency Contact Relationship "}
                     placeholder={"Relationship of the employee"}
@@ -459,7 +370,11 @@ const AddnewEmployee = () => {
                     onChange={(e) => setEmergencyContactName(e.target.value)}
                   />
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.emergency_contact
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Emergency Contact"}
                     placeholder={"Emergency mobile no of the employee"}
@@ -468,11 +383,12 @@ const AddnewEmployee = () => {
                     value={emergency_contact}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      if (/^\d*$/.test(newValue)) {
+                      if (/^\d*$/.test(newValue) && newValue.length <= 10) {
                         setEmergencyContact(newValue);
                       }
                     }}
                   />
+
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.emergency_contact}
                   </span>
@@ -516,7 +432,11 @@ const AddnewEmployee = () => {
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
+                  <div className="form-group new_employee_form_group" style={
+                    validationErrors?.increment_date
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }>
                     <label htmlFor="">Increment Date</label>
                     <DatePicker
                       selected={increment_date && increment_date}
@@ -547,7 +467,7 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Gender </label>
+                    <label> Gender <span style={{ color: "red" }}>*</span></label>
                     <div
                       className="mt-2"
                       style={
@@ -572,7 +492,7 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of Birth</label>
+                    <label htmlFor="">Date of Birth <span style={{ color: "red" }}>*</span></label>
                     <div
                       style={
                         validationErrors?.dob
@@ -598,7 +518,7 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of joining </label>
+                    <label htmlFor="">Date of joining <span style={{ color: "red" }}>*</span></label>
                     <div
                       style={
                         validationErrors?.doj
@@ -622,7 +542,11 @@ const AddnewEmployee = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.skype_email
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Skype"}
                     placeholder={"Skype"}
@@ -636,7 +560,11 @@ const AddnewEmployee = () => {
                   </span>
                 </div>
 
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.ultivic_email
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Ultivic Email"}
                     placeholder={"Ultivic Email"}
@@ -713,7 +641,11 @@ const AddnewEmployee = () => {
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
+                  <div className="form-group new_employee_form_group" style={
+                    validationErrors?.position
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }>
                     <label>
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
@@ -787,7 +719,11 @@ const AddnewEmployee = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.username
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     span={true}
                     labelname={"Username"}
@@ -802,7 +738,11 @@ const AddnewEmployee = () => {
                     {validationErrors?.username}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.password
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Password"}
                     placeholder={"Password"}
@@ -812,11 +752,16 @@ const AddnewEmployee = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     styleTrue={validationErrors?.password}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}></span>
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.password}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" style={
+                  validationErrors?.confirm_password
+                    ? { border: "1px solid red", borderRadius: "10px" }
+                    : {}
+                }>
                   <InputField
                     labelname={"Confirm Password"}
                     placeholder={"Confirm Password"}
@@ -831,8 +776,12 @@ const AddnewEmployee = () => {
                   </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
-                    <label> Role</label>
+                  <div className="form-group new_employee_form_group" style={
+                    validationErrors?.role
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }>
+                    <label> Role <span style={{ color: "red" }}>*</span></label>
                     <div className="mt-2">
                       <CustomSelectComp
                         optionsData={role}
@@ -847,8 +796,8 @@ const AddnewEmployee = () => {
                 </div>
               </div>
 
-              <div className="form-group new_employee_form_group">
-                <label>Address</label>
+              <div className="form-group new_employee_form_group" >
+                <label>Address <span style={{ color: "red" }}>*</span></label>
                 <textarea
                   className="form-control mt-3"
                   placeholder="Address"
@@ -856,7 +805,7 @@ const AddnewEmployee = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   style={
-                    validationErrors?.username
+                    validationErrors?.address
                       ? { border: "1px solid red" }
                       : {}
                   }

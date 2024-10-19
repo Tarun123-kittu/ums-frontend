@@ -131,7 +131,7 @@ const HolidayEvent = () => {
   return (
     <section className="holiday_event_wrapper">
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -167,8 +167,8 @@ const HolidayEvent = () => {
                 onClick={() =>
                   isSearched
                     ? dispatch(
-                        get_all_holidays_and_events({ year: selected_year })
-                      )
+                      get_all_holidays_and_events({ year: selected_year })
+                    )
                     : toast.error("Please select year !!")
                 }
               >

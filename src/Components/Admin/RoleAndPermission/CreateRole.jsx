@@ -100,7 +100,7 @@ const CreateRole = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={`wrapper gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

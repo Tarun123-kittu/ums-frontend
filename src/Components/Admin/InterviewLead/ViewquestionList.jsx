@@ -41,9 +41,8 @@ const ViewQuestionList = () => {
   return (
     <section className="Interviewlead_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${
-          show ? "cmn_margin" : "cmn_margin_outer"
-        }`}
+        className={` gray_bg admin_outer  ${show ? "cmn_margin" : "cmn_margin_outer"
+          }`}
       >
         <Notification />
         <div className="cmn_padding_outer">
