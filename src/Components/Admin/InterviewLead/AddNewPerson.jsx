@@ -170,7 +170,12 @@ const AddNewPerson = () => {
                   classname={"new_employee_form_group"}
                   type={"number"}
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue === "" || parseFloat(newValue) >= 0) {
+                      setMobile(newValue);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -230,9 +235,14 @@ const AddNewPerson = () => {
                   labelname={"Current salary (optional)"}
                   placeholder={"Enter Current salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={current_salary}
-                  onChange={(e) => setCurrent_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setCurrent_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -240,9 +250,14 @@ const AddNewPerson = () => {
                   labelname={"Expected salary (optional)"}
                   placeholder={"Enter Expected salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={expected_salary}
-                  onChange={(e) => setExpected_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setExpected_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">

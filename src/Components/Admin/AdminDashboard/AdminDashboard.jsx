@@ -19,6 +19,7 @@ import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { get_employee_leave_count } from "../../../utils/redux/dashboardSlice/getEmployeesOnLeave";
 import { get_dashboard_interview_overview } from "../../../utils/redux/dashboardSlice/getDashboardInterviewOverview";
 import { get_dashboard_attendence_graph } from "../../../utils/redux/dashboardSlice/getDashboardAttendenceGraph";
+import { get_leaves_on_dashboard } from "../../../utils/redux/dashboardSlice/getDashboardLeave";
 
 const AdminDashboard = () => {
   UseAllUsernames();
@@ -37,6 +38,8 @@ const AdminDashboard = () => {
   const employee_on_leave = useSelector((store) => store.EMPLOYEE_LEAVE_COUNT)
   const interviews_overview = useSelector((store) => store.DASHBOARD_INTERVIEWOVERVIEW)
   const attendence_graph = useSelector((store) => store.DASHBOARD_ATTENDENCE_GRAPH)
+  const dashboard_leaves = useSelector((store) => store.GET_LEAVES_ON_DASHBOARD)
+  console.log(dashboard_leaves, "this is the dashboard leaves")
 
   useEffect(() => {
     dispatch(total_present_employees());
@@ -45,6 +48,7 @@ const AdminDashboard = () => {
     dispatch(get_employee_leave_count())
     dispatch(get_dashboard_interview_overview())
     dispatch(get_dashboard_attendence_graph())
+    dispatch(get_leaves_on_dashboard())
   }, []);
 
 
@@ -252,18 +256,22 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <h5 className="mb-0">Gurjeet kumar</h5>
-                        <span> Android Developer</span>
-                      </td>
-                      <td>10/10/2024</td>
-                      <td>Casual Leaves</td>
-                      <td>Employee Name</td>
-                      <td>
-                        <button className="table_cmn pending">pending</button>
-                      </td>
-                    </tr>
+                    {dashboard_leaves?.data?.data?.map((leave, i) => {
+                      return (
+                        <tr>
+                          <td>
+                            <h5 className="mb-0">{leave?.name}</h5>
+                            <span>{leave?.position}</span>
+                          </td>
+                          <td>{new Date(leave?.date_of_application).toISOString()}</td>
+                          <td>{leave?.type}</td>
+                          <td>{leave?.duration}</td>
+                          <td>
+                            <button className="table_cmn pending">{leave?.status}</button>
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
               </div>

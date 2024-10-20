@@ -99,10 +99,10 @@ const AddnewEmployee = () => {
   const [bank_name, setBankName] = useState("");
   const [account_number, setAccountNumber] = useState("");
   const [ifsc, setIfsc] = useState("");
-  const [increment_date, setIncrementDate] = useState(null);
+  const [increment_date, setIncrementDate] = useState("");
   const [gender, setGender] = useState("");
-  const [dob, setDob] = useState(null);
-  const [doj, setDoj] = useState(null);
+  const [dob, setDob] = useState("");
+  const [doj, setDoj] = useState("");
   const [skype_email, setSkypeEmail] = useState("");
   const [ultivic_email, setUltivicEmail] = useState("");
   const [salary, setSalary] = useState("");
@@ -438,28 +438,16 @@ const AddnewEmployee = () => {
                       : {}
                   }>
                     <label htmlFor="">Increment Date</label>
-                    <DatePicker
-                      selected={increment_date && increment_date}
-                      onSelect={(date) => {
-                        if (
-                          date instanceof Date &&
-                          !isNaN(date) &&
-                          date <= getMaxDate()
-                        ) {
-                          setIncrementDate(date);
-                        } else {
-                          alert("Invalid date. Please select a valid date.");
-                        }
-                      }}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={getMaxDate()}
-                      minDate={new Date()}
-                      className="form-control"
-                    />
+                    <div className="col-lg-4 col-sm-12 col-md-6">
+                      <InputField
+                        span={true}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={increment_date}
+                        onChange={(e) => setIncrementDate(e.target.value)}
+                      />
+                    </div>
                     <span style={{ color: "red", fontSize: "13px" }}>
                       {validationErrors?.increment_date}
                     </span>
@@ -492,7 +480,7 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of Birth <span style={{ color: "red" }}>*</span></label>
+                    {/* <label htmlFor="">Date of Birth <span style={{ color: "red" }}>*</span></label> */}
                     <div
                       style={
                         validationErrors?.dob
@@ -500,16 +488,17 @@ const AddnewEmployee = () => {
                           : {}
                       }
                     >
-                      <DatePicker
-                        selected={dob}
-                        onChange={(date) => setDob(date)}
-                        placeholderText="DD/MM/YYYY"
-                        onKeyDown={(e) => e.preventDefault()}
-                        dateFormat="dd/MM/yyyy"
-                        showYearDropdown
-                        scrollableYearDropdown
-                        className="form-control"
-                      />
+                      <div className="col-lg-4 col-sm-12 col-md-6">
+                        <InputField
+                          labelname={"Date Of Birth"}
+                          span={true}
+                          placeholder={"Select DOB"}
+                          classname={"new_employee_form_group"}
+                          type={"date"}
+                          value={dob}
+                          onChange={(e) => setDob(e.target.value)}
+                        />
+                      </div>
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.dob}
                       </span>
@@ -518,7 +507,6 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of joining <span style={{ color: "red" }}>*</span></label>
                     <div
                       style={
                         validationErrors?.doj
@@ -526,16 +514,17 @@ const AddnewEmployee = () => {
                           : {}
                       }
                     >
-                      <DatePicker
-                        className={"form-control"}
-                        selected={doj}
-                        onChange={(date) => setDoj(date)}
-                        placeholderText="DD/MM/YYYY"
-                        onKeyDown={(e) => e.preventDefault()}
-                        dateFormat="dd/MM/yyyy"
-                        showYearDropdown
-                        scrollableYearDropdown
-                      />
+                      <div className="col-lg-4 col-sm-12 col-md-6">
+                        <InputField
+                          span={true}
+                          labelname={"Date of joining"}
+                          placeholder={"Select DOB"}
+                          classname={"new_employee_form_group"}
+                          type={"date"}
+                          value={doj}
+                          onChange={(e) => setDoj(e.target.value)}
+                        />
+                      </div>
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.doj}
                       </span>

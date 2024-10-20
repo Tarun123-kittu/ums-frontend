@@ -85,6 +85,7 @@ import getUserDocument from './userSlice/getUserDocuments'
 import getEmployeeLeaveCount from './dashboardSlice/getEmployeesOnLeave'
 import getDashboardInterviewOverview from './dashboardSlice/getDashboardInterviewOverview'
 import getDashboardAttendenceGraph from './dashboardSlice/getDashboardAttendenceGraph'
+import getLeavesOnDashboard from './dashboardSlice/getDashboardLeave'
 
 const appStore = configureStore({
     reducer: {
@@ -173,7 +174,8 @@ const appStore = configureStore({
         USER_DOCUMENT: getUserDocument,
         EMPLOYEE_LEAVE_COUNT: getEmployeeLeaveCount,
         DASHBOARD_INTERVIEWOVERVIEW: getDashboardInterviewOverview,
-        DASHBOARD_ATTENDENCE_GRAPH: getDashboardAttendenceGraph
+        DASHBOARD_ATTENDENCE_GRAPH: getDashboardAttendenceGraph,
+        GET_LEAVES_ON_DASHBOARD: getLeavesOnDashboard
     },
 })
 
