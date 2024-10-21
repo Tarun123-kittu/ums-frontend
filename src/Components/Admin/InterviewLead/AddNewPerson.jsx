@@ -140,7 +140,9 @@ const AddNewPerson = () => {
   return (
     <section>
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -172,7 +174,7 @@ const AddNewPerson = () => {
                   value={mobile}
                   onChange={(e) => {
                     const newValue = e.target.value;
-                    if (newValue === "" || parseFloat(newValue) >= 0) {
+                    if (/^\d*$/.test(newValue) && newValue.length <= 10) {
                       setMobile(newValue);
                     }
                   }}

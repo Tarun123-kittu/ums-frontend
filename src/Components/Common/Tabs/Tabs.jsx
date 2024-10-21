@@ -410,7 +410,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center">
-                      Invalid data format
+                      No lead Found
                     </td>
                   </tr>
                 )}

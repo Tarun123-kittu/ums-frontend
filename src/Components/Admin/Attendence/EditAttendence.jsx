@@ -8,19 +8,21 @@ import { MdStar } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const EditAttendence = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const obj = [
     { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Edit  Attendance Today", path: "/editAttendenceToday" },
   ];
-  if (localStorage.getItem('roles').includes('Employee')) {
+  if (localStorage.getItem("roles").includes("Employee")) {
     navigate("/mark-attendence");
   }
   const { show } = useAppContext();
   return (
     <section className="attendenceReport_outer">
       <div
-        className={`gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

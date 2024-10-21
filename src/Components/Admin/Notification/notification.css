@@ -17,3 +17,8 @@
 .notification_outer img.logo_image {
     width: auto;
 }
+
+.notification_outer .dropdown_color,.notification_outer .dropdown_color:hover,.notification_outer .dropdown_color:active ,.notification_outer .dropdown_color:focus{
+    background-color: transparent ;
+    border: 1px solid transparent ;
+}

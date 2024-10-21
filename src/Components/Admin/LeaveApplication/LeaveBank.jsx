@@ -11,6 +11,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import toast from "react-hot-toast";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
@@ -20,13 +21,13 @@ const LeaveBank = () => {
   const [session, setSession] = useState("");
   const [selected_year, setSelected_year] = useState("");
   const [selected_month, setSelected_month] = useState("");
+  const [enableSearch, setEnableSearch] = useState(false);
+  const [paid_leaves, setPaid_leaves] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
   const [year, setYear] = useState([]);
   const [yearObj, setYearObj] = useState([]);
   const [financial_year, setFinancial_year] = useState([]);
-  const obj = [
-    { name: "Leave Application", path: "" },
-    { name: "Leave Bank", path: "/leaveBank" },
-  ];
+  const obj = [{ name: "Leave Bank", path: "/leaveBank" }];
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -89,7 +90,9 @@ const LeaveBank = () => {
   return permissions?.can_view ? (
     <section className="attendenceBank_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -140,20 +143,50 @@ const LeaveBank = () => {
             </div>
 
             <div className="employee_wrapper text-end serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  dispatch(
-                    get_leave_bank_report({
-                      session,
-                      month: selected_month,
-                      year: selected_year,
-                    })
-                  )
-                }
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={async () => {
+                    if (session || selected_month || selected_year) {
+                      try {
+                        await dispatch(
+                          get_leave_bank_report({
+                            session,
+                            month: selected_month,
+                            year: selected_year,
+                          })
+                        );
+                        setEnableSearch(true);
+                      } catch (error) {
+                        console.error(
+                          "Error fetching leave bank report",
+                          error
+                        );
+                      }
+                    } else {
+                      toast.error("Please select session, month, or year !!");
+                    }
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_leave_bank_report({
+                        session: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
@@ -184,7 +217,11 @@ const LeaveBank = () => {
                         {permissions?.can_update && (
                           <div
                             className="cmn_action_outer yellow_bg cusror_pointer"
-                            onClick={() => setShowEditLeaveModal(true)}
+                            onClick={() => {
+                              setShowEditLeaveModal(true);
+                              setPaid_leaves(leave_bank?.paid_leave);
+                              setEmployeeId(leave_bank?.id);
+                            }}
                           >
                             <FiEdit />
                           </div>
@@ -203,6 +240,8 @@ const LeaveBank = () => {
           <EditLeaveBankModal
             show={showEditLeaveModal}
             setShow={setShowEditLeaveModal}
+            paid_leave={paid_leaves}
+            employeeId={employeeId}
           />
         )}
       </div>

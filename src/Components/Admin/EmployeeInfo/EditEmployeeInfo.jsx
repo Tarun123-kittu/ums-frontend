@@ -114,7 +114,6 @@ const EditEmployeeInfo = () => {
           newArr.push(documentName);
         }
       });
-      console.log(newArr, "this is the new Arr");
       setSelected_documents(newArr);
     }
   }, [documents]);
@@ -201,6 +200,7 @@ const EditEmployeeInfo = () => {
       position,
       department,
       status,
+      role,
       address,
       documents: selected_documents,
     };
@@ -223,7 +223,10 @@ const EditEmployeeInfo = () => {
       newErrorMessages["skype_email"] = "Skype Email is invalid.";
       toast.error("Skype Email is invalid.");
     }
-    if (field_data.ultivic_email && !validator.isEmail(field_data.ultivic_email)) {
+    if (
+      field_data.ultivic_email &&
+      !validator.isEmail(field_data.ultivic_email)
+    ) {
       invalidEmails.push("ultivic_email");
       newErrorMessages["ultivic_email"] = "Ultivic Email is invalid.";
       toast.error("Ultivic Email is invalid.");
@@ -232,6 +235,11 @@ const EditEmployeeInfo = () => {
       invalidEmails.push("email");
       newErrorMessages["email"] = "Email is invalid.";
       toast.error("Email is invalid.");
+    }
+    if (field_data.status === "" || field_data?.status === "Select") {
+      invalidEmails.push("status");
+      newErrorMessages["status"] = "status is required";
+      toast.error("Status is required");
     }
 
     // Display toast and set error messages for missing fields
@@ -256,7 +264,6 @@ const EditEmployeeInfo = () => {
     }
   };
 
-
   const documentsName = [
     { id: 1, name: "Aadhar Card" },
     { id: 2, name: "PAN Card" },
@@ -279,7 +286,9 @@ const EditEmployeeInfo = () => {
   return permissions?.can_view ? (
     <section className="add_new_emp_container">
       <div
-        className={` admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -302,7 +311,12 @@ const EditEmployeeInfo = () => {
                     onChange={(e) => setName(e.target.value)}
                     styleTrue={errorMessages?.name} // Pass error message to show inline
                   />
-                  {errorMessages?.name && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.name}</span>} {/* Inline error */}
+                  {errorMessages?.name && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.name}
+                    </span>
+                  )}{" "}
+                  {/* Inline error */}
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -315,7 +329,11 @@ const EditEmployeeInfo = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     styleTrue={errorMessages?.email}
                   />
-                  {errorMessages?.email && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.email}</span>}
+                  {errorMessages?.email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.email}
+                    </span>
+                  )}
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -335,7 +353,11 @@ const EditEmployeeInfo = () => {
                     }}
                     styleTrue={errorMessages?.mobile}
                   />
-                  {errorMessages?.mobile && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.mobile}</span>}
+                  {errorMessages?.mobile && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.mobile}
+                    </span>
+                  )}
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -434,11 +456,15 @@ const EditEmployeeInfo = () => {
                           : {}
                       }
                     >
-                      <option>Select</option>
+                      <option value="">Select</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
-                    {errorMessages?.gender && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.gender}</span>}
+                    {errorMessages?.gender && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.gender}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -461,7 +487,11 @@ const EditEmployeeInfo = () => {
                         scrollableYearDropdown
                         maxDate={new Date()}
                       />
-                      {errorMessages?.dob && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.dob}</span>}
+                      {errorMessages?.dob && (
+                        <span style={{ color: "red", fontSize: "13px" }}>
+                          {errorMessages.dob}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -486,7 +516,11 @@ const EditEmployeeInfo = () => {
                         scrollableYearDropdown
                         maxDate={new Date()}
                       />
-                      {errorMessages?.doj && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.doj}</span>}
+                      {errorMessages?.doj && (
+                        <span style={{ color: "red", fontSize: "13px" }}>
+                          {errorMessages.doj}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -605,7 +639,11 @@ const EditEmployeeInfo = () => {
                         );
                       })}
                     </select>
-                    {errorMessages?.position && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.position}</span>}
+                    {errorMessages?.position && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.position}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -626,14 +664,18 @@ const EditEmployeeInfo = () => {
                           : {}
                       }
                     >
-                      <option>Select</option>
+                      <option value="">Select</option>
                       {ProfileData?.map((data, i) => {
                         return (
                           <option value={data?.value}>{data?.label}</option>
                         );
                       })}
                     </select>
-                    {errorMessages?.department && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.department}</span>}
+                    {errorMessages?.department && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.department}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -652,7 +694,7 @@ const EditEmployeeInfo = () => {
                           : {}
                       }
                     >
-                      <option>Select</option>
+                      <option value="">Select</option>
                       {statusObj?.map((data, i) => {
                         return (
                           <option key={i} value={data?.value}>
@@ -661,7 +703,11 @@ const EditEmployeeInfo = () => {
                         );
                       })}
                     </select>
-                    {errorMessages?.status && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.status}</span>}
+                    {errorMessages?.status && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.status}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -675,7 +721,11 @@ const EditEmployeeInfo = () => {
                     onChange={(e) => setUsername(e.target.value)}
                     styleTrue={missingData?.username}
                   />
-                  {errorMessages?.username && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.username}</span>}
+                  {errorMessages?.username && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.username}
+                    </span>
+                  )}
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
@@ -685,12 +735,9 @@ const EditEmployeeInfo = () => {
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                     >
-                      <option>Select Role</option>
+                      <option value="">Select Role</option>
                       {roles?.data?.data?.map((role, i) => {
-                        if (
-                          role?.role === "Admin" &&
-                          user_all_permissions?.roles_data?.includes("HR")
-                        ) {
+                        if (role?.role === "Admin") {
                           return null;
                         }
                         return (
@@ -700,7 +747,11 @@ const EditEmployeeInfo = () => {
                         );
                       })}
                     </select>
-                    {errorMessages?.role && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.eole}</span>}
+                    {errorMessages?.role && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.eole}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -719,7 +770,11 @@ const EditEmployeeInfo = () => {
                     missingData?.username ? { border: "1px solid red" } : {}
                   }
                 />
-                {errorMessages?.address && <span style={{ color: "red", fontSize: "13px" }}>{errorMessages.address}</span>}
+                {errorMessages?.address && (
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {errorMessages.address}
+                  </span>
+                )}
               </div>
               <div className="table-responsive mt-4 transparent_bg">
                 <table className="employee_detail_table mt-3">

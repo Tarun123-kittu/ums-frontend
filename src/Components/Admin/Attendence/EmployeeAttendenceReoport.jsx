@@ -10,11 +10,6 @@ const EmployeeAttendenceReoport = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { valid } = location?.state ? location?.state : location;
-  useEffect(() => {
-    if (!valid) {
-      navigate(-1);
-    }
-  }, [valid]);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [enable_search, setEnableSearch] = useState(false);

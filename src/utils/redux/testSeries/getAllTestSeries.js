@@ -42,6 +42,16 @@ export const getAllSeries = createSlice({
         isLoading: false,
         error: null
     },
+    reducers: {
+        clear_series_state: (state) => {
+            state.daya = []
+            state.isSuccess = false
+            state.isLoading = false
+            state.isError = false
+            state.error = null
+            return state
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(get_all_series.pending, (state) => {
@@ -64,5 +74,5 @@ export const getAllSeries = createSlice({
             });
     }
 });
-
+export const { clear_series_state } = getAllSeries.actions
 export default getAllSeries.reducer;

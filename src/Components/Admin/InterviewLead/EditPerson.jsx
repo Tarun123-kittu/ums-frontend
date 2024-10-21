@@ -115,7 +115,9 @@ const EditPerson = () => {
   return permissions?.can_view ? (
     <section>
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -145,7 +147,12 @@ const EditPerson = () => {
                   classname={"new_employee_form_group"}
                   type={"number"}
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (/^\d*$/.test(newValue) && newValue.length <= 10) {
+                      setMobile(newValue);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -205,9 +212,14 @@ const EditPerson = () => {
                   labelname={"Current salary (optional)"}
                   placeholder={"Enter Current salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={current_salary}
-                  onChange={(e) => setCurrent_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setCurrent_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -215,9 +227,14 @@ const EditPerson = () => {
                   labelname={"Expected salary (optional)"}
                   placeholder={"Enter Expected salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={expected_salary}
-                  onChange={(e) => setExpected_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setExpected_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">

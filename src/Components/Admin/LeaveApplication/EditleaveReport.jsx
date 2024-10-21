@@ -24,7 +24,9 @@ const EditLeaveReport = () => {
   return (
     <section className="editLeave_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

@@ -100,7 +100,9 @@ const CreateRole = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

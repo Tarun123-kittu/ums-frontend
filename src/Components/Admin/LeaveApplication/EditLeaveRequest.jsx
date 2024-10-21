@@ -88,7 +88,9 @@ const EditLeaveRequest = () => {
   return permissions?.can_view ? (
     <section className="editLeave_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper"
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -126,10 +128,10 @@ const EditLeaveRequest = () => {
                     value={
                       leaveDetail?.from_date && leaveDetail?.to_date
                         ? `${moment(leaveDetail.from_date).format(
-                          "MM/DD/YYYY"
-                        )} - ${moment(leaveDetail.to_date).format(
-                          "MM/DD/YYYY"
-                        )}`
+                            "MM/DD/YYYY"
+                          )} - ${moment(leaveDetail.to_date).format(
+                            "MM/DD/YYYY"
+                          )}`
                         : ""
                     }
                   />

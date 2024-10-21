@@ -27,7 +27,7 @@ const UserValidations = (
     username,
     password,
     confirm_password,
-    role,
+    selected_role,
     address,
     selectedDocuments
 ) => {
@@ -51,13 +51,6 @@ const UserValidations = (
         if (!mobileRegex.test(mobile)) {
             toast.error("Please enter a valid 10-digit mobile number.");
             return { mobile: "Mobile number must be 10 digits long!!" };
-        }
-    }
-    if (emergency_contact_relationship) {
-        const valid_relationships = ["Father", "Mother", "Brother", "Friend", "Sister", "Uncle", "Cousin"];
-        if (!valid_relationships.includes(emergency_contact_relationship)) {
-            toast.error("Emergency contact relationship must be one of the following: Father, Mother, Brother, Friend, Sister, Uncle, Cousin.");
-            return { emergency_contact_relationship: "Invalid relationship!" };
         }
     }
 
@@ -126,7 +119,7 @@ const UserValidations = (
         toast.error("Please Enter confirm_password");
         return { confirm_password: "Confirm password is required!!" };
     }
-    if (!role) {
+    if (!selected_role) {
         toast.error("Please Select Role");
         return { role: "Role is required!!" };
     }

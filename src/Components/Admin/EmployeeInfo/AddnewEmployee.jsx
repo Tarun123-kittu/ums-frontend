@@ -46,11 +46,8 @@ const AddnewEmployee = () => {
     if (roles?.isSuccess) {
       if (roles?.data?.data?.length !== 0) {
         roles.data.data.forEach((data) => {
-          const shouldAddAdmin =
-            !user_all_permissions?.roles_data?.includes("HR") ||
-            data?.role !== "Admin";
           if (
-            shouldAddAdmin &&
+            data?.role !== "Admin" &&
             !role.some((item) => item.value === data?.role)
           ) {
             role.push({ value: data?.role, label: data?.role });
@@ -58,7 +55,7 @@ const AddnewEmployee = () => {
         });
       }
     }
-  }, [roles, user_all_permissions]);
+  }, [roles]);
 
   const installmentObj = [
     { value: 1, label: 1 },
@@ -117,7 +114,6 @@ const AddnewEmployee = () => {
   const [confirm_password, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
-  console.log(validationErrors, "this is the validations error")
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -195,42 +191,44 @@ const AddnewEmployee = () => {
       username,
       password,
       confirm_password,
-      role,
+      selected_role,
       address,
       selectedDocuments
     );
 
     if (Object.keys(checkValidations).length === 0) {
-      dispatch(create_new_user({
-        name,
-        email,
-        mobile,
-        emergency_contact_relationship,
-        emergency_contact_name,
-        emergency_contact,
-        bank_name,
-        account_number,
-        ifsc,
-        increment_date,
-        gender,
-        dob,
-        doj,
-        skype_email,
-        ultivic_email,
-        salary,
-        security,
-        total_security,
-        installments,
-        position,
-        department,
-        status,
-        username,
-        password,
-        confirm_password,
-        selected_role,
-        address,
-        selectedDocuments,
-      }));
+      dispatch(
+        create_new_user({
+          name,
+          email,
+          mobile,
+          emergency_contact_relationship,
+          emergency_contact_name,
+          emergency_contact,
+          bank_name,
+          account_number,
+          ifsc,
+          increment_date,
+          gender,
+          dob,
+          doj,
+          skype_email,
+          ultivic_email,
+          salary,
+          security,
+          total_security,
+          installments,
+          position,
+          department,
+          status,
+          username,
+          password,
+          confirm_password,
+          selected_role,
+          address,
+          selectedDocuments,
+        })
+      );
     } else {
       setValidationErrors(checkValidations);
     }
@@ -268,7 +266,9 @@ const AddnewEmployee = () => {
   return (
     <section className="add_new_emp_container">
       <div
-        className={` admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -279,11 +279,7 @@ const AddnewEmployee = () => {
           <div className="new_employee_wrapper cmn_border">
             <form>
               <div className="row">
-                <div className="col-lg-4 col-sm-12 col-md-12" id="name" style={
-                  validationErrors?.name
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12" id="name">
                   <InputField
                     labelname={"Name"}
                     span={true}
@@ -294,20 +290,19 @@ const AddnewEmployee = () => {
                     value={name}
                     onChange={(e) => {
                       const inputValue = e.target.value;
-                      const capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
+                      const capitalizedValue =
+                        inputValue.charAt(0).toUpperCase() +
+                        inputValue.slice(1);
                       setName(capitalizedValue);
                     }}
+                    styleTrue={validationErrors?.name}
                   />
 
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.name}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.email
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     labelname={"Email"}
                     span={true}
@@ -319,7 +314,7 @@ const AddnewEmployee = () => {
                     styleTrue={validationErrors?.email}
                   />
                   <span style={{ color: "red", fontSize: "13px" }}>
-                    {validationErrors?.mobile}
+                    {validationErrors?.email}
                   </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -336,16 +331,20 @@ const AddnewEmployee = () => {
                         setMobile(newValue);
                       }
                     }}
+                    styleTrue={validationErrors?.mobile}
                   />
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.mobile}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.emergency_contact_relationship
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.emergency_contact_relationship
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
                     labelname={"Emergency Contact Relationship "}
                     placeholder={"Relationship of the employee"}
@@ -356,9 +355,6 @@ const AddnewEmployee = () => {
                       setEmergencyContactRelationship(e.target.value)
                     }
                   />
-                  <span style={{ color: "red", fontSize: "13px" }}>
-                    {validationErrors?.emergency_contact_relationship}
-                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -370,11 +366,7 @@ const AddnewEmployee = () => {
                     onChange={(e) => setEmergencyContactName(e.target.value)}
                   />
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.emergency_contact
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     labelname={"Emergency Contact"}
                     placeholder={"Emergency mobile no of the employee"}
@@ -387,6 +379,7 @@ const AddnewEmployee = () => {
                         setEmergencyContact(newValue);
                       }
                     }}
+                    styleTrue={validationErrors?.emergency_contact}
                   />
 
                   <span style={{ color: "red", fontSize: "13px" }}>
@@ -432,22 +425,16 @@ const AddnewEmployee = () => {
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group" style={
-                    validationErrors?.increment_date
-                      ? { border: "1px solid red", borderRadius: "10px" }
-                      : {}
-                  }>
-                    <label htmlFor="">Increment Date</label>
-                    <div className="col-lg-4 col-sm-12 col-md-6">
-                      <InputField
-                        span={true}
-                        placeholder={"Select DOB"}
-                        classname={"new_employee_form_group"}
-                        type={"date"}
-                        value={increment_date}
-                        onChange={(e) => setIncrementDate(e.target.value)}
-                      />
-                    </div>
+                  <div>
+                    <InputField
+                      labelname={"Increment Date"}
+                      placeholder={"Select DOB"}
+                      classname={"new_employee_form_group"}
+                      type={"date"}
+                      value={increment_date}
+                      onChange={(e) => setIncrementDate(e.target.value)}
+                      styleTrue={validationErrors?.increment_date}
+                    />
                     <span style={{ color: "red", fontSize: "13px" }}>
                       {validationErrors?.increment_date}
                     </span>
@@ -455,15 +442,11 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Gender <span style={{ color: "red" }}>*</span></label>
-                    <div
-                      className="mt-2"
-                      style={
-                        validationErrors?.gender
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
+                    <label>
+                      {" "}
+                      Gender <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="mt-2">
                       <CustomSelectComp
                         optionsData={[
                           { value: "male", label: "Male" },
@@ -471,6 +454,7 @@ const AddnewEmployee = () => {
                         ]}
                         changeHandler={(e) => handleGender(e)}
                         value={gender}
+                        styleTrue={validationErrors?.gender}
                       />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.gender}
@@ -480,25 +464,17 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    {/* <label htmlFor="">Date of Birth <span style={{ color: "red" }}>*</span></label> */}
-                    <div
-                      style={
-                        validationErrors?.dob
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
-                      <div className="col-lg-4 col-sm-12 col-md-6">
-                        <InputField
-                          labelname={"Date Of Birth"}
-                          span={true}
-                          placeholder={"Select DOB"}
-                          classname={"new_employee_form_group"}
-                          type={"date"}
-                          value={dob}
-                          onChange={(e) => setDob(e.target.value)}
-                        />
-                      </div>
+                    <div>
+                      <InputField
+                        labelname={"Date Of Birth"}
+                        span={true}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
+                        styleTrue={validationErrors?.dob}
+                      />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.dob}
                       </span>
@@ -507,35 +483,31 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <div
-                      style={
-                        validationErrors?.doj
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
-                      <div className="col-lg-4 col-sm-12 col-md-6">
-                        <InputField
-                          span={true}
-                          labelname={"Date of joining"}
-                          placeholder={"Select DOB"}
-                          classname={"new_employee_form_group"}
-                          type={"date"}
-                          value={doj}
-                          onChange={(e) => setDoj(e.target.value)}
-                        />
-                      </div>
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of joining"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={doj}
+                        onChange={(e) => setDoj(e.target.value)}
+                        styleTrue={validationErrors?.doj}
+                      />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.doj}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.skype_email
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.skype_email
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
                     labelname={"Skype"}
                     placeholder={"Skype"}
@@ -549,11 +521,14 @@ const AddnewEmployee = () => {
                   </span>
                 </div>
 
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.ultivic_email
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.ultivic_email
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
                     labelname={"Ultivic Email"}
                     placeholder={"Ultivic Email"}
@@ -630,26 +605,16 @@ const AddnewEmployee = () => {
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group" style={
-                    validationErrors?.position
-                      ? { border: "1px solid red", borderRadius: "10px" }
-                      : {}
-                  }>
+                  <div className="form-group new_employee_form_group">
                     <label>
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div
-                      className="mt-2"
-                      style={
-                        validationErrors?.position
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
+                    <div className="mt-2">
                       <CustomSelectComp
                         optionsData={positionData}
                         changeHandler={(e) => setPosition(e.value)}
                         value={position}
+                        styleTrue={validationErrors?.position}
                       />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.position}
@@ -664,18 +629,12 @@ const AddnewEmployee = () => {
                       Technology/Department{" "}
                       <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div
-                      className="mt-2"
-                      style={
-                        validationErrors?.department
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
+                    <div className="mt-2">
                       <CustomSelectComp
                         optionsData={ProfileData}
                         changeHandler={(e) => setDepartment(e.value)}
                         value={department}
+                        styleTrue={validationErrors?.department}
                       />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.department}
@@ -689,18 +648,12 @@ const AddnewEmployee = () => {
                       {" "}
                       Status <span style={{ color: "red" }}>*</span>
                     </label>
-                    <div
-                      className="mt-2"
-                      style={
-                        validationErrors?.status
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
+                    <div className="mt-2">
                       <CustomSelectComp
                         optionsData={statusObj}
                         changeHandler={(e) => setStatus(e.value)}
                         value={status}
+                        styleTrue={validationErrors?.status}
                       />
                       <span style={{ color: "red", fontSize: "13px" }}>
                         {validationErrors?.status}
@@ -708,11 +661,7 @@ const AddnewEmployee = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.username
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     span={true}
                     labelname={"Username"}
@@ -727,11 +676,7 @@ const AddnewEmployee = () => {
                     {validationErrors?.username}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.password
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     labelname={"Password"}
                     placeholder={"Password"}
@@ -746,11 +691,7 @@ const AddnewEmployee = () => {
                     {validationErrors?.password}
                   </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12" style={
-                  validationErrors?.confirm_password
-                    ? { border: "1px solid red", borderRadius: "10px" }
-                    : {}
-                }>
+                <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
                     labelname={"Confirm Password"}
                     placeholder={"Confirm Password"}
@@ -765,28 +706,30 @@ const AddnewEmployee = () => {
                   </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group" style={
-                    validationErrors?.role
-                      ? { border: "1px solid red", borderRadius: "10px" }
-                      : {}
-                  }>
-                    <label> Role <span style={{ color: "red" }}>*</span></label>
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Role <span style={{ color: "red" }}>*</span>
+                    </label>
                     <div className="mt-2">
                       <CustomSelectComp
                         optionsData={role}
                         changeHandler={(e) => setSelected_role(e.value)}
                         value={selected_role}
+                        styleTrue={validationErrors?.selected_role}
                       />
                       <span style={{ color: "red", fontSize: "13px" }}>
-                        {validationErrors?.role}
+                        {validationErrors?.selected_role}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="form-group new_employee_form_group" >
-                <label>Address <span style={{ color: "red" }}>*</span></label>
+              <div className="form-group new_employee_form_group">
+                <label>
+                  Address <span style={{ color: "red" }}>*</span>
+                </label>
                 <textarea
                   className="form-control mt-3"
                   placeholder="Address"
@@ -794,9 +737,7 @@ const AddnewEmployee = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   style={
-                    validationErrors?.address
-                      ? { border: "1px solid red" }
-                      : {}
+                    validationErrors?.address ? { border: "1px solid red" } : {}
                   }
                 />
                 <span style={{ color: "red", fontSize: "13px" }}>

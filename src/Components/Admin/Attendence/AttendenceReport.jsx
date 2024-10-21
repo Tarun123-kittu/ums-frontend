@@ -22,13 +22,11 @@ const AttendenceReport = () => {
   const [year, setYear] = useState("");
   const [page, setPage] = useState(1);
   UseUserAttendanceReport({ name, month, year });
-  const obj = [
-    { name: "Attendance Report", path: "/attendenceReport" },
-    { name: "Attendance Report", path: "/attendenceReport" },
-  ];
+  const obj = [{ name: "Attendance Report", path: "/attendenceReport" }];
   let [all_names, setAllNames] = useState([]);
   const navigate = useNavigate();
   const { show } = useAppContext();
+  const [enableSearch, setEnableSearch] = useState(false);
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
@@ -39,7 +37,7 @@ const AttendenceReport = () => {
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
-  }, [name, month, year, page]);
+  }, [page]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -100,7 +98,9 @@ const AttendenceReport = () => {
   return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
-        className={`gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -151,14 +151,33 @@ const AttendenceReport = () => {
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  dispatch(get_user_attendance_report({ name, month, year }))
-                }
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    dispatch(get_user_attendance_report({ name, month, year }));
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_user_attendance_report({
+                        name: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
           <div className="table-responsive mt-3 transparent_bg">

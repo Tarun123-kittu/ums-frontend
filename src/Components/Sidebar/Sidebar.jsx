@@ -38,7 +38,6 @@ const Sidebar = () => {
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
-  console.log(uniqueRoles, "this is the unique roles")
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
@@ -66,12 +65,6 @@ const Sidebar = () => {
 
     setPermissions(permissionsStatus);
   }, [user_all_permissions]);
-
-  useEffect(() => {
-    if (!localStorage.getItem("ums_token")) {
-      navigate("/login");
-    }
-  }, []);
 
   useEffect(() => {
     dispatch(get_logged_in_user_permissions());
@@ -122,7 +115,8 @@ const Sidebar = () => {
     });
   }, [path.pathname, menuitems]);
 
-  return uniqueRoles?.length === 1 && uniqueRoles?.includes('Employee') ? null : (
+  return uniqueRoles?.length === 1 &&
+    uniqueRoles?.includes("Employee") ? null : (
     <div className={`sidebar ${show ? "cmn_width" : ""}`}>
       <h3
         className={`bar ${show ? "text-center" : "pe-3"}`}
@@ -132,59 +126,37 @@ const Sidebar = () => {
       >
         {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
       </h3>
-      <div className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}>
+      <div
+        className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/dashboard")}
+      >
         <img src={logo} height={"40px"} width={"158px"} alt="" />
       </div>
 
       <div className="mt-4">
-        {uniqueRoles?.includes("Admin") &&
-          menuitems.map((data, i) => {
-            const isActive = path.pathname === data?.pathname;
-            if (permissions?.Dashboard_can_view && data?.name === "Dashboard") {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
+        {menuitems.map((data, i) => {
+          const isActive = path.pathname === data?.pathname;
+          if (permissions?.Dashboard_can_view && data?.name === "Dashboard") {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
                         <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -194,75 +166,75 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (permissions?.Users_can_view && data?.name === "Employees") {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (permissions?.Users_can_view && data?.name === "Employees") {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -272,78 +244,78 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (
-              permissions?.Attandance_can_view &&
-              data?.name === "Attendance Report"
-            ) {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Attandance_can_view &&
+            data?.name === "Attendance Report"
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -353,78 +325,78 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (
-              permissions?.Events_can_view &&
-              data?.name === "Holiday & Events"
-            ) {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Events_can_view &&
+            data?.name === "Holiday & Events"
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -434,78 +406,78 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (
-              permissions?.Leaves_can_view &&
-              data?.name === "Leave Application"
-            ) {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Leaves_can_view &&
+            data?.name === "Leave Application"
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -515,78 +487,78 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (
-              permissions?.Interviews_can_view &&
-              data?.name === "InterView Leads"
-            ) {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Interviews_can_view &&
+            data?.name === "InterView Leads"
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -596,75 +568,75 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (permissions?.Test_can_view && data?.name === "Test Series") {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (permissions?.Test_can_view && data?.name === "Test Series") {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -674,75 +646,75 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            }
-            if (permissions?.Teams_can_view && data?.name === "Teams & Roles") {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
                         >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>
-                              {data?.name}
-                            </h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (permissions?.Teams_can_view && data?.name === "Teams & Roles") {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${
+                    isActive ? "active-pathname" : ""
+                  }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${
+                            show ? "" : "d-flex flex-grow-1 gap-2 "
+                          }`}
+                        >
                           <img
                             src={data?.icon}
                             alt={data?.name}
@@ -752,110 +724,71 @@ const Sidebar = () => {
                           />
                           <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              );
-            }
-
-            {
-              /* else {
-              return (
-                <>
-                  <div
-                    key={i}
-                    className={`sidebar-button ${isActive ? "active-pathname" : ""
-                      }`}
-                  >
-                    {data.subItems ? (
-                      <>
-                        <div
-                          className="sidebar_content justify-content-between"
-                          onClick={() => handleToggle(i)}
-                        >
-                          <div
-                            className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
-                              }`}
-                          >
-                            <img
-                              src={data?.icon}
-                              alt={data?.name}
-                              height="18px"
-                              width="18px"
-                              className={isActive ? "filterClass" : ""}
-                            />
-                            <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
-                          </div>
-                          {show ? (
-                            ""
-                          ) : expanded === i ? (
-                            <MdOutlineKeyboardArrowUp
-                              onClick={() => {
-                                handleToggle(i);
-                              }}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardArrowDown />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <Link to={data?.pathname}>
-                        <div className="sidebar_content ">
-                          <img
-                            src={data?.icon}
-                            alt={data?.name}
-                            height="18px"
-                            width="18px"
-                            className={isActive ? "filterClass" : ""}
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
                           />
-                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
-                        </div>
-                      </Link>
-                    )}
-                  </div>
-                  {expanded === i && (
-                    <ul className="list_inner_item_outer">
-                      {data?.subItems?.map((subItem, j) => (
-                        <li className="">
-                          <Link
-                            to={subItem.pathname}
-                            className={
-                              path.pathname === subItem.pathname
-                                ? "active_path"
-                                : ""
-                            }
-                          >
-                            {subItem.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
                   )}
-                </>
-              );
-            } */
-            }
-          })}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+        })}
+        {!(
+          uniqueRoles?.includes("Admin") || uniqueRoles?.includes("Employee")
+        ) && (
+          <div
+            className={`sidebar-button`}
+            onClick={() => navigate("/mark-attendence")}
+          >
+            <div className="sidebar_content">
+              <IoIosLogOut className="sidebar_content" />
+              <h4 className={show ? "d-none" : "sidebar_content"}>
+                Mark Attendance
+              </h4>
+            </div>
+          </div>
+        )}
         <div className={`sidebar-button`} onClick={handleLogout}>
           <div className="sidebar_content">
             <IoIosLogOut className="sidebar_content" />

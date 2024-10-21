@@ -31,6 +31,7 @@ const LeaveReport = () => {
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const [year, setYear] = useState([]);
   const [selected_employee, setSelected_employee] = useState();
+  const [enableSearch, setEnableSearch] = useState(false);
   const [selected_month, setSelected_month] = useState();
   const [selected_year, setSelected_year] = useState();
 
@@ -95,7 +96,9 @@ const LeaveReport = () => {
   return permissions?.can_view ? (
     <section className="leaveReport_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -154,12 +157,33 @@ const LeaveReport = () => {
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() => handleManageFilters()}
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    handleManageFilters();
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_all_user_leave({
+                        name: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
           <div className="table-responsive mt-3 transparent_bg">

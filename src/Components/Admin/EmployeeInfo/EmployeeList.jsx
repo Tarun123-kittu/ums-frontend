@@ -6,7 +6,10 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { get_all_users_user } from "../../../utils/redux/userSlice/getAllUserSlice";
+import {
+  get_all_users_user,
+  clear_users_state,
+} from "../../../utils/redux/userSlice/getAllUserSlice";
 import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
@@ -26,17 +29,18 @@ const EmployeeList = () => {
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [page, setPage] = useState(1);
+  const [usersData, setUsersdata] = useState([]);
+  const [enableSearch, setEnableSearch] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userId, setuserId] = useState("");
   const all_users_list = useSelector((stroe) => stroe?.GET_ALL_USERS);
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
   const all_users = useSelector((store) => store.ALL_USERNAMES);
-  console.log(all_users, "this is the list of all users");
 
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
       toast.success(is_user_deleted?.message?.message);
-      dispatch(get_all_users_user());
+      dispatch(get_all_users_user({ name: "", status: "", page }));
       dispatch(clear_create_delete_state());
     }
     if (is_user_deleted?.isError) {
@@ -46,8 +50,14 @@ const EmployeeList = () => {
   }, [is_user_deleted, dispatch]);
 
   useEffect(() => {
+    if (all_users_list?.isSuccess) {
+      setUsersdata(all_users_list?.data?.data);
+      dispatch(clear_users_state());
+    }
     if (all_users_list?.isError) {
       toast.error(all_users_list?.error?.message);
+      dispatch(clear_users_state());
+      setUsersdata([]);
     }
   }, [all_users_list]);
 
@@ -80,7 +90,9 @@ const EmployeeList = () => {
               <div className="mt-2">
                 <CustomSelectComp
                   optionsData={statusObj}
-                  changeHandler={(e) => setSearchStatus(e.value)}
+                  changeHandler={(e) => {
+                    setSearchStatus(e.value);
+                  }}
                   value={searchStatus}
                   placeholder="Select"
                 />
@@ -115,20 +127,39 @@ const EmployeeList = () => {
           </div>
 
           <div className="employee_wrapper text-end serach_add_outer">
-            <button
-              className="cmn_Button_style"
-              onClick={() =>
-                dispatch(
-                  get_all_users_user({
-                    name: searchName,
-                    status: searchStatus,
-                    page,
-                  })
-                )
-              }
-            >
-              Search
-            </button>
+            {!enableSearch ? (
+              <button
+                className="cmn_Button_style"
+                onClick={() => {
+                  dispatch(
+                    get_all_users_user({
+                      name: searchName,
+                      status: searchStatus,
+                      page,
+                    })
+                  );
+                  setEnableSearch(true);
+                }}
+              >
+                Search
+              </button>
+            ) : (
+              <button
+                className="cmn_Button_style cmn_darkgray_btn"
+                onClick={() => {
+                  dispatch(
+                    get_all_users_user({
+                      name: "",
+                      status: "",
+                      page,
+                    })
+                  );
+                  setEnableSearch(false);
+                }}
+              >
+                Clear
+              </button>
+            )}
             {permissions?.can_create && (
               <button
                 className="cmn_Button_style ms-3"
@@ -158,8 +189,10 @@ const EmployeeList = () => {
             <tbody>
               {all_users_list?.isLoading ? (
                 <img className="loader_gif" src={Loader} alt="loader" />
+              ) : usersData?.length === 0 ? (
+                <h4>No users data</h4>
               ) : (
-                all_users_list?.data?.data?.map((user, index) => {
+                usersData?.map((user, index) => {
                   return (
                     <tr key={user?.id}>
                       <td>{index + 1}</td>

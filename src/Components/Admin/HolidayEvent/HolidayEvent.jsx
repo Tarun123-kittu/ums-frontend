@@ -36,6 +36,7 @@ const HolidayEvent = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [hr_user_permissions, setHr_user_permissions] = useState({});
+  const [enableSearch, setEnableSearch] = useState(false);
   const [event_id, setEvent_id] = useState(null);
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const holiday_and_events = useSelector(
@@ -131,7 +132,9 @@ const HolidayEvent = () => {
   return (
     <section className="holiday_event_wrapper">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -150,30 +153,37 @@ const HolidayEvent = () => {
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
-              <button
-                className="cmn_Button_style cmn_darkgray_btn"
-                onClick={() =>
-                  dispatch(
-                    get_all_holidays_and_events({
-                      year: new Date().getFullYear(),
-                    })
-                  )
-                }
-              >
-                Reset
-              </button>
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  isSearched
-                    ? dispatch(
-                      get_all_holidays_and_events({ year: selected_year })
-                    )
-                    : toast.error("Please select year !!")
-                }
-              >
-                Search
-              </button>
+              {enableSearch ? (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_all_holidays_and_events({
+                        year: new Date().getFullYear(),
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Reset
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    if (isSearched) {
+                      dispatch(
+                        get_all_holidays_and_events({ year: selected_year })
+                      );
+                      setEnableSearch(true);
+                    } else {
+                      toast.error("Please select year !!");
+                    }
+                  }}
+                >
+                  Search
+                </button>
+              )}
               {permissions?.can_create && (
                 <button
                   className="cmn_Button_style"

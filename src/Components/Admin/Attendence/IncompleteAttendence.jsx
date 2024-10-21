@@ -15,7 +15,6 @@ import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 const IncompleteAttendence = () => {
   const permissions = UsePermissions("Attandance");
   const obj = [
-    { name: "Attendance Report", path: "/attendenceReport" },
     { name: "Incomplete Attendance", path: "/incompleteAttendence" },
   ];
   const navigate = useNavigate();
@@ -37,7 +36,9 @@ const IncompleteAttendence = () => {
   return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
