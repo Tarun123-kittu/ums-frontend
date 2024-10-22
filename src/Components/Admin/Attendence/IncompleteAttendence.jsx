@@ -4,25 +4,33 @@ import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
 import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./attendence.css";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 
 const IncompleteAttendence = () => {
+  const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
   const obj = [
     { name: "Incomplete Attendance", path: "/incompleteAttendence" },
   ];
   const navigate = useNavigate();
   const { show } = useAppContext();
+  const [page, setPage] = useState(1);
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  useEffect(() => {
+    dispatch(get_attendance_report({ page }));
+  }, [page]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -48,8 +56,8 @@ const IncompleteAttendence = () => {
             classname={"inter_fontfamily employee_heading"}
             onBreadcrumbClick={""}
           />
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -62,7 +70,11 @@ const IncompleteAttendence = () => {
               </thead>
               <tbody>
                 {attendance_report?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   attendance_report?.data?.data?.map((report, i) => {
                     if (!report?.out_time) {
@@ -94,10 +106,15 @@ const IncompleteAttendence = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {attendance_report?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={attendance_report?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

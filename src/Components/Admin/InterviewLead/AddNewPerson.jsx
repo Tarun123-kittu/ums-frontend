@@ -151,7 +151,7 @@ const AddNewPerson = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="cmn_border px-4 pt-2 pb-4">
+          <div className="cmn_border px-4 pt-2 pb-4 card-cmn">
             <div className="row">
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -329,6 +329,13 @@ const AddNewPerson = () => {
                   handleSave(e);
                 }}
               >
+                {add_lead_state?.isLoading && (
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Save
               </button>
             </div>

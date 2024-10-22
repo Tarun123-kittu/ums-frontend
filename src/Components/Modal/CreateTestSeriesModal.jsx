@@ -11,12 +11,11 @@ import {
 import { get_all_series } from "../../utils/redux/testSeries/getAllTestSeries";
 
 const CreateTestSeriesModal = ({ show, setShow, languages }) => {
-  console.log(languages, "from modal");
   const dispatch = useDispatch();
   const [all_languagages, setAll_languages] = useState([]);
-  console.log(all_languagages, "all languages");
   const [series_name, setSeries_name] = useState("");
   const [series_time, setSeries_time] = useState("");
+  console.log(series_time, "this is the series time");
   const [series_language, setSeries_language] = useState("");
   const [series_description, setSeries_description] = useState("");
   const [experience, setExperience] = useState("");
@@ -79,6 +78,24 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
     }
   };
 
+  const handleTimeChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/[^\d:]/g, "");
+    let rawValue = value.replace(/:/g, "");
+
+    if (rawValue.length > 6) {
+      rawValue = rawValue.substring(0, 6);
+    }
+    if (rawValue.length > 2) {
+      rawValue = rawValue.slice(0, 2) + ":" + rawValue.slice(2);
+    }
+    if (rawValue.length > 5) {
+      rawValue = rawValue.slice(0, 5) + ":" + rawValue.slice(5);
+    }
+
+    setSeries_time(rawValue);
+  };
+
   useEffect(() => {
     if (is_series_created?.isSuccess) {
       dispatch(get_all_series({ id }));
@@ -107,7 +124,7 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
           <InputField
             labelname={"Series "}
             placeholder={"Enter Series Name"}
-            type={"text"}
+            type={"number"}
             classname={"new_employee_form_group"}
             onChange={(e) => setSeries_name(e?.target?.value)}
           />
@@ -116,7 +133,8 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
             placeholder={"HH:MM:SS"}
             type={"text"}
             classname={"new_employee_form_group"}
-            onChange={(e) => setSeries_time(e?.target?.value)}
+            onChange={handleTimeChange}
+            value={series_time}
           />
           <div className="form-group new_employee_form_group">
             <label>Experience</label>
@@ -154,6 +172,13 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
             onClick={() => handleCreateTestSeries()}
           >
             Save
+            {is_series_created?.isLoading && (
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
           </button>
         </Modal.Footer>
       </Modal>

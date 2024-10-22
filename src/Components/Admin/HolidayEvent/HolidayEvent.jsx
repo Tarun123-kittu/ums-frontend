@@ -22,6 +22,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -196,8 +197,8 @@ const HolidayEvent = () => {
               )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -208,7 +209,11 @@ const HolidayEvent = () => {
               </thead>
               <tbody>
                 {holiday_and_events?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   holiday_and_events?.data?.eventsOrHolidays?.map(
                     (event, i) => {
@@ -247,13 +252,15 @@ const HolidayEvent = () => {
                   )
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp
-          totalPage={holiday_and_events?.data?.totalPages}
-          setPage={setPage}
-        />
+        {holiday_and_events?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={holiday_and_events?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
 
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />

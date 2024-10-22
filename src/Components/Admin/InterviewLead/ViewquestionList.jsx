@@ -12,11 +12,14 @@ import EditQuesModal from "../../Modal/EditQuesModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { hr_assigned_questions_to_lead } from "../../../utils/redux/interviewLeadsSlice/hrRound/getAssignedQuestionsToLead";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 
 const ViewQuestionList = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Interviews");
   const { interview_id, lead_id, view } = location?.state
     ? location?.state
     : location;
@@ -38,7 +41,7 @@ const ViewQuestionList = () => {
 
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
-  return (
+  return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
         className={`${
@@ -51,7 +54,7 @@ const ViewQuestionList = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="hr_interview_question_round_outer">
+          <div className="hr_interview_question_round_outer card-cmn">
             <div className="cmn_border mt-3 hr_interview_question_round_content">
               <div className="row">
                 {assigned_questions?.data?.data?.map((ques, i) => {
@@ -67,9 +70,13 @@ const ViewQuestionList = () => {
                         <div className="d-flex gap-2 view_question_list_outer">
                           <h4>{ques?.answer}</h4>
                           <div className="key-point-box">
-                            <CiEdit
-                              onClick={() => setShowEditModal(ques.question_id)} // Set the modal to open for the specific question
-                            />
+                            {permissions?.can_update && (
+                              <CiEdit
+                                onClick={() =>
+                                  setShowEditModal(ques.question_id)
+                                } // Set the modal to open for the specific question
+                              />
+                            )}
                             <div className="key-point-tooltip">
                               <p>{ques?.key_point}</p>
                             </div>
@@ -109,6 +116,8 @@ const ViewQuestionList = () => {
         </div>
       </div>
     </section>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

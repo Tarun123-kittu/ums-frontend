@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_all_applied_leaves = createAsyncThunk("get_all_applied_leaves", async ({ page }, thunkAPI) => {
+export const delete_lead = createAsyncThunk("delete_lead", async ({ leadId }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const requestOptions = {
-            method: "GET",
+            method: "DELETE",
             headers: myHeaders,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_applied_leaves?page=${page}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/delete_lead_records?leadId=${leadId}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -28,31 +28,41 @@ export const get_all_applied_leaves = createAsyncThunk("get_all_applied_leaves",
     }
 })
 
-export const getAllAppliedLeaves = createSlice({
-    name: "getAllAppliedLeaves",
+export const deleteLead = createSlice({
+    name: "deleteLead",
     initialState: {
-        data: [],
+        message: {},
         isSuccess: false,
         isError: false,
         isLoading: false,
-        error: null
+        error: false
+    },
+    reducers: {
+        clear_delete_lead_slice: (state) => {
+            state.message = {}
+            state.isSuccess = false
+            state.isError = false
+            state.isLoading = false
+            state.error = null
+            return state
+        }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(get_all_applied_leaves.pending, (state) => {
+            .addCase(delete_lead.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_all_applied_leaves.fulfilled, (state, action) => {
-                state.data = action.payload
+            .addCase(delete_lead.fulfilled, (state, action) => {
+                state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_all_applied_leaves.rejected, (state, action) => {
+            .addCase(delete_lead.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-
-export default getAllAppliedLeaves.reducer
+export const { clear_delete_lead_slice } = deleteLead.actions
+export default deleteLead.reducer

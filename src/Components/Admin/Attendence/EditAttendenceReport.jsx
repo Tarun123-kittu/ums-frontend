@@ -102,18 +102,18 @@ const EditAttendenceReport = () => {
       <div
         className={`${
           localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        } gray_bg admin_outer   ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer ">
           <BreadcrumbComp
             data={obj}
-            classname={"inter_fontfamily employee_heading"}
+            classname={"inter_fontfamily employee_heading "}
             onBreadcrumbClick={""}
           />
           <div>
-            <div className="cmn_editattendence_outer cmn_border">
+            <div className="cmn_editattendence_outer cmn_border card-cmn">
               <div className="row">
                 <div className="col-lg-6 col-sm-12 col-md-12">
                   <InputField
@@ -203,6 +203,13 @@ const EditAttendenceReport = () => {
                     onClick={() => handleUpdate()}
                   >
                     Update
+                    {is_attendance_updated?.isLoading && (
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                   </button>
                 </div>
               )}

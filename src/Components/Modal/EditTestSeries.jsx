@@ -110,6 +110,24 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
     }
   }, [updated_state]);
 
+  const handleTimeChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/[^\d:]/g, "");
+    let rawValue = value.replace(/:/g, "");
+
+    if (rawValue.length > 6) {
+      rawValue = rawValue.substring(0, 6);
+    }
+    if (rawValue.length > 2) {
+      rawValue = rawValue.slice(0, 2) + ":" + rawValue.slice(2);
+    }
+    if (rawValue.length > 5) {
+      rawValue = rawValue.slice(0, 5) + ":" + rawValue.slice(5);
+    }
+
+    setSeries_time(rawValue);
+  };
+
   return (
     <div>
       <Modal
@@ -136,7 +154,7 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
             type={"text"}
             classname={"new_employee_form_group"}
             value={series_time}
-            onChange={(e) => setSeries_time(e.target.value)}
+            onChange={handleTimeChange}
           />
           <div className="form-group new_employee_form_group">
             <label>Profile</label>

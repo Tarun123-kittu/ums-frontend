@@ -303,7 +303,14 @@ const EditPerson = () => {
                   className="cmn_Button_style"
                   onClick={() => handleUpdate()}
                 >
-                  Save
+                  {update_lead_data?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Update
                 </button>
               )}
             </div>

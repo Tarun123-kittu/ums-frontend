@@ -126,7 +126,7 @@ ul.data_card li span {
     padding: 30px;
     border: 1px solid #F8F9FA;
     box-shadow: 0px 4px 20px 0 #EEEEEE80;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 .leave_table.table>:not(caption)>*>* {
     color: #444A6D;
@@ -207,6 +207,62 @@ button.table_cmn {
 }
 button.table_cmn.pending {
     color: #0095FF;
+}
+.cmn_dropdown.dropdown button::after {display: none;}
+
+.cmn_dropdown.dropdown button {
+    background: #e9e9e9;
+    border-color: #ddd;
+    color: #444a6d;
+    width: auto;
+    font-size: 14px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cmn_dropdown.dropdown button:active {
+   background: #e9e9e9;
+    border-color: #ddd;
+    color: #000;
+}
+
+.cmn_dropdown.show.dropdown {
+    position: unset;
+}
+
+.cmn_dropdown .dropdown-menu a:active {
+    background: unset;
+    color: #000;
+}
+ul.data_card li.present {
+    background: #FFF4DE;
+}
+
+ul.data_card li.total_leaves {
+    background: #DCFCE7;
+}
+
+ul.data_card li.interviews {
+    background: #F3E8FF;
+}
+.cmn_dropdown  .dropdown-menu {
+    inset: unset !important;
+    transform: unset !important;
+    top: unset !important;
+    left: unset !important;
+    border: unset;
+    box-shadow: 0px 0px 5px rgba(0,0,0,15%);
+    margin-top: 5px;
+    padding: 0;
+    width: auto;
+    min-width: 123px;
+    margin-left: -30px;
+}
+.cmn_dropdown .dropdown-menu a {
+    border-bottom: 1px solid #ddd;
+    padding: 6px 10px;
 }
 @media screen and (max-width:991px) {
     .info_content{

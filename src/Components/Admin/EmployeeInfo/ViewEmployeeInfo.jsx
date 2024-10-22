@@ -12,6 +12,7 @@ import {
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_user_documents } from "../../../utils/redux/userSlice/getUserDocuments";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const ViewEmployeeInfo = () => {
   const location = useLocation();
@@ -80,10 +81,7 @@ const ViewEmployeeInfo = () => {
     }
   }, [user_detail]);
 
-  const obj = [
-    { name: "Employee", path: "/employee" },
-    { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
-  ];
+  const obj = [{ name: "Employees", path: "/employee" }];
 
   const documentsName = [
     { id: 1, name: "Aadhar Card" },
@@ -108,7 +106,7 @@ const ViewEmployeeInfo = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="employee_editInfo_wrapper">
+          <div className="employee_editInfo_wrapper card-cmn">
             <ul className="user_info_list_outer">
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Name</h3>
@@ -220,9 +218,9 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">{user_details?.address}</h3>
               </li>
             </ul>
-            <div className="table-responsive mt-4 transparent_bg">
+            <div className=" mt-3 card-cmn">
               <h3 className="heading_style">Documents</h3>
-              <table className="employee_detail_table mt-3">
+              <Table responsive className="leave_table mb-0 ">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -249,7 +247,7 @@ const ViewEmployeeInfo = () => {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </Table>
             </div>
             <div className="mt-3 text-end">
               {permissions?.can_update && (

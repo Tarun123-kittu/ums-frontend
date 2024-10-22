@@ -87,6 +87,7 @@ import getDashboardInterviewOverview from './dashboardSlice/getDashboardIntervie
 import getDashboardAttendenceGraph from './dashboardSlice/getDashboardAttendenceGraph'
 import getLeavesOnDashboard from './dashboardSlice/getDashboardLeave'
 import updateBankLeave from './leaveSlice/updateBankLeaves'
+import deleteLead from './interviewLeadsSlice/deleteLeads'
 
 const appStore = configureStore({
     reducer: {
@@ -177,7 +178,8 @@ const appStore = configureStore({
         DASHBOARD_INTERVIEWOVERVIEW: getDashboardInterviewOverview,
         DASHBOARD_ATTENDENCE_GRAPH: getDashboardAttendenceGraph,
         GET_LEAVES_ON_DASHBOARD: getLeavesOnDashboard,
-        UPDATE_BANK_LEAVE: updateBankLeave
+        UPDATE_BANK_LEAVE: updateBankLeave,
+        DELETE_LEAD: deleteLead
     },
 })
 

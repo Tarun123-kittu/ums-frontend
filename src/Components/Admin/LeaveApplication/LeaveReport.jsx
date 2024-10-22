@@ -12,6 +12,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const LeaveReport = () => {
   const permissions = UsePermissions("Leaves");
@@ -28,8 +29,10 @@ const LeaveReport = () => {
     }
   }, [navigate]);
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
+  console.log(leave_data, "this is the leave data");
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const [year, setYear] = useState([]);
+  const [page, setPage] = useState(1);
   const [selected_employee, setSelected_employee] = useState();
   const [enableSearch, setEnableSearch] = useState(false);
   const [selected_month, setSelected_month] = useState();
@@ -41,10 +44,11 @@ const LeaveReport = () => {
         name: selected_employee,
         month: selected_month,
         year: selected_year,
+        page,
       })
     );
     years();
-  }, []);
+  }, [page]);
 
   const { show } = useAppContext();
   const formatDate = (dateString) => {
@@ -186,8 +190,8 @@ const LeaveReport = () => {
               )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -205,7 +209,11 @@ const LeaveReport = () => {
               </thead>
               <tbody>
                 {leave_data?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   leave_data?.data?.data?.map((leave, i) => {
                     return (
@@ -243,10 +251,15 @@ const LeaveReport = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {leave_data?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={leave_data?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

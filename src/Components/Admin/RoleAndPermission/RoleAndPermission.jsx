@@ -19,6 +19,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const RoleAndPermission = () => {
   const permissions = UsePermissions("Teams");
@@ -84,8 +85,8 @@ const RoleAndPermission = () => {
             )}
           </div>
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>S.No</th>
@@ -143,10 +144,9 @@ const RoleAndPermission = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
       </div>
       {showDeleteModal && (
         <CommonDeleteModal

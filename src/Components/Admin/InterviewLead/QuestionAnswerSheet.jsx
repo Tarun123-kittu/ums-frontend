@@ -88,7 +88,7 @@ const QuestionAnswerSheet = () => {
         } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer card-cmn">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}

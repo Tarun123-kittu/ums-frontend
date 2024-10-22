@@ -1,29 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
 import { useAppContext } from "../../Utils/appContecxt";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllAppliedLeaves";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.png";
+import { get_all_applied_leaves } from "../../../utils/redux/leaveSlice/getAllAppliedLeaves";
 
 const LeaveRequest = () => {
+  const dispatch = useDispatch();
   const permissions = UsePermissions("Leaves");
   const navigate = useNavigate();
-  UseFetchAllAppliedLeaves();
+  UseFetchAllAppliedLeaves({ page: 1 });
   const all_applied_leaves = useSelector(
     (store) => store.GET_ALL_APPLIED_LEAVES
   );
-  const obj = [
-    { name: "Leave Application", path: "/leaveApplication" },
-    { name: "Leave Request", path: "/leaveRequest" },
-  ];
+  console.log(all_applied_leaves, "this is the all applied leaves");
+  const [page, setPage] = useState(1);
+  const obj = [{ name: "Leave Request", path: "/leaveRequest" }];
 
   const { show } = useAppContext();
+
+  useEffect(() => {
+    dispatch(get_all_applied_leaves({ page }));
+  }, [page]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -50,8 +57,8 @@ const LeaveRequest = () => {
             onBreadcrumbClick={""}
           />
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -69,7 +76,24 @@ const LeaveRequest = () => {
               </thead>
               <tbody>
                 {all_applied_leaves?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_applied_leaves?.data?.message ===
+                  "No pending leaves found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : (
                   all_applied_leaves?.data?.data?.map((leaves, i) => {
                     return (
@@ -112,10 +136,15 @@ const LeaveRequest = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {all_applied_leaves?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={all_applied_leaves?.data?.total_pages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

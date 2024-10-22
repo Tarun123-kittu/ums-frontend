@@ -98,7 +98,7 @@ const HrInterViewQuestion = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="hr_interview_question_round_outer">
+          <div className="hr_interview_question_round_outer card-cmn">
             <div className="cmn_border mt-3 hr_interview_question_round_content">
               <div className="row">
                 {questions?.map((ques, i) => {
@@ -124,7 +124,10 @@ const HrInterViewQuestion = () => {
                 <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => navigate("/interviewLead", { state: { tab: "Add Person" } })}>
                   Exit
                 </button>
-                {permissions?.can_update && <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>}
+                {permissions?.can_update && <button className="cmn_Button_style" onClick={() => handleSave()}>
+                  {update_question?.isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+                  Save
+                </button>}
               </div>
             </div>
           </div>

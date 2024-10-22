@@ -21,6 +21,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 import UserValidations from "../../Utils/UserValidations";
+import { Table } from "react-bootstrap";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -276,7 +277,7 @@ const AddnewEmployee = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="new_employee_wrapper cmn_border">
+          <div className="new_employee_wrapper cmn_border card-cmn">
             <form>
               <div className="row">
                 <div className="col-lg-4 col-sm-12 col-md-12" id="name">
@@ -746,8 +747,8 @@ const AddnewEmployee = () => {
               </div>
 
               <div className="text-end mt-3"></div>
-              <div className="table-responsive mt-4 transparent_bg">
-                <table className="employee_detail_table mt-3">
+              <div className=" mt-3 card-cmn">
+                <Table responsive className="leave_table mb-0 ">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -772,7 +773,7 @@ const AddnewEmployee = () => {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </Table>
               </div>
 
               <div className="text-end mt-3">
@@ -813,6 +814,13 @@ const AddnewEmployee = () => {
                   }
                 >
                   Save
+                  {is_user_created?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 </button>
               </div>
             </form>

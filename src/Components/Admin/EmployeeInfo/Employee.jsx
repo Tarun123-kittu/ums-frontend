@@ -26,7 +26,7 @@ const EmployeeInfo = () => {
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer">
+        <div className=" cmn_padding_outer">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}

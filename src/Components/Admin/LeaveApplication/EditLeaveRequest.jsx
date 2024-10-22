@@ -101,7 +101,7 @@ const EditLeaveRequest = () => {
             onBreadcrumbClick={""}
           />
           <div>
-            <div className="cmn_editattendence_outer cmn_border">
+            <div className="cmn_editattendence_outer cmn_border card-cmn">
               <div className="row">
                 <div className="col-lg-6 col-sm-12 col-md-12">
                   <InputField
@@ -118,6 +118,7 @@ const EditLeaveRequest = () => {
                     labelname={"Mobile"}
                     type={"number"}
                     value={leaveDetail?.mobile}
+                    disabled={true}
                   />
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">
@@ -125,6 +126,7 @@ const EditLeaveRequest = () => {
                     classname={"new_employee_form_group"}
                     labelname={"Leave Date"}
                     type={"text"}
+                    disabled={true}
                     value={
                       leaveDetail?.from_date && leaveDetail?.to_date
                         ? `${moment(leaveDetail.from_date).format(
@@ -142,6 +144,7 @@ const EditLeaveRequest = () => {
                     labelname={"Apply Date"}
                     type={"text"}
                     value={moment(leaveDetail?.createdAt).format("MM/DD/YYYY")}
+                    disabled={true}
                   />
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">
@@ -150,6 +153,7 @@ const EditLeaveRequest = () => {
                     labelname={"Number Of Dates"}
                     type={"number"}
                     value={leaveDetail?.count}
+                    disabled={true}
                   />
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">
@@ -158,6 +162,7 @@ const EditLeaveRequest = () => {
                     labelname={"Sandwich"}
                     type={"text "}
                     value={leaveDetail?.sandwich === 0 ? "No" : "Yes"}
+                    disabled={true}
                   />
                 </div>
                 <div className="col-lg-12 col-sm-12 col-md-12">
@@ -166,13 +171,14 @@ const EditLeaveRequest = () => {
                     <textarea
                       className="form-control mt-2"
                       value={leaveDetail?.description}
+                      disabled={true}
                     />
                   </div>
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>Type</label>
-                    <select className="form-control form-group">
+                    <select className="form-control form-group" disabled>
                       <option>{leaveDetail?.type}</option>
                     </select>
                   </div>
@@ -209,6 +215,13 @@ const EditLeaveRequest = () => {
                     className="cmn_Button_style"
                     onClick={() => handleUpdateLeave()}
                   >
+                    {update_leave_data?.isLoading && (
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     Update
                   </button>
                 </div>

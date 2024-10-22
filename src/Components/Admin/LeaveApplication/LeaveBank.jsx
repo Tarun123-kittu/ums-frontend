@@ -12,10 +12,12 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import toast from "react-hot-toast";
+import { Table } from "react-bootstrap";
 
 const LeaveBank = () => {
   const dispatch = useDispatch();
   const permissions = UsePermissions("Leaves");
+  const [page, setPage] = useState(1);
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
   const [session, setSession] = useState("");
@@ -51,10 +53,11 @@ const LeaveBank = () => {
         session,
         month: selected_month,
         year: selected_year,
+        page,
       })
     );
     years();
-  }, []);
+  }, [page]);
 
   const years = (startYear = 2020) => {
     setYear([]);
@@ -190,8 +193,8 @@ const LeaveBank = () => {
             </div>
           </div>
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -203,7 +206,11 @@ const LeaveBank = () => {
               </thead>
               <tbody>
                 {leave_bank_data?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   Array.isArray(leave_bank_data?.data?.data) &&
                   leave_bank_data.data.data.map((leave_bank, index) => (
@@ -231,10 +238,15 @@ const LeaveBank = () => {
                   ))
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {leave_bank_data?.data?.pagination?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={leave_bank_data?.data?.pagination?.totalPages}
+            setPage={setPage}
+          />
+        )}
 
         {showEditLeaveModal && (
           <EditLeaveBankModal

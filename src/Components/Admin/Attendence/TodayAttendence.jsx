@@ -11,6 +11,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const TodayAttendence = () => {
   const permissions = UsePermissions("Attandance");
@@ -69,8 +70,8 @@ const TodayAttendence = () => {
             onBreadcrumbClick={""}
           />
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -85,7 +86,11 @@ const TodayAttendence = () => {
               </thead>
               <tbody>
                 {attendance_report?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   attendance_report?.data?.data?.map((report, i) => {
                     return (
@@ -147,13 +152,15 @@ const TodayAttendence = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp
-          totalPage={attendance_report?.data?.totalPages}
-          setPage={setPage}
-        />
+        {attendance_report?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={attendance_report?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

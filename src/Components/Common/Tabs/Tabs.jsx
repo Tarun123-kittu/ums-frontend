@@ -32,12 +32,21 @@ import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/g
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
+import NoData from "../../assets/nodata.png";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+import {
+  delete_lead,
+  clear_delete_lead_slice,
+} from "../../../utils/redux/interviewLeadsSlice/deleteLeads";
+import { Table } from "react-bootstrap";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const permissions = UsePermissions("Interviews");
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
     useState(false);
 
@@ -79,6 +88,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const face_round_leads = useSelector((store) => store.FACE_ROUND_LEADS);
   const update_face_round = useSelector((store) => store.FACE_ROUND_STATUS);
   const final_round_leads = useSelector((store) => store.FINAL_ROUND_LEADS);
+  const delete_lead_status = useSelector((store) => store.DELETE_LEAD);
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -116,6 +126,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   ];
 
   useEffect(() => {
+    getAllLeads();
+  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
+
+  const getAllLeads = () => {
     dispatch(get_all_leads({ page: allLeadPage, experience: "", profile: "" }));
     dispatch(
       get_hr_round_candidate({
@@ -153,7 +167,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
         result_status: "",
       })
     );
-  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
+  };
 
   useEffect(() => {
     if (hr_round_candidate_status?.isSuccess) {
@@ -247,6 +261,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_round_status]);
 
+  const deleteHandler = () => {
+    dispatch(delete_lead({ leadId }));
+  };
+
+  useEffect(() => {
+    if (delete_lead_status?.isSuccess) {
+      toast.success("Lead Deleted Successfully !!");
+      dispatch(clear_delete_lead_slice);
+      setShowDeleteModal(false);
+      getAllLeads();
+    }
+    if (delete_lead_status?.isError) {
+      toast.error(delete_lead_status?.error?.message);
+      dispatch(clear_delete_lead_slice);
+    }
+  }, [delete_lead_status]);
+
   return permissions?.can_view ? (
     <div>
       <Tabs
@@ -257,8 +288,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
         onSelect={(k) => handleTabSelect(k)}
       >
         <Tab eventKey="Add Person" title="Add Person">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -272,7 +303,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {all_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_leads?.data?.message ===
+                  "No leads found with the specified filters." ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(all_leads?.data?.data) ? (
                   all_leads.data.data.filter((lead) => lead?.in_round === 0)
                     .length > 0 ? (
@@ -394,6 +442,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                     Start
                                   </button>
                                 )}
+                              <div
+                                className="cmn_action_outer red_bg"
+                                style={{ cursor: "pointer" }}
+                                title="delete user"
+                              >
+                                <RiDeleteBin6Line
+                                  onClick={() => {
+                                    setShowDeleteModal(true);
+                                    setLeadId(lead?.id);
+                                  }}
+                                />
+                              </div>
                             </td>
                           </tr>
                         );
@@ -415,7 +475,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </Table>
             {all_leads?.data?.data?.some((field) => field.in_round === 0) >
               0 && (
               <PaginationComp
@@ -426,8 +486,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="HR" title="HR">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -441,7 +501,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {all_hr_round_candidate?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_hr_round_candidate?.data?.message ===
+                  "No candidate found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : all_hr_round_candidate?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
@@ -511,13 +588,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
+                          <RiDeleteBin6Line
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setLeadId(candidate?.id);
+                            }}
+                          />
                         </td>
                       </tr>
                     );
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
             {all_hr_round_candidate?.data?.data?.length > 0 && (
               <PaginationComp
                 totalPage={all_hr_round_candidate?.data?.totalPages}
@@ -527,8 +610,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Technical" title="Technical">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -542,7 +625,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {tech_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : tech_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(tech_round_leads?.data?.data?.data) ? (
                   tech_round_leads.data.data.data.length === 0 ? (
                     <tr>
@@ -610,6 +709,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
+                          <RiDeleteBin6Line
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setLeadId(tech_leads?.id);
+                            }}
+                          />
                         </td>
                       </tr>
                     ))
@@ -622,7 +727,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </Table>
             {tech_round_leads?.data?.data?.data?.length > 0 && (
               <PaginationComp
                 totalPage={tech_round_leads?.data?.pagination?.totalPages}
@@ -632,8 +737,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Face to face" title="Face to face">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -649,7 +754,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {face_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : face_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(face_round_leads?.data?.data) &&
                   face_round_leads?.data?.data?.length > 0 ? (
                   face_round_leads.data.data.map((lead, i) => (
@@ -733,6 +854,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               Start
                             </button>
                           )}
+                        <RiDeleteBin6Line
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                            setLeadId(lead?.id);
+                          }}
+                        />
                       </td>
                     </tr>
                   ))
@@ -744,7 +871,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </Table>
             {face_round_leads?.data?.data?.length > 0 && (
               <PaginationComp
                 totalPage={face_round_leads?.data?.pagination?.totalPages}
@@ -754,8 +881,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Final Interaction" title="Final Interaction">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -771,7 +898,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {final_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : final_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(final_round_leads?.data?.data) &&
                   final_round_leads?.data?.data?.length > 0 ? (
                   final_round_leads?.data?.data?.map((lead, i) => (
@@ -855,7 +998,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </Table>
             {final_round_leads?.data?.data?.length > 0 && (
               <PaginationComp
                 totalPage={final_round_leads?.data?.totalPages}
@@ -878,6 +1021,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           show={showHrQuestionModal}
           setShow={setShowHrQuestionModal}
           leadId={leadId}
+        />
+      )}
+      {showDeleteModal && (
+        <CommonDeleteModal
+          heading_text={"Are you sure you want to delete Interview Lead "}
+          paragraph_text={""}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          handleDelete={deleteHandler}
         />
       )}
     </div>

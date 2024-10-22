@@ -76,6 +76,13 @@ const EditQuesModal = ({
           </button>
           <button className="cmn_Button_style" onClick={() => handleSave()}>
             Save
+            {is_key_updated?.isLoading && (
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
           </button>
         </Modal.Footer>
       </Modal>

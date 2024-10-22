@@ -13,6 +13,7 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const AttendenceReport = () => {
   const dispatch = useDispatch();
@@ -180,8 +181,8 @@ const AttendenceReport = () => {
               )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -200,7 +201,11 @@ const AttendenceReport = () => {
               </thead>
               <tbody>
                 {user_attendance_report?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   user_attendance_report?.data?.data?.map((report, index) => {
                     return (
@@ -253,13 +258,15 @@ const AttendenceReport = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp
-          totalPage={user_attendance_report?.data?.totalPages}
-          setPage={setPage}
-        />
+        {user_attendance_report?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={user_attendance_report?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

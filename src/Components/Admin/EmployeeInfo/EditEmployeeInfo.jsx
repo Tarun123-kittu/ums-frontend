@@ -20,6 +20,7 @@ import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 import validator from "validator";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
@@ -85,6 +86,7 @@ const EditEmployeeInfo = () => {
   let [username, setUsername] = useState(user_details?.username);
   let [selected_documents, setSelected_documents] = useState([]);
   const [errorMessages, setErrorMessages] = useState({});
+  console.log(errorMessages, "this is the error message");
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
   const user_all_permissions = useSelector(
@@ -236,10 +238,14 @@ const EditEmployeeInfo = () => {
       newErrorMessages["email"] = "Email is invalid.";
       toast.error("Email is invalid.");
     }
-    if (field_data.status === "" || field_data?.status === "Select") {
-      invalidEmails.push("status");
-      newErrorMessages["status"] = "status is required";
-      toast.error("Status is required");
+    if (!field_data.role) {
+      invalidEmails.push("role");
+      newErrorMessages["role"] = "Role is Required.";
+    }
+    if (!field_data.address) {
+      invalidEmails.push("address");
+      newErrorMessages["address"] = "address is Required.";
+      toast.error("address is Required");
     }
 
     // Display toast and set error messages for missing fields
@@ -291,12 +297,12 @@ const EditEmployeeInfo = () => {
         } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer card-cmn">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="new_employee_wrapper cmn_border">
+          <div className="new_employee_wrapper cmn_border card-cmn">
             <form>
               <div className="row">
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -532,7 +538,13 @@ const EditEmployeeInfo = () => {
                     type={"text"}
                     value={skype_email}
                     onChange={(e) => setSkypeEmail(e.target.value)}
+                    styleTrue={errorMessages.skype_email}
                   />
+                  {errorMessages?.skype_email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.skype_email}
+                    </span>
+                  )}{" "}
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -543,7 +555,13 @@ const EditEmployeeInfo = () => {
                     type={"text"}
                     value={ultivic_email}
                     onChange={(e) => setUltivicEmail(e.target.value)}
+                    styleTrue={errorMessages.ultivic_email}
                   />
+                  {errorMessages?.ultivic_email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.ultivic_email}
+                    </span>
+                  )}{" "}
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -625,7 +643,7 @@ const EditEmployeeInfo = () => {
                       value={position}
                       onChange={(e) => setPosition(e.target.value)}
                       style={
-                        missingData?.position
+                        errorMessages?.position
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
@@ -659,7 +677,7 @@ const EditEmployeeInfo = () => {
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
                       style={
-                        missingData?.department
+                        errorMessages?.department
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
@@ -689,7 +707,7 @@ const EditEmployeeInfo = () => {
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
                       style={
-                        missingData?.status
+                        errorMessages?.status
                           ? { border: "1px solid red", borderRadius: "10px" }
                           : {}
                       }
@@ -719,7 +737,7 @@ const EditEmployeeInfo = () => {
                     type={"text"}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    styleTrue={missingData?.username}
+                    styleTrue={errorMessages?.username}
                   />
                   {errorMessages?.username && (
                     <span style={{ color: "red", fontSize: "13px" }}>
@@ -734,6 +752,11 @@ const EditEmployeeInfo = () => {
                       className="form-control"
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
+                      style={
+                        errorMessages?.role
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
                     >
                       <option value="">Select Role</option>
                       {roles?.data?.data?.map((role, i) => {
@@ -749,7 +772,7 @@ const EditEmployeeInfo = () => {
                     </select>
                     {errorMessages?.role && (
                       <span style={{ color: "red", fontSize: "13px" }}>
-                        {errorMessages.eole}
+                        {errorMessages.role}
                       </span>
                     )}
                   </div>
@@ -767,7 +790,7 @@ const EditEmployeeInfo = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   style={
-                    missingData?.username ? { border: "1px solid red" } : {}
+                    errorMessages?.address ? { border: "1px solid red" } : {}
                   }
                 />
                 {errorMessages?.address && (
@@ -776,8 +799,8 @@ const EditEmployeeInfo = () => {
                   </span>
                 )}
               </div>
-              <div className="table-responsive mt-4 transparent_bg">
-                <table className="employee_detail_table mt-3">
+              <div className=" mt-3 card-cmn">
+                <Table responsive className="leave_table mb-0 ">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -803,13 +826,22 @@ const EditEmployeeInfo = () => {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </Table>
               </div>
               <div
                 className="text-center mt-3"
                 onClick={(e) => handleUpdate(e)}
               >
-                <button className="cmn_Button_style">Update</button>
+                <button className="cmn_Button_style">
+                  {update_user_details?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Update
+                </button>
               </div>
             </form>
           </div>

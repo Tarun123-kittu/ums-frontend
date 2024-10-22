@@ -112,6 +112,13 @@ const DeveloperReviewModal = ({
             Cancel
           </button>
           <button className="cmn_Button_style" onClick={() => handleSave()}>
+            {submit_result?.isLoading && (
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
             Add
           </button>
         </Modal.Footer>

@@ -106,7 +106,7 @@ const CreateRole = () => {
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer">
+        <div className="employee_wrapper cmn_padding_outer card-cmn">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -214,6 +214,13 @@ const CreateRole = () => {
                       onClick={() => handleCreateNewRole()}
                     >
                       Save
+                      {is_new_role_created?.isLoading && (
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                     </button>
                   )}
                 </div>
