@@ -16,6 +16,9 @@ import {
 } from "../../utils/redux/testSeries/objectiveQuestionsSlice/updateObjectiveQuestion";
 import toast from "react-hot-toast";
 import { get_question_answer } from "../../utils/redux/testSeries/getQuestionsAnswer";
+import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../Unauthorized/UnauthorizedPage";
+
 const EditObjectiveQuesModal = ({
   show,
   setShow,
@@ -23,6 +26,7 @@ const EditObjectiveQuesModal = ({
   series_id,
   language_id,
 }) => {
+  const permissions = UsePermissions("Test");
   const dispatch = useDispatch();
   useEffect(() => {
     return () => {
@@ -34,6 +38,7 @@ const EditObjectiveQuesModal = ({
   const [answer, setAnswer] = useState("");
   const [options, setOptions] = useState([]);
   const all__question = useSelector((store) => store.GET_OBJECTIVE_QUESTION);
+  const [errorMessage, setErrorMessage] = useState();
   const updated_question = useSelector(
     (store) => store.UPDATE_OBJECTIVE_QUESTION
   );
@@ -42,10 +47,10 @@ const EditObjectiveQuesModal = ({
   };
 
   const optionObj = [
-    { value: "1", label: "1" },
-    { value: "2", label: "2" },
-    { value: "3", label: "3" },
-    { value: "4", label: "4" },
+    { value: 1, label: "1" },
+    { value: 2, label: "2" },
+    { value: 3, label: "3" },
+    { value: 4, label: "4" },
   ];
 
   useEffect(() => {
@@ -88,6 +93,45 @@ const EditObjectiveQuesModal = ({
   };
 
   const handleEdit = () => {
+    let missingData = {};
+
+    if (!question) {
+      toast.error("Please enter the question.");
+      missingData.question = "Question is required";
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (options?.length === 4) {
+      if (!options[0]?.option) {
+        missingData.option1 = "Option 1 is required";
+      }
+      if (!options[1]?.option) {
+        missingData.option2 = "Option 2 is required";
+      }
+      if (!options[2]?.option) {
+        missingData.option3 = "Option 3 is required";
+      }
+      if (!options[3]?.option) {
+        missingData.option4 = "Option 4 is required";
+      }
+      setErrorMessage(missingData);
+      return;
+    }
+    if (!answer) {
+      toast.error("Please select the correct answer.");
+      missingData.answer = "Answer is required";
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (answer < 1 || answer > 4) {
+      toast.error("Please select a valid correct answer (1-4).");
+      missingData.answer = "Please select a valid correct answer (1-4).";
+      setErrorMessage(missingData);
+      return;
+    }
+
     dispatch(
       update_objective_questions({
         question_id,
@@ -114,7 +158,7 @@ const EditObjectiveQuesModal = ({
     }
   }, [updated_question]);
 
-  return (
+  return permissions?.can_view ? (
     <div>
       <Modal
         show={show}
@@ -138,7 +182,11 @@ const EditObjectiveQuesModal = ({
               placeholder="Enter Your Question"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
+              style={errorMessage?.question ? { border: "1px solid red" } : {}}
             />
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.question}
+            </span>
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -152,7 +200,13 @@ const EditObjectiveQuesModal = ({
               placeholder="Enter Option 1"
               value={options[0]?.option}
               onChange={(e) => handleSetOptions(0, e)}
+              style={errorMessage?.option1 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option1 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option1}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -166,7 +220,13 @@ const EditObjectiveQuesModal = ({
               placeholder="Enter Option 2"
               value={options[1]?.option}
               onChange={(e) => handleSetOptions(1, e)}
+              style={errorMessage?.option2 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option2 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option2}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -180,7 +240,13 @@ const EditObjectiveQuesModal = ({
               placeholder="Enter Option 3"
               value={options[2]?.option}
               onChange={(e) => handleSetOptions(2, e)}
+              style={errorMessage?.option3 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option3 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option3}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -194,7 +260,13 @@ const EditObjectiveQuesModal = ({
               placeholder="Enter Option 4"
               value={options[3]?.option}
               onChange={(e) => handleSetOptions(3, e)}
+              style={errorMessage?.option4 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option4 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option4}
+              </span>
+            )}
           </div>
           <div className="mt-3">
             <label className="inter_fontfamily cmn_ques_heading">
@@ -205,17 +277,25 @@ const EditObjectiveQuesModal = ({
                 changeHandler={(e) => handleAnswer(e)}
                 optionsData={optionObj}
                 value={answer}
+                styleTrue={errorMessage?.answer}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.answer}
+              </span>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="cmn_Button_style" onClick={() => handleEdit()}>
-            Edit
-          </button>
+          {permissions?.can_update && (
+            <button className="cmn_Button_style" onClick={() => handleEdit()}>
+              Edit
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
     </div>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

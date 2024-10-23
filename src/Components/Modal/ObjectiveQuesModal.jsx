@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import InputField from "../Common/InputField";
 import CustomSelectComp from "../Common/CustomSelectComp";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,8 +14,8 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
   const dispatch = useDispatch();
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState([]);
-  console.log(options, "options options");
   const [answer, setAnswer] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
   const is_obj_created = useSelector((store) => store.CREATE_OBJ_QUESTION);
 
   const handleClose = () => {
@@ -39,29 +36,45 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
   };
 
   const handleSave = () => {
-    if (!options || options?.length < 4) {
-      toast.error("Please provide exactly 4 options.");
-      return;
-    }
-    const hasEmptyOption = options.some((option) => !option.trim());
-    if (hasEmptyOption) {
-      toast.error("Please ensure no option is empty.");
-      return;
-    }
+    let missingData = {};
+
     if (!question) {
       toast.error("Please enter the question.");
+      missingData.question = "Question is required";
+      setErrorMessage(missingData);
       return;
     }
 
+    if (options?.length < 4) {
+      if (!options[0]) {
+        missingData.option1 = "Option 1 is required";
+      }
+      if (!options[1]) {
+        missingData.option2 = "Option 2 is required";
+      }
+      if (!options[2]) {
+        missingData.option3 = "Option 3 is required";
+      }
+      if (!options[3]) {
+        missingData.option4 = "Option 4 is required";
+      }
+      setErrorMessage(missingData);
+      return;
+    }
     if (!answer) {
       toast.error("Please select the correct answer.");
+      missingData.answer = "Answer is required";
+      setErrorMessage(missingData);
       return;
     }
 
     if (answer < 1 || answer > 4) {
       toast.error("Please select a valid correct answer (1-4).");
+      missingData.answer = "Please select a valid correct answer (1-4).";
+      setErrorMessage(missingData);
       return;
     }
+
     dispatch(
       create_obj_question({
         test_series_id: seriesId,
@@ -116,7 +129,11 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Your Question"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
+              style={errorMessage?.question ? { border: "1px solid red" } : {}}
             />
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.question}
+            </span>
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -125,7 +142,13 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Option 1"
               value={options[0]}
               onChange={(e) => handleSetOptions(0, e)}
+              style={errorMessage?.option1 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option1 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option1}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -134,7 +157,13 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Option 2"
               value={options[1]}
               onChange={(e) => handleSetOptions(1, e)}
+              style={errorMessage?.option2 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option2 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option2}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -143,7 +172,13 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Option 3"
               value={options[2]}
               onChange={(e) => handleSetOptions(2, e)}
+              style={errorMessage?.option3 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option3 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option3}
+              </span>
+            )}
           </div>
           <div className="form-group new_employee_form_group">
             <input
@@ -152,8 +187,15 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Option 4"
               value={options[3]}
               onChange={(e) => handleSetOptions(3, e)}
+              style={errorMessage?.option4 ? { border: "1px solid red" } : {}}
             />
+            {errorMessage?.option4 && (
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage.option4}
+              </span>
+            )}
           </div>
+
           <div className="mt-3">
             <label className="inter_fontfamily cmn_ques_heading">
               Choose Answer Option
@@ -163,7 +205,11 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
                 changeHandler={(e) => handleAnswer(e)}
                 optionsData={optionObj}
                 value={answer}
+                styleTrue={errorMessage?.answer}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.answer}
+              </span>
             </div>
           </div>
         </Modal.Body>

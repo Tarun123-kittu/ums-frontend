@@ -474,8 +474,7 @@ const AdminDashboard = () => {
                         <li key={i}>
                           <img src={Birthday_icon} alt="employee" />
                           <div>
-                            <h4>{user[0]}</h4>{" "}
-                            <span>{formatDate(record?.start)}</span>{" "}
+                            <h4>{user[0]}</h4> <span>{record?.date}</span>{" "}
                           </div>
                           <p>{user[1]}</p>
                         </li>
@@ -493,7 +492,7 @@ const AdminDashboard = () => {
                           <img src={Birthday_icon} alt="employee" />
                           <div>
                             <h4>{user[0]}</h4>
-                            <span>{formatDate(record?.start)}</span>
+                            <span>{record?.date}</span>
                           </div>
                           <p>{user[1]}</p>
                         </li>

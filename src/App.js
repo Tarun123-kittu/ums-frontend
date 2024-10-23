@@ -43,7 +43,9 @@ import MarkAttendence from './Components/Admin/Attendence/MarkAttendence';
 import EmployeeAttendenceReoport from './Components/Admin/Attendence/EmployeeAttendenceReoport';
 import ApplyLeaves from './Components/Admin/Attendence/ApplyLeaves';
 import ForgotPassword from './Components/Login/ForgotPassword';
-
+import ChangePassword from './Components/Login/ChangePassword';
+import ResetPassword from './Components/Login/ReserPassword';
+import Test from './Components/Breadcrumb/Test';
 function App() {
   const secureComponent = (Component) => <ProtectedRoute element={() => <><Sidebar /><Component /></>} />;
 
@@ -90,9 +92,11 @@ function App() {
         <Route path='/mark-attendence' element={secureComponent(MarkAttendence)} />
         <Route path='/employee-attendence-report' element={secureComponent(EmployeeAttendenceReoport)} />
         <Route path='/apply-leaves' element={secureComponent(ApplyLeaves)} />
+        <Route path='/change-password' element={secureComponent(ChangePassword)} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset_password/:token" element={<ResetPassword />} />
+        <Route path="/test" element={<Test />} />
 
-        {/* Optional Unauthorized Route */}
-        {/* <Route path='/unauthorizedPage' element={<UnauthorizedPage />} /> */}
       </Routes>
     </BrowserRouter>
   );

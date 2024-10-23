@@ -3,7 +3,6 @@ import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
 import { useAppContext } from "../../Utils/appContecxt";
-import UseAttendanceReport from "../../Utils/customHooks/useAttendanceReport";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
@@ -15,22 +14,17 @@ import { Table } from "react-bootstrap";
 
 const TodayAttendence = () => {
   const permissions = UsePermissions("Attandance");
-  UseAttendanceReport({ page: 1 });
   const dispatch = useDispatch();
 
   const obj = [{ name: "Attendance Today", path: "/todayAttendence" }];
   const navigate = useNavigate();
 
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
 
   const [page, setPage] = useState(1);
   useEffect(() => {
     dispatch(get_attendance_report({ page }));
-  }, [page]);
+  }, [page, dispatch]);
   const { show } = useAppContext();
 
   useEffect(() => {
@@ -93,62 +87,66 @@ const TodayAttendence = () => {
                   </tr>
                 ) : (
                   attendance_report?.data?.data?.map((report, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{report?.name}</td>
-                        <td>
-                          {report?.in_time
-                            ? convertTo12Hour(report.in_time)
-                            : "--"}
-                        </td>
-                        <td>
-                          {report?.out_time
-                            ? convertTo12Hour(report?.out_time)
-                            : "--"}
-                        </td>
-                        <td
-                          style={{
-                            color:
-                              timeToHours(report?.total_time) < 9
-                                ? "red"
-                                : "#33b070",
-                          }}
-                        >
-                          {report?.total_time
-                            ? `${report.total_time} hours`
-                            : "--"}
-                        </td>
-                        <td>
-                          {report?.name && report?.login_mobile
-                            ? `${report.name}/mobile ${
-                                report.login_mobile === "1" ? "true" : "false"
-                              }`
-                            : "--"}
-                        </td>
-                        <td>
-                          {report?.name && report?.logout_mobile
-                            ? `${report.name}/mobile ${
-                                report.logout_mobile === "1" ? "true" : "false"
-                              }`
-                            : "--"}
-                        </td>
+                    if (report?.role !== "Admin") {
+                      return (
+                        <tr key={i}>
+                          <td>{i}</td>
+                          <td>{report?.name}</td>
+                          <td>
+                            {report?.in_time
+                              ? convertTo12Hour(report.in_time)
+                              : "--"}
+                          </td>
+                          <td>
+                            {report?.out_time
+                              ? convertTo12Hour(report?.out_time)
+                              : "--"}
+                          </td>
+                          <td
+                            style={{
+                              color:
+                                timeToHours(report?.total_time) < 9
+                                  ? "red"
+                                  : "#33b070",
+                            }}
+                          >
+                            {report?.total_time
+                              ? `${report.total_time} hours`
+                              : "--"}
+                          </td>
+                          <td>
+                            {report?.name && report?.login_mobile
+                              ? `${report.name}/mobile ${
+                                  report.login_mobile === "1" ? "true" : "false"
+                                }`
+                              : "--"}
+                          </td>
+                          <td>
+                            {report?.name && report?.logout_mobile
+                              ? `${report.name}/mobile ${
+                                  report.logout_mobile === "1"
+                                    ? "true"
+                                    : "false"
+                                }`
+                              : "--"}
+                          </td>
 
-                        <td>
-                          {permissions?.can_update && report?.id && (
-                            <div className="cmn_action_outer yellow_bg">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editAttendenceReport", {
-                                    state: { id: report?.id },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                          <td>
+                            {permissions?.can_update && report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>

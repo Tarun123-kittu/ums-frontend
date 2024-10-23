@@ -429,7 +429,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <td>{lead?.experience}</td>
                             <td>{lead?.current_salary}</td>
                             <td>{lead?.expected_salary}</td>
-                            <td>
+                            <td className="d-flex gap-2">
                               {permissions?.can_view &&
                                 permissions?.can_update && (
                                   <button
@@ -476,13 +476,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </Table>
-            {all_leads?.data?.data?.some((field) => field.in_round === 0) >
-              0 && (
-              <PaginationComp
-                totalPage={all_leads?.data?.pagination?.totalPages}
-                setPage={setAllLeadPage}
-              />
-            )}
+            {all_leads?.data?.pagination?.totalPages > 1 &&
+              all_leads?.data?.data?.some((field) => field.in_round === 0) >
+                0 && (
+                <PaginationComp
+                  totalPage={all_leads?.data?.pagination?.totalPages}
+                  setPage={setAllLeadPage}
+                />
+              )}
           </div>
         </Tab>
         <Tab eventKey="HR" title="HR">
@@ -601,7 +602,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </Table>
-            {all_hr_round_candidate?.data?.data?.length > 0 && (
+            {all_hr_round_candidate?.data?.totalPages > 1 && (
               <PaginationComp
                 totalPage={all_hr_round_candidate?.data?.totalPages}
                 setPage={setHrPages}
@@ -728,7 +729,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </Table>
-            {tech_round_leads?.data?.data?.data?.length > 0 && (
+            {tech_round_leads?.data?.pagination?.totalPages > 1 && (
               <PaginationComp
                 totalPage={tech_round_leads?.data?.pagination?.totalPages}
                 setPage={setTechPage}
@@ -872,7 +873,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </Table>
-            {face_round_leads?.data?.data?.length > 0 && (
+            {face_round_leads?.data?.pagination?.totalPages > 1 && (
               <PaginationComp
                 totalPage={face_round_leads?.data?.pagination?.totalPages}
                 setPage={setTechPage}
@@ -999,7 +1000,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 )}
               </tbody>
             </Table>
-            {final_round_leads?.data?.data?.length > 0 && (
+            {final_round_leads?.data?.totalPages > 0 && (
               <PaginationComp
                 totalPage={final_round_leads?.data?.totalPages}
                 setPage={setTechPage}

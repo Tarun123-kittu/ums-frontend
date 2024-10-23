@@ -34,6 +34,7 @@ const Sidebar = () => {
   UseAllUsernames();
   const navigate = useNavigate();
   const path = useLocation();
+  console.log(path, "this is the path from the sidebr");
   const dispatch = useDispatch();
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
@@ -115,8 +116,8 @@ const Sidebar = () => {
     });
   }, [path.pathname, menuitems]);
 
-  return uniqueRoles?.length === 1 &&
-    uniqueRoles?.includes("Employee") ? null : (
+  return (uniqueRoles?.length === 1 && uniqueRoles?.includes("Employee")) ||
+    path?.pathname === "/change-password" ? null : (
     <div className={`sidebar ${show ? "cmn_width" : ""}`}>
       <h3
         className={`bar ${show ? "text-center" : "pe-3"}`}

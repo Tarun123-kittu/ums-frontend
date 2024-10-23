@@ -96,43 +96,45 @@ const LeaveRequest = () => {
                   </tr>
                 ) : (
                   all_applied_leaves?.data?.data?.map((leaves, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{leaves?.name}</td>
-                        <td>{leaves?.type}</td>
-                        <td>{formatDate(leaves?.applied_on)}</td>
-                        <td>{leaves?.date_from}</td>
-                        <td>{leaves?.to_date}</td>
-                        <td>{leaves?.count}</td>
-                        <td>{leaves?.description}</td>
-                        <td>{leaves?.status}</td>
-                        <td>{leaves?.remark}</td>
-                        <td>
-                          {permissions?.can_update && (
-                            <div className="cmn_action_outer yellow_bg">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editLeaveRequest", {
-                                    state: {
-                                      leave_id: leaves?.id,
-                                      leave_status: leaves?.status,
-                                      leave_remark: leaves?.remark,
-                                      from_date: leaves?.date_from,
-                                      to_date: leaves?.to_date,
-                                      leave_count: leaves?.count,
-                                      user_id: leaves?.user_id,
-                                      name: leaves?.name,
-                                      email: leaves?.email,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                    if (leaves?.role !== "Admin") {
+                      return (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>{leaves?.name}</td>
+                          <td>{leaves?.type}</td>
+                          <td>{formatDate(leaves?.applied_on)}</td>
+                          <td>{leaves?.date_from}</td>
+                          <td>{leaves?.to_date}</td>
+                          <td>{leaves?.count}</td>
+                          <td>{leaves?.description}</td>
+                          <td>{leaves?.status}</td>
+                          <td>{leaves?.remark}</td>
+                          <td>
+                            {permissions?.can_update && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editLeaveRequest", {
+                                      state: {
+                                        leave_id: leaves?.id,
+                                        leave_status: leaves?.status,
+                                        leave_remark: leaves?.remark,
+                                        from_date: leaves?.date_from,
+                                        to_date: leaves?.to_date,
+                                        leave_count: leaves?.count,
+                                        user_id: leaves?.user_id,
+                                        name: leaves?.name,
+                                        email: leaves?.email,
+                                      },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>

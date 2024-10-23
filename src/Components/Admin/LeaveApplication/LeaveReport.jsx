@@ -13,6 +13,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.png";
 
 const LeaveReport = () => {
   const permissions = UsePermissions("Leaves");
@@ -214,40 +215,55 @@ const LeaveReport = () => {
                       <img className="loader_gif" src={Loader} alt="loader" />
                     </td>
                   </tr>
+                ) : leave_data?.data?.data?.length === 1 &&
+                  leave_data?.data?.data[0]?.role === "Admin" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : (
                   leave_data?.data?.data?.map((leave, i) => {
-                    return (
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>{leave?.name}</td>
-                        <td>{leave?.type}</td>
-                        <td>{formatDate(leave?.createdAt)}</td>
-                        <td>{leave?.from_date}</td>
-                        <td>{leave?.to_date}</td>
-                        <td>{leave?.count}</td>
-                        <td>{leave?.description}</td>
-                        <td>{leave?.status}</td>
-                        <td>{leave?.remark}</td>
-                        <td>
-                          {permissions?.can_update && (
-                            <div className="cmn_action_outer yellow_bg cursor_pointer">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editLeaveRequest", {
-                                    state: {
-                                      leave_id: leave?.id,
-                                      back_to_report: true,
-                                      leave_status: leave?.status,
-                                      leave_remark: leave?.remark,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                    if (leave?.role !== "Admin") {
+                      return (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{leave?.name}</td>
+                          <td>{leave?.type}</td>
+                          <td>{formatDate(leave?.createdAt)}</td>
+                          <td>{leave?.from_date}</td>
+                          <td>{leave?.to_date}</td>
+                          <td>{leave?.count}</td>
+                          <td>{leave?.description}</td>
+                          <td>{leave?.status}</td>
+                          <td>{leave?.remark}</td>
+                          <td>
+                            {permissions?.can_update && (
+                              <div className="cmn_action_outer yellow_bg cursor_pointer">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editLeaveRequest", {
+                                      state: {
+                                        leave_id: leave?.id,
+                                        back_to_report: true,
+                                        leave_status: leave?.status,
+                                        leave_remark: leave?.remark,
+                                      },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>

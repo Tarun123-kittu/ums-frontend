@@ -36,7 +36,9 @@ const Notification = ({ view }) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Change Password</Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate("/change-password")}>
+                Change Password
+              </Dropdown.Item>
               <Dropdown.Item
                 as="button"
                 onClick={() => navigate("/employee-attendence-report")}

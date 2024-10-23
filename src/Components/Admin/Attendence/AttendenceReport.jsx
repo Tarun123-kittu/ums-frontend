@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
-import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceReport";
 import { useDispatch, useSelector } from "react-redux";
 import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
 import { useNavigate } from "react-router-dom";
@@ -22,23 +20,18 @@ const AttendenceReport = () => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [page, setPage] = useState(1);
-  UseUserAttendanceReport({ name, month, year });
   const obj = [{ name: "Attendance Report", path: "/attendenceReport" }];
   let [all_names, setAllNames] = useState([]);
   const navigate = useNavigate();
   const { show } = useAppContext();
   const [enableSearch, setEnableSearch] = useState(false);
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
-  );
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
-  }, [page]);
+  }, [dispatch, name, month, year, page]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -75,7 +68,7 @@ const AttendenceReport = () => {
   };
 
   const timeToHours = (time) => {
-    if (!time || time === "--") return 0; // Handle cases where there's no time or it's '--'
+    if (!time || time === "--") return 0;
     const [hours, minutes, seconds] = time.split(":").map(Number);
     return hours + minutes / 60 + seconds / 3600;
   };
@@ -208,53 +201,55 @@ const AttendenceReport = () => {
                   </tr>
                 ) : (
                   user_attendance_report?.data?.data?.map((report, index) => {
-                    return (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>
-                          {report?.date}-{report?.date_in_week_day}
-                        </td>
-                        <td>{report?.name}</td>
-                        <td>{convertTo12Hour(report?.in_time)}</td>
-                        <td>
-                          {report?.out_time
-                            ? convertTo12Hour(report?.out_time)
-                            : "--"}
-                        </td>
-                        <td
-                          style={{
-                            color:
-                              timeToHours(report?.total_time) < 9
-                                ? "red"
-                                : "#33b070",
-                          }}
-                        >
-                          {report?.total_time
-                            ? `${report.total_time} hours`
-                            : "--"}
-                        </td>
-                        <td>{report?.report}</td>
-                        <td>NA</td>
-                        <td>{report?.review ? report?.review : "NA"}</td>
-                        <td>{report?.rating}</td>
-                        <td>
-                          {report?.name}:{report?.login_mobile}
-                        </td>
-                        <td>
-                          {permissions?.can_update && report?.id && (
-                            <div className="cmn_action_outer yellow_bg">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editAttendenceReport ", {
-                                    state: { id: report?.id },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                    if (report?.role !== "Admin") {
+                      return (
+                        <tr>
+                          <td>{index}</td>
+                          <td>
+                            {report?.date}-{report?.date_in_week_day}
+                          </td>
+                          <td>{report?.name}</td>
+                          <td>{convertTo12Hour(report?.in_time)}</td>
+                          <td>
+                            {report?.out_time
+                              ? convertTo12Hour(report?.out_time)
+                              : "--"}
+                          </td>
+                          <td
+                            style={{
+                              color:
+                                timeToHours(report?.total_time) < 9
+                                  ? "red"
+                                  : "#33b070",
+                            }}
+                          >
+                            {report?.total_time
+                              ? `${report.total_time} hours`
+                              : "--"}
+                          </td>
+                          <td>{report?.report}</td>
+                          <td>NA</td>
+                          <td>{report?.review ? report?.review : "NA"}</td>
+                          <td>{report?.rating}</td>
+                          <td>
+                            {report?.name}:{report?.login_mobile}
+                          </td>
+                          <td>
+                            {permissions?.can_update && report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport ", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>

@@ -135,7 +135,15 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
         <Modal.Footer>
           <button className="cmn_Button_style cmn_darkgray_btn">Cancel </button>
           <button className="cmn_Button_style" onClick={() => handleSendLink()}>
-            Send Link
+            {!test_link_status?.isLoading ? (
+              "Send Link"
+            ) : (
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
           </button>
         </Modal.Footer>
       </Modal>

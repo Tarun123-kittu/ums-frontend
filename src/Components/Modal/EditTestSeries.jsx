@@ -13,34 +13,27 @@ import {
   clear_update_test_series_state,
 } from "../../utils/redux/testSeries/updatTestSeries";
 import { get_all_series } from "../../utils/redux/testSeries/getAllTestSeries";
+import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../Unauthorized/UnauthorizedPage";
 
 const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Test");
   const [series_name, setSeries_name] = useState("");
   const [series_time, setSeries_time] = useState("");
   const [series_language, setSeries_language] = useState("");
+  const [experience, setExperience] = useState("");
   const [series_description, setSeries_description] = useState("");
-  const [developer_permissions, setDeveloper_permissions] = useState({});
   const [all_languagages, setAll_languages] = useState([]);
   const series_data = useSelector((store) => store.GET_SERIES);
+  const [errorMessage, setErrorMessage] = useState();
   const updated_state = useSelector((store) => store.UPDATE_TESTSERIES);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
 
   useEffect(() => {
     return () => {
       dispatch(clear_get_series_state());
     };
   }, []);
-
-  useEffect(() => {
-    const can_hr_create = all_permissions?.data?.data?.find(
-      (el) => el.role === "Developer" && el.permission === "Test"
-    );
-    setDeveloper_permissions(can_hr_create);
-  }, [all_permissions]);
 
   useEffect(() => {
     if (seriesId) {
@@ -51,12 +44,19 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
     }
   }, [seriesId]);
 
+  const experienceObj = [
+    { value: "Fresher", label: "Fresher" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Professional", label: "Professional" },
+  ];
+
   useEffect(() => {
     if (series_data?.isSuccess) {
       setSeries_name(series_data?.data?.data?.series_name);
       setSeries_time(series_data?.data?.data?.time_taken);
       setSeries_language(series_data?.data?.data?.language_id);
       setSeries_description(series_data?.data?.data?.description);
+      setExperience(series_data?.data?.data?.experience_level);
     }
   }, [series_data]);
 
@@ -79,20 +79,60 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
   };
 
   const handleCreateTestSeries = () => {
+    const missingData = {};
     const timeFormatRegex = /^([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
-    if (!timeFormatRegex.test(series_time)) {
-      toast.error("Please input time in HH:MM:SS fromat");
-    } else {
-      dispatch(
-        update_test_series({
-          seriesId: seriesId,
-          language_id: series_language,
-          series_name: series_name,
-          time_taken: series_time,
-          description: series_description,
-        })
-      );
+
+    if (!series_name) {
+      missingData.series_name = "Series name is required";
+      toast.error("Series name is required");
+      setErrorMessage(missingData);
+      return;
     }
+
+    if (!series_time) {
+      missingData.series_time = "Series time is required";
+      toast.error("Series time is required");
+      setErrorMessage(missingData);
+    }
+
+    if (!series_language) {
+      missingData.series_language = "Series language is required";
+      toast.error("Series language is required");
+      setErrorMessage(missingData);
+    }
+
+    if (!series_description) {
+      missingData.series_description = "Series description is required";
+      toast.error("Series description is required");
+      setErrorMessage(missingData);
+    }
+
+    if (!experience) {
+      missingData.experience = "Series experience is required";
+      toast.error("Series Experience is required");
+      setErrorMessage(missingData);
+    }
+
+    if (Object.keys(missingData).length > 0) {
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!timeFormatRegex.test(series_time)) {
+      toast.error("Please input time in HH:MM:SS format");
+      return;
+    }
+
+    dispatch(
+      update_test_series({
+        seriesId: seriesId,
+        language_id: series_language,
+        series_name: series_name,
+        time_taken: series_time,
+        description: series_description,
+        experience_level: experience,
+      })
+    );
   };
 
   useEffect(() => {
@@ -128,7 +168,11 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
     setSeries_time(rawValue);
   };
 
-  return (
+  const changeExperienceHandler = (e) => {
+    setExperience(e.value);
+  };
+
+  return permissions?.can_view ? (
     <div>
       <Modal
         show={show}
@@ -147,7 +191,11 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
             classname={"new_employee_form_group"}
             value={series_name}
             onChange={(e) => setSeries_name(e.target.value)}
+            styleTrue={errorMessage?.series_name}
           />
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.series_name}
+          </span>
           <InputField
             labelname={"Time taken to complete this series test"}
             placeholder={"Enter Estimated Times"}
@@ -155,7 +203,25 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
             classname={"new_employee_form_group"}
             value={series_time}
             onChange={handleTimeChange}
+            styleTrue={errorMessage?.series_time}
           />
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.series_time}
+          </span>
+          <div className="form-group new_employee_form_group">
+            <label>Experience</label>
+            <div className="mt-2">
+              <CustomSelectComp
+                optionsData={experienceObj}
+                changeHandler={changeExperienceHandler}
+                value={experience}
+                styleTrue={errorMessage?.experience}
+              />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.experience}
+              </span>
+            </div>
+          </div>
           <div className="form-group new_employee_form_group">
             <label>Profile</label>
             <div className="mt-2">
@@ -163,7 +229,11 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
                 value={series_language}
                 optionsData={all_languagages}
                 changeHandler={changeHandler}
+                styleTrue={errorMessage?.series_language}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.series_language}
+              </span>
             </div>
           </div>
           <div className="form-group new_employee_form_group">
@@ -174,12 +244,15 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
               rows={4}
               value={series_description}
               onChange={(e) => setSeries_description(e.target.value)}
+              styleTrue={errorMessage?.series_description}
             />
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.series_description}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          {(user_all_permissions?.roles_data?.includes("Admin") ||
-            developer_permissions?.can_edit) && (
+          {permissions?.can_update && (
             <button
               className="cmn_Button_style"
               onClick={() => handleCreateTestSeries()}
@@ -190,6 +263,8 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
         </Modal.Footer>
       </Modal>
     </div>
+  ) : (
+    <UnauthorizedPage />
   );
 };
 

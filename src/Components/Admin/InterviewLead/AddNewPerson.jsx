@@ -62,6 +62,8 @@ const AddNewPerson = () => {
   const [expected_salary, setExpected_salary] = useState("");
   const [last_company, setLast_company] = useState("");
   const [all_languagages, setAll_languages] = useState([]);
+  const [errorMessage, setErrorMessage] = useState();
+  let missingData = {};
 
   const changeHandler = (field, e) => {
     if (field === "gender") setGender(e.value);
@@ -71,36 +73,98 @@ const AddNewPerson = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (
-      name &&
-      mobile &&
-      email &&
-      gender &&
-      dob &&
-      profile &&
-      state &&
-      address &&
-      experience
-    ) {
-      dispatch(
-        add_interview_leads({
-          name,
-          mobile,
-          email,
-          gender,
-          dob,
-          profile,
-          state,
-          address,
-          experience,
-          current_salary,
-          expected_salary,
-          last_company,
-        })
-      );
-    } else {
-      toast.error("All fields are required");
+    let missingData = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name) {
+      missingData.name = "Name is required";
+      toast.error("Name is required");
+      setErrorMessage(missingData);
+      return;
     }
+
+    if (!mobile) {
+      missingData.mobile = "Mobile number is required";
+      toast.error("Mobile number is required");
+      setErrorMessage(missingData);
+      return;
+    } else if (mobile.length < 10) {
+      missingData.mobile = "Mobile number must be at least 10 digits";
+      toast.error("Mobile number must be at least 10 digits");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!email) {
+      missingData.email = "Email is required";
+      toast.error("Email is required");
+      setErrorMessage(missingData);
+      return;
+    } else if (!emailRegex.test(email)) {
+      missingData.email = "Invalid email format";
+      toast.error("Invalid email format");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!gender) {
+      missingData.gender = "Gender is required";
+      toast.error("Gender is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!dob) {
+      missingData.dob = "Date of birth is required";
+      toast.error("Date of birth is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!profile) {
+      missingData.profile = "Profile is required";
+      toast.error("Profile is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!state) {
+      missingData.state = "State is required";
+      toast.error("State is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!address) {
+      missingData.address = "Address is required";
+      toast.error("Address is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!experience) {
+      missingData.experience = "Experience is required";
+      toast.error("Experience is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    dispatch(
+      add_interview_leads({
+        name,
+        mobile,
+        email,
+        gender,
+        dob,
+        profile,
+        state,
+        address,
+        experience,
+        current_salary,
+        expected_salary,
+        last_company,
+      })
+    );
   };
 
   useEffect(() => {
@@ -162,7 +226,11 @@ const AddNewPerson = () => {
                   type={"text"}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  styleTrue={errorMessage?.name}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.name}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -178,7 +246,11 @@ const AddNewPerson = () => {
                       setMobile(newValue);
                     }
                   }}
+                  styleTrue={errorMessage?.mobile}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.mobile}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -189,7 +261,11 @@ const AddNewPerson = () => {
                   type={"email"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  styleTrue={errorMessage?.email}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.email}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <div className="form-group new_employee_form_group">
@@ -202,7 +278,11 @@ const AddNewPerson = () => {
                       optionsData={options}
                       changeHandler={(e) => changeHandler("gender", e)}
                       value={gender}
+                      styleTrue={errorMessage?.gender}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.gender}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -215,7 +295,11 @@ const AddNewPerson = () => {
                   type={"date"}
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
+                  styleTrue={errorMessage?.dob}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.dob}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -273,7 +357,11 @@ const AddNewPerson = () => {
                       optionsData={all_languagages}
                       changeHandler={(e) => changeHandler("profile", e)}
                       value={profile}
+                      styleTrue={errorMessage?.profile}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.profile}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -298,7 +386,11 @@ const AddNewPerson = () => {
                       optionsData={indianStatesKeyValuePairs}
                       changeHandler={(e) => changeHandler("state", e)}
                       value={state}
+                      styleTrue={errorMessage?.state}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.state}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -313,7 +405,11 @@ const AddNewPerson = () => {
                 rows={5}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                style={errorMessage?.address ? { border: "1px solid red" } : {}}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.address}
+              </span>
             </div>
 
             <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">

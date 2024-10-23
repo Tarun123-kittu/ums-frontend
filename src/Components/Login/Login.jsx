@@ -103,11 +103,11 @@ const Login = () => {
               <div className="form-group mt-3 position-relative">
                 <div className="d-flex justify-content-between ">
                   <label>Your Password</label>
-                  <h6>
-                    {" "}
-                    <a className="forget_password small_font mt-2" href="/">
-                      Forget password?
-                    </a>
+                  <h6
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/forgot-password")}
+                  >
+                    Forget password?
                   </h6>
                 </div>
 

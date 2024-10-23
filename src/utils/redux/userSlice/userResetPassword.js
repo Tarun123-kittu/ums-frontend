@@ -1,28 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const update_test_series = createAsyncThunk("update_test_series", async ({ seriesId, language_id, series_name, time_taken, description, experience_level }, thunkAPI) => {
+export const reset_password = createAsyncThunk("reset_password", async ({ token, password, confirm_password }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const raw = JSON.stringify({
-            "seriesId": seriesId,
-            "language_id": language_id,
-            "series_name": series_name,
-            "time_taken": time_taken,
-            "description": description,
-            "experience_level": experience_level
+            "password": password,
+            "confirm_password": confirm_password
         });
 
         const requestOptions = {
-            method: "PUT",
+            method: "POST",
             headers: myHeaders,
             body: raw,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_series`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/reset_password/${token}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -38,17 +33,17 @@ export const update_test_series = createAsyncThunk("update_test_series", async (
     }
 })
 
-export const updateTestseries = createSlice({
-    name: "updateTestseries",
+export const UserResetPassword = createSlice({
+    name: "resetPassword",
     initialState: {
         message: {},
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
     },
     reducers: {
-        clear_update_test_series_state: (state) => {
+        clear_reset_password_state: (state) => {
             state.message = {}
             state.isSuccess = false
             state.isLoading = false
@@ -59,20 +54,20 @@ export const updateTestseries = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(update_test_series.pending, (state) => {
+            .addCase(reset_password.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(update_test_series.fulfilled, (state, action) => {
+            .addCase(reset_password.fulfilled, (state, action) => {
                 state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(update_test_series.rejected, (state, action) => {
+            .addCase(reset_password.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-export const { clear_update_test_series_state } = updateTestseries.actions
-export default updateTestseries.reducer
+export const { clear_reset_password_state } = UserResetPassword.actions
+export default UserResetPassword.reducer

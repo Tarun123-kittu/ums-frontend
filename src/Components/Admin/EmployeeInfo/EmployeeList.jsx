@@ -4,7 +4,6 @@ import { FaEye } from "react-icons/fa";
 import Loader from "../../assets/Loader.gif";
 import NoData from "../../assets/nodata.png";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { FaClock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
@@ -133,9 +132,7 @@ const EmployeeList = () => {
           </div>
 
           <div className="employee_wrapper text-end serach_add_outer">
-            {!enableSearch &&
-            usersData?.length > 1 &&
-            usersData[0].role !== "Admin" ? (
+            {!enableSearch ? (
               <button
                 className="cmn_Button_style"
                 onClick={() => {

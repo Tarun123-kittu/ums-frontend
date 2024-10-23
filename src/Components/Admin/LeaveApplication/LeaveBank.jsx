@@ -213,29 +213,32 @@ const LeaveBank = () => {
                   </tr>
                 ) : (
                   Array.isArray(leave_bank_data?.data?.data) &&
-                  leave_bank_data.data.data.map((leave_bank, index) => (
-                    <tr key={leave_bank?.id || index}>
-                      <td>{index + 1}</td>
-                      <td>{leave_bank?.name || "N/A"}</td>
-                      <td>{leave_bank?.taken_leave || "0"}</td>
-                      <td>{leave_bank?.paid_leave || "0"}</td>
+                  leave_bank_data.data.data.map(
+                    (leave_bank, index) =>
+                      leave_bank?.role !== "Admin" && ( // Use short-circuiting for condition
+                        <tr key={leave_bank?.id || index}>
+                          <td>{index + 1}</td>
+                          <td>{leave_bank?.name || "N/A"}</td>
+                          <td>{leave_bank?.taken_leave || "0"}</td>
+                          <td>{leave_bank?.paid_leave || "0"}</td>
 
-                      <td>
-                        {permissions?.can_update && (
-                          <div
-                            className="cmn_action_outer yellow_bg cusror_pointer"
-                            onClick={() => {
-                              setShowEditLeaveModal(true);
-                              setPaid_leaves(leave_bank?.paid_leave);
-                              setEmployeeId(leave_bank?.id);
-                            }}
-                          >
-                            <FiEdit />
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                          <td>
+                            {permissions?.can_update && (
+                              <div
+                                className="cmn_action_outer yellow_bg cusror_pointer"
+                                onClick={() => {
+                                  setShowEditLeaveModal(true);
+                                  setPaid_leaves(leave_bank?.paid_leave);
+                                  setEmployeeId(leave_bank?.id);
+                                }}
+                              >
+                                <FiEdit />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                  )
                 )}
               </tbody>
             </Table>

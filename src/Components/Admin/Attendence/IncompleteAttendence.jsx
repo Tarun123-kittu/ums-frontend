@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import { useSelector, useDispatch } from "react-redux";
 import "./attendence.css";
@@ -24,13 +23,10 @@ const IncompleteAttendence = () => {
   const { show } = useAppContext();
   const [page, setPage] = useState(1);
   const attendance_report = useSelector((store) => store.ATTENDANCE_REPORT);
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
 
   useEffect(() => {
     dispatch(get_attendance_report({ page }));
-  }, [page]);
+  }, [dispatch, page]);
 
   const convertTo12Hour = (time24) => {
     if (!time24) return "--";
@@ -77,10 +73,10 @@ const IncompleteAttendence = () => {
                   </tr>
                 ) : (
                   attendance_report?.data?.data?.map((report, i) => {
-                    if (!report?.out_time) {
+                    if (!report?.out_time && report?.role !== "Admin") {
                       return (
                         <tr>
-                          <td>{i + 1}</td>
+                          <td>{i}</td>
                           <td>
                             {report?.data} -{report?.date_in_week_day}
                           </td>

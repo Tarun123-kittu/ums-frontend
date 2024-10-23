@@ -23,6 +23,7 @@ import {
   delete_objective,
   clear_delete_objective_question_state,
 } from "../../../utils/redux/testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import toast from "react-hot-toast";
 
 const ViewTestseriesQuestions = () => {
@@ -30,6 +31,7 @@ const ViewTestseriesQuestions = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Test");
   const { id, language_id } = location.state ? location.state : location;
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
   const delete_logical_state = useSelector((store) => store.DELETE_LOGICAL_QUE);
@@ -135,7 +137,7 @@ const ViewTestseriesQuestions = () => {
                   title="Objective"
                   className=" cmn_padding_wrapper cmn_border"
                 >
-                  {Permissions?.can_create && (
+                  {permissions?.can_create && (
                     <button
                       className="add_question_btn cmn_Button_style"
                       onClick={() => {
@@ -172,7 +174,7 @@ const ViewTestseriesQuestions = () => {
                             </div>
                           ))}
                           <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {Permissions?.can_delete && (
+                            {permissions?.can_delete && (
                               <button
                                 className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                                 onClick={() => {
@@ -184,7 +186,7 @@ const ViewTestseriesQuestions = () => {
                               </button>
                             )}
 
-                            {Permissions?.can_update && (
+                            {permissions?.can_update && (
                               <button
                                 className="cmn_Button_style cursor_pointer"
                                 onClick={() => {
@@ -206,7 +208,7 @@ const ViewTestseriesQuestions = () => {
                   title="Subjective"
                   className=" cmn_padding_wrapper cmn_border"
                 >
-                  {Permissions?.can_create && (
+                  {permissions?.can_create && (
                     <button
                       className="add_question_btn cmn_Button_style"
                       onClick={() => {
@@ -231,7 +233,7 @@ const ViewTestseriesQuestions = () => {
                           </div>
 
                           <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {Permissions?.can_delete && (
+                            {permissions?.can_delete && (
                               <button
                                 className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                                 onClick={() => {
@@ -242,7 +244,7 @@ const ViewTestseriesQuestions = () => {
                                 Delete
                               </button>
                             )}
-                            {Permissions?.can_update && (
+                            {permissions?.can_update && (
                               <button
                                 className="cmn_Button_style cursor_pointer"
                                 onClick={() => {
@@ -264,7 +266,7 @@ const ViewTestseriesQuestions = () => {
                   title="Logical"
                   className="cmn_padding_wrapper cmn_border"
                 >
-                  {Permissions?.can_create && (
+                  {permissions?.can_create && (
                     <button
                       className="add_question_btn cmn_Button_style"
                       onClick={() => {
@@ -288,7 +290,7 @@ const ViewTestseriesQuestions = () => {
                             />
                           </div>
                           <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {Permissions?.can_delete && (
+                            {permissions?.can_delete && (
                               <button
                                 className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
                                 onClick={() => {
@@ -299,7 +301,7 @@ const ViewTestseriesQuestions = () => {
                                 Delete
                               </button>
                             )}
-                            {Permissions?.can_update && (
+                            {permissions?.can_update && (
                               <button
                                 className="cmn_Button_style cursor_pointer"
                                 onClick={() => {
