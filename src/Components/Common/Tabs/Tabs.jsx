@@ -49,7 +49,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
     useState(false);
-
+  const na = "Not Available";
   const resultData = [
     { value: "selected", label: "Selected" },
     { value: "rejected", label: "Rejected" },
@@ -76,6 +76,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [techPage, setTechPage] = useState(1);
   const [facePage, setFacePage] = useState(1);
   const [finalPage, setFinalPage] = useState(1);
+  const [round, setRound] = useState("");
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
 
@@ -103,7 +104,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [tech_round_leads]);
 
   useEffect(() => {
+    if (localStorage.getItem("tab")) {
+      if (localStorage?.getItem("tab") === "Technical") {
+        setActiveTab("Technical");
+      }
+      if (localStorage?.getItem("tab") === "HR") {
+        setActiveTab("HR");
+      }
+      if (localStorage?.getItem("tab") === "Face to face") {
+        setActiveTab("Face to face");
+      }
+      if (localStorage?.getItem("tab") === "Final Interaction") {
+        setActiveTab("Final Interaction");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (update_round_status?.isSuccess) {
+      setActiveTab("Face to face");
       dispatch(
         get_all_tech_round_leads({
           page: techPage,
@@ -182,6 +201,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [hr_round_candidate_status]);
 
   const handleTabSelect = (selectedTab) => {
+    localStorage.removeItem("tab");
     setOpen_tab(selectedTab);
     setActiveTab(selectedTab);
     setCurrentTab(selectedTab);
@@ -198,7 +218,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   useEffect(() => {
     if (update_tech_status?.isSuccess) {
       toast.success("Lead status Updated successfully");
-      dispatch(get_all_tech_round_leads());
+      dispatch(
+        get_all_tech_round_leads({
+          page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
       dispatch(clear_tech_round_status_state());
     }
     if (update_tech_status?.isError) {
@@ -208,6 +236,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [update_tech_status]);
 
   const changeFaceRoundStatus = (e, id, round) => {
+    setRound(round);
+    localStorage.removeItem("tab");
     dispatch(
       update_face_round_status({
         leadId: id,
@@ -219,7 +249,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_face_round?.isSuccess) {
+      localStorage.removeItem("tab");
       toast.success(" Status Updated Successfully");
+      if (round === "face_to_face") {
+        setActiveTab("Face to face");
+      }
+      if (round === "Final") {
+        setActiveTab("Final Interaction");
+      }
       dispatch(
         get_face_round_leads({
           page: 1,
@@ -425,10 +462,20 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 </div>
                               </div>
                             </td>
-                            <td>{lead?.profile}</td>
-                            <td>{lead?.experience}</td>
-                            <td>{lead?.current_salary}</td>
-                            <td>{lead?.expected_salary}</td>
+                            <td>{lead?.profile ? lead?.profile : na}</td>
+                            <td>
+                              {lead?.experience
+                                ? lead?.experience + " year"
+                                : na}
+                            </td>
+                            <td>
+                              {lead?.current_salary ? lead?.current_salary : na}
+                            </td>
+                            <td>
+                              {lead?.expected_salary
+                                ? lead?.expected_salary
+                                : na}
+                            </td>
                             <td className="d-flex gap-2">
                               {permissions?.can_view &&
                                 permissions?.can_update && (
@@ -536,8 +583,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             {candidate?.name}
                           </div>
                         </td>
-                        <td>{candidate?.profile}</td>
-                        <td>{candidate?.experience}</td>
+                        <td>{candidate?.profile ? candidate?.profile : na}</td>
+                        <td>
+                          {candidate?.experience
+                            ? candidate?.experience + " year"
+                            : na}
+                        </td>
                         <td
                           style={{
                             textDecoration: "underline",
@@ -545,13 +596,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           }}
                           onClick={() => {
                             permissions?.can_view &&
-                              permissions?.can_update &&
                               navigate("/viewQuestionlist", {
                                 state: {
                                   interview_id: candidate?.interview_id,
                                   lead_id: candidate?.id,
                                 },
                               });
+                            localStorage.setItem("tab", "HR");
                           }}
                         >
                           View Questions List
@@ -575,8 +626,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </div>
                         </td>
                         <td>
-                          {permissions?.can_view &&
-                            permissions?.can_update &&
+                          {permissions?.can_update &&
                             candidate?.hr_round_result === "selected" && (
                               <button
                                 className="cmn_Button_style"
@@ -659,14 +709,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             {tech_leads?.name}
                           </div>
                         </td>
-                        <td>{tech_leads?.profile}</td>
-                        <td>{tech_leads?.experience}</td>
+                        <td>
+                          {tech_leads?.profile ? tech_leads?.profile : na}
+                        </td>
+                        <td>
+                          {tech_leads?.experience
+                            ? tech_leads?.experience + " year"
+                            : na}
+                        </td>
                         <td
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
                             permissions?.can_view &&
-                              permissions?.can_update &&
                               navigate("/questionAnswerSheet", {
                                 state: {
                                   lead_id: tech_leads?.id,
@@ -674,6 +729,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                   series_id: series_id,
                                 },
                               });
+                            localStorage.setItem("tab", "Technical");
                           }}
                         >
                           View Questions List
@@ -692,8 +748,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         </td>
 
                         <td>
-                          {permissions?.can_view &&
-                            permissions?.can_update &&
+                          {permissions?.can_update &&
                             tech_leads?.technical_round_result ===
                               "selected" && (
                               <button
@@ -749,7 +804,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   <th>Expected Salary</th>
                   <th>HR Rating/Question</th>
                   <th>Technical/Question</th>
-                  <th>Face To Face</th>
+                  <th>Face To Face Result</th>
                   <th>Final Round</th>
                 </tr>
               </thead>
@@ -782,9 +837,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           {lead?.name}
                         </div>
                       </td>
-                      <td>{lead?.profile}</td>
-                      <td>{lead?.experience}</td>
-                      <td>{lead?.expected_salary}</td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
                       <td
                         style={{
                           textDecoration: "underline",
@@ -792,13 +851,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
                                 lead_id: lead?.id,
                               },
                             });
+                          localStorage.setItem("tab", "Face to face");
                         }}
                       >
                         View Questions List
@@ -809,7 +868,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -818,6 +876,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final");
                         }}
                       >
                         View Questions List
@@ -830,7 +889,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             value={lead?.face_to_face_result}
                             changeHandler={(e) =>
                               permissions?.can_update &&
-                              permissions?.can_view &&
                               changeFaceRoundStatus(e, lead?.id, "face_to_face")
                             }
                           />
@@ -844,6 +902,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <button
                               className="cmn_Button_style"
                               onClick={() =>
+                                permissions?.can_update &&
                                 dispatch(
                                   update_lead_round_count({
                                     leadId: lead?.id,
@@ -926,9 +985,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           {lead?.name}
                         </div>
                       </td>
-                      <td>{lead?.profile}</td>
-                      <td>{lead?.experience}</td>
-                      <td>{lead?.expected_salary}</td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
                       <td
                         style={{
                           textDecoration: "underline",
@@ -936,7 +999,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
@@ -944,6 +1006,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final Interaction");
                         }}
                       >
                         View Questions List
@@ -953,8 +1016,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          permissions?.can_view &&
-                            permissions?.can_update &&
+                          permissions?.can_update &&
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -963,6 +1025,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final Interaction");
                         }}
                       >
                         View Questions List
@@ -974,7 +1037,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             optionsData={resultData}
                             value={lead?.final_result}
                             changeHandler={(e) =>
-                              permissions?.can_view &&
                               permissions?.can_update &&
                               changeFaceRoundStatus(e, lead?.id, "final")
                             }
@@ -983,8 +1045,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                       </td>
 
                       <td>
-                        {permissions?.can_view &&
-                          permissions?.can_update &&
+                        {permissions?.can_update &&
                           lead?.final_result === "selected" && (
                             <button className="cmn_Button_style">Start</button>
                           )}
@@ -1015,6 +1076,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           setShow={setShowTechInterviewQuesModal}
           language={language}
           leadId={leadId}
+          setActiveTab={setActiveTab}
         />
       )}
       {showHrQuestionModal && (

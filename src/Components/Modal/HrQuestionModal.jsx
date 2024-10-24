@@ -3,16 +3,26 @@ import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import InputField from "../Common/InputField";
 import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
+import toast from "react-hot-toast";
 
 const HrQuestionModal = ({ show, setShow, leadId }) => {
   const navigate = useNavigate();
   const permissions = UsePermissions("Interviews");
   const [count, setCount] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleClose = () => {
     setShow(false);
   };
   const startHandler = () => {
+    const missingData = {};
+    if (count === "") {
+      toast.error("please perovide how many questions do you want to ask");
+      missingData.count =
+        "please perovide how many questions do you want to ask";
+      setErrorMessage(missingData);
+      return;
+    }
     setShow(false);
     navigate("/hrInterViewQuestion", { state: { count: count, leadId } });
   };
@@ -57,7 +67,11 @@ const HrQuestionModal = ({ show, setShow, leadId }) => {
                 setCount(value);
               }
             }}
+            styleTrue={errorMessage?.count}
           />
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.count}
+          </span>
         </Modal.Body>
         <Modal.Footer>
           <button

@@ -14,6 +14,7 @@ import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
 
 const AttendenceReport = () => {
+  let i = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
   const [name, setName] = useState("");
@@ -31,6 +32,7 @@ const AttendenceReport = () => {
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
+    localStorage.removeItem("tab");
   }, [dispatch, name, month, year, page]);
 
   const monthDataObj = [
@@ -203,8 +205,8 @@ const AttendenceReport = () => {
                   user_attendance_report?.data?.data?.map((report, index) => {
                     if (report?.role !== "Admin") {
                       return (
-                        <tr>
-                          <td>{index}</td>
+                        <tr key={index}>
+                          <td>{++i}</td>
                           <td>
                             {report?.date}-{report?.date_in_week_day}
                           </td>
@@ -227,12 +229,20 @@ const AttendenceReport = () => {
                               ? `${report.total_time} hours`
                               : "--"}
                           </td>
-                          <td>{report?.report}</td>
-                          <td>NA</td>
-                          <td>{report?.review ? report?.review : "NA"}</td>
-                          <td>{report?.rating}</td>
                           <td>
-                            {report?.name}:{report?.login_mobile}
+                            {report?.report ? report?.report : "Not Available"}
+                          </td>
+                          <td>Not Available</td>
+                          <td>
+                            {report?.review ? report?.review : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.rating ? report?.rating : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.login_mobile
+                              ? report?.name + "/" + report?.login_mobile
+                              : "Not Available"}
                           </td>
                           <td>
                             {permissions?.can_update && report?.id && (

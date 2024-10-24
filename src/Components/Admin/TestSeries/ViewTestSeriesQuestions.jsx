@@ -65,7 +65,7 @@ const ViewTestseriesQuestions = () => {
   const [showEditLogicalQuesModal, setShowEditLogicalQuesModal] =
     useState(false);
   const [question_id, setQuestion_id] = useState(null);
-
+  localStorage.removeItem("tab");
   const obj = [
     { name: "Test Series", path: "/testSeries" },
     { name: "Create Test Series Question", path: "" },

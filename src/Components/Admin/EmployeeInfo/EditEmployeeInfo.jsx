@@ -451,7 +451,10 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Gender </label>
+                    <label>
+                      {" "}
+                      Gender <span style={{ color: "red" }}>*</span>
+                    </label>
                     <select
                       className="form-control"
                       value={gender}
@@ -475,7 +478,9 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of Birth</label>
+                    <label htmlFor="">
+                      Date of Birth<span style={{ color: "red" }}>*</span>
+                    </label>
                     <div
                       style={
                         missingData?.dob
@@ -503,7 +508,9 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of joining </label>
+                    <label htmlFor="">
+                      Date of joining <span style={{ color: "red" }}>*</span>
+                    </label>
                     <div
                       style={
                         missingData?.doj
@@ -747,7 +754,10 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Role</label>
+                    <label>
+                      {" "}
+                      Role<span style={{ color: "red" }}>*</span>
+                    </label>
                     <select
                       className="form-control"
                       value={role}

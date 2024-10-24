@@ -19,6 +19,7 @@ const HrInterViewQuestion = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const [questions, setQuestions] = useState([])
+  const [errorMessage, setErrorMessage] = useState(false)
   const { count, leadId } = location?.state ? location?.state : location;
   const all_question = useSelector((store) => store.HR_ROUND_QUESTION)
   const update_question = useSelector((store) => store.HR_ROUND_RESULT)
@@ -65,6 +66,7 @@ const HrInterViewQuestion = () => {
 
     if (!allAnswered) {
       toast.error("Please provide a valid rating between 1 and 5 for all questions.");
+      setErrorMessage(true)
     } else {
       dispatch(hr_round_response({ responses: questions, lead_id: leadId }));
     }
@@ -114,6 +116,7 @@ const HrInterViewQuestion = () => {
                           placeholder="Enter 1 to 5 Rating"
                           value={ques?.answer}
                           onChange={(e) => handleEdit(i, e)}
+                          style={errorMessage ? { border: "1px solid red" } : {}}
                         />
                       </div>
                     </div>

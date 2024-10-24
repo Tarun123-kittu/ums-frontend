@@ -35,7 +35,6 @@ const ViewQuestionList = () => {
   const assigned_questions = useSelector(
     (store) => store.HR_ASSIGNED_QUESTION_TO_LEAD
   );
-  console.log(assigned_questions, "this is the assigned_questions");
 
   const { show } = useAppContext();
 
@@ -98,7 +97,7 @@ const ViewQuestionList = () => {
                 })}
               </div>
 
-              {view && (
+              {permissions?.can_update && (
                 <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">
                   <button
                     className="cmn_Button_style cmn_darkgray_btn"

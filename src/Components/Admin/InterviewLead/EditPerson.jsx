@@ -149,13 +149,6 @@ const EditPerson = () => {
       return;
     }
 
-    if (!experience) {
-      missingData.experience = "Experience is required";
-      toast.error("Experience is required");
-      setErrorMessage(missingData);
-      return;
-    }
-
     dispatch(
       update_lead({
         name,
@@ -289,7 +282,7 @@ const EditPerson = () => {
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
-                  labelname={"Experience "}
+                  labelname={"Experience (Optional)"}
                   placeholder={"Enter Experience"}
                   classname={"new_employee_form_group"}
                   type={"number"}

@@ -16,6 +16,8 @@ const EmployeeInfo = () => {
   const permissions = UsePermissions("Users");
   const obj = [{ name: "Employees", path: "/employee" }];
 
+  localStorage.removeItem("tab");
+
   return (
     <section className=" employee_outer_container">
       <Sidebar />

@@ -67,6 +67,7 @@ const MarkAttendence = () => {
   useEffect(() => {
     dispatch(get_today_attendance_time());
     dispatch(get_holiay_birthday_events());
+    localStorage.removeItem("tab");
   }, []);
 
   useEffect(() => {

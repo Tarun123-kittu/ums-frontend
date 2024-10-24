@@ -55,6 +55,7 @@ const AdminDashboard = () => {
   const dashboard_leaves = useSelector(
     (store) => store.GET_LEAVES_ON_DASHBOARD
   );
+  console.log(dashboard_leaves, "this is the dashboard leaves");
   const leave_update_status = useSelector((store) => store.UPDATE_LEAVE);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const AdminDashboard = () => {
     dispatch(get_dashboard_interview_overview());
     dispatch(get_dashboard_attendence_graph());
     dispatch(get_leaves_on_dashboard());
+    localStorage.removeItem("tab");
   }, []);
 
   const getInterviews = async () => {
@@ -293,7 +295,7 @@ const AdminDashboard = () => {
                 <ul className="data_card m-0">
                   <li>
                     <img src={TotalEmployee} alt="employee" />
-                    <h4>{all_userNames?.data?.data?.length}</h4>
+                    <h4>{all_userNames?.data?.data?.length - 1}</h4>
                     <p>Total Employee</p>
                     <span onClick={() => navigate("/employee")}>
                       View Details
@@ -354,101 +356,113 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dashboard_leaves?.data?.data?.map((leave, i) => {
-                      return (
-                        <tr>
-                          <td>
-                            <h5 className="mb-0">{leave?.name}</h5>
-                            <span>{leave?.position}</span>
-                          </td>
-                          <td>{formatLeaveDate(leave?.date_of_application)}</td>
-                          <td>{leave?.type}</td>
-                          <td>{leave?.duration}</td>
-                          <td>
-                            <Dropdown className="cmn_dropdown">
-                              <Dropdown.Toggle id="dropdown-basic">
-                                {leave?.status} <BiChevronDown size={24} />
-                                {leave_update_status?.isLoading &&
-                                  index === i && (
-                                    <span
-                                      class="spinner-border spinner-border-sm"
-                                      role="status"
-                                      aria-hidden="true"
-                                    ></span>
-                                  )}
-                              </Dropdown.Toggle>
+                    {dashboard_leaves?.data?.message ? (
+                      <tr>
+                        <td className="text-center" colSpan={8}>
+                          {dashboard_leaves?.data?.message}
+                        </td>
+                      </tr>
+                    ) : (
+                      dashboard_leaves?.data?.data
+                        ?.slice(0, 5)
+                        ?.map((leave, i) => {
+                          return (
+                            <tr>
+                              <td>
+                                <h5 className="mb-0">{leave?.name}</h5>
+                                <span>{leave?.position}</span>
+                              </td>
+                              <td>
+                                {formatLeaveDate(leave?.date_of_application)}
+                              </td>
+                              <td>{leave?.type}</td>
+                              <td>{leave?.duration}</td>
+                              <td>
+                                <Dropdown className="cmn_dropdown">
+                                  <Dropdown.Toggle id="dropdown-basic">
+                                    {leave?.status} <BiChevronDown size={24} />
+                                    {leave_update_status?.isLoading &&
+                                      index === i && (
+                                        <span
+                                          class="spinner-border spinner-border-sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      )}
+                                  </Dropdown.Toggle>
 
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    handleUpdateStatus(
-                                      "PENDING",
-                                      leave?.leave_id,
-                                      leave?.user_id,
-                                      leave?.duration,
-                                      leave?.email,
-                                      leave?.name,
-                                      leave?.count
-                                    );
-                                    setIndex(i);
-                                  }}
-                                >
-                                  PENDING
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    handleUpdateStatus(
-                                      "ACCEPTED",
-                                      leave?.leave_id,
-                                      leave?.user_id,
-                                      leave?.duration,
-                                      leave?.email,
-                                      leave?.name,
-                                      leave?.count
-                                    );
-                                    setIndex(i);
-                                  }}
-                                >
-                                  ACCEPTED
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    handleUpdateStatus(
-                                      "REJECTED",
-                                      leave?.leave_id,
-                                      leave?.user_id,
-                                      leave?.duration,
-                                      leave?.email,
-                                      leave?.name,
-                                      leave?.count
-                                    );
-                                    setIndex(i);
-                                  }}
-                                >
-                                  REJECTED
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    handleUpdateStatus(
-                                      "CANCELLED",
-                                      leave?.leave_id,
-                                      leave?.user_id,
-                                      leave?.duration,
-                                      leave?.email,
-                                      leave?.name,
-                                      leave?.count
-                                    );
-                                    setIndex(i);
-                                  }}
-                                >
-                                  CANCELLED
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "PENDING",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      PENDING
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "ACCEPTED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      ACCEPTED
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "REJECTED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      REJECTED
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "CANCELLED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      CANCELLED
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          );
+                        })
+                    )}
                   </tbody>
                 </Table>
               </div>

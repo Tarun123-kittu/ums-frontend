@@ -32,7 +32,7 @@ const RoleAndPermission = () => {
   const [role_id, setRole_id] = useState("");
   const is_role_disabled = useSelector((store) => store.DISABLE_ROLE);
   const user_roles = useSelector((store) => store.GET_ALL_USER_ROLES);
-
+  localStorage.removeItem("tab");
   const handleDelete = () => {
     dispatch(disable_role({ role_id: role_id }));
   };
@@ -106,8 +106,12 @@ const RoleAndPermission = () => {
                         <td>{roles?.role}</td>
                         <td>
                           {roles?.users?.map((name, index) => {
-                            console.log(name, "name name");
-                            return <span key={index}>{name?.username}</span>;
+                            return (
+                              <span key={index}>
+                                {name?.username}
+                                <br />
+                              </span>
+                            );
                           })}
                         </td>
                         <td>

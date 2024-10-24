@@ -15,6 +15,7 @@ import { Table } from "react-bootstrap";
 const TodayAttendence = () => {
   const permissions = UsePermissions("Attandance");
   const dispatch = useDispatch();
+  let index = 0;
 
   const obj = [{ name: "Attendance Today", path: "/todayAttendence" }];
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const TodayAttendence = () => {
   const [page, setPage] = useState(1);
   useEffect(() => {
     dispatch(get_attendance_report({ page }));
+    localStorage.removeItem("tab");
   }, [page, dispatch]);
   const { show } = useAppContext();
 
@@ -90,7 +92,7 @@ const TodayAttendence = () => {
                     if (report?.role !== "Admin") {
                       return (
                         <tr key={i}>
-                          <td>{i}</td>
+                          <td>{++index}</td>
                           <td>{report?.name}</td>
                           <td>
                             {report?.in_time

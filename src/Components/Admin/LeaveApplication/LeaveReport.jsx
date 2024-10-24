@@ -16,6 +16,7 @@ import { Table } from "react-bootstrap";
 import NoData from "../../assets/nodata.png";
 
 const LeaveReport = () => {
+  let index = 0;
   const permissions = UsePermissions("Leaves");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const LeaveReport = () => {
     { name: "Leave Application", path: "" },
     { name: "Leave Report", path: "/leaveReport" },
   ];
+  localStorage.removeItem("tab");
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -30,7 +32,6 @@ const LeaveReport = () => {
     }
   }, [navigate]);
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
-  console.log(leave_data, "this is the leave data");
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const [year, setYear] = useState([]);
   const [page, setPage] = useState(1);
@@ -233,7 +234,7 @@ const LeaveReport = () => {
                     if (leave?.role !== "Admin") {
                       return (
                         <tr>
-                          <td>{i + 1}</td>
+                          <td>{++index}</td>
                           <td>{leave?.name}</td>
                           <td>{leave?.type}</td>
                           <td>{formatDate(leave?.createdAt)}</td>

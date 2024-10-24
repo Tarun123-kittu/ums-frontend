@@ -48,6 +48,8 @@ const HolidayEvent = () => {
     (store) => store.USER_ALL_PERMISSIONS
   );
 
+  localStorage.removeItem("tab");
+
   useEffect(() => {
     const can_hr_create = all_permissions?.data?.data?.find(
       (el) => el.role === "HR" && el.permission === "Events"
@@ -223,8 +225,8 @@ const HolidayEvent = () => {
                           <td>{formatDate(event?.date)}</td>
                           <td>{event?.occasion_name}</td>
 
-                          <td>
-                            <div className="d-flex gap-2 justify-content-center">
+                          <td className="text-start">
+                            <div className="d-flex gap-2 ">
                               {permissions?.can_update && (
                                 <div className="cmn_action_outer yellow_bg">
                                   <FaRegEdit

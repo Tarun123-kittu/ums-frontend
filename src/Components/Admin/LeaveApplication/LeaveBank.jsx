@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { Table } from "react-bootstrap";
 
 const LeaveBank = () => {
+  let i = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Leaves");
   const [page, setPage] = useState(1);
@@ -30,7 +31,7 @@ const LeaveBank = () => {
   const [yearObj, setYearObj] = useState([]);
   const [financial_year, setFinancial_year] = useState([]);
   const obj = [{ name: "Leave Bank", path: "/leaveBank" }];
-
+  localStorage.removeItem("tab");
   const monthDataObj = [
     { value: "01", label: "January" },
     { value: "02", label: "February" },
@@ -217,7 +218,7 @@ const LeaveBank = () => {
                     (leave_bank, index) =>
                       leave_bank?.role !== "Admin" && ( // Use short-circuiting for condition
                         <tr key={leave_bank?.id || index}>
-                          <td>{index + 1}</td>
+                          <td>{++i}</td>
                           <td>{leave_bank?.name || "N/A"}</td>
                           <td>{leave_bank?.taken_leave || "0"}</td>
                           <td>{leave_bank?.paid_leave || "0"}</td>

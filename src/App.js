@@ -4,7 +4,7 @@ import './App.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ProtectedRoute from './Components/Utils/verifyToken';
 
-import Login from "../src/Components/Login/Login";
+// import Login from "../src/Components/Login/Login";
 import Candidate from './Components/Candidate/Candidate';
 import AdminDashboard from './Components/Admin/AdminDashboard/AdminDashboard';
 import EmployeeInfo from './Components/Admin/EmployeeInfo/Employee';
@@ -46,14 +46,16 @@ import ForgotPassword from './Components/Login/ForgotPassword';
 import ChangePassword from './Components/Login/ChangePassword';
 import ResetPassword from './Components/Login/ReserPassword';
 import Test from './Components/Breadcrumb/Test';
+import { lazy, Suspense } from 'react';
 function App() {
   const secureComponent = (Component) => <ProtectedRoute element={() => <><Sidebar /><Component /></>} />;
+  const Login = lazy(() => import("../src/Components/Login/Login"))
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<Suspense><Login /></Suspense>} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
 
         {/* Protected Routes */}

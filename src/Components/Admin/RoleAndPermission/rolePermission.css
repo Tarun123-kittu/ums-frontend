@@ -50,7 +50,6 @@ ul.role_list li {
 }
 .assign_role_wrapper .new_employee_form_group{
     margin-top: 0px;
-    display: flex;
     width: 77%;
     gap: 16px;
     align-items: center;

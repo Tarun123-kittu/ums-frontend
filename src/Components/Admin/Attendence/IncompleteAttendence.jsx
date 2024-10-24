@@ -14,6 +14,7 @@ import { Table } from "react-bootstrap";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 
 const IncompleteAttendence = () => {
+  let index = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
   const obj = [
@@ -26,6 +27,7 @@ const IncompleteAttendence = () => {
 
   useEffect(() => {
     dispatch(get_attendance_report({ page }));
+    localStorage.removeItem("tab");
   }, [dispatch, page]);
 
   const convertTo12Hour = (time24) => {
@@ -75,8 +77,8 @@ const IncompleteAttendence = () => {
                   attendance_report?.data?.data?.map((report, i) => {
                     if (!report?.out_time && report?.role !== "Admin") {
                       return (
-                        <tr>
-                          <td>{i}</td>
+                        <tr key={i}>
+                          <td>{++index}</td>
                           <td>
                             {report?.data} -{report?.date_in_week_day}
                           </td>

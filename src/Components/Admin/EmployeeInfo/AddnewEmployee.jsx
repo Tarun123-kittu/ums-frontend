@@ -264,6 +264,14 @@ const AddnewEmployee = () => {
     setGender(e.value);
   };
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Adding 1 since months are 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <section className="add_new_emp_container">
       <div
@@ -435,6 +443,7 @@ const AddnewEmployee = () => {
                       value={increment_date}
                       onChange={(e) => setIncrementDate(e.target.value)}
                       styleTrue={validationErrors?.increment_date}
+                      min={true}
                     />
                     <span style={{ color: "red", fontSize: "13px" }}>
                       {validationErrors?.increment_date}
@@ -679,6 +688,7 @@ const AddnewEmployee = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
+                    span={true}
                     labelname={"Password"}
                     placeholder={"Password"}
                     classname={"new_employee_form_group"}
@@ -687,13 +697,13 @@ const AddnewEmployee = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     styleTrue={validationErrors?.password}
                   />
-                  <span style={{ color: "red", fontSize: "13px" }}></span>
                   <span style={{ color: "red", fontSize: "13px" }}>
                     {validationErrors?.password}
                   </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
+                    span={true}
                     labelname={"Confirm Password"}
                     placeholder={"Confirm Password"}
                     classname={"new_employee_form_group"}

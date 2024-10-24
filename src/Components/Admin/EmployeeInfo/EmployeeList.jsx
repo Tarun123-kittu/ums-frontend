@@ -39,6 +39,18 @@ const EmployeeList = () => {
   const is_user_deleted = useSelector((store) => store.DELETE_USER);
   const all_users = useSelector((store) => store.ALL_USERNAMES);
 
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
   useEffect(() => {
     if (is_user_deleted?.isSuccess) {
       toast.success(is_user_deleted?.message?.message);
@@ -189,7 +201,7 @@ const EmployeeList = () => {
                 <th>Mobile</th>
                 <th>DOJ</th>
                 <th>DOB</th>
-                <th>Post</th>
+                <th>Postion</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -214,7 +226,14 @@ const EmployeeList = () => {
                         <td>{user?.mobile}</td>
                         <td>{moment(user?.doj).format("MMMM D, YYYY")}</td>
                         <td>{moment(user?.dob).format("MMMM D, YYYY")}</td>
-                        <td>{user?.position}</td>
+                        <td>
+                          {positionData
+                            ?.filter((post) => post.value === user?.position)
+                            ?.map((filteredPost, index) => (
+                              <span key={index}>{filteredPost.label}</span>
+                            ))}
+                        </td>
+
                         <td>
                           {statusObj?.map((data) => {
                             if (

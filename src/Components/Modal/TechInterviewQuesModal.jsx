@@ -16,7 +16,13 @@ import { get_hr_round_candidate } from "../../utils/redux/interviewLeadsSlice/hr
 import { get_all_tech_round_leads } from "../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
 import { get_all_languages } from "../../utils/redux/testSeries/getAllLanguages";
 
-const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
+const TechInterviewQuestionModal = ({
+  show,
+  setShow,
+  language,
+  leadId,
+  setActiveTab,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [series, setSeries] = useState([]);
@@ -39,7 +45,7 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
   }, [language]);
 
   useEffect(() => {
-    const languageRecord = languages?.find((el) => el?.id == language);
+    const languageRecord = languages?.find((el) => el?.language == language);
     setSelected_language(languageRecord?.language);
   }, [languages]);
 
@@ -79,6 +85,7 @@ const TechInterviewQuestionModal = ({ show, setShow, language, leadId }) => {
   useEffect(() => {
     if (test_link_status?.isSuccess) {
       toast.success("Test link sent successfully");
+      setActiveTab("Technical");
       dispatch(get_hr_round_candidate({ limit: 10 }));
       dispatch(
         get_all_tech_round_leads({

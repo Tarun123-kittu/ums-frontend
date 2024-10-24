@@ -32,8 +32,8 @@ const CreateRole = () => {
   const [role, setRole] = useState("");
   const [name_assigned, setName_assigned] = useState([]);
   const [user_ids, setUser_ids] = useState([]);
-  const [type, setType] = useState("");
   const [deleted_id, setDeleted_id] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
   const is_new_role_created = useSelector(
     (store) => store.CREATE_NEW_ROLE_AND_PERMISSIONS
   );
@@ -55,8 +55,11 @@ const CreateRole = () => {
   };
 
   const handleCreateNewRole = () => {
+    const missingData = {};
     if (!role) {
       toast.error("Role name can't be empty");
+      missingData.role = "Role name can't be empty";
+      setErrorMessage(missingData);
     } else {
       dispatch(
         create_new_role_and_assign_permissions({
@@ -114,15 +117,23 @@ const CreateRole = () => {
           <div className="row">
             <div className="col-lg-8 col-sm-12 col-md-12">
               <div className="cmn_border edit_role_wrapper">
-                <div className="d-flex assign_role_wrapper">
-                  <div className="form-group new_employee_form_group">
+                <div className=" assign_role_wrapper">
+                  <div className="form-group new_employee_form_group w-100">
                     <label>Role Name</label>
-                    <input
-                      className="form-control"
-                      value={role}
-                      placeholder="Role Name"
-                      onChange={(e) => setRole(e.target.value)}
-                    />
+                    <div className="w-100">
+                      <input
+                        className="form-control"
+                        value={role}
+                        placeholder="Role Name"
+                        onChange={(e) => setRole(e.target.value)}
+                        style={
+                          errorMessage?.role ? { border: "1px solid red" } : {}
+                        }
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessage?.role}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 {/* permissions */}

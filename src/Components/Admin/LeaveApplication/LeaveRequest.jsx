@@ -15,6 +15,7 @@ import NoData from "../../assets/nodata.png";
 import { get_all_applied_leaves } from "../../../utils/redux/leaveSlice/getAllAppliedLeaves";
 
 const LeaveRequest = () => {
+  let index = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Leaves");
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const LeaveRequest = () => {
   const all_applied_leaves = useSelector(
     (store) => store.GET_ALL_APPLIED_LEAVES
   );
-  console.log(all_applied_leaves, "this is the all applied leaves");
+  localStorage.removeItem("tab");
   const [page, setPage] = useState(1);
   const obj = [{ name: "Leave Request", path: "/leaveRequest" }];
 
@@ -99,7 +100,7 @@ const LeaveRequest = () => {
                     if (leaves?.role !== "Admin") {
                       return (
                         <tr key={i}>
-                          <td>{i + 1}</td>
+                          <td>{++index}</td>
                           <td>{leaves?.name}</td>
                           <td>{leaves?.type}</td>
                           <td>{formatDate(leaves?.applied_on)}</td>

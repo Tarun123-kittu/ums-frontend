@@ -68,6 +68,18 @@ const ViewEmployeeInfo = () => {
     { value: 4, label: "None" },
   ];
 
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
   useEffect(() => {
     dispatch(get_user_documents({ userId: user_id }));
     dispatch(get_user_details({ id: user_id }));
@@ -148,7 +160,13 @@ const ViewEmployeeInfo = () => {
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Position</h3>
-                <h3 className="heading_style">{user_details?.position}</h3>
+                <h3 className="heading_style">
+                  {positionData
+                    ?.filter((post) => post.value === user_details?.position)
+                    ?.map((filteredPost, index) => (
+                      <span key={index}>{filteredPost.label}</span>
+                    ))}
+                </h3>
                 <h3 className="heading_style">Technology/Department</h3>
                 <h3 className="heading_style">{user_details?.department}</h3>
               </li>
