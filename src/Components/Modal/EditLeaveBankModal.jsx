@@ -69,23 +69,26 @@ const EditLeaveBankModal = ({ show, setShow, paid_leave, employeeId }) => {
           <h3 className="heading">Leave Bank </h3>
           <InputField
             labelname={"Taken Leaves"}
-            type={"number"}
+            type={"text"}
             classname={"new_employee_form_group"}
             value={taken_leaves}
             onChange={(e) => {
               const newValue = e.target.value;
-              if (/^\d*$/.test(newValue) && newValue.length <= 10) {
+              if (/^\d*$/.test(newValue) && newValue.length <= 2) {
                 setTaken_leaves(newValue);
               }
             }}
           />
           <InputField
             labelname={"Paid Leaves"}
-            type={"number"}
+            type={"text"}
             classname={"new_employee_form_group"}
             value={leaves}
             onChange={(e) => {
-              setLeaves(e.target.value);
+              const newValue = e.target.value;
+              if (/^\d*$/.test(newValue) && newValue.length <= 2) {
+                setLeaves(newValue);
+              }
             }}
           />
         </Modal.Body>

@@ -412,7 +412,7 @@ const AddnewEmployee = () => {
                     labelname={"Account Number"}
                     placeholder={"Account Number"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={account_number}
                     onChange={(e) => {
                       const newValue = e.target.value;
@@ -558,11 +558,12 @@ const AddnewEmployee = () => {
                     labelname={"Salary"}
                     placeholder={"Salary"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={salary}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
                         setSalary(newValue);
                       }
                     }}
@@ -575,11 +576,12 @@ const AddnewEmployee = () => {
                     labelname={"Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={security}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
                         setSecurity(newValue);
                       }
                     }}
@@ -592,11 +594,12 @@ const AddnewEmployee = () => {
                     labelname={"Total Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={total_security}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      if (newValue === "" || parseFloat(newValue) >= 0) {
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
                         setTotalSecurity(newValue);
                       }
                     }}

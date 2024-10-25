@@ -128,7 +128,7 @@ const EditAttendenceReport = () => {
                   <InputField
                     classname={"new_employee_form_group"}
                     labelname={"Mobile"}
-                    type={"number"}
+                    type={"text"}
                     value={attendance_detail?.data?.mobile}
                     disabled={true}
                   />

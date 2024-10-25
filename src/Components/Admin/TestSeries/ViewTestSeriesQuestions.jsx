@@ -25,6 +25,7 @@ import {
 } from "../../../utils/redux/testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import toast from "react-hot-toast";
+import NoData from "../../assets/nodata.png";
 
 const ViewTestseriesQuestions = () => {
   const { show } = useAppContext();
@@ -34,6 +35,7 @@ const ViewTestseriesQuestions = () => {
   const permissions = UsePermissions("Test");
   const { id, language_id } = location.state ? location.state : location;
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
+  console.log(all_questions, "this is the all questions")
   const delete_logical_state = useSelector((store) => store.DELETE_LOGICAL_QUE);
   const delete_objective_state = useSelector(
     (store) => store.DELETE_OBJECTIVE_QUE
@@ -114,9 +116,8 @@ const ViewTestseriesQuestions = () => {
   return (
     <section className="test_serie_wrapper">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -135,7 +136,7 @@ const ViewTestseriesQuestions = () => {
                 <Tab
                   eventKey="Objective"
                   title="Objective"
-                  className=" cmn_padding_wrapper cmn_border"
+                  className=" cmn_padding_wrapper cmn_border card-cmn"
                 >
                   {permissions?.can_create && (
                     <button
@@ -147,66 +148,75 @@ const ViewTestseriesQuestions = () => {
                       Add
                     </button>
                   )}
-                  {all_questions?.data?.data?.map((question, questionIndex) => {
-                    if (question?.question_type === "objective") {
-                      return (
-                        <div
-                          key={questionIndex}
-                          className="cmn_border view_question_tab_content"
-                        >
-                          <h2 className="heading">{question?.question}</h2>
-                          {question?.options?.map((option, optionIndex) => (
-                            <div
-                              key={`${questionIndex}-${optionIndex}`} // Unique key for each option
-                              className="form-group new_employee_form_group"
-                            >
-                              <input
-                                type="text"
-                                className={
-                                  question?.correct_answer == option?.option_id
-                                    ? " form-control correct_ans"
-                                    : "form-control "
-                                }
-                                placeholder={`Option ${optionIndex + 1}`}
-                                value={option?.option}
-                                readOnly
-                              />
-                            </div>
-                          ))}
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {permissions?.can_delete && (
-                              <button
-                                className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(question?.question_id);
-                                  setShowDelObjectiveQuesModal(true);
-                                }}
+                  {all_questions?.data?.data?.some((question) => question?.question_type === "objective") ? (
+                    all_questions?.data?.data?.map((question, questionIndex) => {
+                      if (question?.question_type === "objective") {
+                        return (
+                          <div
+                            key={questionIndex}
+                            className="cmn_border view_question_tab_content"
+                          >
+                            <h2 className="heading">{question?.question}</h2>
+                            {question?.options?.map((option, optionIndex) => (
+                              <div
+                                key={`${questionIndex}-${optionIndex}`} // Unique key for each option
+                                className="form-group new_employee_form_group"
                               >
-                                Delete
-                              </button>
-                            )}
+                                <input
+                                  type="text"
+                                  className={
+                                    question?.correct_answer === option?.option_id
+                                      ? "form-control correct_ans"
+                                      : "form-control"
+                                  }
+                                  placeholder={`Option ${optionIndex + 1}`}
+                                  value={option?.option}
+                                  readOnly
+                                />
+                              </div>
+                            ))}
+                            <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                              {permissions?.can_delete && (
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(question?.question_id);
+                                    setShowDelObjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              )}
 
-                            {permissions?.can_update && (
-                              <button
-                                className="cmn_Button_style cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(question?.question_id);
-                                  setShowEditObjectiveQuesModal(true);
-                                }}
-                              >
-                                Edit
-                              </button>
-                            )}
+                              {permissions?.can_update && (
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(question?.question_id);
+                                    setShowEditObjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    }
-                  })}
+                        );
+                      }
+                      return null; // Return null for non-objective questions
+                    })
+                  ) : (
+                    <div className="text-center">
+
+                      <img src={NoData} alt="no data found" />
+                    </div>
+                  )}
+
                 </Tab>
                 <Tab
                   eventKey="Subjective"
                   title="Subjective"
-                  className=" cmn_padding_wrapper cmn_border"
+                  className=" cmn_padding_wrapper cmn_border card-cmn"
                 >
                   {permissions?.can_create && (
                     <button
@@ -218,53 +228,63 @@ const ViewTestseriesQuestions = () => {
                       Add
                     </button>
                   )}
-                  {all_questions?.data?.data?.map((ques, i) => {
-                    if (ques?.question_type === "subjective") {
-                      return (
-                        <div className="cmn_border view_question_tab_content">
-                          <h2 className="heading">{ques?.question}</h2>
-                          <div className="form-group new_employee_form_group">
-                            <textarea
-                              type="text"
-                              className={"form-control"}
-                              placeholder={"lorem 1"}
-                              value={ques?.answer}
-                            />
-                          </div>
+                  {all_questions?.data?.data?.some((ques) => ques?.question_type === "subjective") ? (
+                    all_questions?.data?.data?.map((ques, i) => {
+                      if (ques?.question_type === "subjective") {
+                        return (
+                          <div key={i} className="cmn_border view_question_tab_content">
+                            <h2 className="heading">{ques?.question}</h2>
+                            <div className="form-group new_employee_form_group">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                placeholder="lorem 1"
+                                value={ques?.answer}
+                                readOnly
+                              />
+                            </div>
 
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {permissions?.can_delete && (
-                              <button
-                                className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(ques?.question_id);
-                                  setShowDelSubjectiveQuesModal(true);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            )}
-                            {permissions?.can_update && (
-                              <button
-                                className="cmn_Button_style cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(ques?.question_id);
-                                  setShowEditSubjectiveQuesModal(true);
-                                }}
-                              >
-                                Edit
-                              </button>
-                            )}
+                            <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                              {permissions?.can_delete && (
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowDelSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              )}
+                              {permissions?.can_update && (
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowEditSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    }
-                  })}
+                        );
+                      }
+                      return null; // Return null for non-subjective questions
+                    })
+                  ) : (
+                    <div className="text-center">
+
+                      <img src={NoData} alt="no data found" />
+                    </div>
+                  )}
+
                 </Tab>
                 <Tab
                   eventKey="Logical"
                   title="Logical"
-                  className="cmn_padding_wrapper cmn_border"
+                  className="cmn_padding_wrapper cmn_border card-cmn"
                 >
                   {permissions?.can_create && (
                     <button
@@ -276,47 +296,57 @@ const ViewTestseriesQuestions = () => {
                       Add
                     </button>
                   )}
-                  {all_questions?.data?.data?.map((ques, i) => {
-                    if (ques?.question_type === "logical") {
-                      return (
-                        <div className="cmn_border view_question_tab_content">
-                          <h2 className="heading">{ques?.question}</h2>
-                          <div className="form-group new_employee_form_group">
-                            <textarea
-                              type="text"
-                              className={"form-control"}
-                              placeholder={"lorem 1"}
-                              value={ques?.answer}
-                            />
+                  {all_questions?.data?.data?.some((ques) => ques?.question_type === "logical") ? (
+                    all_questions?.data?.data?.map((ques, i) => {
+                      if (ques?.question_type === "logical") {
+                        return (
+                          <div key={i} className="cmn_border view_question_tab_content">
+                            <h2 className="heading">{ques?.question}</h2>
+                            <div className="form-group new_employee_form_group">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                placeholder="lorem 1"
+                                value={ques?.answer}
+                                readOnly
+                              />
+                            </div>
+                            <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
+                              {permissions?.can_delete && (
+                                <button
+                                  className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowDelSubjectiveQuesModal(true);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              )}
+                              {permissions?.can_update && (
+                                <button
+                                  className="cmn_Button_style cursor_pointer"
+                                  onClick={() => {
+                                    setQuestion_id(ques?.question_id);
+                                    setShowEditLogicalQuesModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              )}
+                            </div>
                           </div>
-                          <div className="d-flex justify-content-end gap-3 mt-4 obj_btn_outer">
-                            {permissions?.can_delete && (
-                              <button
-                                className="cmn_Button_style cmn_darkgray_btn cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(ques?.question_id);
-                                  setShowDelSubjectiveQuesModal(true);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            )}
-                            {permissions?.can_update && (
-                              <button
-                                className="cmn_Button_style cursor_pointer"
-                                onClick={() => {
-                                  setQuestion_id(ques?.question_id);
-                                  setShowEditLogicalQuesModal(true);
-                                }}
-                              >
-                                Edit
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    }
-                  })}
+                        );
+                      }
+                      return null; // Return null for non-logical questions
+                    })
+                  ) : (
+                    <div className="text-center">
+
+                      <img src={NoData} alt="no data found" />
+                    </div>
+                  )}
+
                 </Tab>
               </Tabs>
             </div>

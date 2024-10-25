@@ -94,6 +94,7 @@ const LogicalQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Answer"
               rows={4}
               value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
               style={errorMessage?.answer ? { border: "1px solid red" } : {}}
             />
 

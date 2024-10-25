@@ -272,6 +272,7 @@ const AdminDashboard = () => {
       toast.success("Leave Updated Successfully");
       dispatch(clear_update_leave_state());
       dispatch(get_leaves_on_dashboard());
+      dispatch(get_employee_leave_count());
     }
     if (leave_update_status?.isError) {
       toast.error(leave_update_status?.error?.message);
@@ -320,7 +321,7 @@ const AdminDashboard = () => {
                       {employee_on_leave?.data?.data?.totalAcceptedLeaves}
                     </h4>
                     <p>Total Leave</p>
-                    <span onClick={() => navigate("/leaveRequest")}>
+                    <span onClick={() => navigate("/leaveReport")}>
                       View Details
                     </span>
                   </li>
@@ -356,7 +357,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dashboard_leaves?.data?.message ? (
+                    {dashboard_leaves?.data?.message && dashboard_leaves?.data?.data?.length === 0 ? (
                       <tr>
                         <td className="text-center" colSpan={8}>
                           {dashboard_leaves?.data?.message}

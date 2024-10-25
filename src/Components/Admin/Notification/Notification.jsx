@@ -12,7 +12,7 @@ const Notification = ({ view }) => {
     <section className="notification_outer">
       <div className="d-flex justify-content-between align-items-center">
         {localStorage?.getItem("roles")?.includes("Employee") && (
-          <div className="text-start sidebar_logo_outer">
+          <div className="text-start sidebar_logo_outer" style={{cursor:"pointer"}} onClick={() => navigate("/mark-attendence")}>
             <img
               src={logo}
               height={"40px"}

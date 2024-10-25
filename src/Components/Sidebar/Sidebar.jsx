@@ -39,10 +39,12 @@ const Sidebar = () => {
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [uniqueRoles, setUniqueRoles] = useState();
+  console.log(uniqueRoles, "this is the unique rolesd");
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+  console.log(user_all_permissions, "this is the user all permision");
 
   const [permissions, setPermissions] = useState({});
   const checkPermissions = (permission, rolesData, permissionData) => {

@@ -33,6 +33,8 @@ const EditEmployeeInfo = () => {
     ? location?.state
     : location;
 
+  console.log(user_details, "thius is the user details")
+
   useEffect(() => {
     dispatch(get_all_roles());
   }, []);
@@ -54,8 +56,8 @@ const EditEmployeeInfo = () => {
   let [address, setAddress] = useState(user_details?.address);
   let [bank_name, setBankName] = useState(user_details?.bank_name);
   let [department, setDepartment] = useState(user_details?.department);
-  let [dob, setDob] = useState(new Date(user_details?.dob));
-  let [doj, setDoj] = useState(new Date(user_details?.doj));
+  let [dob, setDob] = useState(user_details?.dob);
+  let [doj, setDoj] = useState(user_details?.doj);
   let [email, setEmail] = useState(user_details?.email);
   let [emergency_contact, setEmergencyContact] = useState(
     user_details?.emergency_contact
@@ -68,19 +70,20 @@ const EditEmployeeInfo = () => {
   let [gender, setGender] = useState(user_details?.gender);
   let [ifsc, setIfsc] = useState(user_details?.ifsc);
   let [increment_date, setIncrementDate] = useState(
-    new Date(user_details?.increment_date)
+    user_details?.increment_date
   );
+  console.log(increment_date, "this is the increment date")
   let [installments, setInstallments] = useState(user_details?.installments);
   let [mobile, setMobile] = useState(user_details?.mobile);
   let [name, setName] = useState(user_details?.name);
   let [position, setPosition] = useState(user_details?.position);
   let [role, setRole] = useState(user_details?.role);
-  let [salary, setSalary] = useState(user_details?.salary);
-  let [security, setSecurity] = useState(user_details?.security);
+  let [salary, setSalary] = useState(user_details?.salary || "");
+  let [security, setSecurity] = useState(user_details?.security || "");
   let [skype_email, setSkypeEmail] = useState(user_details?.skype_email);
   let [status, setStatus] = useState(user_details?.status);
   let [total_security, setTotalSecurity] = useState(
-    user_details?.total_security
+    user_details?.total_security || ""
   );
   let [ultivic_email, setUltivicEmail] = useState(user_details?.ultivic_email);
   let [username, setUsername] = useState(user_details?.username);
@@ -289,12 +292,21 @@ const EditEmployeeInfo = () => {
     });
   };
 
+  function formatDateToYYYYMMDD(dateString) {
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   return permissions?.can_view ? (
     <section className="add_new_emp_container">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer card-cmn">
@@ -414,7 +426,7 @@ const EditEmployeeInfo = () => {
                     labelname={"Account Number"}
                     placeholder={"Account Number"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={account_number}
                     onChange={(e) => {
                       const value = Number(e.target.value);
@@ -436,17 +448,23 @@ const EditEmployeeInfo = () => {
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
-                    <label htmlFor="">Increment Date</label>
-                    <DatePicker
-                      selected={increment_date}
-                      onChange={(date) => setIncrementDate(date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                    />
+                  <div className="form-group new_employee_form_group ">
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Increnent Date"}
+                        placeholder={"Select increment date"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(doj)}
+                        onChange={(e) => setIncrementDate(e.target.value)}
+                        styleTrue={errorMessages?.increment_date}
+                      // min={true}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -478,62 +496,39 @@ const EditEmployeeInfo = () => {
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">
-                      Date of Birth<span style={{ color: "red" }}>*</span>
-                    </label>
-                    <div
-                      style={
-                        missingData?.dob
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
-                      <DatePicker
-                        selected={dob}
-                        onChange={(date) => setDob(date)}
-                        placeholderText="DD/MM/YYYY"
-                        onKeyDown={(e) => e.preventDefault()}
-                        dateFormat="dd/MM/yyyy"
-                        showYearDropdown
-                        scrollableYearDropdown
-                        maxDate={new Date()}
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of Birth"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(dob)}
+                        onChange={(e) => setDob(e.target.value)}
+                        styleTrue={errorMessages?.doj}
                       />
-                      {errorMessages?.dob && (
-                        <span style={{ color: "red", fontSize: "13px" }}>
-                          {errorMessages.dob}
-                        </span>
-                      )}
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">
-                      Date of joining <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <div
-                      style={
-                        missingData?.doj
-                          ? { border: "1px solid red", borderRadius: "10px" }
-                          : {}
-                      }
-                    >
-                      <DatePicker
-                        classname={"form-control"}
-                        selected={doj}
-                        onChange={(date) => setDoj(date)}
-                        placeholderText="DD/MM/YYYY"
-                        onKeyDown={(e) => e.preventDefault()}
-                        dateFormat="dd/MM/yyyy"
-                        showYearDropdown
-                        scrollableYearDropdown
-                        maxDate={new Date()}
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of joining"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(doj)}
+                        onChange={(e) => setDoj(e.target.value)}
+                        styleTrue={errorMessages?.doj}
                       />
-                      {errorMessages?.doj && (
-                        <span style={{ color: "red", fontSize: "13px" }}>
-                          {errorMessages.doj}
-                        </span>
-                      )}
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -577,12 +572,13 @@ const EditEmployeeInfo = () => {
                     labelname={"Salary"}
                     placeholder={"Salary"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={salary}
                     onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (value >= 0) {
-                        setSalary(value);
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSalary(newValue);
                       }
                     }}
                   />
@@ -595,12 +591,13 @@ const EditEmployeeInfo = () => {
                     labelname={"Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={security}
                     onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (value >= 0) {
-                        setSecurity(value);
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSecurity(newValue);
                       }
                     }}
                   />
@@ -612,15 +609,17 @@ const EditEmployeeInfo = () => {
                     labelname={"Total Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
+                    type={"text"}
                     value={total_security}
                     onChange={(e) => {
-                      const value = Number(e.target.value);
-                      if (value >= 0) {
-                        setTotalSecurity(value);
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setTotalSecurity(newValue);
                       }
                     }}
                   />
+
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">

@@ -11,12 +11,14 @@ import {
 } from "../../utils/redux/loginSlice/loginSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import validator from "validator";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [errorMessage,setErrorMessage] = useState()
   const [password, setPassword] = useState("");
   const login_details = useSelector((store) => store.LOGIN);
 
@@ -37,11 +39,28 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (!password && !email) {
-      toast.error("email and password are required", { autoClose: 2000 });
-    } else {
-      dispatch(login({ email, password }));
+    let missingData = {}
+    if(!email){
+      toast.error("Email is required")
+      missingData.email = 'Email is required'
+      setErrorMessage(missingData)
+      return
     }
+    if(!validator?.isEmail(email)){
+      toast.error("Email is not valid")
+      missingData.email = 'Email is not valid'
+      setErrorMessage(missingData)
+      return
+    }
+    if(!password){
+      toast.error("Password is required")
+      missingData.password = 'Password is required'
+      setErrorMessage(missingData)
+      return
+    }
+   
+      dispatch(login({ email, password }));
+    
   };
 
   useEffect(() => {
@@ -98,7 +117,9 @@ const Login = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  style={errorMessage?.email ? {border:"1px solid red"} : {}}
                 />
+                <span style = {{color:"red",fontSize:"13px"}}>{errorMessage?.email}</span>
               </div>
               <div className="form-group mt-3 position-relative">
                 <div className="d-flex justify-content-between ">
@@ -119,7 +140,9 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  style={errorMessage?.password ? {border:"1px solid red"} : {}}
                 />
+                <span style = {{color:"red",fontSize:"13px"}}>{errorMessage?.password}</span>
                 <div className="open_eye">
                   {showPassword ? (
                     <IoEyeOutline

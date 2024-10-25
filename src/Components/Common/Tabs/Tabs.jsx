@@ -61,6 +61,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const { tab } = location?.state ? location?.state : location;
+
   useEffect(() => {
     if (tab) {
       setActiveTab(tab);
@@ -122,10 +123,33 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_round_status?.isSuccess) {
-      setActiveTab("Face to face");
+      if(activeTab === "Technical"){
+        setActiveTab("Face to face")
+      }
+      if(activeTab === "Face to face"){
+        setActiveTab("Final Interaction")
+      }
       dispatch(
         get_all_tech_round_leads({
           page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_face_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_final_round_leads({
+          page: 1,
           limit: 10,
           profile: "",
           experience: "",
@@ -201,7 +225,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [hr_round_candidate_status]);
 
   const handleTabSelect = (selectedTab) => {
-    localStorage.removeItem("tab");
+    localStorage.setItem("tab",selectedTab);
     setOpen_tab(selectedTab);
     setActiveTab(selectedTab);
     setCurrentTab(selectedTab);
@@ -283,20 +307,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_face_round]);
 
-  useEffect(() => {
-    if (update_round_status?.isSuccess) {
-      toast.success("Candidate successfully moved to next round");
-      dispatch(
-        get_face_round_leads({
-          page: 1,
-          limit: 10,
-          profile: "",
-          experience: "",
-          result_status: "",
-        })
-      );
-    }
-  }, [update_round_status]);
+
 
   const deleteHandler = () => {
     dispatch(delete_lead({ leadId }));
