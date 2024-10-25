@@ -19,6 +19,7 @@ const HrInterViewQuestion = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const [questions, setQuestions] = useState([])
+  const [errorMessage, setErrorMessage] = useState(false)
   const { count, leadId } = location?.state ? location?.state : location;
   const all_question = useSelector((store) => store.HR_ROUND_QUESTION)
   const update_question = useSelector((store) => store.HR_ROUND_RESULT)
@@ -65,6 +66,7 @@ const HrInterViewQuestion = () => {
 
     if (!allAnswered) {
       toast.error("Please provide a valid rating between 1 and 5 for all questions.");
+      setErrorMessage(true)
     } else {
       dispatch(hr_round_response({ responses: questions, lead_id: leadId }));
     }
@@ -89,7 +91,8 @@ const HrInterViewQuestion = () => {
   return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -97,7 +100,7 @@ const HrInterViewQuestion = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="hr_interview_question_round_outer">
+          <div className="hr_interview_question_round_outer card-cmn">
             <div className="cmn_border mt-3 hr_interview_question_round_content">
               <div className="row">
                 {questions?.map((ques, i) => {
@@ -113,6 +116,7 @@ const HrInterViewQuestion = () => {
                           placeholder="Enter 1 to 5 Rating"
                           value={ques?.answer}
                           onChange={(e) => handleEdit(i, e)}
+                          style={errorMessage ? { border: "1px solid red" } : {}}
                         />
                       </div>
                     </div>
@@ -123,7 +127,10 @@ const HrInterViewQuestion = () => {
                 <button className="cmn_Button_style cmn_darkgray_btn" onClick={() => navigate("/interviewLead", { state: { tab: "Add Person" } })}>
                   Exit
                 </button>
-                {permissions?.can_update && <button className="cmn_Button_style" onClick={() => handleSave()}>Save</button>}
+                {permissions?.can_update && <button className="cmn_Button_style" onClick={() => handleSave()}>
+                  {update_question?.isLoading && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+                  Save
+                </button>}
               </div>
             </div>
           </div>

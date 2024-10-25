@@ -22,6 +22,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const HolidayEvent = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [hr_user_permissions, setHr_user_permissions] = useState({});
+  const [enableSearch, setEnableSearch] = useState(false);
   const [event_id, setEvent_id] = useState(null);
   const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const holiday_and_events = useSelector(
@@ -45,6 +47,8 @@ const HolidayEvent = () => {
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
   );
+
+  localStorage.removeItem("tab");
 
   useEffect(() => {
     const can_hr_create = all_permissions?.data?.data?.find(
@@ -131,7 +135,9 @@ const HolidayEvent = () => {
   return (
     <section className="holiday_event_wrapper">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -150,30 +156,37 @@ const HolidayEvent = () => {
             </div>
 
             <div className="employee_wrapper  serach_reset_outer">
-              <button
-                className="cmn_Button_style cmn_darkgray_btn"
-                onClick={() =>
-                  dispatch(
-                    get_all_holidays_and_events({
-                      year: new Date().getFullYear(),
-                    })
-                  )
-                }
-              >
-                Reset
-              </button>
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  isSearched
-                    ? dispatch(
-                      get_all_holidays_and_events({ year: selected_year })
-                    )
-                    : toast.error("Please select year !!")
-                }
-              >
-                Search
-              </button>
+              {enableSearch ? (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_all_holidays_and_events({
+                        year: new Date().getFullYear(),
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Reset
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    if (isSearched) {
+                      dispatch(
+                        get_all_holidays_and_events({ year: selected_year })
+                      );
+                      setEnableSearch(true);
+                    } else {
+                      toast.error("Please select year !!");
+                    }
+                  }}
+                >
+                  Search
+                </button>
+              )}
               {permissions?.can_create && (
                 <button
                   className="cmn_Button_style"
@@ -186,8 +199,8 @@ const HolidayEvent = () => {
               )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -198,7 +211,11 @@ const HolidayEvent = () => {
               </thead>
               <tbody>
                 {holiday_and_events?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   holiday_and_events?.data?.eventsOrHolidays?.map(
                     (event, i) => {
@@ -208,8 +225,8 @@ const HolidayEvent = () => {
                           <td>{formatDate(event?.date)}</td>
                           <td>{event?.occasion_name}</td>
 
-                          <td>
-                            <div className="d-flex gap-2 justify-content-center">
+                          <td className="text-start">
+                            <div className="d-flex gap-2 ">
                               {permissions?.can_update && (
                                 <div className="cmn_action_outer yellow_bg">
                                   <FaRegEdit
@@ -237,13 +254,15 @@ const HolidayEvent = () => {
                   )
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp
-          totalPage={holiday_and_events?.data?.totalPages}
-          setPage={setPage}
-        />
+        {holiday_and_events?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={holiday_and_events?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
 
         {showEventModal && (
           <AddEventModal show={showEventModal} setShow={setShowEventModal} />

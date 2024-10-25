@@ -16,15 +16,19 @@ const EmployeeInfo = () => {
   const permissions = UsePermissions("Users");
   const obj = [{ name: "Employees", path: "/employee" }];
 
+  localStorage.removeItem("tab");
+
   return (
-    <section className="employee_outer_container">
+    <section className=" employee_outer_container">
       <Sidebar />
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        }gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer">
+        <div className=" cmn_padding_outer">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}

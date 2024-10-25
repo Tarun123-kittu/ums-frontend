@@ -24,6 +24,7 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
   const [description, setDiscription] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
   const [permissions, setPermissions] = useState({
     can_view: false,
     can_create: false,
@@ -64,6 +65,25 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
   ];
 
   const handleAddHolidayAndEvents = () => {
+    let missingData = {};
+    if (date === "") {
+      missingData.date = "Date is Required";
+      toast.error("Date is Required !!");
+      setErrorMessage(missingData);
+      return;
+    }
+    if (type === "") {
+      missingData.type = "Type is Required";
+      toast.error("Type is Required !!");
+      setErrorMessage(missingData);
+      return;
+    }
+    if (description === "") {
+      missingData.description = "description is Required";
+      toast.error("description is Required !!");
+      setErrorMessage(missingData);
+      return;
+    }
     if (eventId && edit) {
       dispatch(
         update_holiday_and_event({
@@ -145,6 +165,14 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
       setShow(false);
     }
   }, [is_holiday_updated]);
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Adding 1 since months are 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   return (
     <div>
       <Modal
@@ -168,7 +196,12 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
               type="date"
               onChange={(e) => setDate(e.target.value)}
               value={date}
+              min={getCurrentDate()}
+              style={errorMessage?.date ? { border: "1px solid red" } : {}}
             />
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.date}
+            </span>
           </div>
           <div className="form-group new_employee_form_group mt-2">
             <label className="modal_label">Type</label>
@@ -177,7 +210,11 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
                 optionsData={options}
                 changeHandler={(e) => setType(e.value)}
                 value={type}
+                styleTrue={errorMessage?.type}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.type}
+              </span>
             </div>
           </div>
           <div className="form-group new_employee_form_group mt-2">
@@ -187,7 +224,13 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
               className="candidate-register-input form-control mt-2"
               value={description}
               onChange={(e) => setDiscription(e.target.value)}
+              style={
+                errorMessage?.description ? { border: "1px solid red" } : {}
+              }
             />
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.description}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -196,6 +239,13 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
               className="cmn_Button_style"
               onClick={() => handleAddHolidayAndEvents()}
             >
+              {is_holiday_created?.isLoading && (
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              )}
               {"Add Event"}
             </button>
           )}
@@ -204,6 +254,13 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
               className="cmn_Button_style"
               onClick={() => handleAddHolidayAndEvents()}
             >
+              {is_holiday_updated?.isLoading && (
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              )}
               {"update"}
             </button>
           )}

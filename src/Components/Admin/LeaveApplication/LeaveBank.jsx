@@ -11,23 +11,27 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import toast from "react-hot-toast";
+import { Table } from "react-bootstrap";
 
 const LeaveBank = () => {
+  let i = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Leaves");
+  const [page, setPage] = useState(1);
   const [showEditLeaveModal, setShowEditLeaveModal] = useState(false);
   const leave_bank_data = useSelector((store) => store.LEAVE_REPORT_BANK);
   const [session, setSession] = useState("");
   const [selected_year, setSelected_year] = useState("");
   const [selected_month, setSelected_month] = useState("");
+  const [enableSearch, setEnableSearch] = useState(false);
+  const [paid_leaves, setPaid_leaves] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
   const [year, setYear] = useState([]);
   const [yearObj, setYearObj] = useState([]);
   const [financial_year, setFinancial_year] = useState([]);
-  const obj = [
-    { name: "Leave Application", path: "" },
-    { name: "Leave Bank", path: "/leaveBank" },
-  ];
-
+  const obj = [{ name: "Leave Bank", path: "/leaveBank" }];
+  localStorage.removeItem("tab");
   const monthDataObj = [
     { value: "01", label: "January" },
     { value: "02", label: "February" },
@@ -50,10 +54,11 @@ const LeaveBank = () => {
         session,
         month: selected_month,
         year: selected_year,
+        page,
       })
     );
     years();
-  }, []);
+  }, [page]);
 
   const years = (startYear = 2020) => {
     setYear([]);
@@ -89,7 +94,9 @@ const LeaveBank = () => {
   return permissions?.can_view ? (
     <section className="attendenceBank_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -140,25 +147,55 @@ const LeaveBank = () => {
             </div>
 
             <div className="employee_wrapper text-end serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  dispatch(
-                    get_leave_bank_report({
-                      session,
-                      month: selected_month,
-                      year: selected_year,
-                    })
-                  )
-                }
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={async () => {
+                    if (session || selected_month || selected_year) {
+                      try {
+                        await dispatch(
+                          get_leave_bank_report({
+                            session,
+                            month: selected_month,
+                            year: selected_year,
+                          })
+                        );
+                        setEnableSearch(true);
+                      } catch (error) {
+                        console.error(
+                          "Error fetching leave bank report",
+                          error
+                        );
+                      }
+                    } else {
+                      toast.error("Please select session, month, or year !!");
+                    }
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_leave_bank_report({
+                        session: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -170,39 +207,57 @@ const LeaveBank = () => {
               </thead>
               <tbody>
                 {leave_bank_data?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   Array.isArray(leave_bank_data?.data?.data) &&
-                  leave_bank_data.data.data.map((leave_bank, index) => (
-                    <tr key={leave_bank?.id || index}>
-                      <td>{index + 1}</td>
-                      <td>{leave_bank?.name || "N/A"}</td>
-                      <td>{leave_bank?.taken_leave || "0"}</td>
-                      <td>{leave_bank?.paid_leave || "0"}</td>
+                  leave_bank_data.data.data.map(
+                    (leave_bank, index) =>
+                      leave_bank?.role !== "Admin" && ( // Use short-circuiting for condition
+                        <tr key={leave_bank?.id || index}>
+                          <td>{++i}</td>
+                          <td>{leave_bank?.name || "N/A"}</td>
+                          <td>{leave_bank?.taken_leave || "0"}</td>
+                          <td>{leave_bank?.paid_leave || "0"}</td>
 
-                      <td>
-                        {permissions?.can_update && (
-                          <div
-                            className="cmn_action_outer yellow_bg cusror_pointer"
-                            onClick={() => setShowEditLeaveModal(true)}
-                          >
-                            <FiEdit />
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                          <td>
+                            {permissions?.can_update && (
+                              <div
+                                className="cmn_action_outer yellow_bg cusror_pointer"
+                                onClick={() => {
+                                  setShowEditLeaveModal(true);
+                                  setPaid_leaves(leave_bank?.paid_leave);
+                                  setEmployeeId(leave_bank?.id);
+                                }}
+                              >
+                                <FiEdit />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                  )
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {leave_bank_data?.data?.pagination?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={leave_bank_data?.data?.pagination?.totalPages}
+            setPage={setPage}
+          />
+        )}
 
         {showEditLeaveModal && (
           <EditLeaveBankModal
             show={showEditLeaveModal}
             setShow={setShowEditLeaveModal}
+            paid_leave={paid_leaves}
+            employeeId={employeeId}
           />
         )}
       </div>

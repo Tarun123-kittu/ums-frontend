@@ -16,6 +16,14 @@
     margin-top: 10px;
     font-weight: 500;
 }
+
+.card-cmn {
+    background: #fff;
+    padding: 30px;
+    border: 1px solid #F8F9FA;
+    box-shadow: 0px 4px 20px 0 #EEEEEE80;
+    border-radius: 10px;
+}
  
 button.cmn_bg_btn {
     border: unset;

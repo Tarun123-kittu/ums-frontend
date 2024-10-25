@@ -59,6 +59,16 @@ export const getAllUsers = createSlice({
         isLoading: false,
         error: null,
     },
+    reducers: {
+        clear_users_state: (state) => {
+            state.data = []
+            state.isSuccess = false
+            state.isError = false
+            state.isLoading = false
+            state.error = null
+
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(get_all_users_user.pending, (state) => {
@@ -76,5 +86,5 @@ export const getAllUsers = createSlice({
             });
     },
 });
-
+export const { clear_users_state } = getAllUsers.actions
 export default getAllUsers.reducer;

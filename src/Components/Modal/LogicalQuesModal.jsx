@@ -15,24 +15,34 @@ const LogicalQuesModal = ({ show, setShow, seriesId, language_id }) => {
   const dispatch = useDispatch();
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
   const log_que = useSelector((store) => store.LOGICAL_QUE);
   const handleClose = () => {
     setShow(false);
   };
 
   const handleSave = () => {
-    if (!question && !answer) {
-      toast.error("All fields are required");
-    } else {
-      dispatch(
-        add_logical_que({
-          test_series_id: seriesId,
-          language_id,
-          question,
-          answer,
-        })
-      );
+    let missingData = {};
+    if (!question) {
+      toast.error("Question is required");
+      missingData.question = "Question is required";
+      setErrorMessage(missingData);
+      return;
     }
+    if (!answer) {
+      toast.error("Answer is required");
+      missingData.answer = "Answer is required";
+      setErrorMessage(missingData);
+      return;
+    }
+    dispatch(
+      add_logical_que({
+        test_series_id: seriesId,
+        language_id,
+        question,
+        answer,
+      })
+    );
   };
 
   useEffect(() => {
@@ -71,7 +81,12 @@ const LogicalQuesModal = ({ show, setShow, seriesId, language_id }) => {
             classname={"new_employee_form_group"}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
+            styleTrue={errorMessage?.question}
           />
+
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.question}
+          </span>
           <div className="form-group new_employee_form_group">
             <label>Logical Answer</label>
             <textarea
@@ -79,8 +94,12 @@ const LogicalQuesModal = ({ show, setShow, seriesId, language_id }) => {
               placeholder="Enter Answer"
               rows={4}
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              style={errorMessage?.answer ? { border: "1px solid red" } : {}}
             />
+
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.answer}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer>

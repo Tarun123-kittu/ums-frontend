@@ -4,8 +4,15 @@ import { TiArrowUnsorted } from "react-icons/ti";
 
 import Select, { components } from "react-select";
 
-const CustomSelectComp = ({ optionsData, changeHandler, value, placeholder, disabled }) => {
-  const valueObj = optionsData?.find(option => option.value === value);
+const CustomSelectComp = ({
+  optionsData,
+  changeHandler,
+  value,
+  placeholder,
+  disabled,
+  styleTrue,
+}) => {
+  const valueObj = optionsData?.find((option) => option.value === value);
 
   const customStyles = {
     container: (provided) => ({
@@ -17,8 +24,8 @@ const CustomSelectComp = ({ optionsData, changeHandler, value, placeholder, disa
       backgroundColor: state.isSelected
         ? "#9e0302"
         : state.isFocused
-          ? "#f6f6f6"
-          : "#f6f6f6",
+        ? "#f6f6f6"
+        : "#f6f6f6",
       color: state.isSelected ? "#ffffff" : "#687281",
       padding: 10,
       display: "flex",
@@ -35,27 +42,25 @@ const CustomSelectComp = ({ optionsData, changeHandler, value, placeholder, disa
     control: (provided, state) => ({
       ...provided,
       borderRadius: 7,
-      border: state.isFocused ? "1px solid #D9D9D9" : "1px solid #D9D9D9",
+      border: styleTrue ? "1px solid red" : "1px solid #D9D9D9", // Apply the red border here
       padding: "0 8px",
       boxShadow: "none",
       "&:hover": {
-        border: "1px solid #D9D9D9",
+        border: styleTrue ? "1px solid red" : "1px solid #D9D9D9", // Apply hover border conditionally
       },
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
     }),
     placeholder: (provided) => ({
       ...provided,
       fontSize: 14,
       color: "#798398",
       fontWeight: 500,
-
     }),
     singleValue: (provided) => ({
       ...provided,
       fontSize: 14,
       color: "#8a8d91",
     }),
-
     indicatorSeparator: () => ({
       display: "none",
     }),
@@ -96,7 +101,7 @@ const CustomSelectComp = ({ optionsData, changeHandler, value, placeholder, disa
       onChange={changeHandler}
       placeholder={placeholder}
       value={valueObj || null}
-      isDisabled={disabled} // Use isDisabled to control the select box's disabled state
+      isDisabled={disabled}
     />
   );
 };

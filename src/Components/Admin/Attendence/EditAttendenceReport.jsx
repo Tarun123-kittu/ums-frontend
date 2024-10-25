@@ -19,24 +19,20 @@ import {
   clear_update_attendance_state,
 } from "../../../utils/redux/attendanceSlice/updateAttendance";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 
 const EditAttendenceReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const permissions = UsePermissions("Attandance");
+  console.log(permissions, "this is the permissions");
   const { id } = location?.state ? location?.state : location;
   const [in_time, setIn_time] = useState("");
   const [out_time, setOut_time] = useState("");
   const [report, setReport] = useState("");
   const [remark, setRemark] = useState("");
-  const [hr_user_permissions, setHr_user_permissions] = useState({});
   const [enable, setEnable] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("roles")?.includes("Employee")) {
-      navigate("/mark-attendence");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (!id) {
@@ -53,13 +49,9 @@ const EditAttendenceReport = () => {
 
   const { show } = useAppContext();
 
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
-  );
   const attendance_detail = useSelector(
     (store) => store.SELECTED_ATTENDANCE_DETAIL
   );
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
   const is_attendance_updated = useSelector((store) => store.UPDATE_ATTENDANCE);
 
   useEffect(() => {
@@ -105,21 +97,23 @@ const EditAttendenceReport = () => {
     }
   }, [is_attendance_updated]);
 
-  return Permissions?.can_view ? (
+  return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
-        className={`wrapper gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer   ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
-        <div className="cmn_padding_outer">
+        <div className="cmn_padding_outer ">
           <BreadcrumbComp
             data={obj}
-            classname={"inter_fontfamily employee_heading"}
+            classname={"inter_fontfamily employee_heading "}
             onBreadcrumbClick={""}
           />
           <div>
-            <div className="cmn_editattendence_outer cmn_border">
+            <div className="cmn_editattendence_outer cmn_border card-cmn">
               <div className="row">
                 <div className="col-lg-6 col-sm-12 col-md-12">
                   <InputField
@@ -202,13 +196,20 @@ const EditAttendenceReport = () => {
                 <MdStar />
                 <MdStar />
               </div>
-              {Permissions?.can_update && (
+              {permissions?.can_update && (
                 <div className="text-center mt-4">
                   <button
                     className="cmn_Button_style"
                     onClick={() => handleUpdate()}
                   >
                     Update
+                    {is_attendance_updated?.isLoading && (
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                   </button>
                 </div>
               )}

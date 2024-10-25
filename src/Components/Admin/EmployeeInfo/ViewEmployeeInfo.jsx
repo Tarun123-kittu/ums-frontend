@@ -12,6 +12,7 @@ import {
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_user_documents } from "../../../utils/redux/userSlice/getUserDocuments";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const ViewEmployeeInfo = () => {
   const location = useLocation();
@@ -67,6 +68,18 @@ const ViewEmployeeInfo = () => {
     { value: 4, label: "None" },
   ];
 
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
   useEffect(() => {
     dispatch(get_user_documents({ userId: user_id }));
     dispatch(get_user_details({ id: user_id }));
@@ -80,10 +93,7 @@ const ViewEmployeeInfo = () => {
     }
   }, [user_detail]);
 
-  const obj = [
-    { name: "Employee", path: "/employee" },
-    { name: "Information About Dinesh Kumar", path: "/viewEmployeeInfo" },
-  ];
+  const obj = [{ name: "Employees", path: "/employee" }];
 
   const documentsName = [
     { id: 1, name: "Aadhar Card" },
@@ -97,7 +107,9 @@ const ViewEmployeeInfo = () => {
   return permissions?.can_view ? (
     <section>
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -106,7 +118,7 @@ const ViewEmployeeInfo = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="employee_editInfo_wrapper">
+          <div className="employee_editInfo_wrapper card-cmn">
             <ul className="user_info_list_outer">
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Name</h3>
@@ -148,7 +160,13 @@ const ViewEmployeeInfo = () => {
               </li>
               <li className="d-flex  info_content">
                 <h3 className="heading_style">Position</h3>
-                <h3 className="heading_style">{user_details?.position}</h3>
+                <h3 className="heading_style">
+                  {positionData
+                    ?.filter((post) => post.value === user_details?.position)
+                    ?.map((filteredPost, index) => (
+                      <span key={index}>{filteredPost.label}</span>
+                    ))}
+                </h3>
                 <h3 className="heading_style">Technology/Department</h3>
                 <h3 className="heading_style">{user_details?.department}</h3>
               </li>
@@ -208,8 +226,8 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">
                   {user_details?.dob
                     ? new Date(user_details.increment_date).toLocaleDateString(
-                      "en-GB"
-                    )
+                        "en-GB"
+                      )
                     : "No Date Available"}
                 </h3>
               </li>
@@ -218,9 +236,9 @@ const ViewEmployeeInfo = () => {
                 <h3 className="heading_style">{user_details?.address}</h3>
               </li>
             </ul>
-            <div className="table-responsive mt-4 transparent_bg">
+            <div className=" mt-3 card-cmn">
               <h3 className="heading_style">Documents</h3>
-              <table className="employee_detail_table mt-3">
+              <Table responsive className="leave_table mb-0 ">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -241,13 +259,13 @@ const ViewEmployeeInfo = () => {
                             Array.isArray(selected_documents) &&
                             selected_documents.includes(document.name)
                           }
-                        // onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
+                          // onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
                         />
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </Table>
             </div>
             <div className="mt-3 text-end">
               {permissions?.can_update && (

@@ -36,8 +36,8 @@ const EditPerson = () => {
   const [expected_salary, setExpected_salary] = useState("");
   const [last_company, setLast_company] = useState("");
   const [id, setId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
   const update_lead_data = useSelector((store) => store.UPDATE_LEAD);
-  console.log(update_lead_data, "this is the lead update data");
 
   useEffect(() => {
     if (!leadData) {
@@ -81,6 +81,74 @@ const EditPerson = () => {
   };
 
   const handleUpdate = () => {
+    let missingData = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!name) {
+      missingData.name = "Name is required";
+      toast.error("Name is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!mobile) {
+      missingData.mobile = "Mobile number is required";
+      toast.error("Mobile number is required");
+      setErrorMessage(missingData);
+      return;
+    } else if (mobile.length < 10) {
+      missingData.mobile = "Mobile number must be at least 10 digits";
+      toast.error("Mobile number must be at least 10 digits");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!email) {
+      missingData.email = "Email is required";
+      toast.error("Email is required");
+      setErrorMessage(missingData);
+      return;
+    } else if (!emailRegex.test(email)) {
+      missingData.email = "Invalid email format";
+      toast.error("Invalid email format");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!gender) {
+      missingData.gender = "Gender is required";
+      toast.error("Gender is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!dob) {
+      missingData.dob = "Date of birth is required";
+      toast.error("Date of birth is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!profile) {
+      missingData.profile = "Profile is required";
+      toast.error("Profile is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!state) {
+      missingData.state = "State is required";
+      toast.error("State is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
+    if (!address) {
+      missingData.address = "Address is required";
+      toast.error("Address is required");
+      setErrorMessage(missingData);
+      return;
+    }
+
     dispatch(
       update_lead({
         name,
@@ -115,7 +183,9 @@ const EditPerson = () => {
   return permissions?.can_view ? (
     <section>
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -135,7 +205,11 @@ const EditPerson = () => {
                   type={"text"}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  styleTrue={errorMessage?.name}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.name}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -145,8 +219,17 @@ const EditPerson = () => {
                   classname={"new_employee_form_group"}
                   type={"number"}
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (/^\d*$/.test(newValue) && newValue.length <= 10) {
+                      setMobile(newValue);
+                    }
+                  }}
+                  styleTrue={errorMessage?.mobile}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.mobile}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
@@ -157,7 +240,11 @@ const EditPerson = () => {
                   type={"email"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  styleTrue={errorMessage?.email}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.email}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <div className="form-group new_employee_form_group">
@@ -170,7 +257,11 @@ const EditPerson = () => {
                       optionsData={options}
                       changeHandler={(e) => changeHandler("gender", e)}
                       value={gender}
+                      styleTrue={errorMessage?.gender}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.gender}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -183,11 +274,15 @@ const EditPerson = () => {
                   type={"date"}
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
+                  styleTrue={errorMessage?.dob}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {errorMessage?.dob}
+                </span>
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
                 <InputField
-                  labelname={"Experience "}
+                  labelname={"Experience (Optional)"}
                   placeholder={"Enter Experience"}
                   classname={"new_employee_form_group"}
                   type={"number"}
@@ -205,9 +300,14 @@ const EditPerson = () => {
                   labelname={"Current salary (optional)"}
                   placeholder={"Enter Current salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={current_salary}
-                  onChange={(e) => setCurrent_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setCurrent_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -215,9 +315,14 @@ const EditPerson = () => {
                   labelname={"Expected salary (optional)"}
                   placeholder={"Enter Expected salary"}
                   classname={"new_employee_form_group"}
-                  type={"text"}
+                  type={"number"}
                   value={expected_salary}
-                  onChange={(e) => setExpected_salary(e.target.value)}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value >= 0) {
+                      setExpected_salary(value);
+                    }
+                  }}
                 />
               </div>
               <div className="col-lg-4 col-sm-12 col-md-6">
@@ -231,7 +336,11 @@ const EditPerson = () => {
                       optionsData={ProfileData}
                       changeHandler={(e) => changeHandler("profile", e)}
                       value={profile}
+                      styleTrue={errorMessage?.profile}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.profile}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -256,7 +365,11 @@ const EditPerson = () => {
                       optionsData={indianStatesKeyValuePairs}
                       changeHandler={(e) => changeHandler("state", e)}
                       value={state}
+                      styleTrue={errorMessage?.state}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessage?.state}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -271,7 +384,11 @@ const EditPerson = () => {
                 rows={5}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                style={errorMessage?.address ? { border: "1px solid red" } : {}}
               />
+              <span style={{ color: "red", fontSize: "13px" }}>
+                {errorMessage?.address}
+              </span>
             </div>
 
             <div className="d-flex gap-2 mt-4 justify-content-end exit_save_btn_outer">
@@ -286,7 +403,14 @@ const EditPerson = () => {
                   className="cmn_Button_style"
                   onClick={() => handleUpdate()}
                 >
-                  Save
+                  {update_lead_data?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Update
                 </button>
               )}
             </div>

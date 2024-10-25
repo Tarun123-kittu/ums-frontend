@@ -11,7 +11,10 @@ import CommonDeleteModal from "../../Modal/CommonDeleteModal";
 import EditTestSeriesModal from "../../Modal/EditTestSeries";
 import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 import { useDispatch, useSelector } from "react-redux";
-import { get_all_series } from "../../../utils/redux/testSeries/getAllTestSeries";
+import {
+  get_all_series,
+  clear_series_state,
+} from "../../../utils/redux/testSeries/getAllTestSeries";
 import toast from "react-hot-toast";
 import { FaRegUser } from "react-icons/fa";
 import {
@@ -35,6 +38,8 @@ const Testseries = () => {
   const [all_languagages, setAll_languages] = useState([]);
   const [search_enable, setSearch_enable] = useState(false);
   const [seriesId, setSeriesId] = useState(null);
+  const [enableSearch, setEnableSearch] = useState(false);
+  const [series, setSeries] = useState([]);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const all_series = useSelector((store) => store.ALL_SERIES);
   const deleted_state = useSelector((store) => store.DELETE_SERIES);
@@ -56,11 +61,15 @@ const Testseries = () => {
 
   useEffect(() => {
     if (all_series?.isSuccess) {
+      setSeries(all_series?.data?.data);
       setSearch_enable(false);
+      dispatch(clear_series_state());
     }
     if (all_series?.isError) {
+      setSeries([]);
       setSearch_enable(false);
       toast.error(all_series?.error?.message);
+      dispatch(clear_series_state());
     }
   }, [all_series]);
 
@@ -117,7 +126,9 @@ const Testseries = () => {
   return permissions?.can_view ? (
     <section className="test_serie_wrapper">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -136,18 +147,34 @@ const Testseries = () => {
                   <CustomSelectComp
                     optionsData={all_languagages}
                     changeHandler={changeHandler}
+                    value={id}
                   />
                 </div>
               </div>
             </div>
 
             <div className="gap-3 d-flex text-center serach_add_outer">
-              <button
-                className="cmn_Button_style cmn_darkgray_btn"
-                onClick={() => handleSearch()}
-              >
-                Search
-              </button>
+              {enableSearch ? (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(get_all_series({ id: "" }));
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style "
+                  onClick={() => {
+                    handleSearch();
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              )}
               {permissions?.can_create && (
                 <button
                   onClick={() => {
@@ -165,8 +192,10 @@ const Testseries = () => {
             <div className="row">
               {all_series?.isLoading ? (
                 <img src={Loader} alt="loader" className="loader_gif" />
+              ) : series?.length === 0 ? (
+                <h4>No Series Found</h4>
               ) : (
-                all_series?.data?.data?.map((series, i) => {
+                series?.map((series, i) => {
                   return (
                     <div className="col-lg-4 col-sm-12 col-md-6">
                       <div key={i} className="series_card">

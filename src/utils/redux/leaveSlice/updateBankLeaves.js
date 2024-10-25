@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_all_applied_leaves = createAsyncThunk("get_all_applied_leaves", async ({ page }, thunkAPI) => {
+export const update_bank_leave = createAsyncThunk("update_bank_leave", async ({ employeeId, taken_leaves, paid_leaves, session }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
 
         const requestOptions = {
-            method: "GET",
+            method: "PUT",
             headers: myHeaders,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_applied_leaves?page=${page}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_user_leave_bank?employeeId=${employeeId}&taken_leaves=${taken_leaves}&paid_leaves=${paid_leaves}&session=${session}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
@@ -28,31 +28,41 @@ export const get_all_applied_leaves = createAsyncThunk("get_all_applied_leaves",
     }
 })
 
-export const getAllAppliedLeaves = createSlice({
-    name: "getAllAppliedLeaves",
+export const updateBankLeave = createSlice({
+    name: "updateBankLeave",
     initialState: {
-        data: [],
+        message: {},
         isSuccess: false,
         isError: false,
         isLoading: false,
         error: null
     },
+    reducers: {
+        clear_bank_leave_state: (state) => {
+            state.message = {}
+            state.isSuccess = false
+            state.isError = false
+            state.isLoading = false
+            state.error = null
+            return state
+        }
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(get_all_applied_leaves.pending, (state) => {
+            .addCase(update_bank_leave.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_all_applied_leaves.fulfilled, (state, action) => {
-                state.data = action.payload
+            .addCase(update_bank_leave.fulfilled, (state, action) => {
+                state.message = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_all_applied_leaves.rejected, (state, action) => {
+            .addCase(update_bank_leave.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
             })
     }
 })
-
-export default getAllAppliedLeaves.reducer
+export const { clear_bank_leave_state } = updateBankLeave.actions
+export default updateBankLeave.reducer

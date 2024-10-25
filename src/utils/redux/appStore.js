@@ -86,6 +86,11 @@ import getEmployeeLeaveCount from './dashboardSlice/getEmployeesOnLeave'
 import getDashboardInterviewOverview from './dashboardSlice/getDashboardInterviewOverview'
 import getDashboardAttendenceGraph from './dashboardSlice/getDashboardAttendenceGraph'
 import getLeavesOnDashboard from './dashboardSlice/getDashboardLeave'
+import updateBankLeave from './leaveSlice/updateBankLeaves'
+import deleteLead from './interviewLeadsSlice/deleteLeads'
+import changePassword from './userSlice/changePassword'
+import forgetPassword from './userSlice/forgetPassword'
+import UserResetPassword from './userSlice/userResetPassword'
 
 const appStore = configureStore({
     reducer: {
@@ -175,7 +180,13 @@ const appStore = configureStore({
         EMPLOYEE_LEAVE_COUNT: getEmployeeLeaveCount,
         DASHBOARD_INTERVIEWOVERVIEW: getDashboardInterviewOverview,
         DASHBOARD_ATTENDENCE_GRAPH: getDashboardAttendenceGraph,
-        GET_LEAVES_ON_DASHBOARD: getLeavesOnDashboard
+        GET_LEAVES_ON_DASHBOARD: getLeavesOnDashboard,
+        UPDATE_BANK_LEAVE: updateBankLeave,
+        DELETE_LEAD: deleteLead,
+        CHANGE_PASSWORD: changePassword,
+        FORGOT_PASSWORD: forgetPassword,
+        RESET_PASSWORD: UserResetPassword
+
     },
 })
 

@@ -19,6 +19,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const RoleAndPermission = () => {
   const permissions = UsePermissions("Teams");
@@ -31,7 +32,7 @@ const RoleAndPermission = () => {
   const [role_id, setRole_id] = useState("");
   const is_role_disabled = useSelector((store) => store.DISABLE_ROLE);
   const user_roles = useSelector((store) => store.GET_ALL_USER_ROLES);
-
+  localStorage.removeItem("tab");
   const handleDelete = () => {
     dispatch(disable_role({ role_id: role_id }));
   };
@@ -60,7 +61,9 @@ const RoleAndPermission = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -82,8 +85,8 @@ const RoleAndPermission = () => {
             )}
           </div>
 
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>S.No</th>
@@ -103,8 +106,12 @@ const RoleAndPermission = () => {
                         <td>{roles?.role}</td>
                         <td>
                           {roles?.users?.map((name, index) => {
-                            console.log(name, "name name");
-                            return <span key={index}>{name?.username}</span>;
+                            return (
+                              <span key={index}>
+                                {name?.username}
+                                <br />
+                              </span>
+                            );
                           })}
                         </td>
                         <td>
@@ -141,10 +148,9 @@ const RoleAndPermission = () => {
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
       </div>
       {showDeleteModal && (
         <CommonDeleteModal

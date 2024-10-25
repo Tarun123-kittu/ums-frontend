@@ -12,8 +12,11 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.png";
 
 const LeaveReport = () => {
+  let index = 0;
   const permissions = UsePermissions("Leaves");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,6 +24,7 @@ const LeaveReport = () => {
     { name: "Leave Application", path: "" },
     { name: "Leave Report", path: "/leaveReport" },
   ];
+  localStorage.removeItem("tab");
 
   useEffect(() => {
     if (localStorage.getItem("roles")?.includes("Employee")) {
@@ -30,7 +34,9 @@ const LeaveReport = () => {
   const leave_data = useSelector((store) => store.USER_ALL_LEAVES);
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const [year, setYear] = useState([]);
+  const [page, setPage] = useState(1);
   const [selected_employee, setSelected_employee] = useState();
+  const [enableSearch, setEnableSearch] = useState(false);
   const [selected_month, setSelected_month] = useState();
   const [selected_year, setSelected_year] = useState();
 
@@ -40,10 +46,11 @@ const LeaveReport = () => {
         name: selected_employee,
         month: selected_month,
         year: selected_year,
+        page,
       })
     );
     years();
-  }, []);
+  }, [page]);
 
   const { show } = useAppContext();
   const formatDate = (dateString) => {
@@ -95,7 +102,9 @@ const LeaveReport = () => {
   return permissions?.can_view ? (
     <section className="leaveReport_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -154,16 +163,37 @@ const LeaveReport = () => {
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() => handleManageFilters()}
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    handleManageFilters();
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_all_user_leave({
+                        name: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -181,48 +211,72 @@ const LeaveReport = () => {
               </thead>
               <tbody>
                 {leave_data?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : leave_data?.data?.data?.length === 1 &&
+                  leave_data?.data?.data[0]?.role === "Admin" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : (
                   leave_data?.data?.data?.map((leave, i) => {
-                    return (
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>{leave?.name}</td>
-                        <td>{leave?.type}</td>
-                        <td>{formatDate(leave?.createdAt)}</td>
-                        <td>{leave?.from_date}</td>
-                        <td>{leave?.to_date}</td>
-                        <td>{leave?.count}</td>
-                        <td>{leave?.description}</td>
-                        <td>{leave?.status}</td>
-                        <td>{leave?.remark}</td>
-                        <td>
-                          {permissions?.can_update && (
-                            <div className="cmn_action_outer yellow_bg cursor_pointer">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editLeaveRequest", {
-                                    state: {
-                                      leave_id: leave?.id,
-                                      back_to_report: true,
-                                      leave_status: leave?.status,
-                                      leave_remark: leave?.remark,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                    if (leave?.role !== "Admin") {
+                      return (
+                        <tr>
+                          <td>{++index}</td>
+                          <td>{leave?.name}</td>
+                          <td>{leave?.type}</td>
+                          <td>{formatDate(leave?.createdAt)}</td>
+                          <td>{leave?.from_date}</td>
+                          <td>{leave?.to_date}</td>
+                          <td>{leave?.count}</td>
+                          <td>{leave?.description}</td>
+                          <td>{leave?.status}</td>
+                          <td>{leave?.remark}</td>
+                          <td>
+                            {permissions?.can_update && (
+                              <div className="cmn_action_outer yellow_bg cursor_pointer">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editLeaveRequest", {
+                                      state: {
+                                        leave_id: leave?.id,
+                                        back_to_report: true,
+                                        leave_status: leave?.status,
+                                        leave_remark: leave?.remark,
+                                      },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp />
+        {leave_data?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={leave_data?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

@@ -20,7 +20,6 @@ const Leads = () => {
   );
   const leadData = useSelector((store) => store.VERIFY_LEAD)
   const start_test_data = useSelector((store) => store.START_TEST)
-  console.log()
   const handleStart = () => {
     if (!checked) {
       toast.error("Please confirm terms and conditions");
@@ -73,7 +72,8 @@ const Leads = () => {
   if (
     (
       user_all_permissions?.roles_data?.includes("Admin") ||
-      user_all_permissions?.roles_data?.includes("HR")
+      user_all_permissions?.roles_data?.includes("HR") ||
+      user_all_permissions?.roles_data?.includes("Employee")
     )
   ) {
     return <UnauthorizedPage />;

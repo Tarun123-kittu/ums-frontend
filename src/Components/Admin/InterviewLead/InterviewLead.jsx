@@ -28,6 +28,7 @@ const InterviewLead = () => {
   const [selected_language, setSelected_language] = useState("");
   const [selected_experience, setSelected_experience] = useState("");
   const [selected_result, setSelected_result] = useState("");
+  const [enableSearch, setEnableSearch] = useState(false);
   const [currentTab, setCurrentTab] = useState("Add Person");
   const [open_tab, setOpen_tab] = useState("Add Person");
   const [page, setPage] = useState(1);
@@ -188,7 +189,9 @@ const InterviewLead = () => {
   return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
-        className={` gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -235,20 +238,27 @@ const InterviewLead = () => {
               )}
 
               <div className="employee_wrapper text-end serach_add_outer d-flex gap-2">
-                <button
-                  className="cmn_Button_style cmn_darkgray_btn"
-                  onClick={() => {
-                    handleClearResult();
-                  }}
-                >
-                  Clear
-                </button>
-                <button
-                  className="cmn_Button_style"
-                  onClick={() => searchHandler()}
-                >
-                  Search
-                </button>
+                {enableSearch ? (
+                  <button
+                    className="cmn_Button_style cmn_darkgray_btn"
+                    onClick={() => {
+                      handleClearResult();
+                      setEnableSearch(false);
+                    }}
+                  >
+                    Clear
+                  </button>
+                ) : (
+                  <button
+                    className="cmn_Button_style"
+                    onClick={() => {
+                      searchHandler();
+                      setEnableSearch(true);
+                    }}
+                  >
+                    Search
+                  </button>
+                )}
               </div>
             </div>
             <div className="inerterview_lead_tabs cmn_border mt-3">

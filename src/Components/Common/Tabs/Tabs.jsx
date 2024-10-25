@@ -32,15 +32,24 @@ import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/g
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
+import NoData from "../../assets/nodata.png";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+import {
+  delete_lead,
+  clear_delete_lead_slice,
+} from "../../../utils/redux/interviewLeadsSlice/deleteLeads";
+import { Table } from "react-bootstrap";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const permissions = UsePermissions("Interviews");
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
     useState(false);
-
+  const na = "Not Available";
   const resultData = [
     { value: "selected", label: "Selected" },
     { value: "rejected", label: "Rejected" },
@@ -67,6 +76,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const [techPage, setTechPage] = useState(1);
   const [facePage, setFacePage] = useState(1);
   const [finalPage, setFinalPage] = useState(1);
+  const [round, setRound] = useState("");
   const all_leads = useSelector((Store) => Store.ALL_LEADS);
   const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
 
@@ -79,6 +89,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   const face_round_leads = useSelector((store) => store.FACE_ROUND_LEADS);
   const update_face_round = useSelector((store) => store.FACE_ROUND_STATUS);
   const final_round_leads = useSelector((store) => store.FINAL_ROUND_LEADS);
+  const delete_lead_status = useSelector((store) => store.DELETE_LEAD);
 
   useEffect(() => {
     if (tech_round_leads?.isSuccess) {
@@ -93,7 +104,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [tech_round_leads]);
 
   useEffect(() => {
+    if (localStorage.getItem("tab")) {
+      if (localStorage?.getItem("tab") === "Technical") {
+        setActiveTab("Technical");
+      }
+      if (localStorage?.getItem("tab") === "HR") {
+        setActiveTab("HR");
+      }
+      if (localStorage?.getItem("tab") === "Face to face") {
+        setActiveTab("Face to face");
+      }
+      if (localStorage?.getItem("tab") === "Final Interaction") {
+        setActiveTab("Final Interaction");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (update_round_status?.isSuccess) {
+      setActiveTab("Face to face");
       dispatch(
         get_all_tech_round_leads({
           page: techPage,
@@ -116,6 +145,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   ];
 
   useEffect(() => {
+    getAllLeads();
+  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
+
+  const getAllLeads = () => {
     dispatch(get_all_leads({ page: allLeadPage, experience: "", profile: "" }));
     dispatch(
       get_hr_round_candidate({
@@ -153,7 +186,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
         result_status: "",
       })
     );
-  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
+  };
 
   useEffect(() => {
     if (hr_round_candidate_status?.isSuccess) {
@@ -168,6 +201,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [hr_round_candidate_status]);
 
   const handleTabSelect = (selectedTab) => {
+    localStorage.removeItem("tab");
     setOpen_tab(selectedTab);
     setActiveTab(selectedTab);
     setCurrentTab(selectedTab);
@@ -184,7 +218,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   useEffect(() => {
     if (update_tech_status?.isSuccess) {
       toast.success("Lead status Updated successfully");
-      dispatch(get_all_tech_round_leads());
+      dispatch(
+        get_all_tech_round_leads({
+          page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
       dispatch(clear_tech_round_status_state());
     }
     if (update_tech_status?.isError) {
@@ -194,6 +236,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [update_tech_status]);
 
   const changeFaceRoundStatus = (e, id, round) => {
+    setRound(round);
+    localStorage.removeItem("tab");
     dispatch(
       update_face_round_status({
         leadId: id,
@@ -205,7 +249,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_face_round?.isSuccess) {
+      localStorage.removeItem("tab");
       toast.success(" Status Updated Successfully");
+      if (round === "face_to_face") {
+        setActiveTab("Face to face");
+      }
+      if (round === "Final") {
+        setActiveTab("Final Interaction");
+      }
       dispatch(
         get_face_round_leads({
           page: 1,
@@ -247,6 +298,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [update_round_status]);
 
+  const deleteHandler = () => {
+    dispatch(delete_lead({ leadId }));
+  };
+
+  useEffect(() => {
+    if (delete_lead_status?.isSuccess) {
+      toast.success("Lead Deleted Successfully !!");
+      dispatch(clear_delete_lead_slice);
+      setShowDeleteModal(false);
+      getAllLeads();
+    }
+    if (delete_lead_status?.isError) {
+      toast.error(delete_lead_status?.error?.message);
+      dispatch(clear_delete_lead_slice);
+    }
+  }, [delete_lead_status]);
+
   return permissions?.can_view ? (
     <div>
       <Tabs
@@ -257,8 +325,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
         onSelect={(k) => handleTabSelect(k)}
       >
         <Tab eventKey="Add Person" title="Add Person">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -272,7 +340,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {all_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_leads?.data?.message ===
+                  "No leads found with the specified filters." ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(all_leads?.data?.data) ? (
                   all_leads.data.data.filter((lead) => lead?.in_round === 0)
                     .length > 0 ? (
@@ -377,11 +462,21 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 </div>
                               </div>
                             </td>
-                            <td>{lead?.profile}</td>
-                            <td>{lead?.experience}</td>
-                            <td>{lead?.current_salary}</td>
-                            <td>{lead?.expected_salary}</td>
+                            <td>{lead?.profile ? lead?.profile : na}</td>
                             <td>
+                              {lead?.experience
+                                ? lead?.experience + " year"
+                                : na}
+                            </td>
+                            <td>
+                              {lead?.current_salary ? lead?.current_salary : na}
+                            </td>
+                            <td>
+                              {lead?.expected_salary
+                                ? lead?.expected_salary
+                                : na}
+                            </td>
+                            <td className="d-flex gap-2">
                               {permissions?.can_view &&
                                 permissions?.can_update && (
                                   <button
@@ -394,6 +489,18 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                     Start
                                   </button>
                                 )}
+                              <div
+                                className="cmn_action_outer red_bg"
+                                style={{ cursor: "pointer" }}
+                                title="delete user"
+                              >
+                                <RiDeleteBin6Line
+                                  onClick={() => {
+                                    setShowDeleteModal(true);
+                                    setLeadId(lead?.id);
+                                  }}
+                                />
+                              </div>
                             </td>
                           </tr>
                         );
@@ -410,24 +517,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center">
-                      Invalid data format
+                      No lead Found
                     </td>
                   </tr>
                 )}
               </tbody>
-            </table>
-            {all_leads?.data?.data?.some((field) => field.in_round === 0) >
-              0 && (
-              <PaginationComp
-                totalPage={all_leads?.data?.pagination?.totalPages}
-                setPage={setAllLeadPage}
-              />
-            )}
+            </Table>
+            {all_leads?.data?.pagination?.totalPages > 1 &&
+              all_leads?.data?.data?.some((field) => field.in_round === 0) >
+                0 && (
+                <PaginationComp
+                  totalPage={all_leads?.data?.pagination?.totalPages}
+                  setPage={setAllLeadPage}
+                />
+              )}
           </div>
         </Tab>
         <Tab eventKey="HR" title="HR">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -441,7 +549,24 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {all_hr_round_candidate?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_hr_round_candidate?.data?.message ===
+                  "No candidate found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : all_hr_round_candidate?.data?.data?.length === 0 ? (
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
@@ -458,8 +583,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             {candidate?.name}
                           </div>
                         </td>
-                        <td>{candidate?.profile}</td>
-                        <td>{candidate?.experience}</td>
+                        <td>{candidate?.profile ? candidate?.profile : na}</td>
+                        <td>
+                          {candidate?.experience
+                            ? candidate?.experience + " year"
+                            : na}
+                        </td>
                         <td
                           style={{
                             textDecoration: "underline",
@@ -467,13 +596,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           }}
                           onClick={() => {
                             permissions?.can_view &&
-                              permissions?.can_update &&
                               navigate("/viewQuestionlist", {
                                 state: {
                                   interview_id: candidate?.interview_id,
                                   lead_id: candidate?.id,
                                 },
                               });
+                            localStorage.setItem("tab", "HR");
                           }}
                         >
                           View Questions List
@@ -497,8 +626,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           </div>
                         </td>
                         <td>
-                          {permissions?.can_view &&
-                            permissions?.can_update &&
+                          {permissions?.can_update &&
                             candidate?.hr_round_result === "selected" && (
                               <button
                                 className="cmn_Button_style"
@@ -511,14 +639,20 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
+                          <RiDeleteBin6Line
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setLeadId(candidate?.id);
+                            }}
+                          />
                         </td>
                       </tr>
                     );
                   })
                 )}
               </tbody>
-            </table>
-            {all_hr_round_candidate?.data?.data?.length > 0 && (
+            </Table>
+            {all_hr_round_candidate?.data?.totalPages > 1 && (
               <PaginationComp
                 totalPage={all_hr_round_candidate?.data?.totalPages}
                 setPage={setHrPages}
@@ -527,8 +661,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Technical" title="Technical">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -542,7 +676,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {tech_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : tech_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(tech_round_leads?.data?.data?.data) ? (
                   tech_round_leads.data.data.data.length === 0 ? (
                     <tr>
@@ -559,14 +709,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             {tech_leads?.name}
                           </div>
                         </td>
-                        <td>{tech_leads?.profile}</td>
-                        <td>{tech_leads?.experience}</td>
+                        <td>
+                          {tech_leads?.profile ? tech_leads?.profile : na}
+                        </td>
+                        <td>
+                          {tech_leads?.experience
+                            ? tech_leads?.experience + " year"
+                            : na}
+                        </td>
                         <td
                           className="cursor_pointer"
                           style={{ textDecoration: "underline" }}
                           onClick={() => {
                             permissions?.can_view &&
-                              permissions?.can_update &&
                               navigate("/questionAnswerSheet", {
                                 state: {
                                   lead_id: tech_leads?.id,
@@ -574,6 +729,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                   series_id: series_id,
                                 },
                               });
+                            localStorage.setItem("tab", "Technical");
                           }}
                         >
                           View Questions List
@@ -592,8 +748,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         </td>
 
                         <td>
-                          {permissions?.can_view &&
-                            permissions?.can_update &&
+                          {permissions?.can_update &&
                             tech_leads?.technical_round_result ===
                               "selected" && (
                               <button
@@ -610,6 +765,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
+                          <RiDeleteBin6Line
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setLeadId(tech_leads?.id);
+                            }}
+                          />
                         </td>
                       </tr>
                     ))
@@ -622,8 +783,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
-            {tech_round_leads?.data?.data?.data?.length > 0 && (
+            </Table>
+            {tech_round_leads?.data?.pagination?.totalPages > 1 && (
               <PaginationComp
                 totalPage={tech_round_leads?.data?.pagination?.totalPages}
                 setPage={setTechPage}
@@ -632,8 +793,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Face to face" title="Face to face">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -643,13 +804,29 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   <th>Expected Salary</th>
                   <th>HR Rating/Question</th>
                   <th>Technical/Question</th>
-                  <th>Face To Face</th>
+                  <th>Face To Face Result</th>
                   <th>Final Round</th>
                 </tr>
               </thead>
               <tbody>
                 {face_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : face_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(face_round_leads?.data?.data) &&
                   face_round_leads?.data?.data?.length > 0 ? (
                   face_round_leads.data.data.map((lead, i) => (
@@ -660,9 +837,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           {lead?.name}
                         </div>
                       </td>
-                      <td>{lead?.profile}</td>
-                      <td>{lead?.experience}</td>
-                      <td>{lead?.expected_salary}</td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
                       <td
                         style={{
                           textDecoration: "underline",
@@ -670,13 +851,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
                                 lead_id: lead?.id,
                               },
                             });
+                          localStorage.setItem("tab", "Face to face");
                         }}
                       >
                         View Questions List
@@ -687,7 +868,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -696,6 +876,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final");
                         }}
                       >
                         View Questions List
@@ -708,7 +889,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             value={lead?.face_to_face_result}
                             changeHandler={(e) =>
                               permissions?.can_update &&
-                              permissions?.can_view &&
                               changeFaceRoundStatus(e, lead?.id, "face_to_face")
                             }
                           />
@@ -722,6 +902,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             <button
                               className="cmn_Button_style"
                               onClick={() =>
+                                permissions?.can_update &&
                                 dispatch(
                                   update_lead_round_count({
                                     leadId: lead?.id,
@@ -733,6 +914,12 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               Start
                             </button>
                           )}
+                        <RiDeleteBin6Line
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                            setLeadId(lead?.id);
+                          }}
+                        />
                       </td>
                     </tr>
                   ))
@@ -744,8 +931,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
-            {face_round_leads?.data?.data?.length > 0 && (
+            </Table>
+            {face_round_leads?.data?.pagination?.totalPages > 1 && (
               <PaginationComp
                 totalPage={face_round_leads?.data?.pagination?.totalPages}
                 setPage={setTechPage}
@@ -754,8 +941,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           </div>
         </Tab>
         <Tab eventKey="Final Interaction" title="Final Interaction">
-          <div className="table-responsive transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>Sr.no</th>
@@ -771,7 +958,23 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
               </thead>
               <tbody>
                 {final_round_leads?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : final_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif"
+                        src={NoData}
+                        alt="loader"
+                        width={300}
+                        height={300}
+                      />
+                    </td>
+                  </tr>
                 ) : Array.isArray(final_round_leads?.data?.data) &&
                   final_round_leads?.data?.data?.length > 0 ? (
                   final_round_leads?.data?.data?.map((lead, i) => (
@@ -782,9 +985,13 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           {lead?.name}
                         </div>
                       </td>
-                      <td>{lead?.profile}</td>
-                      <td>{lead?.experience}</td>
-                      <td>{lead?.expected_salary}</td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
                       <td
                         style={{
                           textDecoration: "underline",
@@ -792,7 +999,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         }}
                         onClick={() => {
                           permissions?.can_view &&
-                            permissions?.can_update &&
                             navigate("/viewQuestionlist", {
                               state: {
                                 interview_id: lead?.interview_id,
@@ -800,6 +1006,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final Interaction");
                         }}
                       >
                         View Questions List
@@ -809,8 +1016,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="cursor_pointer"
                         style={{ textDecoration: "underline" }}
                         onClick={() => {
-                          permissions?.can_view &&
-                            permissions?.can_update &&
+                          permissions?.can_update &&
                             navigate("/questionAnswerSheet", {
                               state: {
                                 lead_id: lead?.id,
@@ -819,6 +1025,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 view: true,
                               },
                             });
+                          localStorage.setItem("tab", "Final Interaction");
                         }}
                       >
                         View Questions List
@@ -830,7 +1037,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                             optionsData={resultData}
                             value={lead?.final_result}
                             changeHandler={(e) =>
-                              permissions?.can_view &&
                               permissions?.can_update &&
                               changeFaceRoundStatus(e, lead?.id, "final")
                             }
@@ -839,8 +1045,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                       </td>
 
                       <td>
-                        {permissions?.can_view &&
-                          permissions?.can_update &&
+                        {permissions?.can_update &&
                           lead?.final_result === "selected" && (
                             <button className="cmn_Button_style">Start</button>
                           )}
@@ -855,8 +1060,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   </tr>
                 )}
               </tbody>
-            </table>
-            {final_round_leads?.data?.data?.length > 0 && (
+            </Table>
+            {final_round_leads?.data?.totalPages > 0 && (
               <PaginationComp
                 totalPage={final_round_leads?.data?.totalPages}
                 setPage={setTechPage}
@@ -871,6 +1076,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           setShow={setShowTechInterviewQuesModal}
           language={language}
           leadId={leadId}
+          setActiveTab={setActiveTab}
         />
       )}
       {showHrQuestionModal && (
@@ -878,6 +1084,15 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           show={showHrQuestionModal}
           setShow={setShowHrQuestionModal}
           leadId={leadId}
+        />
+      )}
+      {showDeleteModal && (
+        <CommonDeleteModal
+          heading_text={"Are you sure you want to delete Interview Lead "}
+          paragraph_text={""}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          handleDelete={deleteHandler}
         />
       )}
     </div>

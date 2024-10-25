@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const get_all_user_leave = createAsyncThunk(
     "get_all_user_leave",
-    async ({ name, month, year }, thunkAPI) => {
+    async ({ name, month, year, page }, thunkAPI) => {
         try {
             const myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem("ums_token"));
@@ -19,6 +19,7 @@ export const get_all_user_leave = createAsyncThunk(
             if (name) params.append("name", name);
             if (month) params.append("month", month);
             if (year) params.append("year", year);
+            if (page) params.append("page", page)
 
             if (params.toString()) {
                 url += params.toString();

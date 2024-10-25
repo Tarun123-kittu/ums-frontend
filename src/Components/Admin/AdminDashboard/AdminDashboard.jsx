@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification";
 import { Row, Col } from "react-bootstrap";
 import TotalEmployee from "../../assets/t-employee.png";
+import Interview from "../../assets/interview.svg";
+import OnLeaves from "../../assets/onLeaves.svg";
+import Present from "../../assets/present.svg";
 import Birthday_icon from "../../assets/birthday_icon.svg";
 import Table from "react-bootstrap/Table";
 import UseAllUsernames from "../../Utils/customHooks/useAllUserNames";
@@ -20,6 +23,13 @@ import { get_employee_leave_count } from "../../../utils/redux/dashboardSlice/ge
 import { get_dashboard_interview_overview } from "../../../utils/redux/dashboardSlice/getDashboardInterviewOverview";
 import { get_dashboard_attendence_graph } from "../../../utils/redux/dashboardSlice/getDashboardAttendenceGraph";
 import { get_leaves_on_dashboard } from "../../../utils/redux/dashboardSlice/getDashboardLeave";
+import Dropdown from "react-bootstrap/Dropdown";
+import { BiChevronDown } from "react-icons/bi";
+import {
+  update_leave,
+  clear_update_leave_state,
+} from "../../../utils/redux/leaveSlice/updateLeaves";
+import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
   UseAllUsernames();
@@ -27,46 +37,59 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const navigate = useNavigate();
-  const [interview_count, setInterview_count] = useState(null)
-  const [attendence_graph_data, setAttendence_graph_data] = useState()
-  console.log(attendence_graph_data, "attendence_graph_data overview")
+  const [interview_count, setInterview_count] = useState(null);
+  const [index, setIndex] = useState(null);
+  const [attendence_graph_data, setAttendence_graph_data] = useState();
   const all_userNames = useSelector((store) => store.ALL_USERNAMES);
   const present_employee = useSelector((store) => store.PRESENT_EMPLOYEES);
   const current_and_next_month_events = useSelector(
     (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
   );
-  const employee_on_leave = useSelector((store) => store.EMPLOYEE_LEAVE_COUNT)
-  const interviews_overview = useSelector((store) => store.DASHBOARD_INTERVIEWOVERVIEW)
-  const attendence_graph = useSelector((store) => store.DASHBOARD_ATTENDENCE_GRAPH)
-  const dashboard_leaves = useSelector((store) => store.GET_LEAVES_ON_DASHBOARD)
-  console.log(dashboard_leaves, "this is the dashboard leaves")
+  const employee_on_leave = useSelector((store) => store.EMPLOYEE_LEAVE_COUNT);
+  const interviews_overview = useSelector(
+    (store) => store.DASHBOARD_INTERVIEWOVERVIEW
+  );
+  const attendence_graph = useSelector(
+    (store) => store.DASHBOARD_ATTENDENCE_GRAPH
+  );
+  const dashboard_leaves = useSelector(
+    (store) => store.GET_LEAVES_ON_DASHBOARD
+  );
+  console.log(dashboard_leaves, "this is the dashboard leaves");
+  const leave_update_status = useSelector((store) => store.UPDATE_LEAVE);
 
   useEffect(() => {
     dispatch(total_present_employees());
     dispatch(get_current_and_next_month_events());
-    getInterviews()
-    dispatch(get_employee_leave_count())
-    dispatch(get_dashboard_interview_overview())
-    dispatch(get_dashboard_attendence_graph())
-    dispatch(get_leaves_on_dashboard())
+    getInterviews();
+    dispatch(get_employee_leave_count());
+    dispatch(get_dashboard_interview_overview());
+    dispatch(get_dashboard_attendence_graph());
+    dispatch(get_leaves_on_dashboard());
+    localStorage.removeItem("tab");
   }, []);
-
 
   const getInterviews = async () => {
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("ums_token")
+    );
 
     const requestOptions = {
       method: "GET",
       headers: myHeaders,
-      redirect: "follow"
+      redirect: "follow",
     };
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_interviews`, requestOptions)
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEN_URL}/get_all_interviews`,
+      requestOptions
+    );
 
     const result = await response.json();
-    setInterview_count(result?.data?.interviewCount)
-  }
+    setInterview_count(result?.data?.interviewCount);
+  };
 
   useEffect(() => {
     let newArr = [];
@@ -77,7 +100,6 @@ const AdminDashboard = () => {
     }
     setAttendence_graph_data(newArr);
   }, [attendence_graph]);
-
 
   const options = {
     chart: {
@@ -90,15 +112,42 @@ const AdminDashboard = () => {
         name: "Share",
         colorByPoint: true,
         data: [
-          { name: "Face to Face Round", y: parseInt(interviews_overview?.data?.data?.faceToFaceRound || 0) },
-          { name: "Final Round", y: parseInt(interviews_overview?.data?.data?.finalRound || 0) },
-          { name: "HR Round", y: parseInt(interviews_overview?.data?.data?.hrRound || 0) },
-          { name: "Technical Round", y: parseInt(interviews_overview?.data?.data?.technicalRound || 0) },
-          { name: "On Hold", y: parseInt(interviews_overview?.data?.data?.onHold || 0) },
-          { name: "Pending", y: parseInt(interviews_overview?.data?.data?.pending || 0) },
-          { name: "Rejected", y: parseInt(interviews_overview?.data?.data?.rejected || 0) },
-          { name: "Selected", y: parseInt(interviews_overview?.data?.data?.selected || 0) },
-          { name: "Total Leads", y: parseInt(interviews_overview?.data?.data?.totalLeads || 0) }
+          {
+            name: "Face to Face Round",
+            y: parseInt(interviews_overview?.data?.data?.faceToFaceRound || 0),
+          },
+          {
+            name: "Final Round",
+            y: parseInt(interviews_overview?.data?.data?.finalRound || 0),
+          },
+          {
+            name: "HR Round",
+            y: parseInt(interviews_overview?.data?.data?.hrRound || 0),
+          },
+          {
+            name: "Technical Round",
+            y: parseInt(interviews_overview?.data?.data?.technicalRound || 0),
+          },
+          {
+            name: "On Hold",
+            y: parseInt(interviews_overview?.data?.data?.onHold || 0),
+          },
+          {
+            name: "Pending",
+            y: parseInt(interviews_overview?.data?.data?.pending || 0),
+          },
+          {
+            name: "Rejected",
+            y: parseInt(interviews_overview?.data?.data?.rejected || 0),
+          },
+          {
+            name: "Selected",
+            y: parseInt(interviews_overview?.data?.data?.selected || 0),
+          },
+          {
+            name: "Total Leads",
+            y: parseInt(interviews_overview?.data?.data?.totalLeads || 0),
+          },
         ],
       },
     ],
@@ -180,18 +229,63 @@ const AdminDashboard = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0"); // Add leading zero
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`; // Format as DD/MM/YYYY
+    return `${day}/${month}/${year}`;
   };
+  const formatLeaveDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleUpdateStatus = (
+    status,
+    leave_id,
+    user_id,
+    duration,
+    email,
+    name,
+    count
+  ) => {
+    const [from_date, to_date] = duration.split(" - ");
+    dispatch(
+      update_leave({
+        leave_id,
+        status,
+        remark: null,
+        email,
+        name,
+        from_date,
+        to_date,
+        user_id,
+        leave_count: count,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (leave_update_status?.isSuccess) {
+      toast.success("Leave Updated Successfully");
+      dispatch(clear_update_leave_state());
+      dispatch(get_leaves_on_dashboard());
+    }
+    if (leave_update_status?.isError) {
+      toast.error(leave_update_status?.error?.message);
+      dispatch(clear_update_leave_state());
+    }
+  }, [leave_update_status]);
 
   return permissions?.can_view ? (
     <section>
       <Notification />
       <div
-        className={`min-vh-100 lightgray_bg ${show ? "cmn_margin" : "cmn_margin_outer"
-          }`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        }min-vh-100 lightgray_bg ${show ? "cmn_margin" : "cmn_margin_outer"}`}
       >
         <div className="dashboard_outer pt-3">
           <Row className="m-0 mb-3">
@@ -201,14 +295,14 @@ const AdminDashboard = () => {
                 <ul className="data_card m-0">
                   <li>
                     <img src={TotalEmployee} alt="employee" />
-                    <h4>{all_userNames?.data?.data?.length}</h4>
+                    <h4>{all_userNames?.data?.data?.length - 1}</h4>
                     <p>Total Employee</p>
                     <span onClick={() => navigate("/employee")}>
                       View Details
                     </span>
                   </li>
-                  <li>
-                    <img src={TotalEmployee} alt="employee" />
+                  <li className="present">
+                    <img src={Present} alt="present" />
                     <h4>
                       {
                         present_employee?.total_employee
@@ -220,17 +314,23 @@ const AdminDashboard = () => {
                       View Details
                     </span>
                   </li>
-                  <li>
-                    <img src={TotalEmployee} alt="employee" />
-                    <h4>{employee_on_leave?.data?.data?.totalAcceptedLeaves}</h4>
+                  <li className="total_leaves">
+                    <img src={OnLeaves} alt="onLeaves" />
+                    <h4>
+                      {employee_on_leave?.data?.data?.totalAcceptedLeaves}
+                    </h4>
                     <p>Total Leave</p>
-                    <span onClick={() => navigate("/leaveRequest")}>View Details</span>
+                    <span onClick={() => navigate("/leaveRequest")}>
+                      View Details
+                    </span>
                   </li>
-                  <li>
-                    <img src={TotalEmployee} alt="employee" />
+                  <li className="interviews">
+                    <img src={Interview} alt="Interview" />
                     <h4>{interview_count || 0}</h4>
                     <p>Total Interviews</p>
-                    <span onClick={() => navigate("/interviewLead")}>View Details</span>
+                    <span onClick={() => navigate("/interviewLead")}>
+                      View Details
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -245,7 +345,7 @@ const AdminDashboard = () => {
             <Col lg={8}>
               <div className="card-cmn mb-3">
                 <h4>Leaves Applied</h4>
-                <Table responsive className="leave_table">
+                <Table responsive className="leave_table mb-0">
                   <thead>
                     <tr>
                       <th>Employee Name</th>
@@ -256,22 +356,113 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dashboard_leaves?.data?.data?.map((leave, i) => {
-                      return (
-                        <tr>
-                          <td>
-                            <h5 className="mb-0">{leave?.name}</h5>
-                            <span>{leave?.position}</span>
-                          </td>
-                          <td>{new Date(leave?.date_of_application).toISOString()}</td>
-                          <td>{leave?.type}</td>
-                          <td>{leave?.duration}</td>
-                          <td>
-                            <button className="table_cmn pending">{leave?.status}</button>
-                          </td>
-                        </tr>
-                      )
-                    })}
+                    {dashboard_leaves?.data?.message ? (
+                      <tr>
+                        <td className="text-center" colSpan={8}>
+                          {dashboard_leaves?.data?.message}
+                        </td>
+                      </tr>
+                    ) : (
+                      dashboard_leaves?.data?.data
+                        ?.slice(0, 5)
+                        ?.map((leave, i) => {
+                          return (
+                            <tr>
+                              <td>
+                                <h5 className="mb-0">{leave?.name}</h5>
+                                <span>{leave?.position}</span>
+                              </td>
+                              <td>
+                                {formatLeaveDate(leave?.date_of_application)}
+                              </td>
+                              <td>{leave?.type}</td>
+                              <td>{leave?.duration}</td>
+                              <td>
+                                <Dropdown className="cmn_dropdown">
+                                  <Dropdown.Toggle id="dropdown-basic">
+                                    {leave?.status} <BiChevronDown size={24} />
+                                    {leave_update_status?.isLoading &&
+                                      index === i && (
+                                        <span
+                                          class="spinner-border spinner-border-sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      )}
+                                  </Dropdown.Toggle>
+
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "PENDING",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      PENDING
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "ACCEPTED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      ACCEPTED
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "REJECTED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      REJECTED
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        handleUpdateStatus(
+                                          "CANCELLED",
+                                          leave?.leave_id,
+                                          leave?.user_id,
+                                          leave?.duration,
+                                          leave?.email,
+                                          leave?.name,
+                                          leave?.count
+                                        );
+                                        setIndex(i);
+                                      }}
+                                    >
+                                      CANCELLED
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          );
+                        })
+                    )}
                   </tbody>
                 </Table>
               </div>
@@ -290,21 +481,21 @@ const AdminDashboard = () => {
                   {current_and_next_month_events?.data?.data?.currentMonth
                     ?.slice(0, 6)
                     .map((record, i) => {
+                      console.log(record, "record");
                       const user = record?.title?.split("'s");
 
                       return (
                         <li key={i}>
                           <img src={Birthday_icon} alt="employee" />
                           <div>
-                            <h4>{user[0]}</h4>{" "}
-                            <span>{formatDate(record?.start)}</span>{" "}
+                            <h4>{user[0]}</h4> <span>{record?.date}</span>{" "}
                           </div>
                           <p>{user[1]}</p>
                         </li>
                       );
                     })}
                 </ul>
-                <h5 className="next-event">November 2024</h5>
+                <h5 className="next-event">Next Month</h5>
                 <ul className="event_list">
                   {current_and_next_month_events?.data?.data?.nextMonth
                     ?.slice(0, 3)
@@ -315,7 +506,7 @@ const AdminDashboard = () => {
                           <img src={Birthday_icon} alt="employee" />
                           <div>
                             <h4>{user[0]}</h4>
-                            <span>{formatDate(record?.start)}</span>
+                            <span>{record?.date}</span>
                           </div>
                           <p>{user[1]}</p>
                         </li>

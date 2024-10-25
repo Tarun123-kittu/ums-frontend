@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
 import { FiEdit } from "react-icons/fi";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
-import UseUserAttendanceReport from "../../Utils/customHooks/useUserAttendanceReport";
 import { useDispatch, useSelector } from "react-redux";
 import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
 import { useNavigate } from "react-router-dom";
@@ -13,33 +11,29 @@ import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
 
 const AttendenceReport = () => {
+  let i = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
   const [name, setName] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [page, setPage] = useState(1);
-  UseUserAttendanceReport({ name, month, year });
-  const obj = [
-    { name: "Attendance Report", path: "/attendenceReport" },
-    { name: "Attendance Report", path: "/attendenceReport" },
-  ];
+  const obj = [{ name: "Attendance Report", path: "/attendenceReport" }];
   let [all_names, setAllNames] = useState([]);
   const navigate = useNavigate();
   const { show } = useAppContext();
-  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  const [enableSearch, setEnableSearch] = useState(false);
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
-  );
-  const user_all_permissions = useSelector(
-    (store) => store.USER_ALL_PERMISSIONS
   );
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
-  }, [name, month, year, page]);
+    localStorage.removeItem("tab");
+  }, [dispatch, name, month, year, page]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -76,7 +70,7 @@ const AttendenceReport = () => {
   };
 
   const timeToHours = (time) => {
-    if (!time || time === "--") return 0; // Handle cases where there's no time or it's '--'
+    if (!time || time === "--") return 0;
     const [hours, minutes, seconds] = time.split(":").map(Number);
     return hours + minutes / 60 + seconds / 3600;
   };
@@ -100,7 +94,9 @@ const AttendenceReport = () => {
   return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
-        className={`gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -151,18 +147,37 @@ const AttendenceReport = () => {
             </div>
 
             <div className="employee_wrapper text-center serach_add_outer">
-              <button
-                className="cmn_Button_style"
-                onClick={() =>
-                  dispatch(get_user_attendance_report({ name, month, year }))
-                }
-              >
-                Search
-              </button>
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    dispatch(get_user_attendance_report({ name, month, year }));
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_user_attendance_report({
+                        name: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
-          <div className="table-responsive mt-3 transparent_bg">
-            <table className="employee_detail_table">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
               <thead>
                 <tr>
                   <th>#</th>
@@ -181,66 +196,82 @@ const AttendenceReport = () => {
               </thead>
               <tbody>
                 {user_attendance_report?.isLoading ? (
-                  <img className="loader_gif" src={Loader} alt="loader" />
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
                 ) : (
                   user_attendance_report?.data?.data?.map((report, index) => {
-                    return (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>
-                          {report?.date}-{report?.date_in_week_day}
-                        </td>
-                        <td>{report?.name}</td>
-                        <td>{convertTo12Hour(report?.in_time)}</td>
-                        <td>
-                          {report?.out_time
-                            ? convertTo12Hour(report?.out_time)
-                            : "--"}
-                        </td>
-                        <td
-                          style={{
-                            color:
-                              timeToHours(report?.total_time) < 9
-                                ? "red"
-                                : "#33b070",
-                          }}
-                        >
-                          {report?.total_time
-                            ? `${report.total_time} hours`
-                            : "--"}
-                        </td>
-                        <td>{report?.report}</td>
-                        <td>NA</td>
-                        <td>{report?.review ? report?.review : "NA"}</td>
-                        <td>{report?.rating}</td>
-                        <td>
-                          {report?.name}:{report?.login_mobile}
-                        </td>
-                        <td>
-                          {permissions?.can_update && report?.id && (
-                            <div className="cmn_action_outer yellow_bg">
-                              <FiEdit
-                                onClick={() => {
-                                  navigate("/editAttendenceReport ", {
-                                    state: { id: report?.id },
-                                  });
-                                }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    );
+                    if (report?.role !== "Admin") {
+                      return (
+                        <tr key={index}>
+                          <td>{++i}</td>
+                          <td>
+                            {report?.date}-{report?.date_in_week_day}
+                          </td>
+                          <td>{report?.name}</td>
+                          <td>{convertTo12Hour(report?.in_time)}</td>
+                          <td>
+                            {report?.out_time
+                              ? convertTo12Hour(report?.out_time)
+                              : "--"}
+                          </td>
+                          <td
+                            style={{
+                              color:
+                                timeToHours(report?.total_time) < 9
+                                  ? "red"
+                                  : "#33b070",
+                            }}
+                          >
+                            {report?.total_time
+                              ? `${report.total_time} hours`
+                              : "--"}
+                          </td>
+                          <td>
+                            {report?.report ? report?.report : "Not Available"}
+                          </td>
+                          <td>Not Available</td>
+                          <td>
+                            {report?.review ? report?.review : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.rating ? report?.rating : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.login_mobile
+                              ? report?.name + "/" + report?.login_mobile
+                              : "Not Available"}
+                          </td>
+                          <td>
+                            {permissions?.can_update && report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport ", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 )}
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
-        <PaginationComp
-          totalPage={user_attendance_report?.data?.totalPages}
-          setPage={setPage}
-        />
+        {user_attendance_report?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={user_attendance_report?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
     </section>
   ) : (

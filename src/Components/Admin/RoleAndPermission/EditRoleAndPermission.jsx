@@ -130,11 +130,13 @@ const EditRoleAndPermission = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={` gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer">
+        <div className="employee_wrapper cmn_padding_outer card-cmn">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -240,6 +242,13 @@ const EditRoleAndPermission = () => {
                       onClick={() => handleUpdatePermissions()}
                     >
                       Save
+                      {is_permissions_updated?.isLoading && (
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                     </button>
                   )}
                 </div>

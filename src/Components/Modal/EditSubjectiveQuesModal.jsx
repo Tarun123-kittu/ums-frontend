@@ -22,6 +22,7 @@ const EditSubjectiveQuesModal = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
   const all__question = useSelector(
     (store) => store.GET_LOGICAL_SUBJECTIVE_QUESTION
   );
@@ -54,6 +55,19 @@ const EditSubjectiveQuesModal = ({
   }, [all__question]);
 
   const handleEdit = () => {
+    let missingData = {};
+    if (!question) {
+      toast.error("Question is required");
+      missingData.question = "Question is required";
+      setErrorMessage(missingData);
+      return;
+    }
+    if (!answer) {
+      toast.error("Answer is required");
+      missingData.answer = "Answer is required";
+      setErrorMessage(missingData);
+      return;
+    }
     dispatch(
       update_logical_que({
         question_id,
@@ -101,7 +115,12 @@ const EditSubjectiveQuesModal = ({
             classname={"new_employee_form_group"}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
+            styleTrue={errorMessage?.question}
           />
+
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.question}
+          </span>
           <div className="form-group new_employee_form_group">
             <label>Subjective Answer</label>
             <textarea
@@ -110,7 +129,12 @@ const EditSubjectiveQuesModal = ({
               rows={4}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
+              style={errorMessage?.answer ? { border: "1px solid red" } : {}}
             />
+
+            <span style={{ color: "red", fontSize: "13px" }}>
+              {errorMessage?.answer}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer>

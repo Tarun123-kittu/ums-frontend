@@ -22,7 +22,9 @@ background-color: #f7f2f2 !important;
 .react-datepicker-wrapper {
   width: 100%;
 }
-
+.sidebar a:active, .sidebar a:focus, .sidebar a:hover{
+  text-decoration: none;
+}
 .react-datepicker-wrapper input{
   background: transparent;
   width: 100%;
