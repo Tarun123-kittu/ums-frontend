@@ -43,8 +43,7 @@ const EditAttendenceReport = () => {
   }, [id]);
 
   const obj = [
-    { name: "Attendance Report", path: "/attendenceReport" },
-    { name: "Edit  Attendance Report", path: "/editAttendenceReport" },
+    { name: "Attendance Report", path: "/attendenceReport" }
   ];
 
   const { show } = useAppContext();
@@ -100,9 +99,8 @@ const EditAttendenceReport = () => {
   return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer   ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer   ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -188,14 +186,7 @@ const EditAttendenceReport = () => {
                   onChange={(e) => handleChange("remark", e)}
                 />
               </div>
-              <div className="rating_outer">
-                <h3>Rating</h3>
-                <MdStar />
-                <MdStar />
-                <MdStar />
-                <MdStar />
-                <MdStar />
-              </div>
+
               {permissions?.can_update && (
                 <div className="text-center mt-4">
                   <button
