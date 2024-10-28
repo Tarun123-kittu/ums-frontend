@@ -35,7 +35,6 @@ const ViewTestseriesQuestions = () => {
   const permissions = UsePermissions("Test");
   const { id, language_id } = location.state ? location.state : location;
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
-  console.log(all_questions, "this is the all questions")
   const delete_logical_state = useSelector((store) => store.DELETE_LOGICAL_QUE);
   const delete_objective_state = useSelector(
     (store) => store.DELETE_OBJECTIVE_QUE

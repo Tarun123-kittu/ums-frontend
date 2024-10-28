@@ -33,7 +33,6 @@ const EditEmployeeInfo = () => {
     ? location?.state
     : location;
 
-  console.log(user_details, "thius is the user details")
 
   useEffect(() => {
     dispatch(get_all_roles());
@@ -72,7 +71,6 @@ const EditEmployeeInfo = () => {
   let [increment_date, setIncrementDate] = useState(
     user_details?.increment_date
   );
-  console.log(increment_date, "this is the increment date")
   let [installments, setInstallments] = useState(user_details?.installments);
   let [mobile, setMobile] = useState(user_details?.mobile);
   let [name, setName] = useState(user_details?.name);
@@ -89,7 +87,6 @@ const EditEmployeeInfo = () => {
   let [username, setUsername] = useState(user_details?.username);
   let [selected_documents, setSelected_documents] = useState([]);
   const [errorMessages, setErrorMessages] = useState({});
-  console.log(errorMessages, "this is the error message");
 
   const update_user_details = useSelector((store) => store.UPDATE_USER);
   const user_all_permissions = useSelector(

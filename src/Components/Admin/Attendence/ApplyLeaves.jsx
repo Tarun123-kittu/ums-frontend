@@ -11,6 +11,7 @@ import {
 } from "../../../utils/redux/leaveSlice/applyLeave";
 import toast from "react-hot-toast";
 import { user_applied_leaves } from "../../../utils/redux/leaveSlice/getUserAppliedLeaves";
+import { change_employee_leave_status, clear_employee_leave_state } from "../../../utils/redux/leaveSlice/changeEmployeeLeaveStatus";
 
 const ApplyLeaves = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ const ApplyLeaves = () => {
   const pending_leaves = useSelector((store) => store.USER_PENDING_LEAVES);
   const is_leave_applied = useSelector((store) => store.APPLY_LEAVE);
   const applied_leaves = useSelector((store) => store.USER_APPLIED_LEAVES);
-  console.log(applied_leaves, "this is the user applied leaved");
+  const leave_status = useSelector((store) => store.EMPLOYEE_LEAVE_STATUS)
+  console.log(leave_status,"this is the leaveStatus")
 
   useEffect(() => {
     dispatch(user_pending_leaves());
@@ -95,7 +97,7 @@ const ApplyLeaves = () => {
       dispatch(clear_apply_leave_state());
     }
 
-    if(is_leave_applied?.isError){
+    if (is_leave_applied?.isError) {
       toast.error(is_leave_applied?.error?.message)
       dispatch(clear_apply_leave_state());
     }
@@ -134,6 +136,18 @@ const ApplyLeaves = () => {
       dispatch(user_applied_leaves({ month, year }));
     }
   };
+
+  useEffect(() => {
+    if (leave_status?.isSuccess) {
+      toast.success("Leave cancelled successully !!")
+      dispatch(user_applied_leaves({ month, year }));
+      dispatch(clear_employee_leave_state())
+    }
+    if(leave_status?.isError){
+      toast.error("Something went wrong.Please try again later")
+      dispatch(clear_employee_leave_state())
+    }
+  }, [leave_status])
   return (
     <section>
       <div className="min-vh-100">
@@ -163,10 +177,10 @@ const ApplyLeaves = () => {
                 </div>
                 <div className="flex-grow-1 form-group">
                   <label htmlFor="Date">Date</label>
-                 <div className="w-100">
-                 <DateRangePicker onChange={handleChange} style={errorMessage?.date ? { border: "1px solid red" } : {}} className="w-100" value={startDate && endDate ? [startDate, endDate] : null} />
-                  <span style={{ color: "red", fontSize: "13px" }}>{errorMessage?.date}</span>
-                 </div>
+                  <div className="w-100">
+                    <DateRangePicker onChange={handleChange} style={errorMessage?.date ? { border: "1px solid red" } : {}} className="w-100" value={startDate && endDate ? [startDate, endDate] : null} />
+                    <span style={{ color: "red", fontSize: "13px" }}>{errorMessage?.date}</span>
+                  </div>
                 </div>
                 <div className="flex-grow-1 form-group">
                   <label htmlFor="Date">Pending Leaves</label>
@@ -248,11 +262,11 @@ const ApplyLeaves = () => {
                   </select>
                 </div>
               </div>
-             <div className="text-center">
-             <button className="cmn_bg_btn" onClick={() => handleSearch()}>
-                Apply
-              </button>
-             </div>
+              <div className="text-center">
+                <button className="cmn_bg_btn" onClick={() => handleSearch()}>
+                  Apply
+                </button>
+              </div>
             </div>
             <div className="attendence_submit cmn_card mt-3">
               <h4>Leave Report</h4>
@@ -297,6 +311,16 @@ const ApplyLeaves = () => {
                           <td>{leave?.description}</td>
                           <td>{leave?.status}</td>
                           <td>{leave?.remark}</td>
+                          <td>
+                            {leave?.status === "PENDING" && <button className="cmn_bg_btn" onClick={() => dispatch(change_employee_leave_status({ leave_id: leave?.id }))}>
+                              {!leave_status?.isLoading ? "Cancel" :
+                              <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>}
+                            </button>}
+                          </td>
                         </tr>
                       );
                     })}

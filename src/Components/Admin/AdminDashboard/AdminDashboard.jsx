@@ -55,7 +55,6 @@ const AdminDashboard = () => {
   const dashboard_leaves = useSelector(
     (store) => store.GET_LEAVES_ON_DASHBOARD
   );
-  console.log(dashboard_leaves, "this is the dashboard leaves");
   const leave_update_status = useSelector((store) => store.UPDATE_LEAVE);
 
   useEffect(() => {
@@ -482,7 +481,6 @@ const AdminDashboard = () => {
                   {current_and_next_month_events?.data?.data?.currentMonth
                     ?.slice(0, 6)
                     .map((record, i) => {
-                      console.log(record, "record");
                       const user = record?.title?.split("'s");
 
                       return (

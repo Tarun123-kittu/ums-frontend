@@ -29,7 +29,6 @@ export const get_all_users_user = createAsyncThunk(
             if (queryParams.length > 0) {
                 url += `&${queryParams.join('&')}`;
             }
-            console.log("Fetching data from URL:", url);
 
             const response = await fetch(url, requestOptions);
 

@@ -15,7 +15,6 @@ const EditLeaveReport = () => {
   const location = useLocation();
 
   const { leave_id } = location?.state ? location?.state : location;
-  console.log(leave_id, "this is the leave_id");
   const obj = [
     { name: "Leave Application", path: "" },
     { name: "Edit Leave Report", path: "/editLeaveReport" },

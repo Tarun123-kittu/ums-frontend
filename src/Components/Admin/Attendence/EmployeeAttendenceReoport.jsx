@@ -17,7 +17,6 @@ const EmployeeAttendenceReoport = () => {
     (store) => store.ATTENDENCE_MONTHLY_REPORT
   );
 
-  console.log(monthly_report, "this is the monthly report");
   const monthDataObj = [
     { value: "01", label: "January" },
     { value: "02", label: "February" },

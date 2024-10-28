@@ -28,12 +28,12 @@ const QuestionAnswerSheet = () => {
     ? location.state
     : location;
   const lead_answers = useSelector((store) => store.LEAD_ANSWER);
+  console.log(lead_answers,"this is the lead answer")
   const all_questions = useSelector((store) => store.ALL_QUE_ANS);
   const check_answer = useSelector((store) => store.CHECK_LEAD_ANSWER);
   const [showDeveloperModal, setShowDeveloperModal] = useState(false);
   const [allAnswersFilled, setAllAnswersFilled] = useState(false);
   const [interview_id, setInterview_id] = useState(null);
-  console.log(interview_id, "this is the lead interview_id");
 
   const { show } = useAppContext();
   const obj = [
@@ -64,7 +64,7 @@ const QuestionAnswerSheet = () => {
   }, [check_answer]);
 
   useEffect(() => {
-    lead_answers?.data?.map((lead) => {
+    lead_answers?.data?.result?.map((lead) => {
       if (lead?.interview_id) {
         setInterview_id(lead?.interview_id);
       }
@@ -73,7 +73,7 @@ const QuestionAnswerSheet = () => {
 
   useEffect(() => {
     if (lead_answers?.data) {
-      const allFilled = lead_answers.data.every(
+      const allFilled = lead_answers.data.result?.every(
         (lead) => lead.answer_status !== null
       );
       setAllAnswersFilled(allFilled);
@@ -102,7 +102,6 @@ const QuestionAnswerSheet = () => {
                   <h3>OBJECTIVE</h3>
                   {all_questions?.data?.data?.map((ques, i) => {
                     if (ques?.question_type === "objective") {
-                      console.log(ques, "from map functo");
                       return (
                         <div>
                           <div className="answer_card">
@@ -172,9 +171,8 @@ const QuestionAnswerSheet = () => {
                 <h3 className="answer_heading">Candidate Answers</h3>
                 <div className="question_inner_content">
                   <h3>OBJECTIVE</h3>
-                  {lead_answers?.data?.map((answer, i) => {
+                  {lead_answers?.data?.result?.map((answer, i) => {
                     if (answer.question_type === "objective") {
-                      console.log(answer, "this is the answer");
                       return (
                         <div key={i}>
                           <div className="answer_card">
@@ -282,7 +280,7 @@ const QuestionAnswerSheet = () => {
                 </div>
                 <div className="question_inner_content">
                   <h3>Subjective</h3>
-                  {lead_answers?.data?.map((answer, i) => {
+                  {lead_answers?.data?.result?.map((answer, i) => {
                     if (answer.question_type === "subjective") {
                       return (
                         <div key={i}>
@@ -385,7 +383,7 @@ const QuestionAnswerSheet = () => {
                 </div>
                 <div className="question_inner_content">
                   <h3>Logical</h3>
-                  {lead_answers?.data?.map((answer, i) => {
+                  {lead_answers?.data?.result?.map((answer, i) => {
                     if (answer.question_type === "logical") {
                       return (
                         <div key={i}>

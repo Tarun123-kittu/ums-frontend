@@ -36,7 +36,6 @@ const EditLeaveRequest = () => {
     email,
   } = location?.state ? location?.state : location;
   const leave_details = useSelector((store) => store.APPLIED_LEAVE_DETAIL);
-  console.log(leave_details, "this is the leave details")
   const update_leave_data = useSelector((store) => store.UPDATE_LEAVE);
   const [leaveDetail, setLeaveDetail] = useState();
   const [status, setStatus] = useState(leave_status);

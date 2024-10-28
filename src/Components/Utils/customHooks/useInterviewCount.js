@@ -22,7 +22,6 @@ const UseInterviewCount = () => {
                 }
 
                 const result = await response.json();
-                console.log(result, "this is the result")
                 return result;
             } catch (error) {
                 console.error("Error fetching interviews:", error);

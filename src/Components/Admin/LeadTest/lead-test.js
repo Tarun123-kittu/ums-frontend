@@ -30,7 +30,6 @@ const Leadtest = () => {
   const questions_data = useSelector((store) => store.TEST_QUESTIONS);
   const submit_question_result = useSelector((store) => store.SUBMIT_TEST);
   const tech_round_submit_response = useSelector((store) => store.TECH_ROUND_SUBMIT_RESULT)
-  console.log(tech_round_submit_response,"tech round submit response")
 
   useEffect(() => {
     if (questions_data?.isSuccess) {
