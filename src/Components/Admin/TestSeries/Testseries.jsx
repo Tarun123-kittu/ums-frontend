@@ -127,9 +127,8 @@ const Testseries = () => {
   return permissions?.can_view ? (
     <section className="test_serie_wrapper">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -190,11 +189,16 @@ const Testseries = () => {
           </div>
 
           <div className="create_series_outer mt-3">
-            <div className="row">
+            <div className="row m-0">
               {all_series?.isLoading ? (
+
                 <img src={Loader} alt="loader" className="loader_gif" />
               ) : all_series?.data?.message === "No test series available." ? (
-                <img className="image_loading col-12" src={NoData} alt="No data found"/>
+                <div className="col-12">
+                  <div className="card-cmn text-center">
+                  <img className="image_loading col-12" src={NoData} alt="No data found" />
+                  </div>
+                </div>
               ) : (
                 series?.map((series, i) => {
                   return (
@@ -268,7 +272,7 @@ const Testseries = () => {
         <CommonDeleteModal
           dialogClassname={"custom_modal_width"}
           heading_text={
-            "Are you sure to delete the 4 Year of Experience form Test Series"
+            "Are you sure to delete this Test Series"
           }
           paragraph_text={""}
           show={showDeleteModal}

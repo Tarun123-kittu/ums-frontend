@@ -32,7 +32,6 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({
     selectedDocuments,
 }, thunkAPI) => {
     try {
-        console.log(name, email, mobile)
 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");

@@ -70,7 +70,6 @@ const Login = () => {
       localStorage.setItem("roles", login_details?.data?.roles);
       localStorage.setItem("userId", login_details?.data?.id);
       localStorage.setItem("tokenIssueTime", Date.now());
-      console.log(login_details?.data?.roles, "this is the roles");
       if (login_details?.data?.roles?.includes("Admin")) {
         navigate("/dashboard");
       } else {

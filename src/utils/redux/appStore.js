@@ -92,6 +92,8 @@ import changePassword from './userSlice/changePassword'
 import forgetPassword from './userSlice/forgetPassword'
 import UserResetPassword from './userSlice/userResetPassword'
 import techRoundSubmitResult from './interviewLeadsSlice/technicalRound/technicalRoundSubmitStatus'
+import getPermissions from './rolesAndPermissionSlice/getPermissions'
+import changeEmployeeLeaveStatus from './leaveSlice/changeEmployeeLeaveStatus'
 
 const appStore = configureStore({
     reducer: {
@@ -187,7 +189,9 @@ const appStore = configureStore({
         CHANGE_PASSWORD: changePassword,
         FORGOT_PASSWORD: forgetPassword,
         RESET_PASSWORD: UserResetPassword,
-        TECH_ROUND_SUBMIT_RESULT: techRoundSubmitResult
+        TECH_ROUND_SUBMIT_RESULT: techRoundSubmitResult,
+        GET_ALL_PERMISSIONS: getPermissions,
+        EMPLOYEE_LEAVE_STATUS: changeEmployeeLeaveStatus
 
     },
 })

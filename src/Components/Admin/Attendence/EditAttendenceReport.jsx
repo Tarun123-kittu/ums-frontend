@@ -26,7 +26,6 @@ const EditAttendenceReport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
-  console.log(permissions, "this is the permissions");
   const { id } = location?.state ? location?.state : location;
   const [in_time, setIn_time] = useState("");
   const [out_time, setOut_time] = useState("");

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
@@ -7,7 +8,6 @@ import { IoMdAdd } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CommonDeleteModal from "../../Modal/CommonDeleteModal";
 import AssignNameModal from "../../Modal/AssignNameModal";
-import { permissionsList } from "../../Utils/customData/permissionsListData";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,7 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
-import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
+import { get_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getPermissions";
 
 const CreateRole = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const CreateRole = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteRoleModal, setShowDeleteRoleModal] = useState(false);
-  const [all_permission, setAll_permission] = useState(permissionsList);
+  const [all_permission, setAll_permission] = useState();
   const [role, setRole] = useState("");
   const [name_assigned, setName_assigned] = useState([]);
   const [user_ids, setUser_ids] = useState([]);
@@ -38,10 +38,22 @@ const CreateRole = () => {
     (store) => store.CREATE_NEW_ROLE_AND_PERMISSIONS
   );
   const all_userNames = useSelector((store) => store.ALL_USERNAMES?.data?.data);
-  const role_permissions_data = useSelector(
-    (store) => store.GET_ROLE_PERMISSIONS
-  );
-  console.log(role_permissions_data, "this is the role permission data ")
+
+  const all_permissions = useSelector((store) => store.GET_ALL_PERMISSIONS)
+
+  useEffect(() => {
+      dispatch(get_permissions())
+  }, [])
+
+  useEffect(() => {
+      const data = []
+      if (all_permissions?.isSuccess) {
+          all_permissions?.data?.data?.map((per) => {
+              data.push({ can_view: false, can_create: false, can_update: false, can_delete: false, permission: per?.permission, permission_id: per?.permission_id })
+          })
+      }
+      setAll_permission(data)
+  }, [all_permissions])
 
   const handleChangePermissions = (index, valueKey, permission_id) => {
     const updatedPermissions = all_permission.map((state, idx) => {
@@ -57,10 +69,6 @@ const CreateRole = () => {
 
     setAll_permission(updatedPermissions);
   };
-
-  useEffect(() => {
-    dispatch(get_role_permissions())
-  }, [])
 
   const handleCreateNewRole = () => {
     const missingData = {};
@@ -111,8 +119,9 @@ const CreateRole = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-          } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 

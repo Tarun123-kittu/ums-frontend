@@ -57,7 +57,6 @@ const AddEventModal = ({ show, setShow, eventId, edit }) => {
     setPermissions(permissionStatus);
   }, [user_all_permissions]);
 
-  console.log(permissions, "this is the permissions");
 
   const options = [
     { value: "holiday", label: "Holiday" },

@@ -37,7 +37,6 @@ const ViewEmployeeInfo = () => {
           newArr.push(documentName);
         }
       });
-      console.log(newArr, "this is the new Arr");
       setSelected_documents(newArr);
     }
   }, [documents]);

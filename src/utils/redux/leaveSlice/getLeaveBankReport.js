@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const get_leave_bank_report = createAsyncThunk("get_leave_bank_report", async ({ session, month, year, page }, thunkAPI) => {
-    console.log(session, month, year, "session, month, year")
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
