@@ -146,9 +146,10 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
         <Modal.Body>
           <h3 className="heading">Create Test Series </h3>
           <InputField
+          span={true}
             labelname={"Series "}
             placeholder={"Enter Series Name"}
-            type={"number"}
+            type={"text"}
             classname={"new_employee_form_group"}
             onChange={(e) => setSeries_name(e?.target?.value)}
             styleTrue={errorMessage?.series_name}

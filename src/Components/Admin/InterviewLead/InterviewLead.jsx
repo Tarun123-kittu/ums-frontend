@@ -30,7 +30,7 @@ const InterviewLead = () => {
   const [selected_result, setSelected_result] = useState("");
   const [enableSearch, setEnableSearch] = useState(false);
   const [currentTab, setCurrentTab] = useState("Add Person");
-  const [open_tab, setOpen_tab] = useState("Add Person");
+  const [open_tab, setOpen_tab] = useState(localStorage.getItem('tab') || "Add Person");
   const [page, setPage] = useState(1);
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];

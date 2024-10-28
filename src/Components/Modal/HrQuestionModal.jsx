@@ -59,12 +59,13 @@ const HrQuestionModal = ({ show, setShow, leadId }) => {
             placeholder={"Enter Question Number"}
             labelname={"How many questions do you want to ask?"}
             classname={"new_employee_form_group"}
-            type={"number"}
+            type={"text"}
             value={count}
             onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value >= 0) {
-                setCount(value);
+              const newValue = e.target.value;
+              const numericPattern = /^\d*\.?\d*$/;
+              if (newValue === "" || numericPattern.test(newValue)) {
+                setCount(newValue);
               }
             }}
             styleTrue={errorMessage?.count}

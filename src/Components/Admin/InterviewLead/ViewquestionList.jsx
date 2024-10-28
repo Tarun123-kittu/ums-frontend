@@ -107,7 +107,9 @@ const ViewQuestionList = () => {
                   >
                     Exit
                   </button>
-                  <button className="cmn_Button_style">Save</button>
+                  <button className="cmn_Button_style"  onClick={() =>
+                      navigate("/interviewLead", { state: { tab: "HR" } })
+                    }>Save</button>
                 </div>
               )}
             </div>

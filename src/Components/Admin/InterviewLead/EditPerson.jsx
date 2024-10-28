@@ -217,7 +217,7 @@ const EditPerson = () => {
                   span={true}
                   placeholder={"Enter Phone Number"}
                   classname={"new_employee_form_group"}
-                  type={"number"}
+                  type={"text"}
                   value={mobile}
                   onChange={(e) => {
                     const newValue = e.target.value;
@@ -285,12 +285,13 @@ const EditPerson = () => {
                   labelname={"Experience (Optional)"}
                   placeholder={"Enter Experience"}
                   classname={"new_employee_form_group"}
-                  type={"number"}
+                  type={"text"}
                   value={experience}
                   onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (value >= 0) {
-                      setExperience(value);
+                    const newValue = e.target.value;
+                    const numericPattern = /^\d*\.?\d*$/;
+                    if (newValue === "" || numericPattern.test(newValue)) {
+                      setExperience(newValue);
                     }
                   }}
                 />
@@ -300,12 +301,13 @@ const EditPerson = () => {
                   labelname={"Current salary (optional)"}
                   placeholder={"Enter Current salary"}
                   classname={"new_employee_form_group"}
-                  type={"number"}
+                  type={"text"}
                   value={current_salary}
                   onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (value >= 0) {
-                      setCurrent_salary(value);
+                    const newValue = e.target.value;
+                    const numericPattern = /^\d*\.?\d*$/;
+                    if (newValue === "" || numericPattern.test(newValue)) {
+                      setCurrent_salary(newValue);
                     }
                   }}
                 />
@@ -315,12 +317,13 @@ const EditPerson = () => {
                   labelname={"Expected salary (optional)"}
                   placeholder={"Enter Expected salary"}
                   classname={"new_employee_form_group"}
-                  type={"number"}
+                  type={"text"}
                   value={expected_salary}
                   onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (value >= 0) {
-                      setExpected_salary(value);
+                    const newValue = e.target.value;
+                    const numericPattern = /^\d*\.?\d*$/;
+                    if (newValue === "" || numericPattern.test(newValue)) {
+                      setExpected_salary(newValue);
                     }
                   }}
                 />

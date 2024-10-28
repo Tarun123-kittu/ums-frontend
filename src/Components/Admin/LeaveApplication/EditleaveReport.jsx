@@ -50,7 +50,7 @@ const EditLeaveReport = () => {
                   <InputField
                     classname={"new_employee_form_group"}
                     labelname={"Mobile"}
-                    type={"number"}
+                    type={"text"}
                   />
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">
@@ -71,7 +71,7 @@ const EditLeaveReport = () => {
                   <InputField
                     classname={"new_employee_form_group"}
                     labelname={"Number Of Dates"}
-                    type={"number"}
+                    type={"text"}
                   />
                 </div>
                 <div className="col-lg-6 col-sm-12 col-md-12">

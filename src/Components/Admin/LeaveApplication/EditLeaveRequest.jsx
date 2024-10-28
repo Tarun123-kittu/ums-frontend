@@ -36,6 +36,7 @@ const EditLeaveRequest = () => {
     email,
   } = location?.state ? location?.state : location;
   const leave_details = useSelector((store) => store.APPLIED_LEAVE_DETAIL);
+  console.log(leave_details, "this is the leave details")
   const update_leave_data = useSelector((store) => store.UPDATE_LEAVE);
   const [leaveDetail, setLeaveDetail] = useState();
   const [status, setStatus] = useState(leave_status);
@@ -66,11 +67,19 @@ const EditLeaveRequest = () => {
 
   const obj = [
     { name: "Leave Application", path: "" },
-    { name: "Edit Leave Request", path: "/editLeaveRequest" },
+    { name: "Edit Leave Request" },
   ];
   const { show } = useAppContext();
 
   const handleUpdateLeave = () => {
+    if (status === "select") {
+      toast.error("Please Select Leave status")
+      return
+    }
+    if (status === leave_details?.data?.data[0]?.status) {
+      toast.error("you cannot update the leave with same status")
+      return
+    }
     dispatch(
       update_leave({
         leave_id,
@@ -88,9 +97,8 @@ const EditLeaveRequest = () => {
   return permissions?.can_view ? (
     <section className="editLeave_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper"
-        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper"
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -116,7 +124,7 @@ const EditLeaveRequest = () => {
                   <InputField
                     classname={"new_employee_form_group"}
                     labelname={"Mobile"}
-                    type={"number"}
+                    type={"text"}
                     value={leaveDetail?.mobile}
                     disabled={true}
                   />
@@ -130,10 +138,10 @@ const EditLeaveRequest = () => {
                     value={
                       leaveDetail?.from_date && leaveDetail?.to_date
                         ? `${moment(leaveDetail.from_date).format(
-                            "MM/DD/YYYY"
-                          )} - ${moment(leaveDetail.to_date).format(
-                            "MM/DD/YYYY"
-                          )}`
+                          "MM/DD/YYYY"
+                        )} - ${moment(leaveDetail.to_date).format(
+                          "MM/DD/YYYY"
+                        )}`
                         : ""
                     }
                   />
@@ -151,7 +159,7 @@ const EditLeaveRequest = () => {
                   <InputField
                     classname={"new_employee_form_group"}
                     labelname={"Number Of Dates"}
-                    type={"number"}
+                    type={"text"}
                     value={leaveDetail?.count}
                     disabled={true}
                   />
@@ -191,10 +199,11 @@ const EditLeaveRequest = () => {
                       value={status ? status : leaveDetail?.status}
                       onChange={(e) => setStatus(e.target.value)}
                     >
+                      <option value="select">Select</option>
                       <option value="PENDING">Pending</option>
-                      <option value="CANCELLED">Cancelled</option>
-                      <option value="REJECTED">Rejected</option>
-                      <option value="ACCEPTED">Accepted</option>
+                      <option value="CANCELLED">Cancel</option>
+                      <option value="REJECTED">Reject</option>
+                      <option value="ACCEPTED">Accept</option>
                     </select>
                   </div>
                 </div>
@@ -211,6 +220,9 @@ const EditLeaveRequest = () => {
 
               {permissions?.can_update && (
                 <div className="text-center mt-4">
+                  <button onClick={() => navigate(-1)} className="cmn_Button_style cmn_darkgray_btn m-2">
+                    Back
+                  </button>
                   <button
                     className="cmn_Button_style"
                     onClick={() => handleUpdateLeave()}

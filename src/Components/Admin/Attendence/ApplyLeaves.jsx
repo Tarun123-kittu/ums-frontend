@@ -24,6 +24,7 @@ const ApplyLeaves = () => {
 
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
+  const [errorMessage, setErrorMessage] = useState()
   const [enable_search, setEnableSearch] = useState(false);
   const pending_leaves = useSelector((store) => store.USER_PENDING_LEAVES);
   const is_leave_applied = useSelector((store) => store.APPLY_LEAVE);
@@ -45,32 +46,58 @@ const ApplyLeaves = () => {
   };
 
   const apply_leave = () => {
+    let missingData = {}
+
+    if (type === "select") {
+      toast.error("please select the leave type")
+      missingData.type = 'Please select the leave type'
+      setErrorMessage(missingData)
+      return
+    }
     if (!type) {
       toast.error("Please select the leave type");
-    } else if (!startDate || !endDate) {
-      toast.error("Please select start and end date");
-    } else if (!description) {
-      toast.error("Please provide leave reason");
-    } else {
-      dispatch(
-        apply_leave_handler({
-          from_date: startDate,
-          to_date: endDate,
-          description,
-          type,
-        })
-      );
+      missingData.type = 'Please select the leave type'
+      setErrorMessage(missingData)
+      return
     }
+    if (!startDate || !endDate) {
+      toast.error("Start date and end date is required");
+      missingData.date = 'Start date and end date is required'
+      setErrorMessage(missingData)
+      return
+    }
+    if (!description) {
+      toast.error("Please provide leave reason");
+      missingData.description = 'Please provide leave reason'
+      setErrorMessage(missingData)
+      return
+    }
+
+    dispatch(
+      apply_leave_handler({
+        from_date: startDate,
+        to_date: endDate,
+        description,
+        type,
+      })
+    );
+
   };
 
   useEffect(() => {
+
     if (is_leave_applied?.isSuccess) {
-      dispatch(user_applied_leaves({ month, year }));
-      dispatch(clear_apply_leave_state());
       setType("");
       setStartDate("");
       setEndDate("");
       setDescription("");
+      dispatch(user_applied_leaves({ month, year }));
+      dispatch(clear_apply_leave_state());
+    }
+
+    if(is_leave_applied?.isError){
+      toast.error(is_leave_applied?.error?.message)
+      dispatch(clear_apply_leave_state());
     }
   }, [is_leave_applied]);
 
@@ -123,16 +150,23 @@ const ApplyLeaves = () => {
                     name=""
                     id=""
                     onChange={(e) => setType(e.target.value)}
+                    style={errorMessage?.type ? { border: "1px solid red" } : {}}
+                    value={type}
                   >
+                    <option value="select">Select</option>
                     <option value={"SICK LEAVE"}>Sick Leave</option>
                     <option value={"URGENT LEAVE"}>Urgent Leave</option>
                     <option value={"HALF DAY"}>Half Day Leave</option>
                     <option value={"SHORT DAY"}>Short Leave</option>
                   </select>
+                  <span style={{ color: "red", fontSize: "13px" }}>{errorMessage?.type}</span>
                 </div>
                 <div className="flex-grow-1 form-group">
                   <label htmlFor="Date">Date</label>
-                  <DateRangePicker onChange={handleChange} />
+                 <div className="w-100">
+                 <DateRangePicker onChange={handleChange} style={errorMessage?.date ? { border: "1px solid red" } : {}} className="w-100" value={startDate && endDate ? [startDate, endDate] : null} />
+                  <span style={{ color: "red", fontSize: "13px" }}>{errorMessage?.date}</span>
+                 </div>
                 </div>
                 <div className="flex-grow-1 form-group">
                   <label htmlFor="Date">Pending Leaves</label>
@@ -154,11 +188,18 @@ const ApplyLeaves = () => {
                   className="form-control"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  style={errorMessage?.description ? { border: "1px solid red" } : {}}
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>{errorMessage?.description}</span>
               </div>
               <div className="text-center mt-4">
                 <button className="cmn_bg_btn" onClick={() => apply_leave()}>
-                  Apply
+                  {!is_leave_applied?.isLoading ? "Apply" :
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>}
                 </button>
               </div>
             </div>
@@ -207,9 +248,11 @@ const ApplyLeaves = () => {
                   </select>
                 </div>
               </div>
-              <button className="cmn_bg_btn" onClick={() => handleSearch()}>
+             <div className="text-center">
+             <button className="cmn_bg_btn" onClick={() => handleSearch()}>
                 Apply
               </button>
+             </div>
             </div>
             <div className="attendence_submit cmn_card mt-3">
               <h4>Leave Report</h4>
