@@ -15,6 +15,7 @@ import {
   submit_result,
   clear_submit_test_state,
 } from "../../../utils/redux/interviewLeadsSlice/technicalRound/submitTest";
+import { tech_round_submit_result,clear_tech_round_submit_state } from "../../../utils/redux/interviewLeadsSlice/technicalRound/technicalRoundSubmitStatus";
 
 const Leadtest = () => {
   const params = useParams();
@@ -28,6 +29,8 @@ const Leadtest = () => {
   const [attempted_questions, setAttempted_questions] = useState([]);
   const questions_data = useSelector((store) => store.TEST_QUESTIONS);
   const submit_question_result = useSelector((store) => store.SUBMIT_TEST);
+  const tech_round_submit_response = useSelector((store) => store.TECH_ROUND_SUBMIT_RESULT)
+  console.log(tech_round_submit_response,"tech round submit response")
 
   useEffect(() => {
     if (questions_data?.isSuccess) {
@@ -42,8 +45,19 @@ const Leadtest = () => {
   };
 
   useEffect(() => {
-    dispatch(get_test_questions({ lead_id }));
+    dispatch(tech_round_submit_result({interview_id : lead_id}))
+    // dispatch(get_test_questions({ lead_id }));
   }, [lead_id]);
+
+  useEffect(() => {
+if(tech_round_submit_response?.isSuccess){
+  if(tech_round_submit_response?.data?.data?.test_submitted === 0){
+     dispatch(get_test_questions({ lead_id }));
+  }else{
+    navigate("/test-thankyou")
+  }
+}
+  },[tech_round_submit_response])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -160,6 +174,18 @@ const Leadtest = () => {
   const handleCut = (e) => {
     e.preventDefault();
   };
+
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "F12") {
+        e.preventDefault();
+    }
+    if ((e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) || (e.ctrlKey && e.key === "U")) {
+        e.preventDefault();
+    }
+});
+
 
   return (
     <section className="test_serie_wrapper gray_bg min-vh-100">

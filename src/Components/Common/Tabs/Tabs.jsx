@@ -51,8 +51,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     useState(false);
   const na = "Not Available";
   const resultData = [
-    { value: "selected", label: "Selected" },
-    { value: "rejected", label: "Rejected" },
+    { value: "selected", label: "Select" },
+    { value: "rejected", label: "Reject" },
     { value: "on hold", label: "On Hold" },
     { value: "pending", label: "Pending" },
   ];
@@ -108,15 +108,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     if (localStorage.getItem("tab")) {
       if (localStorage?.getItem("tab") === "Technical") {
         setActiveTab("Technical");
+        setOpen_tab("Technical")
       }
       if (localStorage?.getItem("tab") === "HR") {
         setActiveTab("HR");
+        setOpen_tab("HR")
       }
       if (localStorage?.getItem("tab") === "Face to face") {
         setActiveTab("Face to face");
+        setOpen_tab("Face to face")
       }
       if (localStorage?.getItem("tab") === "Final Interaction") {
         setActiveTab("Final Interaction");
+        setOpen_tab("Final Interaction")
       }
     }
   }, []);
@@ -161,8 +165,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [update_round_status]);
 
   const technicalRoundStatus = [
-    { value: "selected", label: "Selected" },
-    { value: "rejected", label: "Rejected" },
+    { value: "selected", label: "Select" },
+    { value: "rejected", label: "Reject" },
     { value: "on hold", label: "On Hold" },
     { value: "pending", label: "Pending" },
     { value: "opened", label: "Opened" },

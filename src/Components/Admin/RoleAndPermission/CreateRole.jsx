@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import { useAppContext } from "../../Utils/appContecxt";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
@@ -18,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
 
 const CreateRole = () => {
   const dispatch = useDispatch();
@@ -38,6 +38,10 @@ const CreateRole = () => {
     (store) => store.CREATE_NEW_ROLE_AND_PERMISSIONS
   );
   const all_userNames = useSelector((store) => store.ALL_USERNAMES?.data?.data);
+  const role_permissions_data = useSelector(
+    (store) => store.GET_ROLE_PERMISSIONS
+  );
+  console.log(role_permissions_data, "this is the role permission data ")
 
   const handleChangePermissions = (index, valueKey, permission_id) => {
     const updatedPermissions = all_permission.map((state, idx) => {
@@ -53,6 +57,10 @@ const CreateRole = () => {
 
     setAll_permission(updatedPermissions);
   };
+
+  useEffect(() => {
+    dispatch(get_role_permissions())
+  }, [])
 
   const handleCreateNewRole = () => {
     const missingData = {};
@@ -103,9 +111,8 @@ const CreateRole = () => {
   return permissions?.can_view ? (
     <section className="role_permission_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
