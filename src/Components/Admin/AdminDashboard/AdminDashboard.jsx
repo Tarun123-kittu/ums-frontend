@@ -55,6 +55,7 @@ const AdminDashboard = () => {
   const dashboard_leaves = useSelector(
     (store) => store.GET_LEAVES_ON_DASHBOARD
   );
+  console.log(dashboard_leaves,"this is the dashboard leaves")
   const leave_update_status = useSelector((store) => store.UPDATE_LEAVE);
 
   useEffect(() => {
@@ -356,7 +357,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dashboard_leaves?.data?.message && dashboard_leaves?.data?.data?.length === 0 ? (
+                    {dashboard_leaves?.data?.message && !dashboard_leaves?.data?.data ? (
                       <tr>
                         <td className="text-center" colSpan={8}>
                           {dashboard_leaves?.data?.message}

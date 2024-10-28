@@ -42,6 +42,7 @@ import {
   clear_delete_lead_slice,
 } from "../../../utils/redux/interviewLeadsSlice/deleteLeads";
 import { Table } from "react-bootstrap";
+import { FiEdit } from "react-icons/fi";
 
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const permissions = UsePermissions("Interviews");
@@ -127,10 +128,10 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
 
   useEffect(() => {
     if (update_round_status?.isSuccess) {
-      if(activeTab === "Technical"){
+      if (activeTab === "Technical") {
         setActiveTab("Face to face")
       }
-      if(activeTab === "Face to face"){
+      if (activeTab === "Face to face") {
         setActiveTab("Final Interaction")
       }
       dispatch(
@@ -229,7 +230,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
   }, [hr_round_candidate_status]);
 
   const handleTabSelect = (selectedTab) => {
-    localStorage.setItem("tab",selectedTab);
+    localStorage.setItem("tab", selectedTab);
     setOpen_tab(selectedTab);
     setActiveTab(selectedTab);
     setCurrentTab(selectedTab);
@@ -457,7 +458,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                             </li>
                                           ))}
                                         </ul>
-                                        <div className="text-end">
+                                        {/* <div className="text-end">
                                           {permissions?.can_update && (
                                             <button
                                               className="cmn_Button_style"
@@ -470,7 +471,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                               Edit
                                             </button>
                                           )}
-                                        </div>
+                                        </div> */}
                                       </div>
                                     </div>
                                   </div>
@@ -507,12 +508,25 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               <div
                                 className="cmn_action_outer red_bg"
                                 style={{ cursor: "pointer" }}
-                                title="delete user"
+                                title="Delete Lead"
                               >
-                                <RiDeleteBin6Line
+                                {permissions?.can_delete && <RiDeleteBin6Line
                                   onClick={() => {
                                     setShowDeleteModal(true);
                                     setLeadId(lead?.id);
+                                  }}
+                                />}
+                              </div>
+                              <div
+                                className="cmn_action_outer red_bg"
+                                style={{ cursor: "pointer" }}
+                                title="Edit Lead"
+                              >
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editPerson", {
+                                      state: { leadData: lead },
+                                    });
                                   }}
                                 />
                               </div>
@@ -540,7 +554,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
             </Table>
             {all_leads?.data?.pagination?.totalPages > 1 &&
               all_leads?.data?.data?.some((field) => field.in_round === 0) >
-                0 && (
+              0 && (
                 <PaginationComp
                   totalPage={all_leads?.data?.pagination?.totalPages}
                   setPage={setAllLeadPage}
@@ -654,12 +668,34 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
-                          <RiDeleteBin6Line
-                            onClick={() => {
-                              setShowDeleteModal(true);
-                              setLeadId(candidate?.id);
-                            }}
-                          />
+                          {permissions?.can_delete &&
+                            <div
+                              className="cmn_action_outer red_bg"
+                              style={{ cursor: "pointer" }}
+                              title="Delete Lead"
+                            >
+                              <RiDeleteBin6Line
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setLeadId(candidate?.id);
+                                }}
+                              />
+                            </div>
+                          }
+
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editPerson", {
+                                  state: { leadData: candidate },
+                                });
+                              }}
+                            />
+                          </div>
                         </td>
                       </tr>
                     );
@@ -765,7 +801,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         <td>
                           {permissions?.can_update &&
                             tech_leads?.technical_round_result ===
-                              "selected" && (
+                            "selected" && (
                               <button
                                 className="cmn_Button_style"
                                 onClick={() =>
@@ -780,12 +816,33 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                 Start
                               </button>
                             )}
-                          <RiDeleteBin6Line
-                            onClick={() => {
-                              setShowDeleteModal(true);
-                              setLeadId(tech_leads?.id);
-                            }}
-                          />
+                          {permissions?.can_delete &&
+                            <div
+                              className="cmn_action_outer red_bg"
+                              style={{ cursor: "pointer" }}
+                              title="Edit Lead"
+                            >
+                              <RiDeleteBin6Line
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setLeadId(tech_leads?.id);
+                                }}
+                              />
+                            </div>
+                          }
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editPerson", {
+                                  state: { leadData: tech_leads },
+                                });
+                              }}
+                            />
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -929,12 +986,33 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               Start
                             </button>
                           )}
-                        <RiDeleteBin6Line
-                          onClick={() => {
-                            setShowDeleteModal(true);
-                            setLeadId(lead?.id);
-                          }}
-                        />
+                        {permissions?.can_delete &&
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <RiDeleteBin6Line
+                              onClick={() => {
+                                setShowDeleteModal(true);
+                                setLeadId(lead?.id);
+                              }}
+                            />
+                          </div>
+                        }
+                        <div
+                          className="cmn_action_outer red_bg"
+                          style={{ cursor: "pointer" }}
+                          title="Edit Lead"
+                        >
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editPerson", {
+                                state: { leadData: lead },
+                              });
+                            }}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -1064,6 +1142,19 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                           lead?.final_result === "selected" && (
                             <button className="cmn_Button_style">Start</button>
                           )}
+                        <div
+                          className="cmn_action_outer red_bg"
+                          style={{ cursor: "pointer" }}
+                          title="Edit Lead"
+                        >
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editPerson", {
+                                state: { leadData: lead },
+                              });
+                            }}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))

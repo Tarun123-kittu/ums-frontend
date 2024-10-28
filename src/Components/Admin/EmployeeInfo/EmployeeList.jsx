@@ -88,6 +88,7 @@ const EmployeeList = () => {
   };
 
   const statusObj = [
+    { value: null, label: "Select" },
     { value: 0, label: "Terminated" },
     { value: 1, label: "OnProbation" },
     { value: 2, label: "Confirmed" },
@@ -144,11 +145,11 @@ const EmployeeList = () => {
           </div>
 
           <div className="employee_wrapper text-end serach_add_outer">
-            {!enableSearch ? (
+            {!enableSearch && usersData?.length > 1 ? (
               <button
                 className="cmn_Button_style"
                 onClick={() => {
-                  dispatch(
+                  searchStatus === null ? toast.error("Please select the status") :dispatch(
                     get_all_users_user({
                       name: searchName,
                       status: searchStatus,
@@ -161,8 +162,7 @@ const EmployeeList = () => {
                 Search
               </button>
             ) : (
-              usersData?.length > 1 &&
-              usersData[0].role !== "Admin" && (
+              (
                 <button
                   className="cmn_Button_style cmn_darkgray_btn"
                   onClick={() => {
@@ -213,8 +213,10 @@ const EmployeeList = () => {
                     <img className="loader_gif" src={Loader} alt="loader" />
                   </td>
                 </tr>
-              ) : usersData === 0 ? (
-                <img src={NoData} alt="no data" />
+              ) : usersData?.length === 0 ? (
+                <td colSpan={12} className="text-center">
+                  <img src={NoData} alt="no data" />
+                </td>
               ) : (
                 usersData?.map((user, index) => {
                   if (user?.role !== "Admin") {

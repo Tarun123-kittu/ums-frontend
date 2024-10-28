@@ -12,6 +12,8 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
+import Mobile from "../../assets/mobile.png"
+import Computer from "../../assets/computer.png"
 
 const AttendenceReport = () => {
   let i = 0;
@@ -240,9 +242,17 @@ const AttendenceReport = () => {
                             {report?.rating ? report?.rating : "Not Available"}
                           </td>
                           <td>
-                            {report?.login_mobile
-                              ? report?.name + "/" + report?.login_mobile
-                              : "Not Available"}
+                            {report?.name && report?.login_mobile ? (
+                              <>
+                                {report.login_mobile === "1" ? (
+                                  <img className="login_image" src={Mobile} alt="image_computer" />
+                                ) : (
+                                  <img className="login_image" src={Computer} alt="image_mobile" />
+                                )}
+                              </>
+                            ) : (
+                              "--"
+                            )}
                           </td>
                           <td>
                             {permissions?.can_update && report?.id && (

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../Common/InputField";
 import { FaSort } from "react-icons/fa";
 import CustomSelectComp from "../Common/CustomSelectComp";
-import { get_selected_language_series } from "../../utils/redux/interviewLeadsSlice/technicalRound/getAllSelectedTestSeries";
+import { get_selected_language_series,clear_language_series_state} from "../../utils/redux/interviewLeadsSlice/technicalRound/getAllSelectedTestSeries";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
@@ -62,9 +62,11 @@ const TechInterviewQuestionModal = ({
           series.push({ value: data?.id, label: data?.series_name });
         }
       });
+      
     }
     if (series_data?.isError) {
       toast.error(series_data?.error.message);
+      dispatch(clear_language_series_state())
     }
   }, [series_data]);
 

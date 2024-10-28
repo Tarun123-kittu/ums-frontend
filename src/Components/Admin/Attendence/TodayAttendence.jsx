@@ -9,6 +9,8 @@ import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
 import Loader from "../../assets/Loader.gif";
+import Mobile from "../../assets/mobile.png"
+import Computer from "../../assets/computer.png"
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
 
@@ -53,9 +55,8 @@ const TodayAttendence = () => {
   return permissions?.can_view ? (
     <section className="incomplete_attendence_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -117,21 +118,33 @@ const TodayAttendence = () => {
                               : "--"}
                           </td>
                           <td>
-                            {report?.name && report?.login_mobile
-                              ? `${report.name}/mobile ${
-                                  report.login_mobile === "1" ? "true" : "false"
-                                }`
-                              : "--"}
+                            {report?.name && report?.login_mobile ? (
+                              <>
+                                {report.login_mobile === "1" ? (
+                                  <img className="login_image" src={Mobile} alt="image_computer" />
+                                ) : (
+                                  <img className="login_image" src={Computer} alt="image_mobile" />
+                                )}
+                              </>
+                            ) : (
+                              "--"
+                            )}
                           </td>
+
                           <td>
-                            {report?.name && report?.logout_mobile
-                              ? `${report.name}/mobile ${
-                                  report.logout_mobile === "1"
-                                    ? "true"
-                                    : "false"
-                                }`
-                              : "--"}
+                            {report?.name && report?.logout_mobile ? (
+                              <>
+                                {report.logout_mobile === "1" ? (
+                                  <img className="login_image" src={Mobile} alt="computer icon" />
+                                ) : (
+                                  <img className="login_image" src={Computer} alt="mobile icon" />
+                                )}
+                              </>
+                            ) : (
+                              "--"
+                            )}
                           </td>
+
 
                           <td>
                             {permissions?.can_update && report?.id && (

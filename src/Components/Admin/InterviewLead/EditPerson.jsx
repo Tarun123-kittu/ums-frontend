@@ -16,6 +16,8 @@ import {
 import toast from "react-hot-toast";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
+import { localeData } from "moment/moment";
 
 const EditPerson = () => {
   const permissions = UsePermissions("Interviews");
@@ -23,6 +25,7 @@ const EditPerson = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { leadData } = location?.state ? location?.state : location;
+  console.log(leadData,"this is the lea dta")
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -37,7 +40,13 @@ const EditPerson = () => {
   const [last_company, setLast_company] = useState("");
   const [id, setId] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
+  const [all_languagages, setAll_languages] = useState([]);
   const update_lead_data = useSelector((store) => store.UPDATE_LEAD);
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
+
+  useEffect(() => {
+    dispatch(get_all_languages());
+  }, []);
 
   useEffect(() => {
     if (!leadData) {
@@ -49,7 +58,10 @@ const EditPerson = () => {
       setEmail(leadData?.email);
       setGender(leadData?.gender);
       setDob(leadData?.dob);
-      setProfile(leadData?.profile);
+      if(languages?.length > 0){
+        const profile = languages?.filter((el) => el.language === leadData?.profile)
+        setProfile(profile[0].id);
+      }
       setState(leadData?.state);
       setAddress(leadData?.house_address);
       setExperience(leadData?.experience);
@@ -57,7 +69,20 @@ const EditPerson = () => {
       setExpected_salary(leadData?.expected_salary);
       setLast_company(leadData?.last_company);
     }
-  }, [leadData]);
+  }, [leadData,languages]);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.id,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
 
   const obj = [
     { name: "Interview Lead", path: "/interviewLead" },
@@ -336,7 +361,7 @@ const EditPerson = () => {
                   <div className="mt-2">
                     <CustomSelectComp
                       placeholder={"Select profile"}
-                      optionsData={ProfileData}
+                      optionsData={all_languagages}
                       changeHandler={(e) => changeHandler("profile", e)}
                       value={profile}
                       styleTrue={errorMessage?.profile}

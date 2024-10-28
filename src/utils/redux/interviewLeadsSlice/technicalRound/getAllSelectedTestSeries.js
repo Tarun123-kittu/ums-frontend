@@ -36,6 +36,16 @@ export const getSelectedLanguageSeries = createSlice({
         isError: false,
         error: null
     },
+    reducer: {
+        clear_language_series_state: (state) => {
+            state.data = []
+            state.isSuccess = false
+            state.isLoading = false
+            state.isError = false
+            state.error = null
+            return state
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(get_selected_language_series.pending, (state) => {
@@ -53,4 +63,5 @@ export const getSelectedLanguageSeries = createSlice({
             })
     }
 })
+export const {clear_language_series_state} = getSelectedLanguageSeries.actions
 export default getSelectedLanguageSeries.reducer

@@ -89,3 +89,7 @@ button.cmn_bg_btn {
 .norecord_found h4 {
     margin: 0;
 }
+
+img.login_image {
+    width: 26px;
+}
