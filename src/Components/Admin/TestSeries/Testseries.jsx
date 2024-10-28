@@ -24,6 +24,7 @@ import {
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import NoData from "../../assets/nodata.png";
 
 const Testseries = () => {
   const dispatch = useDispatch();
@@ -138,7 +139,7 @@ const Testseries = () => {
             classname={"inter_fontfamily employee_heading"}
           />
 
-          <div className="d-flex test_series_header employee_container align-items-end mt-3">
+          <div className="d-flex test_series_header employee_container align-items-end mt-3  card-cmn">
             <div className="d-flex gap-3 test_series_header_wrapper">
               <div className="form-group new_employee_form_group">
                 <label>Profile</label>
@@ -192,8 +193,8 @@ const Testseries = () => {
             <div className="row">
               {all_series?.isLoading ? (
                 <img src={Loader} alt="loader" className="loader_gif" />
-              ) : series?.length === 0 ? (
-                <h4>No Series Found</h4>
+              ) : all_series?.data?.message === "No test series available." ? (
+                <img className="image_loading col-12" src={NoData} alt="No data found"/>
               ) : (
                 series?.map((series, i) => {
                   return (

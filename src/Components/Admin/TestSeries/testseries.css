@@ -64,6 +64,9 @@
     flex-shrink: 0;
     /* border: thin solid gray; */
 }
+img.image_loading {
+    width: 567px;
+}
 .view_question_tab_content h2{
     font-weight: 700;
 }

@@ -91,6 +91,7 @@ import deleteLead from './interviewLeadsSlice/deleteLeads'
 import changePassword from './userSlice/changePassword'
 import forgetPassword from './userSlice/forgetPassword'
 import UserResetPassword from './userSlice/userResetPassword'
+import techRoundSubmitResult from './interviewLeadsSlice/technicalRound/technicalRoundSubmitStatus'
 
 const appStore = configureStore({
     reducer: {
@@ -185,7 +186,8 @@ const appStore = configureStore({
         DELETE_LEAD: deleteLead,
         CHANGE_PASSWORD: changePassword,
         FORGOT_PASSWORD: forgetPassword,
-        RESET_PASSWORD: UserResetPassword
+        RESET_PASSWORD: UserResetPassword,
+        TECH_ROUND_SUBMIT_RESULT: techRoundSubmitResult
 
     },
 })
