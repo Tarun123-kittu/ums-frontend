@@ -24,7 +24,7 @@ import {
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
-import NoData from "../../assets/nodata.png";
+import NoData from "../../assets/nodata.jpg";
 
 const Testseries = () => {
   const dispatch = useDispatch();

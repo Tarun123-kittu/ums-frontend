@@ -22,6 +22,7 @@ import { ProfileData } from "../../Utils/customData/profileData";
 import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
 import UserValidations from "../../Utils/UserValidations";
 import { Table } from "react-bootstrap";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const AddnewEmployee = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
+  const [all_languagages, setAll_languages] = useState([]);
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
@@ -38,10 +40,25 @@ const AddnewEmployee = () => {
   );
 
   const roles = useSelector((store) => store.ALL_ROLES);
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
 
   useEffect(() => {
     dispatch(get_all_roles());
+    dispatch(get_all_languages());
   }, []);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.language,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
 
   useEffect(() => {
     if (roles?.isSuccess) {
@@ -644,8 +661,8 @@ const AddnewEmployee = () => {
                     </label>
                     <div className="mt-2">
                       <CustomSelectComp
-                        optionsData={ProfileData}
-                        changeHandler={(e) => setDepartment(e.value)}
+                        optionsData={all_languagages}
+                        changeHandler={(e) => setDepartment(e.label)}
                         value={department}
                         styleTrue={validationErrors?.department}
                       />

@@ -25,7 +25,7 @@ import {
 } from "../../../utils/redux/testSeries/objectiveQuestionsSlice/deleteObjectiveQuestion";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import toast from "react-hot-toast";
-import NoData from "../../assets/nodata.png";
+import NoData from "../../assets/nodata.jpg";
 
 const ViewTestseriesQuestions = () => {
   const { show } = useAppContext();

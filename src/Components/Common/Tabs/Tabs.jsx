@@ -32,7 +32,7 @@ import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/g
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
 import Loader from "../../assets/Loader.gif";
-import NoData from "../../assets/nodata.png";
+import NoData from "../../assets/nodata.jpg";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { RiDeleteBin6Line } from "react-icons/ri";

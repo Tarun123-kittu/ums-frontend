@@ -21,6 +21,7 @@ import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getA
 import validator from "validator";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 
 const EditEmployeeInfo = () => {
   const { show } = useAppContext();
@@ -29,14 +30,29 @@ const EditEmployeeInfo = () => {
   const dispatch = useDispatch();
   const permissions = UsePermissions("Users");
   const obj = [{ name: "Employees", path: "/employee" }];
+  const [all_languagages, setAll_languages] = useState([]);
   const { user_details, documents } = location?.state
     ? location?.state
     : location;
-
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
 
   useEffect(() => {
     dispatch(get_all_roles());
+    dispatch(get_all_languages());
   }, []);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.language,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
 
   useEffect(() => {
     if (
@@ -686,7 +702,7 @@ const EditEmployeeInfo = () => {
                       }
                     >
                       <option value="">Select</option>
-                      {ProfileData?.map((data, i) => {
+                      {all_languagages?.map((data, i) => {
                         return (
                           <option value={data?.value}>{data?.label}</option>
                         );

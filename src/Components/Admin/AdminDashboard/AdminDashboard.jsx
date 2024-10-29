@@ -109,7 +109,7 @@ const AdminDashboard = () => {
     },
     series: [
       {
-        name: "Share",
+        name: "Leads",
         colorByPoint: true,
         data: [
           {

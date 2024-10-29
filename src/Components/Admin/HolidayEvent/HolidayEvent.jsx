@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
 import Notification from "../Notification/Notification";
 import { useAppContext } from "../../Utils/appContecxt";
 
@@ -23,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.jpg";
+
 const HolidayEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const HolidayEvent = () => {
   const holiday_and_events = useSelector(
     (store) => store.ALL_HOLIDAY_AND_EVENT
   );
+  console.log(holiday_and_events, "hthis is the holiday and events")
   const is_deleted = useSelector((store) => store.DELETE_EVENT);
   const user_all_permissions = useSelector(
     (store) => store.USER_ALL_PERMISSIONS
@@ -135,9 +137,8 @@ const HolidayEvent = () => {
   return (
     <section className="holiday_event_wrapper">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -216,7 +217,9 @@ const HolidayEvent = () => {
                       <img className="loader_gif" src={Loader} alt="loader" />
                     </td>
                   </tr>
-                ) : (
+                ) : holiday_and_events?.data?.eventsOrHolidays?.length === 0 ? <td colSpan={12} className="text-center">
+                  <img src={NoData} alt="no data" width={500}/>
+                </td> : (
                   holiday_and_events?.data?.eventsOrHolidays?.map(
                     (event, i) => {
                       return (

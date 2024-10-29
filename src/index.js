@@ -8,15 +8,18 @@ import { AppProvider } from './Components/Utils/appContecxt';
 import appStore from './utils/redux/appStore';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+import InternetChecker from './Components/noInternet/InternetChecker';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <Provider store={appStore}>
-    <AppProvider>
-      <App />
-      <Toaster />
-    </AppProvider>
+    <InternetChecker> 
+      <AppProvider>
+        <App />
+        <Toaster />
+      </AppProvider>
+    </InternetChecker>
   </Provider>
 );
 

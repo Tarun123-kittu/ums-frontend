@@ -13,7 +13,7 @@ import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import Loader from "../../assets/Loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
-import NoData from "../../assets/nodata.png";
+import NoData from "../../assets/nodata.jpg";
 
 const LeaveReport = () => {
   let index = 0;

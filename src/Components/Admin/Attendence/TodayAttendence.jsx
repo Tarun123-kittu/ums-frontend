@@ -13,6 +13,7 @@ import Mobile from "../../assets/mobile.png"
 import Computer from "../../assets/computer.png"
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.jpg";
 
 const TodayAttendence = () => {
   const permissions = UsePermissions("Attandance");

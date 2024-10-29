@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaSort, FaSortDown } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import Loader from "../../assets/Loader.gif";
-import NoData from "../../assets/nodata.png";
+import NoData from "../../assets/nodata.jpg";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -214,8 +214,8 @@ const EmployeeList = () => {
                   </td>
                 </tr>
               ) : usersData?.length === 0 ? (
-                <td colSpan={12} className="text-center">
-                  <img src={NoData} alt="no data" />
+                <td colSpan={12} className="text-center ">
+                  <img src={NoData} alt="no data"/>
                 </td>
               ) : (
                 usersData?.map((user, index) => {
