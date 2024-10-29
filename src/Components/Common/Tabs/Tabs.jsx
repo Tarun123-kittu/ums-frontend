@@ -69,7 +69,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     }
   }, [tab]);
   const [leadId, setLeadId] = useState(null);
-  const [page, setPage] = useState(1);
   const [language_id, setLanguage_id] = useState(null);
   const [series_id, setSeries_id] = useState(null);
   const [language, setLanguage] = useState("");
@@ -171,6 +170,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
     { value: "on hold", label: "On Hold" },
     { value: "pending", label: "Pending" },
     { value: "opened", label: "Opened" },
+    { value: "submitted", label: "Test Submitted" }
   ];
 
   useEffect(() => {
@@ -369,8 +369,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500} height={400}
                       />
                     </td>
                   </tr>
@@ -458,20 +457,6 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                                             </li>
                                           ))}
                                         </ul>
-                                        {/* <div className="text-end">
-                                          {permissions?.can_update && (
-                                            <button
-                                              className="cmn_Button_style"
-                                              onClick={() => {
-                                                navigate("/editPerson", {
-                                                  state: { leadData: lead },
-                                                });
-                                              }}
-                                            >
-                                              Edit
-                                            </button>
-                                          )}
-                                        </div> */}
                                       </div>
                                     </div>
                                   </div>
@@ -591,8 +576,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500} height={400}
                       />
                     </td>
                   </tr>
@@ -739,8 +723,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500} height={400}
                       />
                     </td>
                   </tr>
@@ -894,8 +877,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500} height={400}
                       />
                     </td>
                   </tr>
@@ -1028,7 +1010,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
             {face_round_leads?.data?.pagination?.totalPages > 1 && (
               <PaginationComp
                 totalPage={face_round_leads?.data?.pagination?.totalPages}
-                setPage={setTechPage}
+                setPage={setFacePage}
               />
             )}
           </div>
@@ -1063,8 +1045,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500} height={400}
                       />
                     </td>
                   </tr>
@@ -1161,7 +1142,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 ) : (
                   <tr>
                     <td colSpan="9" className="text-center">
-                      No face-to-face lead found.
+                      No final lead found.
                     </td>
                   </tr>
                 )}
@@ -1170,7 +1151,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
             {final_round_leads?.data?.totalPages > 0 && (
               <PaginationComp
                 totalPage={final_round_leads?.data?.totalPages}
-                setPage={setTechPage}
+                setPage={setFinalPage}
               />
             )}
           </div>

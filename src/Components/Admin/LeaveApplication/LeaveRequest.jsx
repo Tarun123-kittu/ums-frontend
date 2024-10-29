@@ -90,8 +90,8 @@ const LeaveRequest = () => {
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500}
+                        height={400}
                       />
                     </td>
                   </tr>
@@ -107,7 +107,7 @@ const LeaveRequest = () => {
                           <td>{leaves?.date_from}</td>
                           <td>{leaves?.to_date}</td>
                           <td>{leaves?.count}</td>
-                          <td>{leaves?.description}</td>
+                          <td title={leaves?.description}>{leaves?.description?.slice(0,20)+"..."}</td>
                           <td>{leaves?.status}</td>
                           <td>{leaves?.remark}</td>
                           <td>

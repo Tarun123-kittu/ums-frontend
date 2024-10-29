@@ -5,7 +5,7 @@ import InputField from "../../Common/InputField";
 import "./attendence.css";
 import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
 import Notification from "../Notification/Notification";
-import { MdStar } from "react-icons/md";
+import { MdStar, MdStarBorder } from "react-icons/md";
 import "./attendence.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -32,6 +32,7 @@ const EditAttendenceReport = () => {
   const [report, setReport] = useState("");
   const [remark, setRemark] = useState("");
   const [enable, setEnable] = useState(false);
+  const [rating, setRating] = useState(3);
 
   useEffect(() => {
     if (!id) {
@@ -58,6 +59,7 @@ const EditAttendenceReport = () => {
       setOut_time(attendance_detail?.data?.out_time);
       setRemark(attendance_detail?.data?.remark);
       setReport(attendance_detail?.data?.report);
+      setRating(attendance_detail?.data?.rating);
     }
     if (attendance_detail.isError) {
       toast.error("Something went wrong");
@@ -77,7 +79,7 @@ const EditAttendenceReport = () => {
     if (!enable) {
       toast.error("You have not changed any field");
     } else {
-      dispatch(update_attendance({ id, in_time, out_time, remark, report }));
+      dispatch(update_attendance({ id, in_time, out_time, remark, report,rating }));
     }
   };
 
@@ -185,6 +187,15 @@ const EditAttendenceReport = () => {
                   onChange={(e) => handleChange("remark", e)}
                 />
               </div>
+              <div className="rating_outer">
+                <h3>Rating</h3>
+                {Array.from({ length: 5 }, (_, index) => (
+                  <span key={index} onClick={() => setRating(index + 1)}>
+                    {index < rating ? <MdStar /> : <MdStarBorder />}
+                  </span>
+                ))}
+              </div>
+
 
               {permissions?.can_update && (
                 <div className="text-center mt-4">

@@ -216,16 +216,15 @@ const LeaveReport = () => {
                       <img className="loader_gif" src={Loader} alt="loader" />
                     </td>
                   </tr>
-                ) : leave_data?.data?.data?.length === 1 &&
-                  leave_data?.data?.data[0]?.role === "Admin" ? (
+                ) : leave_data?.data?.message === "No leaves found" ? (
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
                         className="loader_gif"
                         src={NoData}
                         alt="loader"
-                        width={300}
-                        height={300}
+                        width={500}
+                        height={400}
                       />
                     </td>
                   </tr>
@@ -241,7 +240,7 @@ const LeaveReport = () => {
                           <td>{leave?.from_date}</td>
                           <td>{leave?.to_date}</td>
                           <td>{leave?.count}</td>
-                          <td>{leave?.description}</td>
+                          <td title={leave?.description}>{leave?.description?.slice(0,20)+"..."}</td>
                           <td>{leave?.status}</td>
                           <td>{leave?.remark}</td>
                           <td>

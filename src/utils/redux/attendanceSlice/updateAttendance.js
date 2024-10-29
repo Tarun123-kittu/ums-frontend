@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const update_attendance = createAsyncThunk("update_attendance", async ({ id, in_time, out_time, remark, report }, thunkAPI) => {
+export const update_attendance = createAsyncThunk("update_attendance", async ({ id, in_time, out_time, remark, report,rating }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -11,7 +11,8 @@ export const update_attendance = createAsyncThunk("update_attendance", async ({ 
             "report": report,
             "in_time": in_time,
             "out_time": out_time,
-            "remark": remark
+            "remark": remark,
+            "rating" : rating
         });
 
         const requestOptions = {

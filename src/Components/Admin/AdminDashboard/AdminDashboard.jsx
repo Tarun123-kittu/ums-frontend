@@ -32,7 +32,7 @@ import {
 import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
-  UseAllUsernames();
+  UseAllUsernames()
   const permissions = UsePermissions("Dashboard");
   const dispatch = useDispatch();
   const { show } = useAppContext();
@@ -55,7 +55,6 @@ const AdminDashboard = () => {
   const dashboard_leaves = useSelector(
     (store) => store.GET_LEAVES_ON_DASHBOARD
   );
-  console.log(dashboard_leaves,"this is the dashboard leaves")
   const leave_update_status = useSelector((store) => store.UPDATE_LEAVE);
 
   useEffect(() => {
@@ -280,13 +279,25 @@ const AdminDashboard = () => {
     }
   }, [leave_update_status]);
 
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
+
   return permissions?.can_view ? (
     <section>
       <Notification />
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        }min-vh-100 lightgray_bg ${show ? "cmn_margin" : "cmn_margin_outer"}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          }min-vh-100 lightgray_bg ${show ? "cmn_margin" : "cmn_margin_outer"}`}
       >
         <div className="dashboard_outer pt-3">
           <Row className="m-0 mb-3">
@@ -371,7 +382,11 @@ const AdminDashboard = () => {
                             <tr>
                               <td>
                                 <h5 className="mb-0">{leave?.name}</h5>
-                                <span>{leave?.position}</span>
+                                {positionData
+                                  ?.filter((post) => post.value === leave?.position)
+                                  ?.map((filteredPost, index) => (
+                                    <span key={index}>{filteredPost.label}</span>
+                                  ))}
                               </td>
                               <td>
                                 {formatLeaveDate(leave?.date_of_application)}
@@ -477,7 +492,7 @@ const AdminDashboard = () => {
             </Col>
             <Col lg={4}>
               <div className="card-cmn">
-                <h4>Employee Attendance</h4>
+                <h4>Upcoming Events</h4>
                 <ul className="event_list">
                   {current_and_next_month_events?.data?.data?.currentMonth
                     ?.slice(0, 6)

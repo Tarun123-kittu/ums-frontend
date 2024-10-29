@@ -45,6 +45,12 @@ const Notification = ({ view }) => {
               >
                 Attendence Report
               </Dropdown.Item>
+              <Dropdown.Item
+                as="button"
+                onClick={() => navigate("/apply-leaves")}
+              >
+                Apply Leave
+              </Dropdown.Item>
               {localStorage?.getItem("roles")?.includes("Employee") && (
                 <Dropdown.Item
                   as="button"

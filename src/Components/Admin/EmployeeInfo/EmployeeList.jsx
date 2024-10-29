@@ -215,7 +215,7 @@ const EmployeeList = () => {
                 </tr>
               ) : usersData?.length === 0 ? (
                 <td colSpan={12} className="text-center ">
-                  <img src={NoData} alt="no data"/>
+                  <img src={NoData} alt="no data" width={500} height={400}/>
                 </td>
               ) : (
                 usersData?.map((user, index) => {

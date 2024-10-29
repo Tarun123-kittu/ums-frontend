@@ -80,7 +80,7 @@ const IncompleteAttendence = () => {
                         <tr key={i}>
                           <td>{++index}</td>
                           <td>
-                            {report?.data} -{report?.date_in_week_day}
+                            {report?.date} -{report?.date_in_week_day}
                           </td>
                           <td>{report?.name}</td>
                           <td>{convertTo12Hour(report?.in_time)}</td>

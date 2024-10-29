@@ -14,8 +14,12 @@ import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
 import Mobile from "../../assets/mobile.png"
 import Computer from "../../assets/computer.png"
+import NoData from "../../assets/nodata.jpg";
+import UseAllUsernames from "../../Utils/customHooks/useAllUserNames";
 
 const AttendenceReport = () => {
+  UseAllUsernames()
+
   let i = 0;
   const dispatch = useDispatch();
   const permissions = UsePermissions("Attandance");
@@ -31,11 +35,12 @@ const AttendenceReport = () => {
   const user_attendance_report = useSelector(
     (store) => store.GET_USER_ATTENDANCE_REPORT
   );
+  const all_userNames = useSelector((store) => store.ALL_USERNAMES);
 
   useEffect(() => {
     dispatch(get_user_attendance_report({ name, month, year, page }));
     localStorage.removeItem("tab");
-  }, [dispatch, name, month, year, page]);
+  }, [dispatch, page]);
 
   const monthDataObj = [
     { value: "01", label: "January" },
@@ -78,14 +83,19 @@ const AttendenceReport = () => {
   };
 
   useEffect(() => {
-    let user_data = [];
-    user_attendance_report?.data?.data?.forEach((user_name) => {
-      if (!user_data.some((user) => user.value === user_name?.name)) {
-        user_data.push({ value: user_name?.name, label: user_name?.name });
-      }
-    });
-    setAllNames(user_data);
-  }, [user_attendance_report]);
+    if (all_userNames?.isSuccess) {
+      all_userNames?.data?.data?.forEach((data) => {
+        if (!all_names.some((item) => item.value === data?.name)) {
+          if (data?.role !== "Admin") {
+            all_names.push({
+              value: data?.name,
+              label: data?.name,
+            });
+          }
+        }
+      });
+    }
+  }, [all_userNames]);
 
   const handleSelectChange = (field, e) => {
     field === "name" && setName(e.value);
@@ -96,9 +106,8 @@ const AttendenceReport = () => {
   return permissions?.can_view ? (
     <section className="attendenceReport_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
 
@@ -203,7 +212,9 @@ const AttendenceReport = () => {
                       <img className="loader_gif" src={Loader} alt="loader" />
                     </td>
                   </tr>
-                ) : (
+                ) : user_attendance_report?.data?.data?.length === 1 && user_attendance_report?.data?.data[0].role === "Admin" ? <td colSpan={12} className="text-center ">
+                  <img src={NoData} alt="no data" width={500} height={400} />
+                </td> : (
                   user_attendance_report?.data?.data?.map((report, index) => {
                     if (report?.role !== "Admin") {
                       return (
