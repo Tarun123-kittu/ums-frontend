@@ -151,6 +151,7 @@ const Sidebar = () => {
                       <div
                         className="sidebar_content justify-content-between"
                         onClick={() => handleToggle(i)}
+                        title={data?.name}
                       >
                         <div
                           className={`transition_class ${
@@ -164,7 +165,7 @@ const Sidebar = () => {
                             width="18px"
                             className={isActive ? "filterClass" : ""}
                           />
-                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                          <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                         </div>
                         {show ? (
                           ""
@@ -189,7 +190,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -267,7 +268,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -348,7 +349,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -429,7 +430,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -510,7 +511,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -591,7 +592,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -669,7 +670,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}
@@ -747,7 +748,7 @@ const Sidebar = () => {
                           width="18px"
                           className={isActive ? "filterClass" : ""}
                         />
-                        <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
                       </div>
                     </Link>
                   )}

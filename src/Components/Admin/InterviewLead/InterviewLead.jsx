@@ -189,9 +189,8 @@ const InterviewLead = () => {
   return permissions?.can_view ? (
     <section className="Interviewlead_outer">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer minheight">
@@ -290,9 +289,7 @@ const InterviewLead = () => {
           show={showDeleteModal}
           setShow={setShowDeleteModal}
           heading_text={"Are you sure to delete the user list"}
-          paragraph_text={
-            "Please confirm your action. Deleting the user list is permanent and cannot be reversed."
-          }
+          paragraph_text={"Please confirm your action. Deleting the user list is permanent and cannot be reversed."}
         />
       )}
     </section>
