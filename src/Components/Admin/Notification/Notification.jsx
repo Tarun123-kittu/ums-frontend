@@ -9,21 +9,10 @@ import { useNavigate } from "react-router-dom";
 const Notification = ({ view }) => {
   const navigate = useNavigate();
   return (
-    <section className="notification_outer">
+    <section className="h-20 notification_outer">
       <div className="d-flex justify-content-between align-items-center">
-        {localStorage?.getItem("roles")?.includes("Employee") && (
-          <div className="text-start sidebar_logo_outer" style={{cursor:"pointer"}} onClick={() => navigate("/mark-attendence")}>
-            <img
-              src={logo}
-              height={"40px"}
-              width={"158px"}
-              className="logo_image"
-              alt="notification"
-            />
-          </div>
-        )}
         <div className="d-flex align-items-center ms-auto">
-          <IoMdNotificationsOutline className="me-3" size={24} />
+          <IoMdNotificationsOutline className="me-3 -mt-4" size={24} />
 
           <Dropdown>
             <Dropdown.Toggle className="dropdown_color">
@@ -39,26 +28,7 @@ const Notification = ({ view }) => {
               <Dropdown.Item onClick={() => navigate("/change-password")}>
                 Change Password
               </Dropdown.Item>
-              <Dropdown.Item
-                as="button"
-                onClick={() => navigate("/employee-attendence-report")}
-              >
-                Attendence Report
-              </Dropdown.Item>
-              <Dropdown.Item
-                as="button"
-                onClick={() => navigate("/apply-leaves")}
-              >
-                Apply Leave
-              </Dropdown.Item>
-              {localStorage?.getItem("roles")?.includes("Employee") && (
-                <Dropdown.Item
-                  as="button"
-                  onClick={() => localStorage?.clear()}
-                >
-                  Logout
-                </Dropdown.Item>
-              )}
+
             </Dropdown.Menu>
           </Dropdown>
         </div>

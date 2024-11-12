@@ -73,7 +73,7 @@ const Login = () => {
       if (login_details?.data?.roles?.includes("Admin")) {
         navigate("/dashboard");
       } else {
-        navigate("/mark-attendence");
+        navigate("/employee-dashboard");
       }
       dispatch(clear_login_state());
     }

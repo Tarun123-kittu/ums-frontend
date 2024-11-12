@@ -57,8 +57,8 @@ const EmployeeAttendenceReoport = () => {
     <section>
       <div className="min-vh-100">
         <Notification view={true} />
-        <div className="container">
-          <div className="admin_dashboard_outer mt-0">
+        <div className=" container">
+          <div className=" admin_dashboard_outer mt-0">
             <div className="attendence_submit cmn_card">
               <h4>Mark Attendence</h4>
               <div className="report_header">

@@ -59,6 +59,21 @@ const menuitems = [
     name: "Teams & Roles",
     pathname: "/rolePermission"
   },
+  {
+    icon: calendar,
+    name: "Employee Dashboard",
+    pathname: "/employee-dashboard"
+  },
+  {
+    icon: attendenceIcon,
+    name: "Employee Attendence Report",
+    pathname: "/employee-attendence-report"
+  },
+  {
+    icon: leaveApplication,
+    name: "Apply For Leave",
+    pathname: "/apply-leaves"
+  },
 
 ]
 

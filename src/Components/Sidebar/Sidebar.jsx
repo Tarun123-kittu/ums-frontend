@@ -115,36 +115,40 @@ const Sidebar = () => {
     });
   }, [path.pathname, menuitems]);
 
-  return (uniqueRoles?.length === 1 && uniqueRoles?.includes("Employee")) ||
-    path?.pathname === "/change-password" ? null : (
+  return (
     <div className={`sidebar ${show ? "cmn_width" : ""}`}>
       <h3
         className={`bar ${show ? "text-center" : "pe-3"}`}
         onClick={() => {
           setShow(!show);
         }}
+        style={{ padding: '12px 16px 0px' }}
       >
-        {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
+        {show ? <FaBars /> : <RxCross2 className="p-0 text-center ms-auto" />}
       </h3>
+
       <div
         className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}
-        style={{ cursor: "pointer" }}
+        style={{
+          cursor: "pointer",
+          paddingLeft: "45px",
+        }}
         onClick={() => navigate("/dashboard")}
       >
         <img src={logo} height={"40px"} width={"158px"} alt="" />
       </div>
 
-      <div className="mt-4">
+
+      <div className="mt-4 nomargintop">
         {menuitems.map((data, i) => {
           const isActive = path.pathname === data?.pathname;
-          if (permissions?.Dashboard_can_view && data?.name === "Dashboard") {
+          if (permissions?.Dashboard_can_view && data?.name === "Dashboard" && !uniqueRoles?.includes("Employee")) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -154,9 +158,8 @@ const Sidebar = () => {
                         title={data?.name}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -216,14 +219,13 @@ const Sidebar = () => {
               </>
             );
           }
-          if (permissions?.Users_can_view && data?.name === "Employees") {
+          if (permissions?.Users_can_view && data?.name === "Employees" && !uniqueRoles?.includes("Employee")) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -232,9 +234,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -296,15 +297,14 @@ const Sidebar = () => {
           }
           if (
             permissions?.Attandance_can_view &&
-            data?.name === "Attendance Report"
+            data?.name === "Attendance Report" && !uniqueRoles?.includes("Employee")
           ) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -313,9 +313,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -378,14 +377,14 @@ const Sidebar = () => {
           if (
             permissions?.Events_can_view &&
             data?.name === "Holiday & Events"
+            && !uniqueRoles?.includes("Employee")
           ) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -394,9 +393,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -459,14 +457,14 @@ const Sidebar = () => {
           if (
             permissions?.Leaves_can_view &&
             data?.name === "Leave Application"
+            && !uniqueRoles?.includes("Employee")
           ) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -475,9 +473,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -540,14 +537,14 @@ const Sidebar = () => {
           if (
             permissions?.Interviews_can_view &&
             data?.name === "InterView Leads"
+            && !uniqueRoles?.includes("Employee")
           ) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -556,9 +553,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -618,14 +614,13 @@ const Sidebar = () => {
               </>
             );
           }
-          if (permissions?.Test_can_view && data?.name === "Test Series") {
+          if (permissions?.Test_can_view && data?.name === "Test Series" && !uniqueRoles?.includes("Employee")) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -634,9 +629,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -696,14 +690,13 @@ const Sidebar = () => {
               </>
             );
           }
-          if (permissions?.Teams_can_view && data?.name === "Teams & Roles") {
+          if (data?.name === "Teams & Roles" && !uniqueRoles?.includes("Employee")) {
             return (
               <>
                 <div
                   key={i}
-                  className={`sidebar-button ${
-                    isActive ? "active-pathname" : ""
-                  }`}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
                 >
                   {data.subItems ? (
                     <>
@@ -712,9 +705,8 @@ const Sidebar = () => {
                         onClick={() => handleToggle(i)}
                       >
                         <div
-                          className={`transition_class ${
-                            show ? "" : "d-flex flex-grow-1 gap-2 "
-                          }`}
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
                         >
                           <img
                             src={data?.icon}
@@ -774,22 +766,238 @@ const Sidebar = () => {
               </>
             );
           }
+          // employee dashboard
+          if (data?.name === "Employee Dashboard" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name === "Employee Dashboard" && "Dashboard"}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name === "Employee Dashboard" && "Dashboard"}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (data?.name === "Employee Attendence Report" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name === "Employee Attendence Report" && "Attendence Report"}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (data?.name === "Apply For Leave" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+
+
         })}
-        {!(
-          uniqueRoles?.includes("Admin") || uniqueRoles?.includes("Employee")
-        ) && (
-          <div
-            className={`sidebar-button`}
-            onClick={() => navigate("/mark-attendence")}
-          >
-            <div className="sidebar_content">
-              <IoIosLogOut className="sidebar_content" />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Mark Attendance
-              </h4>
-            </div>
-          </div>
-        )}
         <div className={`sidebar-button`} onClick={handleLogout}>
           <div className="sidebar_content">
             <IoIosLogOut className="sidebar_content" />

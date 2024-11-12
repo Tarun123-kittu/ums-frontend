@@ -124,15 +124,6 @@ const MarkAttendence = () => {
     return () => clearInterval(interval);
   }, [mark_attendance_time]);
 
-  const addItem = () => {
-    if (inputValue.trim()) {
-      setItemsString((prev) =>
-        prev ? `${prev}\n${inputValue.trim()}` : inputValue.trim()
-      );
-      setInputValue("");
-    }
-  };
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -166,180 +157,79 @@ const MarkAttendence = () => {
   };
   return (
     <section>
-      <div>
-        <Notification view={true} />
-        <div className="container">
-          <div className="admin_dashboard_outer mt-0">
-            {!mark_attendance_time && (
-              <div className="attendence_submit cmn_card">
-                <h4>Mark Attendence</h4>
-                <div className="row align-items-end row-gap-2">
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="Day">Day</label>
-                      <input
-                        type="text"
-                        placeholder="tuesday"
-                        className="form-control"
-                        value={moment().format("dddd")}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="date">Date</label>
-                      <input
-                        type="text"
-                        placeholder="08-10-2024"
-                        className="form-control"
-                        value={moment(date).format("DD-MM-YYYY")}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="time">Time</label>
-                      <input
-                        type="text"
-                        placeholder="01:09:26 PM"
-                        className="form-control"
-                        value={formatTime(date)}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3 text-center">
-                    <button
-                      className="cmn_bg_btn"
-                      onClick={() =>
-                        dispatch(
-                          mark_attendance({
-                            login_device: deviceType,
-                            login_mobile,
-                          })
-                        )
-                      }
-                    >
-                      Mark Your Attendence
-                    </button>
-                  </div>
+      <div class="container py-2" >
+        <div class="mt-0">
+          <div class="bg-white p-4 rounded mb-4" style={{ border: '1px solid #0000000F' }}>
+            <h3 class="h5 font-weight-semibold text-danger">Good Morning, Hankish Lohia</h3>
+            <p class="font-weight-bold text-muted" style={{ fontSize: '22px', fontWeight: 600, lineHeight: '22px', marginTop: '14px' }}>Mark Your Attendance</p>
+            <p class="text-muted" style={{ fontSize: '17px', fontWeight: 500, lineHeight: '22px', color: '#687281' }}>Ready to start day with Ultivic</p>
+
+            <div class="d-flex space-x-4 mt-3">
+              <div class="col-6 mb-3">
+                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Day</label>
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control pr-4 p-3"
+                    placeholder="Enter day"
+                  />
                 </div>
               </div>
-            )}
-            {mark_attendance_time && (
-              <div className="attendence_submit cmn_card">
-                <h4>Ready To Go?</h4>
-                <div className="row align-items-end row-gap-2">
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="Day">Day</label>
-                      <input
-                        type="text"
-                        placeholder="tuesday"
-                        className="form-control"
-                        value={moment().format("dddd")}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="date">Date</label>
-                      <input
-                        type="text"
-                        placeholder="08-10-2024"
-                        className="form-control"
-                        value={moment(date).format("DD-MM-YYYY")}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="Intime">In Time</label>
-                      <input
-                        type="text"
-                        placeholder="01:09:26 PM"
-                        className="form-control"
-                        value={mark_attendance_time}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label htmlFor="CurrentTime">Current Time</label>
-                      <input
-                        type="text"
-                        placeholder="01:09:26 PM"
-                        className="form-control"
-                        value={timeDifference}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  {/* <div className="col-md-12">
-                    <div className="form-group">
-                      <label htmlFor="addTask">Add Your task</label>
-                      <input
-                        type="text"
-                        placeholder="Add you task"
-                        className="form-control"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                      />
-                    </div>
-                  </div> */}
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label htmlFor="searchtask">Add task</label>
-                      <textarea
-                        name=""
-                        id=""
-                        className="form-control"
-                        value={inputValue}
-                        rows={itemsString.split("\n").length + 1}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        cols={30}
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="col-md-12 text-center mt-2">
-                    <button
-                      className="cmn_bg_btn"
-                      onClick={() => handleUnmarkAttendance()}
-                    >
-                      Submit
-                    </button>
-                  </div>
+
+              <div class="col-6 mb-3">
+                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Date</label>
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control pr-5 p-3"
+                    placeholder="Enter date"
+                  />
+                  <svg
+                    class="w-5 h-5 text-muted position-absolute end-0 top-50 translate-middle-y"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    style={{marginRight: '35px'}}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M7.25802 1.51115C7.25802 0.926817 6.71644 0.453125 6.04835 0.453125C5.38027 0.453125 4.83868 0.926817 4.83868 1.51115H3.62901C1.62476 1.51115 0 2.93222 0 4.68521V18.4395C0 20.1925 1.62476 21.6135 3.62901 21.6135H18.1451C20.1493 21.6135 21.7741 20.1925 21.7741 18.4395V4.68521C21.7741 2.93222 20.1493 1.51115 18.1451 1.51115H16.9354C16.9354 0.926817 16.3938 0.453125 15.7257 0.453125C15.0576 0.453125 14.516 0.926817 14.516 1.51115H7.25802ZM19.3547 5.74323V4.68521C19.3547 4.10088 18.8131 3.62719 18.1451 3.62719H16.9354C16.9354 4.21152 16.3938 4.68521 15.7257 4.68521C15.0576 4.68521 14.516 4.21152 14.516 3.62719H7.25802C7.25802 4.21152 6.71644 4.68521 6.04835 4.68521C5.38027 4.68521 4.83868 4.21152 4.83868 3.62719H3.62901C2.96093 3.62719 2.41934 4.10088 2.41934 4.68521V5.74323H19.3547ZM2.41934 7.85927V18.4395C2.41934 19.0238 2.96093 19.4975 3.62901 19.4975H18.1451C18.8131 19.4975 19.3547 19.0238 19.3547 18.4395V7.85927H2.41934Z"
+                      fill="#667085"
+                    />
+                  </svg>
                 </div>
               </div>
-            )}
-            <div className="mt-3 cmn_card">
-              <Calendar
-                localizer={localizer}
-                events={myEventsList}
-                startAccessor="start"
-                endAccessor="end"
-                views={{
-                  month: true,
-                  agenda: true, // Keeping Agenda but customizing
-                }}
-                defaultView="month" // Set agenda as default view
-                style={{ height: 850 }}
-                eventPropGetter={eventStyleGetter}
-                messages={{
-                  agenda: "List", // Renaming "Agenda" to "List"
-                }}
-              />
+            </div>
+
+            <div class="d-flex space-x-4 mt-3">
+              <div class="col-6 mb-3">
+                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Time</label>
+                <input
+                  type="text"
+                  class="form-control p-3"
+                />
+              </div>
+              <div class="col-6 mb-3">
+                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Current Time</label>
+                <input
+                  type="text"
+                  class="form-control p-3"
+                />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+              <button class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
+                Mark Your Attendance
+              </button>
             </div>
           </div>
         </div>
       </div>
+
     </section>
   );
 };

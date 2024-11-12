@@ -46,6 +46,7 @@ import ForgotPassword from './Components/Login/ForgotPassword';
 import ChangePassword from './Components/Login/ChangePassword';
 import ResetPassword from './Components/Login/ReserPassword';
 import Test from './Components/Breadcrumb/Test';
+import EmployeeDashboard from "./Components/Admin/Eemployee/EmployeeDashboard"
 import { lazy, Suspense } from 'react';
 function App() {
   const secureComponent = (Component) => <ProtectedRoute element={() => <><Sidebar /><Component /></>} />;
@@ -61,6 +62,7 @@ function App() {
         {/* Protected Routes */}
         <Route path='/candidate' element={secureComponent(Candidate)} />
         <Route path='/dashboard' element={secureComponent(AdminDashboard)} />
+        <Route path='/employee-dashboard' element={secureComponent(EmployeeDashboard)} />
         <Route path='/employee' element={secureComponent(EmployeeInfo)} />
         <Route path='/addemployee' element={secureComponent(AddnewEmployee)} />
         <Route path='/todayAttendence' element={secureComponent(TodayAttendence)} />
