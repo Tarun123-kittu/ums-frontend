@@ -86,6 +86,8 @@ import getEmployeeLeaveCount from './dashboardSlice/getEmployeesOnLeave'
 import getDashboardInterviewOverview from './dashboardSlice/getDashboardInterviewOverview'
 import getDashboardAttendenceGraph from './dashboardSlice/getDashboardAttendenceGraph'
 import getLeavesOnDashboard from './dashboardSlice/getDashboardLeave'
+import getEmployeeCurrentYearLeaves from './dashboardSlice/getEmployeeCurrentYearLeaves'
+import getDashboardEmployeeAcceptedLeaves from './dashboardSlice/getAllEmployeeAcceptedLeaves'
 import updateBankLeave from './leaveSlice/updateBankLeaves'
 import deleteLead from './interviewLeadsSlice/deleteLeads'
 import changePassword from './userSlice/changePassword'
@@ -191,7 +193,9 @@ const appStore = configureStore({
         RESET_PASSWORD: UserResetPassword,
         TECH_ROUND_SUBMIT_RESULT: techRoundSubmitResult,
         GET_ALL_PERMISSIONS: getPermissions,
-        EMPLOYEE_LEAVE_STATUS: changeEmployeeLeaveStatus
+        EMPLOYEE_LEAVE_STATUS: changeEmployeeLeaveStatus,
+        EMPLOYEE_CURRENT_YEAR_LEAVE : getEmployeeCurrentYearLeaves,
+        ALL_EMPLOYEES_ACCEPTED_LEAVES : getDashboardEmployeeAcceptedLeaves
 
     },
 })

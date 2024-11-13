@@ -28,6 +28,7 @@ const UserValidations = (
     password,
     confirm_password,
     selected_role,
+    selected_schedule,
     address,
     selectedDocuments
 ) => {
@@ -122,6 +123,10 @@ const UserValidations = (
     if (!selected_role) {
         toast.error("Please Select Role");
         return { role: "Role is required!!" };
+    }
+    if (selected_schedule === "") {
+        toast.error("Please Select Work_schedule");
+        return { selected_schedule: "Work_schedule is required!!" };
     }
     if (address === "") {
         toast.error("Please Enter address");

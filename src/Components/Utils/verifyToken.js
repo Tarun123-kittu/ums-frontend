@@ -9,7 +9,12 @@ const ProtectedRoute = ({ element: Component }) => {
     }
 
     try {
-        jwtDecode(token);
+        const userData = jwtDecode(token);
+        if(userData){
+            localStorage.setItem("email",userData.email)
+            localStorage.setItem("hours",userData.working_schedule)
+            localStorage.setItem("name",userData.username)
+        }
     } catch (error) {
         localStorage.removeItem('jwtToken');
         return <Navigate to="/" />;

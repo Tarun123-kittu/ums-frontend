@@ -96,6 +96,7 @@ const EditEmployeeInfo = () => {
   let [security, setSecurity] = useState(user_details?.security || "");
   let [skype_email, setSkypeEmail] = useState(user_details?.skype_email);
   let [status, setStatus] = useState(user_details?.status);
+  let [work_schedule, setWork_schedule] = useState(user_details?.working_schedule);
   let [total_security, setTotalSecurity] = useState(
     user_details?.total_security || ""
   );
@@ -122,6 +123,12 @@ const EditEmployeeInfo = () => {
       dispatch(clear_update_user_state());
     }
   }, [update_user_details]);
+
+  const workingScheduleOptions = [
+    {value : "full-time",label : "Fulltime"},
+    {value : "split",label : "Split"},
+    {value : "part-time",label : "Parttime"},
+  ]
 
   useEffect(() => {
     if (documents?.data?.data?.length > 0) {
@@ -219,6 +226,7 @@ const EditEmployeeInfo = () => {
       department,
       status,
       role,
+      work_schedule,
       address,
       documents: selected_documents,
     };
@@ -262,6 +270,11 @@ const EditEmployeeInfo = () => {
       invalidEmails.push("address");
       newErrorMessages["address"] = "address is Required.";
       toast.error("address is Required");
+    }
+    if (!field_data.work_schedule) {
+      invalidEmails.push("work_schedule");
+      newErrorMessages["work_schedule"] = "Working Schedule is Required.";
+      toast.error("Working Schedule is Required");
     }
 
     // Display toast and set error messages for missing fields
@@ -788,6 +801,38 @@ const EditEmployeeInfo = () => {
                         return (
                           <option key={i} value={role?.role}>
                             {role?.role}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.role && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.role}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Working Schedule<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={work_schedule}
+                      onChange={(e) => setWork_schedule(e.target.value)}
+                      style={
+                        errorMessages?.role
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select Role</option>
+                      {workingScheduleOptions?.map((work, i) => {
+                        return (
+                          <option key={i} value={work?.value}>
+                            {work?.value}
                           </option>
                         );
                       })}

@@ -4,7 +4,7 @@ import moment from "moment";
 export const update_user = createAsyncThunk("update_user", async ({ name, username, email, mobile, emergency_contact_relationship, emergency_contact_name,
     emergency_contact, bank_name, account_number, ifsc, increment_date, gender, dob, doj, skype_email,
     ultivic_email, salary, security, total_security, installments, position, department, status, documents,
-    address, id, role }, thunkAPI) => {
+    address, id, role,work_schedule }, thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -37,6 +37,7 @@ export const update_user = createAsyncThunk("update_user", async ({ name, userna
             "status": status,
             "address": address,
             "role": role,
+            "working_schedule": work_schedule,
             "documents": documents
         });
 

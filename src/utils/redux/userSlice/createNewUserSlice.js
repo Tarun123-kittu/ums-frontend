@@ -28,11 +28,11 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({
     password,
     confirm_password,
     selected_role,
+    selected_schedule,
     address,
     selectedDocuments,
 }, thunkAPI) => {
     try {
-
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -63,6 +63,7 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({
             status: status,
             address: address,
             role: selected_role,
+            working_schedule : selected_schedule,
             confirm_password: confirm_password,
             password: password,
             documents: selectedDocuments // assuming selectedDocuments is meant to represent the documents

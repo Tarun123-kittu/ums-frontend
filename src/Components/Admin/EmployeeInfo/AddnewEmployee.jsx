@@ -83,6 +83,12 @@ const AddnewEmployee = () => {
     { value: 5, label: 5 },
   ];
 
+  const workingScheduleOptions = [
+    { value: "full-time", label: "Full time" },
+    { value: "split", label: "Split" },
+    { value: "part-time", label: "Part time" },
+  ]
+
   const positionData = [
     { value: "INTERN", label: "Intern" },
     { value: "TRAINEE", label: "Trainee" },
@@ -132,6 +138,7 @@ const AddnewEmployee = () => {
   const [confirm_password, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+  const [selected_schedule, setSelected_Schedule] = useState("")
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -178,7 +185,8 @@ const AddnewEmployee = () => {
     username,
     password,
     confirm_password,
-    role,
+    selected_role,
+    selected_schedule,
     address,
     selectedDocuments
   ) => {
@@ -210,6 +218,7 @@ const AddnewEmployee = () => {
       password,
       confirm_password,
       selected_role,
+      selected_schedule,
       address,
       selectedDocuments
     );
@@ -243,6 +252,7 @@ const AddnewEmployee = () => {
           password,
           confirm_password,
           selected_role,
+          selected_schedule,
           address,
           selectedDocuments,
         })
@@ -292,9 +302,8 @@ const AddnewEmployee = () => {
   return (
     <section className="add_new_emp_container">
       <div
-        className={`${
-          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
-        } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -755,6 +764,25 @@ const AddnewEmployee = () => {
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Working Schedule <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={workingScheduleOptions}
+                        changeHandler={(e) => setSelected_Schedule(e.value)}
+                        value={selected_schedule}
+                        styleTrue={validationErrors?.selected_schedule}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.selected_schedule}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="form-group new_employee_form_group">
@@ -837,7 +865,8 @@ const AddnewEmployee = () => {
                       username,
                       password,
                       confirm_password,
-                      role,
+                      selected_role,
+                      selected_schedule,
                       address,
                       selectedDocuments
                     )

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const get_user_details = createAsyncThunk("get_user_details", async ({ id }, thunkAPI) => {
+export const get_dashboard_accepted_leaves = createAsyncThunk("get_dashboard_accepted_leaves", async (thunkAPI) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem('ums_token'));
@@ -11,13 +11,14 @@ export const get_user_details = createAsyncThunk("get_user_details", async ({ id
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_employee_details?id=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_employees_accepted_leaves`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
                 throw new Error(errorMessage.message);
             }
         }
+
         const result = await response.json();
         return result;
     } catch (error) {
@@ -27,36 +28,26 @@ export const get_user_details = createAsyncThunk("get_user_details", async ({ id
     }
 })
 
-export const getUserDetails = createSlice({
-    name: "getUserDetails",
+export const getDashboardEmployeeAcceptedLeaves = createSlice({
+    name: "getDashboardEmployeeAcceptedLeaves",
     initialState: {
         data: [],
         isSuccess: false,
-        isError: false,
         isLoading: false,
+        isError: false,
         error: null
-    },
-    reducers: {
-        clear_user_detail_slice: (state) => {
-            state.data = []
-            state.isSuccess = false
-            state.isError = false
-            state.isLoading = false
-            state.error = null
-            return state
-        }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(get_user_details.pending, (state) => {
+            .addCase(get_dashboard_accepted_leaves.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(get_user_details.fulfilled, (state, action) => {
+            .addCase(get_dashboard_accepted_leaves.fulfilled, (state, action) => {
                 state.data = action.payload
                 state.isSuccess = true
                 state.isLoading = false
             })
-            .addCase(get_user_details.rejected, (state, action) => {
+            .addCase(get_dashboard_accepted_leaves.rejected, (state, action) => {
                 state.error = action.payload
                 state.isError = true
                 state.isLoading = false
@@ -64,5 +55,4 @@ export const getUserDetails = createSlice({
     }
 })
 
-export const { clear_user_detail_slice } = getUserDetails.actions
-export default getUserDetails.reducer
+export default getDashboardEmployeeAcceptedLeaves.reducer

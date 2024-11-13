@@ -33,6 +33,8 @@ const MarkAttendence = () => {
   const [mark_attendance_time, setMark_attendance_time] = useState("");
   const [timeDifference, setTimeDifference] = useState("");
   const [myEventsList, setMyEventList] = useState([]);
+  const [is_attendence_marked,setIs_attendence_marked] = useState(false)
+  console.log(is_attendence_marked,"this is the attendence status")
   const mark_attendance_state = useSelector((store) => store.MARK_ATTENDANCE);
   const attendance_time = useSelector((store) => store.TODAY_ATTENDANCE_TIME);
   const events_birthays_holidays = useSelector(
@@ -74,7 +76,7 @@ const MarkAttendence = () => {
     if (attendance_time?.isSuccess) {
       setMark_attendance_time(attendance_time?.data?.data[0]?.in_time);
       if (attendance_time?.data?.data[0]?.out_time) {
-        navigate("/employee-attendence-report");
+        setIs_attendence_marked(true)
       }
     }
   }, [attendance_time]);
@@ -115,6 +117,15 @@ const MarkAttendence = () => {
     return date.toLocaleTimeString();
   };
 
+  function getDate(date) {
+    const newDate = new Date(date);
+    const day = String(newDate.getDate()).padStart(2, '0');
+    const month = String(newDate.getMonth() + 1).padStart(2, '0');
+    const year = newDate.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       const diff = getTimeDifference(mark_attendance_time);
@@ -141,26 +152,30 @@ const MarkAttendence = () => {
     );
   };
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    let backgroundColor = event.color || "#3174ad"; // Default color if no color is provided
-    let style = {
-      backgroundColor: backgroundColor,
-      borderRadius: "5px",
-      opacity: 0.8,
-      color: "white",
-      border: "0px",
-      display: "block",
-    };
-    return {
-      style: style,
-    };
-  };
+  function getGreeting() {
+    const currentHour = new Date().getHours();
+  
+    if (currentHour < 12) {
+      return "Good Morning";
+    } else if (currentHour < 17) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  }
+
+
+  function getCurrentDay() {
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const currentDay = new Date().getDay();
+    return daysOfWeek[currentDay];
+  }
   return (
     <section>
       <div class="container py-2" >
         <div class="mt-0">
           <div class="bg-white p-4 rounded mb-4" style={{ border: '1px solid #0000000F' }}>
-            <h3 class="h5 font-weight-semibold text-danger">Good Morning, Hankish Lohia</h3>
+            <h3 class="h5 font-weight-semibold text-danger">{getGreeting()}, Hankish Lohia</h3>
             <p class="font-weight-bold text-muted" style={{ fontSize: '22px', fontWeight: 600, lineHeight: '22px', marginTop: '14px' }}>Mark Your Attendance</p>
             <p class="text-muted" style={{ fontSize: '17px', fontWeight: 500, lineHeight: '22px', color: '#687281' }}>Ready to start day with Ultivic</p>
 
@@ -171,7 +186,8 @@ const MarkAttendence = () => {
                   <input
                     type="text"
                     class="form-control pr-4 p-3"
-                    placeholder="Enter day"
+                    value={getCurrentDay()}
+                    disabled={true}
                   />
                 </div>
               </div>
@@ -183,23 +199,9 @@ const MarkAttendence = () => {
                     type="text"
                     class="form-control pr-5 p-3"
                     placeholder="Enter date"
+                    value={getDate(date)}
+                    disabled={true}
                   />
-                  <svg
-                    class="w-5 h-5 text-muted position-absolute end-0 top-50 translate-middle-y"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 22 22"
-                    fill="none"
-                    style={{marginRight: '35px'}}
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M7.25802 1.51115C7.25802 0.926817 6.71644 0.453125 6.04835 0.453125C5.38027 0.453125 4.83868 0.926817 4.83868 1.51115H3.62901C1.62476 1.51115 0 2.93222 0 4.68521V18.4395C0 20.1925 1.62476 21.6135 3.62901 21.6135H18.1451C20.1493 21.6135 21.7741 20.1925 21.7741 18.4395V4.68521C21.7741 2.93222 20.1493 1.51115 18.1451 1.51115H16.9354C16.9354 0.926817 16.3938 0.453125 15.7257 0.453125C15.0576 0.453125 14.516 0.926817 14.516 1.51115H7.25802ZM19.3547 5.74323V4.68521C19.3547 4.10088 18.8131 3.62719 18.1451 3.62719H16.9354C16.9354 4.21152 16.3938 4.68521 15.7257 4.68521C15.0576 4.68521 14.516 4.21152 14.516 3.62719H7.25802C7.25802 4.21152 6.71644 4.68521 6.04835 4.68521C5.38027 4.68521 4.83868 4.21152 4.83868 3.62719H3.62901C2.96093 3.62719 2.41934 4.10088 2.41934 4.68521V5.74323H19.3547ZM2.41934 7.85927V18.4395C2.41934 19.0238 2.96093 19.4975 3.62901 19.4975H18.1451C18.8131 19.4975 19.3547 19.0238 19.3547 18.4395V7.85927H2.41934Z"
-                      fill="#667085"
-                    />
-                  </svg>
                 </div>
               </div>
             </div>
@@ -210,21 +212,43 @@ const MarkAttendence = () => {
                 <input
                   type="text"
                   class="form-control p-3"
+                  value={(mark_attendance_time && !is_attendence_marked) ? mark_attendance_time : formatTime(date)}
+                  disabled={true}
                 />
               </div>
-              <div class="col-6 mb-3">
+              {(mark_attendance_time && !is_attendence_marked) && <div class="col-6 mb-3">
                 <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Current Time</label>
                 <input
                   type="text"
                   class="form-control p-3"
+                  value={timeDifference}
+                  disabled={true}
                 />
-              </div>
+              </div>}
             </div>
+            {(mark_attendance_time && !is_attendence_marked) && <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Enter Your Task</label>
+              <textarea value={inputValue}
+                rows={inputValue.split("\n").length + 1}
+                onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} class="form-control" id="exampleFormControlTextarea1"  placeholder="Enter Your Task" ></textarea>
+            </div>}
 
             <div class="d-flex justify-content-center mt-4">
-              <button class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
-                Mark Your Attendance
+              {(mark_attendance_time && !is_attendence_marked) ? <button onClick={handleUnmarkAttendance} class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
+                Submit
               </button>
+                :
+                 <button onClick={() =>
+                   !is_attendence_marked ? dispatch(
+                    mark_attendance({
+                      login_device: deviceType,
+                      login_mobile,
+                    })
+                  ) : toast.success("Your Attencence For Today Has been Submitted Successfully")
+                } class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
+                  Mark Your Attendence
+                </button> 
+              }
             </div>
           </div>
         </div>
