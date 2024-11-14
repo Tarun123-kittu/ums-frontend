@@ -171,87 +171,107 @@ const MarkAttendence = () => {
     return daysOfWeek[currentDay];
   }
   return (
-    <section>
-      <div class="container py-2" >
-        <div class="mt-0">
-          <div class="bg-white p-4 rounded mb-4" style={{ border: '1px solid #0000000F' }}>
-            <h3 class="h5 font-weight-semibold text-danger">{getGreeting()}, Hankish Lohia</h3>
-            <p class="font-weight-bold text-muted" style={{ fontSize: '22px', fontWeight: 600, lineHeight: '22px', marginTop: '14px' }}>Mark Your Attendance</p>
-            <p class="text-muted" style={{ fontSize: '17px', fontWeight: 500, lineHeight: '22px', color: '#687281' }}>Ready to start day with Ultivic</p>
+    <section className="dashboard-sections">
 
-            <div class="d-flex space-x-4 mt-3">
-              <div class="col-6 mb-3">
-                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Day</label>
-                <div class="position-relative">
-                  <input
-                    type="text"
-                    class="form-control pr-4 p-3"
-                    value={getCurrentDay()}
-                    disabled={true}
-                  />
-                </div>
-              </div>
 
-              <div class="col-6 mb-3">
-                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Date</label>
-                <div class="position-relative">
-                  <input
-                    type="text"
-                    class="form-control pr-5 p-3"
-                    placeholder="Enter date"
-                    value={getDate(date)}
-                    disabled={true}
-                  />
-                </div>
-              </div>
-            </div>
+      <h3 className="h3 fw-semibold text-danger">{getGreeting()}, Hankish Lohia</h3>
+      <p className="fw-bold text-muted" style={{ fontSize: '20px', fontWeight: 600, lineHeight: '22px', marginTop: '14px', marginBottom: '7px' }}>
+        Mark Your Attendance
+      </p>
+      <p className="text-muted" style={{ fontSize: '16px', fontWeight: 500, lineHeight: '22px', color: '#687281', margin:"0" }}>
+        Ready to start the day with Ultivic
+      </p>
 
-            <div class="d-flex space-x-4 mt-3">
-              <div class="col-6 mb-3">
-                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Time</label>
-                <input
-                  type="text"
-                  class="form-control p-3"
-                  value={(mark_attendance_time && !is_attendence_marked) ? mark_attendance_time : formatTime(date)}
-                  disabled={true}
-                />
-              </div>
-              {(mark_attendance_time && !is_attendence_marked) && <div class="col-6 mb-3">
-                <label class="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>Current Time</label>
-                <input
-                  type="text"
-                  class="form-control p-3"
-                  value={timeDifference}
-                  disabled={true}
-                />
-              </div>}
-            </div>
-            {(mark_attendance_time && !is_attendence_marked) && <div class="mb-3">
-              <label for="exampleFormControlTextarea1" class="form-label">Enter Your Task</label>
-              <textarea value={inputValue}
-                rows={inputValue.split("\n").length + 1}
-                onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} class="form-control" id="exampleFormControlTextarea1"  placeholder="Enter Your Task" ></textarea>
-            </div>}
-
-            <div class="d-flex justify-content-center mt-4">
-              {(mark_attendance_time && !is_attendence_marked) ? <button onClick={handleUnmarkAttendance} class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
-                Submit
-              </button>
-                :
-                 <button onClick={() =>
-                   !is_attendence_marked ? dispatch(
-                    mark_attendance({
-                      login_device: deviceType,
-                      login_mobile,
-                    })
-                  ) : toast.success("Your Attencence For Today Has been Submitted Successfully")
-                } class="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
-                  Mark Your Attendence
-                </button> 
-              }
-            </div>
+      <div className="row g-4 mt-3">
+        <div className="col-6 m-0">
+          <label className="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>
+            Day
+          </label>
+          <div className="position-relative">
+            <input
+              type="text"
+              className="form-control pr-4 p-3"
+              value={getCurrentDay()}
+              disabled
+            />
           </div>
         </div>
+
+        <div className="col-6 m-0">
+          <label className="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>
+            Date
+          </label>
+          <div className="position-relative">
+            <input
+              type="text"
+              className="form-control pr-5 p-3"
+              placeholder="Enter date"
+              value={getDate(date)}
+              disabled
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="row g-4 mt-3">
+        <div className="col-6 m-0 pt-2">
+          <label className="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>
+            Time
+          </label>
+          <input
+            type="text"
+            className="form-control p-3"
+            value={(mark_attendance_time && !is_attendence_marked) ? mark_attendance_time : formatTime(date)}
+            disabled
+          />
+        </div>
+        {(mark_attendance_time && !is_attendence_marked) && (
+          <div className="col-6 m-0 pt-2">
+            <label className="text-muted small" style={{ fontSize: '16px', fontWeight: 600, lineHeight: '16px', marginBottom: '14px' }}>
+              Current Time
+            </label>
+            <input
+              type="text"
+              className="form-control p-3"
+              value={timeDifference}
+              disabled
+            />
+          </div>
+        )}
+      </div>
+      
+      {(mark_attendance_time && !is_attendence_marked) && (
+        <div className="mt-3 pt-2">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">Enter Your Task</label>
+          <textarea
+            value={inputValue}
+            rows={inputValue.split("\n").length + 1}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="form-control"
+            id="exampleFormControlTextarea1"
+            placeholder="Enter Your Task"
+          ></textarea>
+        </div>
+      )}
+
+      <div className="d-flex justify-content-center pt-4">
+        {(mark_attendance_time && !is_attendence_marked) ? (
+          <button onClick={handleUnmarkAttendance} className="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary">
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={() =>
+              !is_attendence_marked
+                ? dispatch(mark_attendance({ login_device: deviceType, login_mobile }))
+                : toast.success("Your Attendance For Today Has been Submitted Successfully")
+            }
+            className="btn btn-danger w-25 py-2 rounded-pill hover:bg-secondary"
+          >
+            Mark Your Attendance
+          </button>
+        )}
       </div>
 
     </section>

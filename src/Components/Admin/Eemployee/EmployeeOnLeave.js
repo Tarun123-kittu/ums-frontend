@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
+import './employeeDashboard.css'
 import { get_dashboard_accepted_leaves } from "../../../utils/redux/dashboardSlice/getAllEmployeeAcceptedLeaves"
 
 
@@ -35,24 +36,27 @@ const EmployeeOnLeave = () => {
     ];
     return (
         <>
-            <div className="bg-white p-4 rounded my-4 " style={{ border: '1px solid #0000000F' }}>
-                <h4 className="px-3 font-semibold ">
-                    On Leave Roster for This Week
-                </h4>
+            <section className="dashboard-sections">
+            <h3 className="heading-h3" >
+            On Leave Roster for This Week
+            </h3>
                 <table className="table table-sm table-borderless">
                     <thead style={{ color: '#848CA9' }}>
                         <tr>
-                            <th scope="col" className="px-3 py-2 rounded-start">
-                                Name
+                            <th scope="col" className=" col-3 py-2 rounded-start">
+                               <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Name</p>
                             </th>
-                            <th scope="col" className="px-3 py-2">
-                                Profile
+                            <th scope="col" className=" col-3 py-2">
+                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Profile</p>
+                                
                             </th>
-                            <th scope="col" className="px-3 py-2">
-                                Days
+                            <th scope="col" className="col-3 py-2">
+                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Days</p>
+                               
                             </th>
-                            <th scope="col" className="px-3 py-2 rounded-end">
-                                Duration
+                            <th scope="col" className="col-3 py-2 rounded-end">
+                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}>   Duration</p>
+                              
                             </th>
                         </tr>
                     </thead>
@@ -60,20 +64,20 @@ const EmployeeOnLeave = () => {
                         {leave_data?.data?.data?.map((leave, i) => {
                             return (
                                 <tr className="bg-white">
-                                    <td className="px-3 py-3">
+                                    <td className=" py-3">
                                         {leave?.name}
                                     </td>
-                                    <td className="px-3 py-3">
+                                    <td className=" py-3">
                                         {positionData
                                             ?.filter((post) => post.value === leave?.department)
                                             ?.map((filteredPost, index) => (
                                                 <span key={index}>{filteredPost.label}</span>
                                             ))}
                                     </td>
-                                    <td className="px-3 py-3">
+                                    <td className="3 py-3">
                                         {leave?.count}
                                     </td>
-                                    <td className="px-3 py-3">
+                                    <td className=" py-3">
                                         {leave?.duration ? formatDateRange(leave?.duration) : "Loading..."}
                                     </td>
                                 </tr>
@@ -82,7 +86,7 @@ const EmployeeOnLeave = () => {
 
                     </tbody>
                 </table>
-            </div>
+            </section>
 
         </>
     )

@@ -55,12 +55,17 @@ const EmployeeAttendenceReoport = () => {
   };
   return (
     <section>
-      <div className="min-vh-100">
+      <div className=" min-vh-100 bg-light cmn_margin_outer">
         <Notification view={true} />
-        <div className=" container">
-          <div className=" admin_dashboard_outer mt-0">
+        <div className="p-4 py-5 ">
+        <h1 class="maine-heading">Attendance Reports</h1>
+          <div className=" admin_dashboard_outer m-0 ">
             <div className="attendence_submit cmn_card">
-              <h4>Mark Attendence</h4>
+             <div className="reporting-sub-heading-box"> 
+             <h3>Monthly Attendance</h3>
+             <p>Your Monthly Attendance Snapshot!</p>
+             </div>
+              <div className="attendence_submit cmn_card">
               <div className="report_header">
                 <div className="flex-grow-1 form-group">
                   <select
@@ -102,22 +107,22 @@ const EmployeeAttendenceReoport = () => {
                     })}
                   </select>
                 </div>
-                <button className="cmn_bg_btn" onClick={() => get_report()}>
+                <button className="all-btn-red" onClick={() => get_report()}>
                   Get Report
                 </button>
               </div>
             </div>
-            <div className="attendence_submit cmn_card mt-3">
-              <h4>Attendence Report</h4>
+
+
               <Table
                 responsive
                 bordered
                 hover
                 className="mb-0 leave_table table report_table"
               >
-                <thead>
-                  <tr>
-                    <th colSpan={1}>#</th>
+                <thead >
+                  <tr className="report-table-header">
+                    {/* <th colSpan={1}>#</th> */}
                     <th colSpan={1}>Date</th>
                     <th>In Time</th>
                     <th>Out Time</th>
@@ -129,8 +134,8 @@ const EmployeeAttendenceReoport = () => {
                   {monthly_report?.data?.message?.map((report, i) => {
                     if (report?.isHoliday || report?.isWeekend) {
                       return (
-                        <tr>
-                          <td
+                        <tr className="report-table-body">
+                          {/* <td
                             style={
                               report?.isHoliday
                                 ? { color: "blue" }
@@ -138,10 +143,10 @@ const EmployeeAttendenceReoport = () => {
                             }
                           >
                             {i + 1}
-                          </td>
+                          </td> */}
                           {report?.isHoliday && (
                             <td
-                              colSpan={8}
+                              colSpan={7}
                               className="text-center"
                               style={{ color: "blue" }}
                             >
@@ -150,7 +155,7 @@ const EmployeeAttendenceReoport = () => {
                           )}
                           {report?.isWeekend && (
                             <td
-                              colSpan={8}
+                              colSpan={7}
                               className="text-center"
                               style={{ color: "green" }}
                             >
@@ -161,8 +166,8 @@ const EmployeeAttendenceReoport = () => {
                       );
                     }
                     return (
-                      <tr>
-                        <td colSpan={1}>{i + 1}</td>
+                      <tr className="report-table-body">
+                        {/* <td colSpan={1}>{i + 1}</td> */}
                         <td colSpan={1}>
                           {" "}
                           {report?.date} - {report.dayOfWeek}

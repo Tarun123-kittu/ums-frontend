@@ -1,0 +1,73 @@
+.dashboard-sections{
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+}
+.heading-h3{
+    color:#000000;
+    font-size: 26px;
+    font-weight: 500;
+    padding-bottom: 20px;
+    margin: 0;
+}
+.upcoming-month-h4 {
+    font-size: 16px;
+    color: #000000;
+}
+.employee-even-name{
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    padding-bottom: 3px;
+}
+.employee-event-date{
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+.employee-event-type{
+    font-size: 16px;
+    font-weight: 500;
+    color: #27AE60;
+
+}
+.to-do-text{
+    font-size: 16px;
+    color: #030303;
+}
+label.form-check-label{
+    border-bottom:  1px solid rgba(0, 0, 0, 0.10);
+}
+.to-do-input .form-control{
+    padding: 12px;
+    border: none;
+    font-size: 18px;
+    border-bottom:  1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 0;
+    color: #737791;
+}
+.all-btn-red, .all-btn-black{
+    padding: 10px 25px;
+    border-radius: 100px;
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.all-btn-red{
+
+    background-color:#9E0302;
+ 
+}
+.all-btn-black{
+
+    background-color:#303030;
+    margin-right: 5px;
+ 
+}
+.leave-inner-heading{
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+    color: #303030;
+}

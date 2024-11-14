@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-
+import './employeeDashboard.css'
 function EmployeeTodoList() {
     return (
-        <div class="container mt-4">
+        <div class="">
             
-            <div class="d-flex justify-content-between">
-                <h3 class="h5 font-weight-bold text-secondary">To-Do List</h3>
+            <div class="d-flex justify-content-between pb-2">
+                <h3 className="heading-h3">
+                To-Do List
+            </h3>
                 <div class="d-flex mr-4">
                     <div class="mr-4">
                         <button type="button" class="btn btn-danger btn-sm px-4 py-2 text-white rounded-pill">Active</button>
@@ -16,41 +18,68 @@ function EmployeeTodoList() {
                 </div>
             </div>
 
-            <ul class="mt-4 list-unstyled">
-                <li class="d-flex justify-content-between border-bottom py-2 mb-2">
-                    <span class="w-50 mb-3 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                    <input type="checkbox" class="form-check-input" />
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2 mb-4">
-                    <span class="w-50 mb-3 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                    <input type="checkbox" class="form-check-input" />
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2 mb-4">
-                    <span class="w-50 mb-3 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                    <input type="checkbox" class="form-check-input" />
-                </li>
-                <li class="d-flex justify-content-between border-bottom py-2 mb-4">
-                    <span class="w-50 mb-3 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                    <input type="checkbox" class="form-check-input" />
-                </li>
-                <li class="d-flex justify-content-between py-2 mb-4">
-                    <span class="w-50 mb-3 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                    <input type="checkbox" class="form-check-input" />
-                </li>
-            </ul>
+            <ul class="pt-6 list-unstyled">
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault1">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
+        </div>
+    </li>
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault2">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2" />
+        </div>
+    </li>
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault3">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3" />
+        </div>
+    </li>
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault4">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4" />
+        </div>
+    </li>
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault5">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5" />
+        </div>
+    </li>
+    <li class="d-flex justify-content-between pb-3">
+        <label class="form-check-label" for="flexCheckDefault5">
+            <p className="to-do-text">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5" />
+        </div>
+    </li>
+</ul>
+
 
             <div class="mb-4">
-                <input placeholder="Enter Your Task" type="text" class="form-control form-control-sm mb-2" />
+            <textarea rows="2" class=" to-do-input form-control" id="exampleFormControlTextarea1" placeholder="Enter your to-do task..."></textarea>
             </div>
 
-            <div class="mb-6">
-                <div class="d-flex justify-content-end mr-4">
-                    <div class="mr-4">
-                        <button type="button" class="btn btn-danger btn-sm px-4 py-2 rounded-pill"> Save</button>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-dark btn-sm px-4 py-2 rounded-pill">Cancel</button>
-                    </div>
+            <div class="">
+                <div class="d-flex justify-content-end ">
+                
+                        <button type="button" class="all-btn-black">Cancel</button>
+                        <button type="button" class="all-btn-red"> Save</button>
+                  
                 </div>
             </div>
         </div>

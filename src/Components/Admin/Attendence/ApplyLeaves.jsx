@@ -217,10 +217,10 @@ const ApplyLeaves = () => {
                 </button>
               </div>
             </div>
-            <div className="attendence_submit cmn_card mt-4">
-              <div className="report_header">
+            <div className="apply_leave_check cmn_card mt-3">
+            <div className="apply_leave_submit">
+              <div className="report_header p-0 w-100">
                 <div className="flex-grow-1 form-group">
-                  <label htmlFor="leaveType">Month</label>
                   <select
                     class="form-select"
                     name=""
@@ -241,7 +241,6 @@ const ApplyLeaves = () => {
                   </select>
                 </div>
                 <div className="flex-grow-1 form-group">
-                  <label htmlFor="leaveType">Type </label>
                   <select
                     class="form-select"
                     name=""
@@ -263,13 +262,11 @@ const ApplyLeaves = () => {
                 </div>
               </div>
               <div className="text-center">
-                <button className="cmn_bg_btn" onClick={() => handleSearch()}>
-                  Apply
+                <button className="all-btn-red" onClick={() => handleSearch()}>
+                Get Report
                 </button>
               </div>
             </div>
-            <div className="attendence_submit cmn_card mt-3">
-              <h4>Leave Report</h4>
               {applied_leaves?.data?.message === "No leaves found" ? (
                 <h4 className="text-center">{applied_leaves?.data?.message}</h4>
               ) : (

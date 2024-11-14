@@ -33,11 +33,12 @@ button.cmn_bg_btn {
     padding: 5px 20px;
 }
 
-.cmn_card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,10%);
+.admin_dashboard_outer {
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+   
 }
 
 .attendence_submit h4 {
@@ -74,6 +75,7 @@ button.cmn_bg_btn {
   .report_header {
     display: flex;
     gap: 15px;
+    padding:  25px 0;
 }
 .report_table thead tr th {
     font-weight: 500;
@@ -92,4 +94,63 @@ button.cmn_bg_btn {
 
 img.login_image {
     width: 26px;
+}
+
+.dashboard-sections{
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+}
+.attendence_submit  .report_table {
+    border-radius: 20px;
+}
+.attendence_submit .report-table-header th{
+    font-size: 18px;
+    padding: 15px;
+    background-color: #F0F1F3 ;
+}
+.attendence_submit .report-table-body td{
+    font-size: 15px;
+    padding: 15px;
+    color: #333843;
+}
+
+.reporting-sub-heading-box h3{
+    font-size: 26px;
+    padding-bottom: 5px;
+    font-weight: 700;
+    margin: 0;
+}
+.reporting-sub-heading-box p{
+    font-size: 16px;
+    padding-bottom: 4px;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+
+}
+.maine-heading{
+    font-size: 40px;
+    padding-bottom: 20px;
+    margin: 0;
+}
+input.form-control, select.form-select {
+    padding: 12px 20px;
+    border-radius: 7px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.rs-date-range-input.rs-input {
+    padding: 14px 20px;
+    border-radius: 7px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.apply_leave_submit{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 25px;
 }
