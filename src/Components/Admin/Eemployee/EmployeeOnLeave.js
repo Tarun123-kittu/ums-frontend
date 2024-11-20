@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import './employeeDashboard.css'
 import { get_dashboard_accepted_leaves } from "../../../utils/redux/dashboardSlice/getAllEmployeeAcceptedLeaves"
+import NoLeave from "../../assets/No-leaves-bg.png"
 
 
 const EmployeeOnLeave = () => {
@@ -37,54 +38,57 @@ const EmployeeOnLeave = () => {
     return (
         <>
             <section className="dashboard-sections">
-            <h3 className="heading-h3" >
-            On Leave Roster for This Week
-            </h3>
+                <h3 className="heading-h3" >
+                    On Leave Roster for This Week
+                </h3>
                 <table className="table table-sm table-borderless">
                     <thead style={{ color: '#848CA9' }}>
                         <tr>
                             <th scope="col" className=" col-3 py-2 rounded-start">
-                               <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Name</p>
+                                <p className="m-0 " style={{ fontSize: '16px', fontWeight: 600, }}> Name</p>
                             </th>
                             <th scope="col" className=" col-3 py-2">
-                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Profile</p>
-                                
+                                <p className="m-0 " style={{ fontSize: '16px', fontWeight: 600, }}> Profile</p>
+
                             </th>
                             <th scope="col" className="col-3 py-2">
-                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}> Days</p>
-                               
+                                <p className="m-0 " style={{ fontSize: '16px', fontWeight: 600, }}> Days</p>
+
                             </th>
                             <th scope="col" className="col-3 py-2 rounded-end">
-                            <p className="m-0 "  style={{ fontSize:'16px', fontWeight: 600,  }}>   Duration</p>
-                              
+                                <p className="m-0 " style={{ fontSize: '16px', fontWeight: 600, }}>   Duration</p>
+
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {leave_data?.data?.data?.map((leave, i) => {
-                            return (
-                                <tr className="bg-white">
-                                    <td className=" py-3">
-                                        {leave?.name}
-                                    </td>
-                                    <td className=" py-3">
+                        {Array.isArray(leave_data?.data) && leave_data?.data?.length === 0 ? (
+                            <tr>
+                                <td colSpan="4" className="text-center py-3">
+                                    <img className="m-auto" src={NoLeave} alt="no leave" />
+                                </td>
+                            </tr>
+                        ) : (
+                            Array.isArray(leave_data?.data?.data) &&
+                            leave_data?.data?.data?.map((leave, i) => (
+                                <tr className="bg-white" key={i}>
+                                    <td className="py-3">{leave?.name}</td>
+                                    <td className="py-3">
                                         {positionData
                                             ?.filter((post) => post.value === leave?.department)
                                             ?.map((filteredPost, index) => (
                                                 <span key={index}>{filteredPost.label}</span>
                                             ))}
                                     </td>
-                                    <td className="3 py-3">
-                                        {leave?.count}
-                                    </td>
-                                    <td className=" py-3">
+                                    <td className="py-3">{leave?.count}</td>
+                                    <td className="py-3">
                                         {leave?.duration ? formatDateRange(leave?.duration) : "Loading..."}
                                     </td>
                                 </tr>
-                            )
-                        })}
-
+                            ))
+                        )}
                     </tbody>
+
                 </table>
             </section>
 

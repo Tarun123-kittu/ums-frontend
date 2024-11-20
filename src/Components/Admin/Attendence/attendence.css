@@ -40,6 +40,11 @@ button.cmn_bg_btn {
     border-radius: 10px;
    
 }
+.admin_dashboard_outer.no-border.mt-0{
+    background-color:transparent;
+    border: transparent;
+}
+
 
 .attendence_submit h4 {
     font-size: 18px;
@@ -47,12 +52,12 @@ button.cmn_bg_btn {
     font-weight: 600;
 }
 
-.attendence_submit label {
+/* .attendence_submit label {
     font-size: 14px;
     color: #748f74;
     margin-bottom: 4px;
     font-weight: 400;
-}
+} */
 .cmn_card .rbc-toolbar button {
     border-color: #a30d03;
     color: #a30d03;
@@ -106,13 +111,13 @@ img.login_image {
     border-radius: 20px;
 }
 .attendence_submit .report-table-header th{
-    font-size: 18px;
+    font-size: 19px;
     padding: 15px;
-    background-color: #F0F1F3 ;
+    background-color: #F9F9FC ;
 }
 .attendence_submit .report-table-body td{
     font-size: 15px;
-    padding: 15px;
+    padding: 10px 15px;
     color: #333843;
 }
 
@@ -135,12 +140,12 @@ img.login_image {
     padding-bottom: 20px;
     margin: 0;
 }
-input.form-control, select.form-select {
+/* input.form-control, select.form-select {
     padding: 12px 20px;
     border-radius: 7px;
     border-radius: 5px;
     font-size: 16px;
-}
+} */
 .rs-date-range-input.rs-input {
     padding: 14px 20px;
     border-radius: 7px;
@@ -153,4 +158,68 @@ input.form-control, select.form-select {
     align-items: center;
     gap: 10px;
     padding-bottom: 25px;
+}
+.leave_table.table tbody tr td {
+    font-weight: 500;
+    font-size: 17px;
+    color: #333843;
+}
+.leave_table span {
+    color: #667085;
+    font-size: 14px;
+    font-weight: 400;
+}
+.col.inner-leave-item{
+    padding: 20px;
+    background-color: red;
+    border-radius: 20px;
+}
+.col.inner-leave-item:nth-child(1) {
+    background-color:#FFE2E5;
+    border: 1px solid #fa5a7d26;
+}
+.col.inner-leave-item:nth-child(2) {
+    background-color:#FFF4DE; 
+    border: 1px solid #ff947a30;
+}
+.col.inner-leave-item:nth-child(3) {
+    background-color:#DCFCE7; 
+    border: 1px solid #82e89552;
+}
+.col.inner-leave-item:nth-child(4) {
+    background-color: #F3E8FF; 
+    border: 1px solid #bf83ff2b;
+}
+.col.inner-leave-item:nth-child(5) {
+    background-color: #C7E2FF;
+    border: 1px solid #268fff2b;
+}
+.col.inner-leave-item p {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+}
+.col.inner-leave-item span {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Mr Css  */
+
+label.form-label {
+    font-size: 16px;
+    margin: 0;
+    padding-bottom: 5px;
+    color: #687281;
+}
+input.form-control.input-text, select.form-select.select-text, textarea.form-control.textarea-text {
+    padding: 10px 14px;
+    color: #687281;
+    font-size: 16px;
+}
+.apply-leave tr th{
+    font-size: 19px;
+    padding: 15px;
+    background-color: #F9F9FC;
+    color: #444A6D;
 }
