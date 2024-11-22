@@ -71,3 +71,38 @@ label.form-check-label{
     font-weight: 600;
     color: #303030;
 }
+
+.alert-pop-up{
+    background-color: #FFE5E5;
+    border: 1px solid #FFCECE;
+    padding: 20px;
+    border-radius: 12px;
+    position: relative;
+}
+.close-alert{
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    width: 50px !important;
+}
+.alert-text h3{
+    color: #FF0000;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+.alert-text p{
+    color: #000000;
+    padding: 0;
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+.alert-pop-up.row .col-auto{
+padding: 0px;   
+}
+.alert-pop-up.row {
+    margin: 0 auto;
+    margin-bottom: 25px;
+    justify-content: center;
+    align-items: center;
+}

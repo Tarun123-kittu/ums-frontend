@@ -34,7 +34,6 @@ const MarkAttendence = () => {
   const [timeDifference, setTimeDifference] = useState("");
   const [myEventsList, setMyEventList] = useState([]);
   const [is_attendence_marked,setIs_attendence_marked] = useState(false)
-  console.log(is_attendence_marked,"this is the attendence status")
   const mark_attendance_state = useSelector((store) => store.MARK_ATTENDANCE);
   const attendance_time = useSelector((store) => store.TODAY_ATTENDANCE_TIME);
   const events_birthays_holidays = useSelector(

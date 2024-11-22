@@ -96,6 +96,9 @@ import UserResetPassword from './userSlice/userResetPassword'
 import techRoundSubmitResult from './interviewLeadsSlice/technicalRound/technicalRoundSubmitStatus'
 import getPermissions from './rolesAndPermissionSlice/getPermissions'
 import changeEmployeeLeaveStatus from './leaveSlice/changeEmployeeLeaveStatus'
+import AddTodoTaskAPI from "./todoSlice/addTodoSlice"
+import getAllTodoTasksAPI from "./todoSlice/getTasksSlice"
+import shiftTaskAPI from "./todoSlice/shiftTaskSlice"
 
 const appStore = configureStore({
     reducer: {
@@ -194,8 +197,11 @@ const appStore = configureStore({
         TECH_ROUND_SUBMIT_RESULT: techRoundSubmitResult,
         GET_ALL_PERMISSIONS: getPermissions,
         EMPLOYEE_LEAVE_STATUS: changeEmployeeLeaveStatus,
-        EMPLOYEE_CURRENT_YEAR_LEAVE : getEmployeeCurrentYearLeaves,
-        ALL_EMPLOYEES_ACCEPTED_LEAVES : getDashboardEmployeeAcceptedLeaves
+        EMPLOYEE_CURRENT_YEAR_LEAVE: getEmployeeCurrentYearLeaves,
+        ALL_EMPLOYEES_ACCEPTED_LEAVES: getDashboardEmployeeAcceptedLeaves,
+        ADD_TODO_TASK: AddTodoTaskAPI,
+        GET_ALL_TODOS: getAllTodoTasksAPI,
+        SHIFT_TASK : shiftTaskAPI
 
     },
 })
