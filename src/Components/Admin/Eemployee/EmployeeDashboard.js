@@ -19,7 +19,8 @@ const EmployeeDashboard = () => {
     const { show } = useAppContext();
     const dispatch = useDispatch()
     const [socket, setSocket] = useState(null);
-    console.log(socket,"this is the socket")
+    const [lateData,setLateData] = useState()
+    console.log(lateData,"this is the socket")
     const current_and_next_month_events = useSelector(
         (store) => store.CURRENT_AND_NEXT_MONTH_EVENTS
     );
@@ -32,7 +33,7 @@ const EmployeeDashboard = () => {
         const socketConnection = io(process.env.REACT_APP_SOCKET_SERVER_URL);
         setSocket(socketConnection);
         socketConnection.on('late_threshold_exceeded', (data) => {
-          console.log(data)
+            setLateData(data)
         });
     
         return () => {
@@ -66,7 +67,7 @@ const EmployeeDashboard = () => {
             <Notification />
 
             <div className="p-4 bg-light min-vh-100 w-100">
-            <Alert />
+            {lateData?.message && <Alert message={lateData?.message}/>}
                 {/* Dashboard Header */}
                 <h1 className="maine-heading" >Dashboard</h1>
 

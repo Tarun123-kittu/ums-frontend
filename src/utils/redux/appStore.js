@@ -99,6 +99,7 @@ import changeEmployeeLeaveStatus from './leaveSlice/changeEmployeeLeaveStatus'
 import AddTodoTaskAPI from "./todoSlice/addTodoSlice"
 import getAllTodoTasksAPI from "./todoSlice/getTasksSlice"
 import shiftTaskAPI from "./todoSlice/shiftTaskSlice"
+import getUserMonthlyLeaveReportAPI from "./leaveSlice/getUserMonthlyLeaveReport"
 
 const appStore = configureStore({
     reducer: {
@@ -201,7 +202,8 @@ const appStore = configureStore({
         ALL_EMPLOYEES_ACCEPTED_LEAVES: getDashboardEmployeeAcceptedLeaves,
         ADD_TODO_TASK: AddTodoTaskAPI,
         GET_ALL_TODOS: getAllTodoTasksAPI,
-        SHIFT_TASK : shiftTaskAPI
+        SHIFT_TASK : shiftTaskAPI,
+        USER_MONTHLY_RECORD : getUserMonthlyLeaveReportAPI
 
     },
 })

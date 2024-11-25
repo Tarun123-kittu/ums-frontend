@@ -262,7 +262,7 @@ const MarkAttendence = () => {
         ) : (
           <button
             onClick={() =>
-              !is_attendence_marked
+              !is_attendence_marked || localStorage?.getItem("hours") === "split"
                 ? dispatch(mark_attendance({ login_device: deviceType, login_mobile }))
                 : toast.success("Your Attendance For Today Has been Submitted Successfully")
             }

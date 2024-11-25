@@ -1,7 +1,7 @@
 import React from 'react'
 import "./employeeDashboard.css"
 
-const Alert = () => {
+const Alert = ({message}) => {
     return (
         <div>
             <div className="alert-pop-up row">
@@ -15,13 +15,10 @@ const Alert = () => {
                 </div>
                 <div className="col alert-text">
                     <h3 nameclassName="">Alert!</h3>
-                    <p>You have already arrived late three times this month; if you arrive late a fourth time, Ms. HR will take half a day off your leave. Be Punctual Tomorrow.</p>
+                    <p>{message}</p>
                 </div>
                 <div className="close-alert">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M7.75732 7.75781L16.2426 16.2431" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M7.75739 16.2431L16.2427 7.75781" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
+                    
                 </div>
             </div>
         </div>

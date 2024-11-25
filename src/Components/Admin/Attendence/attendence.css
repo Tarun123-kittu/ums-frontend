@@ -217,9 +217,3 @@ input.form-control.input-text, select.form-select.select-text, textarea.form-con
     color: #687281;
     font-size: 16px;
 }
-.apply-leave tr th{
-    font-size: 19px;
-    padding: 15px;
-    background-color: #F9F9FC;
-    color: #444A6D;
-}
