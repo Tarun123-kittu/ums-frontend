@@ -17,7 +17,8 @@ import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSli
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
-
+import AddInterviewLeadModal from '../../Modal/AddInterviewLeadModal'
+import EditInterviewLeadModal from '../../Modal/AddInterviewLeadModal'
 const InterviewLead = () => {
   const { show } = useAppContext();
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const InterviewLead = () => {
   const [currentTab, setCurrentTab] = useState("Add Person");
   const [open_tab, setOpen_tab] = useState(localStorage.getItem('tab') || "Add Person");
   const [page, setPage] = useState(1);
+  const[addInterviewLeadModal, setAddInterviewLeadModal] = useState(false)
   const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
   const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
@@ -269,9 +271,9 @@ const InterviewLead = () => {
                 <div>
                   {permissions?.can_create && currentTab === "Add Person" && (
                     <button
-                      className="cmn_Button_style addnew_btn_outer"
+                      className="cmn_Button_style addnew_btn_outer sdsd"
                       onClick={() => {
-                        navigate("/addNewPerson");
+                        setAddInterviewLeadModal(true);
                       }}
                     >
                       Add New
@@ -292,6 +294,7 @@ const InterviewLead = () => {
           paragraph_text={"Please confirm your action. Deleting the user list is permanent and cannot be reversed."}
         />
       )}
+     
     </section>
   ) : (
     <UnauthorizedPage />

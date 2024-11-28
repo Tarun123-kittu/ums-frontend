@@ -125,7 +125,7 @@ const CreateRole = () => {
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer card-cmn">
+        <div className="employee_wrapper cmn_padding_outer bg-white">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}

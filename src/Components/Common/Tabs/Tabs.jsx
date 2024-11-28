@@ -43,7 +43,7 @@ import {
 } from "../../../utils/redux/interviewLeadsSlice/deleteLeads";
 import { Table } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
-
+import EditInterviewLeadModal from '../../Modal/EditInterviewLeadModal'
 function TabComp({ setCurrentTab, setOpen_tab }) {
   const permissions = UsePermissions("Interviews");
   const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
@@ -68,6 +68,11 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
       setActiveTab(tab);
     }
   }, [tab]);
+  const [lead, setLead] = useState()
+  const[editInterviewLeadModal, setEditInterviewLeadModal] = useState(false)
+  // const showEditModal =() =>{
+  //   setEditInterviewLeadModal(true)
+  // }
   const [leadId, setLeadId] = useState(null);
   const [language_id, setLanguage_id] = useState(null);
   const [series_id, setSeries_id] = useState(null);
@@ -358,7 +363,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {all_leads?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : all_leads?.data?.message ===
@@ -366,7 +371,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500} height={400}
@@ -380,6 +385,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                       if (lead?.in_round === 0) {
                         return (
                           <tr key={i}>
+                        
+                            
                             <td>{i + 1}</td>
                             <td>
                               <div className="d-flex justify-content-between align-items-center">
@@ -509,9 +516,8 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                               >
                                 <FiEdit
                                   onClick={() => {
-                                    navigate("/editPerson", {
-                                      state: { leadData: lead },
-                                    });
+                                    setEditInterviewLeadModal(true);
+                                    setLead(lead)
                                   }}
                                 />
                               </div>
@@ -565,7 +571,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {all_hr_round_candidate?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : all_hr_round_candidate?.data?.message ===
@@ -573,7 +579,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500} height={400}
@@ -713,14 +719,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {tech_round_leads?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : tech_round_leads?.data?.message === "No Lead Found" ? (
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500} height={400}
@@ -867,14 +873,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {face_round_leads?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : face_round_leads?.data?.message === "No Lead Found" ? (
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500} height={400}
@@ -1035,14 +1041,14 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
                 {final_round_leads?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : final_round_leads?.data?.message === "No Lead Found" ? (
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500} height={400}
@@ -1182,6 +1188,7 @@ function TabComp({ setCurrentTab, setOpen_tab }) {
           handleDelete={deleteHandler}
         />
       )}
+       <EditInterviewLeadModal editInterviewLeadModal={editInterviewLeadModal} setEditInterviewLeadModal={setEditInterviewLeadModal} lead={lead}/>
     </div>
   ) : (
     <UnauthorizedPage />

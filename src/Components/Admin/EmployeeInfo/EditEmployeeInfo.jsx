@@ -478,7 +478,7 @@ const EditEmployeeInfo = () => {
                     <div>
                       <InputField
                         span={true}
-                        labelname={"Increnent Date"}
+                        labelname={"Incremented Date"}
                         placeholder={"Select increment date"}
                         classname={"new_employee_form_group"}
                         type={"date"}

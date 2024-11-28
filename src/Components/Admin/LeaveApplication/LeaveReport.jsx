@@ -213,14 +213,14 @@ const LeaveReport = () => {
                 {leave_data?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : leave_data?.data?.message === "No leaves found" ? (
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500}

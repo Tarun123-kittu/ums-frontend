@@ -210,12 +210,12 @@ const EmployeeList = () => {
               {all_users_list?.isLoading ? (
                 <tr>
                   <td className="text-center" colSpan={9}>
-                    <img className="loader_gif" src={Loader} alt="loader" />
+                    <img className="loader_gif m-auto" src={Loader} alt="loader" />
                   </td>
                 </tr>
               ) : usersData?.length === 0 ? (
                 <td colSpan={12} className="text-center ">
-                  <img src={NoData} alt="no data" width={500} height={400}/>
+                  <img src={NoData} className="m-auto" alt="no data" width={500} height={400}/>
                 </td>
               ) : (
                 usersData?.map((user, index) => {
@@ -286,7 +286,7 @@ const EmployeeList = () => {
                         <tr>
                           <td className="text-center" colSpan={11}>
                             <img
-                              className="loader_gif"
+                              className="loader_gif m-auto"
                               src={NoData}
                               alt="loader"
                               width={300}

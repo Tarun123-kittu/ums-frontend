@@ -136,7 +136,7 @@ const EditRoleAndPermission = () => {
       >
         <Notification />
 
-        <div className="employee_wrapper cmn_padding_outer card-cmn">
+        <div className="employee_wrapper cmn_padding_outer bg-white">
           <BreadcrumbComp
             data={obj}
             classname={"inter_fontfamily employee_heading"}
@@ -176,7 +176,7 @@ const EditRoleAndPermission = () => {
                     </thead>
                     <tbody>
                       {role_permissions_data?.isLoading ? (
-                        <img src={Loader} alt="loader" className="loader_gif" />
+                        <img src={Loader} alt="loader" className="loader_gif m-auto" />
                       ) : (
                         permissions_state?.map((permissions, i) => {
                           return (

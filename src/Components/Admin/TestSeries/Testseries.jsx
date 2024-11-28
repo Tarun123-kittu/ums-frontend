@@ -192,11 +192,11 @@ const Testseries = () => {
             <div className="row m-0">
               {all_series?.isLoading ? (
 
-                <img src={Loader} alt="loader" className="loader_gif" />
+                <img src={Loader} alt="loader" className="loader_gif m-auto" />
               ) : all_series?.data?.message === "No test series available." ? (
-                <div className="col-12">
+                <div className="col-12 p-0">
                   <div className="card-cmn text-center">
-                  <img className="image_loading col-12" src={NoData} alt="No data found" />
+                  <img className="image_loading col-12 m-auto" src={NoData} alt="No data found" />
                   </div>
                 </div>
               ) : (

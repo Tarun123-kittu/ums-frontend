@@ -1,0 +1,37 @@
+.candidate_list ul {
+    padding: 0;
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.candidate_list ul li {
+    padding: 0px 6px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #9E0302;
+    color: var(--bs-white);
+    border-radius: 3px;
+}
+
+.candidate_list h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.candidate_list p {
+    font-size: 14px;
+    color: #464242;
+    margin-bottom: 7px;
+}
+
+.candidate_list {
+    border: 1px solid #0000001A;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.candidate_list .cmn_Button_style {
+    height: 40px;
+    border-radius: 4px;
+}

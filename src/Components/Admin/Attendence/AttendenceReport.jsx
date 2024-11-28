@@ -209,11 +209,11 @@ const AttendenceReport = () => {
                 {user_attendance_report?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : user_attendance_report?.data?.data?.length === 1 && user_attendance_report?.data?.data[0].role === "Admin" ? <td colSpan={12} className="text-center ">
-                  <img src={NoData} alt="no data" width={500} height={400} />
+                  <img src={NoData} alt="no data" className="m-auto" width={500} height={400} />
                 </td> : (
                   user_attendance_report?.data?.data?.map((report, index) => {
                     if (report?.role !== "Admin") {

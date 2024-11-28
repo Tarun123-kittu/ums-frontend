@@ -114,10 +114,7 @@ a.login_text {
         height: 200px;
         width: 400px;
     }
-    .form-group label {
-      
-        font-size: 20px;
-    }
+   
     button.login-button {
         font-size: 20px;
     }
@@ -132,7 +129,7 @@ a.login_text {
         font-size: 38px;
     }
     .form-group label {
-        font-size: 15px;
+        font-size: 14px;
     }
     .ultivic_logo {
         height: 46px;

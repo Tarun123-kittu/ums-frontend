@@ -9,7 +9,7 @@ import {
 import toast from "react-hot-toast";
 import "./modal.css";
 import { get_question_answer } from "../../utils/redux/testSeries/getQuestionsAnswer";
-
+import {Row,Col} from "react-bootstrap";
 const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
   const dispatch = useDispatch();
   const [question, setQuestion] = useState("");
@@ -109,22 +109,24 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
     <div>
       <Modal
         show={show}
-        size="md"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
         className="custom_modal_container"
-        dialogClassName="custom_modal_width"
+        dialogClassName=""
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <h3 className="heading">Create Objective Question</h3>
-          <h4 className="inter_fontfamily cmn_ques_heading">
-            Objective Question
-          </h4>
+        <div className="modal_head">
+        <h3 className="heading">Create Objective Question</h3>
+          <p>
+          Make the objective question for the interview test series.
+          </p>
+        </div>
           <div className="form-group new_employee_form_group">
-            <input
-              type="text"
+            <label className="mb-1" htmlFor="">Objective Question</label>
+            <textarea
               className="form-control"
               placeholder="Enter Your Question"
               value={question}
@@ -135,7 +137,9 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               {errorMessage?.question}
             </span>
           </div>
-          <div className="form-group new_employee_form_group">
+         <Row>
+        <Col>
+        <div className="form-group new_employee_form_group">
             <input
               type="text"
               className="form-control"
@@ -150,7 +154,9 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               </span>
             )}
           </div>
-          <div className="form-group new_employee_form_group">
+        </Col>
+        <Col>
+        <div className="form-group new_employee_form_group">
             <input
               type="text"
               className="form-control"
@@ -165,6 +171,10 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               </span>
             )}
           </div>
+        </Col>
+         </Row>
+         <Row>
+          <Col>
           <div className="form-group new_employee_form_group">
             <input
               type="text"
@@ -180,6 +190,8 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               </span>
             )}
           </div>
+          </Col>
+          <Col>
           <div className="form-group new_employee_form_group">
             <input
               type="text"
@@ -195,12 +207,16 @@ const ObjectiveQuesModal = ({ show, setShow, seriesId, language_id }) => {
               </span>
             )}
           </div>
+          </Col>
+         </Row>
+         
+         
 
-          <div className="mt-3">
+          <div className="mt-2 form-group">
             <label className="inter_fontfamily cmn_ques_heading">
               Choose Answer Option
             </label>
-            <div className="mt-2">
+            <div className="mt-1">
               <CustomSelectComp
                 changeHandler={(e) => handleAnswer(e)}
                 optionsData={optionObj}

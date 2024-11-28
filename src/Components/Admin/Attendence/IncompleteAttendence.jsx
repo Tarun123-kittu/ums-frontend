@@ -70,7 +70,7 @@ const IncompleteAttendence = () => {
                 {attendance_report?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : (

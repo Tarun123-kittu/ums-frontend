@@ -15,7 +15,7 @@ import {
 import { get_all_series } from "../../utils/redux/testSeries/getAllTestSeries";
 import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
 import UnauthorizedPage from "../Unauthorized/UnauthorizedPage";
-
+import {Row, Col} from "react-bootstrap";
 const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
   const dispatch = useDispatch();
   const permissions = UsePermissions("Test");
@@ -180,11 +180,16 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
         centered
         onHide={handleClose}
         className="custom_modal_container"
+        size={'lg'}
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <h3 className="heading">Edit Test Series </h3>
-          <InputField
+         <div className="modal_head">
+         <h3 className="heading">Edit Test Series </h3>
+         </div>
+          <Row>
+            <Col lg={6}>
+            <InputField
             labelname={"Series "}
             placeholder={"Enter Series Name"}
             type={"text"}
@@ -196,7 +201,9 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
           <span style={{ color: "red", fontSize: "13px" }}>
             {errorMessage?.series_name}
           </span>
-          <InputField
+            </Col>
+            <Col lg={6}>
+            <InputField
             labelname={"Time taken to complete this series test"}
             placeholder={"Enter Estimated Times"}
             type={"text"}
@@ -208,7 +215,10 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
           <span style={{ color: "red", fontSize: "13px" }}>
             {errorMessage?.series_time}
           </span>
-          <div className="form-group new_employee_form_group">
+          </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>  <div className="form-group new_employee_form_group">
             <label>Experience</label>
             <div className="mt-2">
               <CustomSelectComp
@@ -221,8 +231,8 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
                 {errorMessage?.experience}
               </span>
             </div>
-          </div>
-          <div className="form-group new_employee_form_group">
+          </div></Col>
+            <Col lg={6}> <div className="form-group new_employee_form_group">
             <label>Profile</label>
             <div className="mt-2">
               <CustomSelectComp
@@ -235,7 +245,11 @@ const EditTestSeriesModal = ({ show, setShow, seriesId, languages }) => {
                 {errorMessage?.series_language}
               </span>
             </div>
-          </div>
+          </div></Col>
+          </Row>
+          
+        
+         
           <div className="form-group new_employee_form_group">
             <label>Description</label>
             <textarea

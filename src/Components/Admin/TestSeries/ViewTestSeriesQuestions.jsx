@@ -207,7 +207,7 @@ const ViewTestseriesQuestions = () => {
                   ) : (
                     <div className="text-center">
 
-                      <img src={NoData} alt="no data found" />
+                      <img src={NoData} className="m-auto" alt="no data found" />
                     </div>
                   )}
 
@@ -275,7 +275,7 @@ const ViewTestseriesQuestions = () => {
                   ) : (
                     <div className="text-center">
 
-                      <img src={NoData} alt="no data found" />
+                      <img src={NoData} className="m-auto" alt="no data found" />
                     </div>
                   )}
 
@@ -342,7 +342,7 @@ const ViewTestseriesQuestions = () => {
                   ) : (
                     <div className="text-center">
 
-                      <img src={NoData} alt="no data found" />
+                      <img src={NoData} className="m-auto" alt="no data found" />
                     </div>
                   )}
 

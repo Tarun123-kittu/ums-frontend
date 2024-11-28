@@ -186,7 +186,7 @@ const ApplyLeaves = () => {
   return (
 
 
-    <div className=" min-vh-100 bg-light cmn_margin_outer">
+    <div className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "} min-vh-100 bg-light ${show ? "cmn_margin" : "cmn_margin_outer"}`}>
       <Notification view={true} />
 
       <div className="">

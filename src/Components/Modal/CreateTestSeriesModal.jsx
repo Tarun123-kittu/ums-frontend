@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import InputField from "../Common/InputField";
-import CustomSelectComp from "../Common/CustomSelectComp";
-import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  create_test_series,
   clear_create_test_series_state,
+  create_test_series,
 } from "../../utils/redux/testSeries/createTestSeries";
 import { get_all_series } from "../../utils/redux/testSeries/getAllTestSeries";
-
+import CustomSelectComp from "../Common/CustomSelectComp";
+import InputField from "../Common/InputField";
+import {Row,Col} from "react-bootstrap";
 const CreateTestSeriesModal = ({ show, setShow, languages }) => {
   const dispatch = useDispatch();
   const [all_languagages, setAll_languages] = useState([]);
@@ -140,12 +140,19 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
         aria-labelledby="contained-modal-title-vcenter Invite_candidate_modal"
         centered
         onHide={handleClose}
+        size={"lg"}
         className="custom_modal_container"
       >
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="">
+          <div className="modal_head">
           <h3 className="heading">Create Test Series </h3>
-          <InputField
+          <p>Make a test series for the interview questions for candidates.</p>
+
+          </div>
+          <Row>
+            <Col lg={6}>
+            <InputField
           span={true}
             labelname={"Series "}
             placeholder={"Enter Series Name"}
@@ -157,7 +164,9 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
           <span style={{ color: "red", fontSize: "13px" }}>
             {errorMessage?.series_name}
           </span>
-          <InputField
+            </Col>
+            <Col lg={6}>
+            <InputField
             labelname={"Time taken to complete this series test"}
             placeholder={"HH:MM:SS"}
             type={"text"}
@@ -168,7 +177,12 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
           />
           <span style={{ color: "red", fontSize: "13px" }}>
             {errorMessage?.series_time}
-          </span>
+          </span></Col>
+          </Row>
+          
+          
+         <Row>
+          <Col>
           <div className="form-group new_employee_form_group">
             <label>Experience</label>
             <div className="mt-2">
@@ -177,12 +191,15 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
                 changeHandler={changeExperienceHandler}
                 value={experience}
                 styleTrue={errorMessage?.experience}
+                className="cmn_select"
               />
               <span style={{ color: "red", fontSize: "13px" }}>
                 {errorMessage?.experience}
               </span>
             </div>
           </div>
+          </Col>
+          <Col>
           <div className="form-group new_employee_form_group">
             <label>Profile</label>
             <div className="mt-2">
@@ -191,12 +208,16 @@ const CreateTestSeriesModal = ({ show, setShow, languages }) => {
                 changeHandler={changeHandler}
                 value={series_language}
                 styleTrue={errorMessage?.series_language}
+                className="cmn_select"
               />
               <span style={{ color: "red", fontSize: "13px" }}>
                 {errorMessage?.series_language}
               </span>
             </div>
           </div>
+          </Col>
+         </Row>
+          
           <div className="form-group new_employee_form_group">
             <label>Description</label>
             <textarea

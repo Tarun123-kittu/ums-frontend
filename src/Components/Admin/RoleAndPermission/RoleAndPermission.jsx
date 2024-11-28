@@ -97,7 +97,7 @@ const RoleAndPermission = () => {
               </thead>
               <tbody>
                 {user_roles?.isLoading ? (
-                  <img src={Loader} alt="loader" className="loader_gif" />
+                  <img src={Loader} alt="loader" className="loader_gif m-auto" />
                 ) : (
                   user_roles?.data?.data?.map((roles, i) => {
                     return (

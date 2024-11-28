@@ -64,7 +64,7 @@ function EmployeeTodoList() {
                 <h3 className="heading-h3">
                     To-Do List
                 </h3>
-                <div class="d-flex mr-4">
+                <div class="d-flex">
                     <div class="mr-4">
                         <button onClick={() => setCurrentTab("ACTIVE")} type="button" class="btn btn-danger btn-sm px-4 py-2 text-white rounded-pill">Active</button>
                     </div>
@@ -81,7 +81,7 @@ function EmployeeTodoList() {
 
             {currentTab === "ACTIVE" && <div>
                 <div class="mb-4">
-                    <textarea rows="2" class=" to-do-input form-control" id="exampleFormControlTextarea1" placeholder="Enter your to-do task..." value={task} onChange={(e) => setTask(e.target.value)}></textarea>
+                    <textarea rows="1" class="to-do-input form-control" id="exampleFormControlTextarea1" placeholder="Enter your to-do task..." value={task} onChange={(e) => setTask(e.target.value)}></textarea>
                 </div>
 
                 <div class="">

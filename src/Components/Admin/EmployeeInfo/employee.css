@@ -56,6 +56,9 @@ button.add_document_btn{
     line-height: 27px;
     color: white;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .redbrown_bg{
     background-color: #9e0302;

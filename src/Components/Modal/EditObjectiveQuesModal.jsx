@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import { get_question_answer } from "../../utils/redux/testSeries/getQuestionsAnswer";
 import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
 import UnauthorizedPage from "../Unauthorized/UnauthorizedPage";
-
+import {Row,Col} from "react-bootstrap";
 const EditObjectiveQuesModal = ({
   show,
   setShow,
@@ -162,22 +162,23 @@ const EditObjectiveQuesModal = ({
     <div>
       <Modal
         show={show}
-        size="md"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
         className="custom_modal_container"
-        dialogClassName="custom_modal_width"
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <h3 className="heading">Edit Objective Question</h3>
-          <h4 className="inter_fontfamily cmn_ques_heading">
+         <div className="modal_head">
+         <h3 className="heading">Edit Objective Question</h3>
+          <p className="inter_fontfamily cmn_ques_heading">
             Objective Question
-          </h4>
+          </p>
+         </div>
           <div className="form-group new_employee_form_group">
-            <input
-              type="text"
+            <label htmlFor="" className="mb-1">Subjective Question</label>
+            <textarea
               className="form-control"
               placeholder="Enter Your Question"
               value={question}
@@ -188,7 +189,8 @@ const EditObjectiveQuesModal = ({
               {errorMessage?.question}
             </span>
           </div>
-          <div className="form-group new_employee_form_group">
+          <Row>
+            <Col><div className="form-group new_employee_form_group">
             <input
               type="text"
               className={
@@ -207,8 +209,8 @@ const EditObjectiveQuesModal = ({
                 {errorMessage.option1}
               </span>
             )}
-          </div>
-          <div className="form-group new_employee_form_group">
+          </div></Col>
+            <Col><div className="form-group new_employee_form_group">
             <input
               type="text"
               className={
@@ -227,8 +229,10 @@ const EditObjectiveQuesModal = ({
                 {errorMessage.option2}
               </span>
             )}
-          </div>
-          <div className="form-group new_employee_form_group">
+          </div></Col>
+          </Row>
+          <Row>
+            <Col>  <div className="form-group new_employee_form_group">
             <input
               type="text"
               className={
@@ -247,8 +251,8 @@ const EditObjectiveQuesModal = ({
                 {errorMessage.option3}
               </span>
             )}
-          </div>
-          <div className="form-group new_employee_form_group">
+          </div></Col>
+            <Col><div className="form-group new_employee_form_group">
             <input
               type="text"
               className={
@@ -267,8 +271,9 @@ const EditObjectiveQuesModal = ({
                 {errorMessage.option4}
               </span>
             )}
-          </div>
-          <div className="mt-3">
+          </div></Col>
+          </Row>
+          <div className="mt-2 form-group">
             <label className="inter_fontfamily cmn_ques_heading">
               Choose Answer Option
             </label>

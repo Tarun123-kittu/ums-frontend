@@ -21,7 +21,9 @@ const ActiveTasks = ({setCompleted,setTask_id_array}) => {
 
     if (all_tasks?.isSuccess && all_tasks?.data?.message === "Currently you have no task in ACTIVE") {
         return (
-            <img className='h-100' src={NOTASK} alt="no tasks" />
+           <div className='text-center p-3'>
+             <img className='h-100 m-auto' src={NOTASK} alt="no tasks" />
+           </div>
         )
     }
     if (all_tasks?.isLoading) {

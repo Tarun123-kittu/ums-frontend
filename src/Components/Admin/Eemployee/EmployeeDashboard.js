@@ -98,7 +98,7 @@ const EmployeeDashboard = () => {
                             <h3 className="heading-h3">Upcoming Events </h3>
                             <h4 className="upcoming-month-h4" >{currentMonthName}, {currentYear}</h4>
 
-                            {current_and_next_month_events?.data?.data?.currentMonth?.length === 0 ? <img src={no_event} alt="no event" /> : current_and_next_month_events?.data?.data?.currentMonth?.map((leave, i) => {
+                            {current_and_next_month_events?.data?.data?.currentMonth?.length === 0 ? <div className="p-3 text-center"> <img src={no_event} className="m-auto" alt="no event" /></div> : current_and_next_month_events?.data?.data?.currentMonth?.map((leave, i) => {
                                 const user = leave?.title?.split("'s") || [];
                                 const eventType = user[1]?.trim() || "Unknown";
                                 return (
@@ -127,7 +127,7 @@ const EmployeeDashboard = () => {
                                 )
                             })}
                             <h4 className="upcoming-month-h4">{nextMonthName}, {currentYear !== nextYear ? nextYear : currentYear}</h4>
-                            {current_and_next_month_events?.data?.data?.nextMonth?.length === 0 ? <img src={no_event} alt="no event" /> : current_and_next_month_events?.data?.data?.nextMonth?.map((leave, i) => {
+                            {current_and_next_month_events?.data?.data?.nextMonth?.length === 0 ? <div className="p-3 text-center"> <img src={no_event} className="m-auto" src={no_event} alt="no event" /> </div> : current_and_next_month_events?.data?.data?.nextMonth?.map((leave, i) => {
                                 const user = leave?.title?.split("'s") || [];
                                 const eventType = user[1]?.trim() || "Unknown";
                                 return (

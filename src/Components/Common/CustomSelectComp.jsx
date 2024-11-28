@@ -102,6 +102,7 @@ const CustomSelectComp = ({
       placeholder={placeholder}
       value={valueObj || null}
       isDisabled={disabled}
+      className="cmn_select"
     />
   );
 };

@@ -79,7 +79,7 @@ const LeaveRequest = () => {
                 {all_applied_leaves?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : all_applied_leaves?.data?.message ===
@@ -87,7 +87,7 @@ const LeaveRequest = () => {
                   <tr>
                     <td className="text-center" colSpan={11}>
                       <img
-                        className="loader_gif"
+                        className="loader_gif m-auto"
                         src={NoData}
                         alt="loader"
                         width={500}

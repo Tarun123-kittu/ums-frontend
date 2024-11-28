@@ -46,8 +46,9 @@ import ForgotPassword from './Components/Login/ForgotPassword';
 import ChangePassword from './Components/Login/ChangePassword';
 import ResetPassword from './Components/Login/ReserPassword';
 import Test from './Components/Breadcrumb/Test';
-import EmployeeDashboard from "./Components/Admin/Eemployee/EmployeeDashboard"
+import EmployeeDashboard from "./Components/Admin/Eemployee/EmployeeDashboard";
 import { lazy, Suspense } from 'react';
+import CandidateList from './Components/Admin/CandidateResult/CandidateList'
 function App() {
   const secureComponent = (Component) => <ProtectedRoute element={() => <><Sidebar /><Component /></>} />;
   const Login = lazy(() => import("../src/Components/Login/Login"))
@@ -72,6 +73,7 @@ function App() {
         <Route path='/leaveBank' element={secureComponent(LeaveBank)} />
         <Route path='/leaveReport' element={secureComponent(LeaveReport)} />
         <Route path='/holiday' element={secureComponent(HolidayEvent)} />
+        <Route path='/candidateList' element={secureComponent(CandidateList)} />
         <Route path='/interviewLead' element={secureComponent(InterviewLead)} />
         <Route path='/addNewPerson' element={secureComponent(AddNewPerson)} />
         <Route path='/hrInterViewQuestion' element={secureComponent(HrInterViewQuestion)} />

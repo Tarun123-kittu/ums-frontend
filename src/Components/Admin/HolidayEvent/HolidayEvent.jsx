@@ -214,11 +214,11 @@ const HolidayEvent = () => {
                 {holiday_and_events?.isLoading ? (
                   <tr>
                     <td className="text-center" colSpan={9}>
-                      <img className="loader_gif" src={Loader} alt="loader" />
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
                     </td>
                   </tr>
                 ) : holiday_and_events?.data?.eventsOrHolidays?.length === 0 ? <td colSpan={12} className="text-center">
-                  <img src={NoData} alt="no data" width={500}/>
+                  <img src={NoData} className="m-auto" alt="no data" width={500}/>
                 </td> : (
                   holiday_and_events?.data?.eventsOrHolidays?.map(
                     (event, i) => {
