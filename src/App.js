@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import './App.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ProtectedRoute from './Components/Utils/verifyToken';
