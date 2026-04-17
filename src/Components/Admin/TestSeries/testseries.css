@@ -1,0 +1,120 @@
+.profile_select_box{
+    margin-top: 10px;
+    width: 100%;
+    min-width: 179px;
+}
+.test_series_header{
+    justify-content: space-between;
+}
+.series_card{
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #E2E6EB;
+    margin-top: 10px;
+}
+.series_created_text{
+    color: white;
+    font-size: 13px;
+    background: #9E0302;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-bottom: 0px;
+}
+.series_created_heading{
+    text-align: end;
+    font-size: 16px;
+    color: gray;
+}
+.card_heading{
+    color: #282A30;
+    font-size: 23px;
+    font-weight: 600;
+}
+.series_card h6{
+    color: #464242;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+    font-family: 'Open-Sans', sans-serif;
+}
+.create_series_btn_outer button{
+    display: block;
+    width: 100%;
+    border-radius: 7px;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 10px;
+}
+.view_question_tab_content{
+    padding:30px 20px;
+}
+.cmn_padding_wrapper{
+    padding: 20px;
+}
+.add_question_btn{
+    position: absolute;
+    left: auto;
+    right: 10px;
+    top: 10px;
+}
+.react-time-picker__wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    /* border: thin solid gray; */
+}
+img.image_loading {
+    width: 567px;
+}
+.view_question_tab_content h2{
+    font-weight: 700;
+}
+@media screen and (max-width:1280px) {
+    .card_heading {
+        font-size: 21px;
+    }
+}
+@media screen and (max-width:1199px){
+    .series_description_outer{
+        flex-wrap: wrap;
+    }
+}
+@media screen and (max-width:1024px) {
+    .card_heading {
+        font-size: 17px;
+    }
+    .view_question_tab_content h2 {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width:767px){
+    .cmn_padding_wrapper {
+        padding: 20px 10px;
+    }
+    .test_series_header_wrapper{
+        flex-wrap: wrap;
+    }
+    .create_series_btn_outer button {
+        font-size: 13px
+    }
+    .series_card h6 {
+        font-size: 13px;
+    }
+    .card_heading {
+        font-size: 14px;
+    }
+    .view_question_tab_content {
+        padding: 30px 10px;
+    }
+    .obj_btn_outer{
+        flex-wrap: wrap;
+    }
+    .view_question_tab_content h2 {
+        font-size: 13px;
+        line-height: 25px;
+    }
+    .cmn_padding_wrapper{
+        padding: 10px;
+    }
+}

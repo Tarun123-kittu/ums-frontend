@@ -1,155 +1,303 @@
-import React from 'react'
-import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
-import Notification from '../Notification/Notification'
-import { FiEdit } from 'react-icons/fi';
-import Sidebar from '../../Sidebar/Sidebar';
-import { useAppContext } from '../../Utils/appContecxt';
-import { FaSortDown } from 'react-icons/fa';
-import { TiArrowSortedUp } from 'react-icons/ti';
-import Select from '../../Common/Select';
+import React, { useEffect, useState } from "react";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import Notification from "../Notification/Notification";
+import { FiEdit } from "react-icons/fi";
+import { useAppContext } from "../../Utils/appContecxt";
+import { useDispatch, useSelector } from "react-redux";
+import { get_user_attendance_report } from "../../../utils/redux/attendanceSlice/getAttendanceRepot";
+import { useNavigate } from "react-router-dom";
+import PaginationComp from "../../Pagination/Pagination";
+import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import Mobile from "../../assets/mobile.png"
+import Computer from "../../assets/computer.png"
+import NoData from "../../assets/nodata.jpg";
+import UseAllUsernames from "../../Utils/customHooks/useAllUserNames";
 
 const AttendenceReport = () => {
-    const obj = [
-        { name: "Attendance Report", path: "/attendenceReport" },
-        { name: "Attendance Report", path: "/attendenceReport" },
-        
-      ];
+  UseAllUsernames()
 
-const {show} = useAppContext()
+  let i = 0;
+  const dispatch = useDispatch();
+  const permissions = UsePermissions("Attandance");
+  const [name, setName] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [page, setPage] = useState(1);
+  const obj = [{ name: "Attendance Report", path: "/attendenceReport" }];
+  let [all_names, setAllNames] = useState([]);
+  const navigate = useNavigate();
+  const { show } = useAppContext();
+  const [enableSearch, setEnableSearch] = useState(false);
+  const user_attendance_report = useSelector(
+    (store) => store.GET_USER_ATTENDANCE_REPORT
+  );
+  const all_userNames = useSelector((store) => store.ALL_USERNAMES);
 
-const employeeDataObj=[
-  {option:"Akriti",value:"Akriti"},
-  {option:"Amit",value:"Amit"},
-]
-const leaveDataObj=[
-  {option:"1",value:"1"},
-  {option:"2",value:"2"},
-]
-const monthDataObj=[
+  useEffect(() => {
+    dispatch(get_user_attendance_report({ name, month, year, page }));
+    localStorage.removeItem("tab");
+  }, [dispatch, page]);
 
-    { value: "01", option: "January" },
-    { value: "02", option: "February" },
-    { value: "03", option: "March" },
-    { value: "04", option: "April" },
-    { value: "05", option: "May" },
-    { value: "06", option: "June" },
-    { value: "07", option: "July" },
-    { value: "08", option: "August" },
-    { value: "09", option: "September" },
-    { value: "10", option: "October" },
-    { value: "11", option: "November" },
-    { value: "12", option: "December" },
+  const monthDataObj = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+  const generateYearOptions = (startYear, endYear) => {
+    const years = [];
+    for (let year = startYear; year <= endYear; year++) {
+      years.push({ label: year, value: year });
+    }
+    return years;
+  };
+  const years = generateYearOptions(2022, new Date().getFullYear());
 
-]
-const generateYearOptions = (startYear, endYear) => {
-  const years = [];
-  for (let year = startYear; year <= endYear; year++) {
-    years.push({option:year,value:year});
-  }
-  return years;
-};
-const years = generateYearOptions(2015, new Date().getFullYear());
+  const yearDataObj = years;
 
+  const convertTo12Hour = (time24) => {
+    if (!time24) return "--";
 
-const yearDataObj=years
+    let [hours, minutes] = time24.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${period}`;
+  };
 
-  return (
-    <section className='attendenceReport_outer'>
-      <Sidebar/>
-    <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
-      <Notification/>
-    
-      <div className='cmn_padding_outer'>
-        <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
-        />
+  const timeToHours = (time) => {
+    if (!time || time === "--") return 0;
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    return hours + minutes / 60 + seconds / 3600;
+  };
 
-<div className='d-flex employee_container align-items-end mt-3'>
+  useEffect(() => {
+    if (all_userNames?.isSuccess) {
+      all_userNames?.data?.data?.forEach((data) => {
+        if (!all_names.some((item) => item.value === data?.name)) {
+          if (data?.role !== "Admin") {
+            all_names.push({
+              value: data?.name,
+              label: data?.name,
+            });
+          }
+        }
+      });
+    }
+  }, [all_userNames]);
 
-<div className='employee_wrapper'>
-<Select labelname={"Employee"}  labelClass={""} options={employeeDataObj}/>
+  const handleSelectChange = (field, e) => {
+    field === "name" && setName(e.value);
+    field === "month" && setMonth(e.value);
+    field === "year" && setYear(e.value);
+  };
 
-</div>
-<div className='employee_wrapper'>
-  <Select labelname={"Pending Leaves"}  labelClass={""} options={leaveDataObj}/>
-</div>
-<div className='employee_wrapper'>
-<Select labelname={"Month"}  labelClass={""} options={monthDataObj}/>
+  return permissions?.can_view ? (
+    <section className="attendenceReport_outer">
+      <div
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          }gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
 
-</div>
-<div className='employee_wrapper'>
-<Select labelname={"Year"}  labelClass={""} options={yearDataObj}/>
+        <div className="cmn_padding_outer minheight">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+            onBreadcrumbClick={""}
+          />
 
-</div>
+          <div className="d-flex employee_container align-items-end mt-3">
+            <div className="employee_wrapper">
+              <div className="form-group new_employee_form_group">
+                <label>Employee</label>
+              </div>
+              <div className="mt-2">
+                <CustomSelectComp
+                  value={name}
+                  changeHandler={(e) => handleSelectChange("name", e)}
+                  optionsData={all_names}
+                />
+              </div>
+            </div>
 
-<div className='employee_wrapper text-center serach_add_outer'>
-  <button className='cmn_Button_style'>Search</button>
+            <div className="employee_wrapper">
+              <div className="form-group new_employee_form_group">
+                <label>Month</label>
+              </div>
+              <div className="mt-2">
+                <CustomSelectComp
+                  value={month}
+                  changeHandler={(e) => handleSelectChange("month", e)}
+                  optionsData={monthDataObj}
+                />
+              </div>
+            </div>
+            <div className="employee_wrapper">
+              <div className="form-group new_employee_form_group">
+                <label>Year</label>
+              </div>
+              <div className="mt-2">
+                <CustomSelectComp
+                  value={year}
+                  changeHandler={(e) => handleSelectChange("year", e)}
+                  optionsData={yearDataObj}
+                />
+              </div>
+            </div>
 
-</div>
-
-</div>
-        <div className='table-responsive mt-3 transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Employee Name</th>
-            <th>In Time</th>
-            <th>Out Time</th>
-            <th>Total Time</th>
-            <th>Task</th>
-            <th>OT Hours</th>
-            <th>Review</th>
-            <th>Rating</th>
-            <th>Login Detail</th>
-            <th>Action</th>
-          </tr>
-         
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>19/08/24 -Monday</td>
-            <td>John</td>
-            <td>01:30:40 PM</td>
-            <td>--</td>
-            <td style={{color:"#33b070"}}>14:51:23</td>
-            <td>Bids Project understanding</td>
-            <td>NA</td>
-            <td>AA</td>
-            <td>John Mobile:false</td>
-            <td>John Mobile:false</td>
-            <td>
-            <div className='cmn_action_outer yellow_bg'><FiEdit /></div>
-            </td>
-          </tr>
-          <tr>
-            <td style={{color:"#33b070"}}>2</td>
-            <td colspan="5" style={{color:"#33b070"}}>19/08/24 Saturday</td>
-            <td>NA</td>
-            <td>NA</td>
-            <td>AA</td>
-            <td colspan="3"></td>
-          </tr>
-          <tr>
-            <td style={{color:"#33b070"}}>3</td>
-            <td colspan="5" style={{color:"#33b070"}}>19/08/24 Sunday</td>
-            <td>NA</td>
-            <td style={{color:"#33b070"}}>AA</td>
-            <td style={{color:"#33b070"}}>AA</td>
-            <td colspan="3"></td>
-          </tr>
-        </tbody>
-        </table>
-         </div>
+            <div className="employee_wrapper text-center serach_add_outer">
+              {!enableSearch ? (
+                <button
+                  className="cmn_Button_style"
+                  onClick={() => {
+                    dispatch(get_user_attendance_report({ name, month, year }));
+                    setEnableSearch(true);
+                  }}
+                >
+                  Search
+                </button>
+              ) : (
+                <button
+                  className="cmn_Button_style cmn_darkgray_btn"
+                  onClick={() => {
+                    dispatch(
+                      get_user_attendance_report({
+                        name: "",
+                        month: "",
+                        year: "",
+                      })
+                    );
+                    setEnableSearch(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Employee Name</th>
+                  <th>In Time</th>
+                  <th>Out Time</th>
+                  <th>Total Time</th>
+                  <th>Task</th>
+                  <th>OT Hours</th>
+                  <th>Review</th>
+                  <th>Rating</th>
+                  <th>Login Detail</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {user_attendance_report?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : user_attendance_report?.data?.data?.length === 1 && user_attendance_report?.data?.data[0].role === "Admin" ? <td colSpan={12} className="text-center ">
+                  <img src={NoData} alt="no data" className="m-auto" width={500} height={400} />
+                </td> : (
+                  user_attendance_report?.data?.data?.map((report, index) => {
+                    if (report?.role !== "Admin") {
+                      return (
+                        <tr key={index}>
+                          <td>{++i}</td>
+                          <td>
+                            {report?.date}-{report?.date_in_week_day}
+                          </td>
+                          <td>{report?.name}</td>
+                          <td>{convertTo12Hour(report?.in_time)}</td>
+                          <td>
+                            {report?.out_time
+                              ? convertTo12Hour(report?.out_time)
+                              : "--"}
+                          </td>
+                          <td
+                            style={{
+                              color:
+                                timeToHours(report?.total_time) < 9
+                                  ? "red"
+                                  : "#33b070",
+                            }}
+                          >
+                            {report?.total_time
+                              ? `${report.total_time} hours`
+                              : "--"}
+                          </td>
+                          <td>
+                            {report?.report ? report?.report : "Not Available"}
+                          </td>
+                          <td>Not Available</td>
+                          <td>
+                            {report?.review ? report?.review : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.rating ? report?.rating : "Not Available"}
+                          </td>
+                          <td>
+                            {report?.name && report?.login_mobile ? (
+                              <>
+                                {report.login_mobile === "1" ? (
+                                  <img className="login_image" src={Mobile} alt="image_computer" />
+                                ) : (
+                                  <img className="login_image" src={Computer} alt="image_mobile" />
+                                )}
+                              </>
+                            ) : (
+                              "--"
+                            )}
+                          </td>
+                          <td>
+                            {permissions?.can_update && report?.id && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editAttendenceReport ", {
+                                      state: { id: report?.id },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  })
+                )}
+              </tbody>
+            </Table>
+          </div>
+        </div>
+        {user_attendance_report?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={user_attendance_report?.data?.totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
-
-    
-
-
-    </div>
     </section>
-  )
-}
+  ) : (
+    <UnauthorizedPage />
+  );
+};
 
-export default AttendenceReport
+export default AttendenceReport;

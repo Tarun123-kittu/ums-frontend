@@ -1,21 +1,43 @@
-import React, { useState } from 'react'
-import {Pagination} from "react-bootstrap"
+import React, { useState } from "react";
+import { Pagination } from "react-bootstrap";
+import "./pagination.css";
 
-const PaginationComp = () => {
-   
+const PaginationComp = ({ totalPage, setPage }) => {
+  const [activePage, setActivePage] = useState(1);
+
+  const handlePageChange = (pageNumber) => {
+    setActivePage(pageNumber);
+    setPage(pageNumber);
+  };
+
+  const pageItems = [];
+  for (let page = 1; page <= totalPage; page++) {
+    pageItems.push(
+      <Pagination.Item
+        key={page}
+        active={page === activePage}
+        onClick={() => handlePageChange(page)}
+      >
+        {page}
+      </Pagination.Item>
+    );
+  }
+
   return (
-    <div>
-        <Pagination className="justify-content-center custom_pagination_wapper">
-          <Pagination.Prev/>
-       
-            <Pagination.Item>
-              1
-            </Pagination.Item>
-       
-          <Pagination.Next/>
-        </Pagination>
-    </div>
-  )
-}
+    <Pagination className="justify-content-center custom_pagination_wapper w-100 mt-3">
+      <Pagination.Prev
+        disabled={activePage === 1}
+        onClick={() => handlePageChange(activePage - 1)}
+      />
 
-export default PaginationComp
+      {pageItems}
+
+      <Pagination.Next
+        disabled={activePage === totalPage}
+        onClick={() => handlePageChange(activePage + 1)}
+      />
+    </Pagination>
+  );
+};
+
+export default PaginationComp;

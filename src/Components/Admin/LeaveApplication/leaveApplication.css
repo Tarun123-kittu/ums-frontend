@@ -1,0 +1,11 @@
+.editLeave_outer select.form-control{
+    padding: 8px 20px;
+    color: #747781;
+}
+
+.editLeave_outer input{
+    color: #747781;
+}
+.editLeave_outer textarea{
+    color: #747781;
+}

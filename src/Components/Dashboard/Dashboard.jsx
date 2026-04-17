@@ -12,13 +12,13 @@ const Dashboard = () => {
 
   return (
     <div>
-   <Sidebar/>
-    <div className={`wrapper ${show?"cmn_margin":""}`  }>
-    <Header/>
-    <div className='text-end register_btn_wrapper'>
-      <button className='cmn_btn'><IoMdAdd /> Register</button>
-    </div>
-    </div>
+      <Sidebar />
+      <div className={` ${show ? "cmn_margin" : ""}`}>
+        <Header />
+        <div className='text-end register_btn_wrapper'>
+          <button className='cmn_btn'><IoMdAdd /> Register</button>
+        </div>
+      </div>
     </div>
   )
 }

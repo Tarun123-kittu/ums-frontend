@@ -1,0 +1,219 @@
+.attendence_heading{
+    color: white;
+    padding: 7px 35px 0px;
+    margin: px;
+    font-size: 24px;
+
+}
+.rating_outer svg {
+    color: #eb833e;
+    font-size: 18px;
+}
+.rating_outer h3{
+    color: #798495;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.card-cmn {
+    background: #fff;
+    padding: 30px;
+    border: 1px solid #F8F9FA;
+    box-shadow: 0px 4px 20px 0 #EEEEEE80;
+    border-radius: 10px;
+}
+ 
+button.cmn_bg_btn {
+    border: unset;
+    background: #9E0302;
+    border-radius: 35px;
+    color: #fff;
+    padding: 5px 20px;
+}
+
+.admin_dashboard_outer {
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+   
+}
+.admin_dashboard_outer.no-border.mt-0{
+    background-color:transparent;
+    border: transparent;
+}
+
+
+.attendence_submit h4 {
+    font-size: 18px;
+    color: #05004E;
+    font-weight: 600;
+}
+
+/* .attendence_submit label {
+    font-size: 14px;
+    color: #748f74;
+    margin-bottom: 4px;
+    font-weight: 400;
+} */
+.cmn_card .rbc-toolbar button {
+    border-color: #a30d03;
+    color: #a30d03;
+}
+
+.cmn_card .rbc-toolbar button.rbc-active {
+    background: #a30d03;
+    color: #fff;
+}
+
+  .cmn_card  .rbc-event, .cmn_card  .rbc-day-slot .rbc-background-event{
+    font-size: 12px;
+  }
+  .cmn_card  .rbc-toolbar button:hover{
+    background: #a30d03;
+    color: #fff;
+  }
+  /* employee attendence report */
+
+  .report_header {
+    display: flex;
+    gap: 15px;
+    padding:  25px 0;
+}
+.report_table thead tr th {
+    font-weight: 500;
+    font-size: 14px;
+}
+.norecord_found {
+    padding: 3em 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.norecord_found h4 {
+    margin: 0;
+}
+
+img.login_image {
+    width: 26px;
+}
+
+.dashboard-sections{
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+}
+.attendence_submit  .report_table {
+    border-radius: 20px;
+}
+.attendence_submit .report-table-header th{
+    font-size: 19px;
+    padding: 15px;
+    background-color: #F9F9FC ;
+}
+.attendence_submit .report-table-body td{
+    font-size: 15px;
+    padding: 10px 15px;
+    color: #333843;
+}
+
+.reporting-sub-heading-box h3{
+    font-size: 26px;
+    padding-bottom: 5px;
+    font-weight: 700;
+    margin: 0;
+}
+.reporting-sub-heading-box p{
+    font-size: 16px;
+    padding-bottom: 4px;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+
+}
+.maine-heading{
+    font-size: 40px;
+    padding-bottom: 20px;
+    margin: 0;
+}
+/* input.form-control, select.form-select {
+    padding: 12px 20px;
+    border-radius: 7px;
+    border-radius: 5px;
+    font-size: 16px;
+} */
+.rs-date-range-input.rs-input {
+    padding: 14px 20px;
+    border-radius: 7px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.apply_leave_submit{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 25px;
+}
+.leave_table.table tbody tr td {
+    font-weight: 500;
+    font-size: 17px;
+    color: #333843;
+}
+.leave_table span {
+    color: #667085;
+    font-size: 14px;
+    font-weight: 400;
+}
+.col.inner-leave-item{
+    padding: 20px;
+    background-color: red;
+    border-radius: 20px;
+}
+.col.inner-leave-item:nth-child(1) {
+    background-color:#FFE2E5;
+    border: 1px solid #fa5a7d26;
+}
+.col.inner-leave-item:nth-child(2) {
+    background-color:#FFF4DE; 
+    border: 1px solid #ff947a30;
+}
+.col.inner-leave-item:nth-child(3) {
+    background-color:#DCFCE7; 
+    border: 1px solid #82e89552;
+}
+.col.inner-leave-item:nth-child(4) {
+    background-color: #F3E8FF; 
+    border: 1px solid #bf83ff2b;
+}
+.col.inner-leave-item:nth-child(5) {
+    background-color: #C7E2FF;
+    border: 1px solid #268fff2b;
+}
+.col.inner-leave-item p {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+}
+.col.inner-leave-item span {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Mr Css  */
+
+label.form-label {
+    font-size: 16px;
+    margin: 0;
+    padding-bottom: 5px;
+    color: #687281;
+}
+input.form-control.input-text, select.form-select.select-text, textarea.form-control.textarea-text {
+    padding: 10px 14px;
+    color: #687281;
+    font-size: 16px;
+}

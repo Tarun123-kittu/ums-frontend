@@ -1,0 +1,923 @@
+import React, { useState, useEffect } from "react";
+import Sidebar from "../../Sidebar/Sidebar";
+import { useAppContext } from "../../Utils/appContecxt";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import Notification from "../Notification/Notification";
+import InputField from "../../Common/InputField";
+import { useDispatch, useSelector } from "react-redux";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import toast from "react-hot-toast";
+import "./employee.css";
+import "react-datepicker/dist/react-datepicker.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  update_user,
+  clear_update_user_state,
+} from "../../../utils/redux/userSlice/updateUserSlice";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { ProfileData } from "../../Utils/customData/profileData";
+import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
+import validator from "validator";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
+
+const EditEmployeeInfo = () => {
+  const { show } = useAppContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const permissions = UsePermissions("Users");
+  const obj = [{ name: "Employees", path: "/employee" }];
+  const [all_languagages, setAll_languages] = useState([]);
+  const { user_details, documents } = location?.state
+    ? location?.state
+    : location;
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
+
+  useEffect(() => {
+    dispatch(get_all_roles());
+    dispatch(get_all_languages());
+  }, []);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.language,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
+
+  useEffect(() => {
+    if (
+      !user_details ||
+      typeof user_details !== "object" ||
+      Array.isArray(user_details)
+    ) {
+      navigate("/employee");
+    }
+  }, [user_details]);
+
+  let [id, setId] = useState(user_details?.id);
+  let [account_number, setAccountNumber] = useState(
+    user_details?.account_number
+  ); // String
+  let [address, setAddress] = useState(user_details?.address);
+  let [bank_name, setBankName] = useState(user_details?.bank_name);
+  let [department, setDepartment] = useState(user_details?.department);
+  let [dob, setDob] = useState(user_details?.dob);
+  let [doj, setDoj] = useState(user_details?.doj);
+  let [email, setEmail] = useState(user_details?.email);
+  let [emergency_contact, setEmergencyContact] = useState(
+    user_details?.emergency_contact
+  );
+  let [emergency_contact_name, setEmergencyContactName] = useState(
+    user_details?.emergency_contact_name
+  );
+  let [emergency_contact_relationship, setEmergencyContactRelationship] =
+    useState(user_details?.emergency_contact_relationship);
+  let [gender, setGender] = useState(user_details?.gender);
+  let [ifsc, setIfsc] = useState(user_details?.ifsc);
+  let [increment_date, setIncrementDate] = useState(
+    user_details?.increment_date
+  );
+  let [installments, setInstallments] = useState(user_details?.installments);
+  let [mobile, setMobile] = useState(user_details?.mobile);
+  let [name, setName] = useState(user_details?.name);
+  let [position, setPosition] = useState(user_details?.position);
+  let [role, setRole] = useState(user_details?.role);
+  let [salary, setSalary] = useState(user_details?.salary || "");
+  let [security, setSecurity] = useState(user_details?.security || "");
+  let [skype_email, setSkypeEmail] = useState(user_details?.skype_email);
+  let [status, setStatus] = useState(user_details?.status);
+  let [work_schedule, setWork_schedule] = useState(user_details?.working_schedule);
+  let [total_security, setTotalSecurity] = useState(
+    user_details?.total_security || ""
+  );
+  let [ultivic_email, setUltivicEmail] = useState(user_details?.ultivic_email);
+  let [username, setUsername] = useState(user_details?.username);
+  let [selected_documents, setSelected_documents] = useState([]);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const update_user_details = useSelector((store) => store.UPDATE_USER);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+  const roles = useSelector((store) => store.ALL_ROLES);
+
+  useEffect(() => {
+    if (update_user_details?.isSuccess) {
+      toast.success("User updated Successfully");
+      dispatch(clear_update_user_state());
+      navigate("/employee");
+    }
+
+    if (update_user_details?.isError) {
+      toast.error(update_user_details?.error?.message);
+      dispatch(clear_update_user_state());
+    }
+  }, [update_user_details]);
+
+  const workingScheduleOptions = [
+    {value : "full-time",label : "Fulltime"},
+    {value : "split",label : "Split"},
+    {value : "part-time",label : "Parttime"},
+  ]
+
+  useEffect(() => {
+    if (documents?.data?.data?.length > 0) {
+      let newArr = [];
+      documents.data.data.map((data) => {
+        const documentName = data.document_name;
+        if (!newArr.includes(documentName)) {
+          newArr.push(documentName);
+        }
+      });
+      setSelected_documents(newArr);
+    }
+  }, [documents]);
+
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
+  const [missingData, setMissingData] = useState({
+    username: false,
+    name: false,
+    email: false,
+    mobile: false,
+    position: false,
+    department: false,
+    dob: false,
+    doj: false,
+    status: false,
+    gender: false,
+    role: false,
+    confirm_password: false,
+    password: false,
+  });
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const optionalFields = [
+      "emergency_contact",
+      "emergency_contact_relationship",
+      "emergency_contact_name",
+      "bank_name",
+      "account_number",
+      "ifsc",
+      "increment_date",
+      "dob",
+      "doj",
+      "skype_email",
+      "ultivic_email",
+      "salary",
+      "security",
+      "total_security",
+      "installments",
+      "address",
+    ];
+
+    const field_data = {
+      name,
+      username,
+      email,
+      mobile,
+      emergency_contact_relationship,
+      emergency_contact_name,
+      emergency_contact,
+      bank_name,
+      account_number,
+      ifsc,
+      increment_date,
+      gender,
+      dob,
+      doj,
+      skype_email,
+      ultivic_email,
+      salary,
+      security,
+      total_security,
+      installments,
+      position,
+      department,
+      status,
+      role,
+      work_schedule,
+      address,
+      documents: selected_documents,
+    };
+
+    const newErrorMessages = {}; // Object to track errors
+
+    const missingFields = Object.entries(field_data)
+      .filter(([key, value]) => {
+        if (optionalFields.includes(key)) {
+          return false;
+        }
+        return typeof value === "string" ? value.trim() === "" : value === null;
+      })
+      .map(([key]) => key);
+
+    // Validate email fields
+    const invalidEmails = [];
+    if (field_data.skype_email && !validator.isEmail(field_data.skype_email)) {
+      invalidEmails.push("skype_email");
+      newErrorMessages["skype_email"] = "Skype Email is invalid.";
+      toast.error("Skype Email is invalid.");
+    }
+    if (
+      field_data.ultivic_email &&
+      !validator.isEmail(field_data.ultivic_email)
+    ) {
+      invalidEmails.push("ultivic_email");
+      newErrorMessages["ultivic_email"] = "Ultivic Email is invalid.";
+      toast.error("Ultivic Email is invalid.");
+    }
+    if (field_data.email && !validator.isEmail(field_data.email)) {
+      invalidEmails.push("email");
+      newErrorMessages["email"] = "Email is invalid.";
+      toast.error("Email is invalid.");
+    }
+    if (!field_data.role) {
+      invalidEmails.push("role");
+      newErrorMessages["role"] = "Role is Required.";
+    }
+    if (!field_data.address) {
+      invalidEmails.push("address");
+      newErrorMessages["address"] = "address is Required.";
+      toast.error("address is Required");
+    }
+    if (!field_data.work_schedule) {
+      invalidEmails.push("work_schedule");
+      newErrorMessages["work_schedule"] = "Working Schedule is Required.";
+      toast.error("Working Schedule is Required");
+    }
+
+    // Display toast and set error messages for missing fields
+    if (missingFields.length > 0) {
+      missingFields.forEach((field) => {
+        newErrorMessages[field] = `${field.replace(/_/g, " ")} is required.`;
+        toast.error(`${field.replace(/_/g, " ")} is required.`);
+      });
+    }
+
+    // Update errorMessages state
+    setErrorMessages(newErrorMessages);
+
+    // Proceed if no errors
+    if (invalidEmails.length === 0 && missingFields.length === 0) {
+      dispatch(
+        update_user({
+          ...field_data,
+          id,
+        })
+      );
+    }
+  };
+
+  const documentsName = [
+    { id: 1, name: "Aadhar Card" },
+    { id: 2, name: "PAN Card" },
+    { id: 3, name: "Qualification" },
+    { id: 4, name: "Experience" },
+    { id: 5, name: "Bank Statement" },
+    { id: 6, name: "Training Certificate" },
+  ];
+
+  const handleCheckboxChange = (documentName) => {
+    setSelected_documents((prevSelected) => {
+      if (prevSelected.includes(documentName)) {
+        return prevSelected.filter((item) => item !== documentName);
+      } else {
+        return [...prevSelected, documentName];
+      }
+    });
+  };
+
+  function formatDateToYYYYMMDD(dateString) {
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  return permissions?.can_view ? (
+    <section className="add_new_emp_container">
+      <div
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
+        <div className="cmn_padding_outer card-cmn">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+          />
+          <div className="new_employee_wrapper cmn_border card-cmn">
+            <form>
+              <div className="row">
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Name"}
+                    span={true}
+                    placeholder={"Name of the employee"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    styleTrue={errorMessages?.name} // Pass error message to show inline
+                  />
+                  {errorMessages?.name && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.name}
+                    </span>
+                  )}{" "}
+                  {/* Inline error */}
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Email"}
+                    span={true}
+                    placeholder={"Email of the employee"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    styleTrue={errorMessages?.email}
+                  />
+                  {errorMessages?.email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.email}
+                    </span>
+                  )}
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Mobile"}
+                    span={true}
+                    placeholder={"Mobile of the employee"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={mobile}
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      input = input.replace(/\D/g, "");
+                      if (input.length > 10) {
+                        input = input.slice(0, 10);
+                      }
+                      setMobile(input);
+                    }}
+                    styleTrue={errorMessages?.mobile}
+                  />
+                  {errorMessages?.mobile && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.mobile}
+                    </span>
+                  )}
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Emergency Contact Relationship "}
+                    placeholder={"Relationship of the employee"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={emergency_contact_relationship}
+                    onChange={(e) =>
+                      setEmergencyContactRelationship(e.target.value)
+                    }
+                  />
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Emergency Contact Name"}
+                    placeholder={"Emergency Contact Name"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={emergency_contact_name}
+                    onChange={(e) => setEmergencyContactName(e.target.value)}
+                  />
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Emergency Contact"}
+                    placeholder={"Emergency mobile no of the employee"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={emergency_contact}
+                    onChange={(e) => setEmergencyContact(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Bank Name"}
+                    placeholder={"Bank Name"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={bank_name}
+                    onChange={(e) => setBankName(e.target.value)}
+                  />
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Account Number"}
+                    placeholder={"Account Number"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={account_number}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 0) {
+                        setAccountNumber(value);
+                      }
+                    }}
+                  />
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"IFCE"}
+                    placeholder={"Bank IFCE Code"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={ifsc}
+                    onChange={(e) => setIfsc(e.target.value)}
+                  />
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group ">
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Incremented Date"}
+                        placeholder={"Select increment date"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(doj)}
+                        onChange={(e) => setIncrementDate(e.target.value)}
+                        styleTrue={errorMessages?.increment_date}
+                      // min={true}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Gender <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      style={
+                        missingData?.gender
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                    {errorMessages?.gender && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.gender}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group ">
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of Birth"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(dob)}
+                        onChange={(e) => setDob(e.target.value)}
+                        styleTrue={errorMessages?.doj}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group ">
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of joining"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={formatDateToYYYYMMDD(doj)}
+                        onChange={(e) => setDoj(e.target.value)}
+                        styleTrue={errorMessages?.doj}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages?.doj}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Skype"}
+                    placeholder={"Skype"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={skype_email}
+                    onChange={(e) => setSkypeEmail(e.target.value)}
+                    styleTrue={errorMessages.skype_email}
+                  />
+                  {errorMessages?.skype_email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.skype_email}
+                    </span>
+                  )}{" "}
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    labelname={"Ultivic Email"}
+                    placeholder={"Ultivic Email"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={ultivic_email}
+                    onChange={(e) => setUltivicEmail(e.target.value)}
+                    styleTrue={errorMessages.ultivic_email}
+                  />
+                  {errorMessages?.ultivic_email && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.ultivic_email}
+                    </span>
+                  )}{" "}
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    isRequred={true}
+                    symbol={"₹"}
+                    labelname={"Salary"}
+                    placeholder={"Salary"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={salary}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSalary(newValue);
+                      }
+                    }}
+                  />
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    isRequred={true}
+                    symbol={"%"}
+                    labelname={"Security"}
+                    placeholder={"Security"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSecurity(newValue);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    isRequred={true}
+                    symbol={"₹"}
+                    labelname={"Total Security"}
+                    placeholder={"Security"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={total_security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setTotalSecurity(newValue);
+                      }
+                    }}
+                  />
+
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label> Installment</label>
+                    <select
+                      className="form-control"
+                      value={installments}
+                      onChange={(e) => setInstallments(e.target.value)}
+                    >
+                      <option>Select</option>
+                      <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Position <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                      style={
+                        errorMessages?.position
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select</option>{" "}
+                      {positionData.map((data, i) => {
+                        return (
+                          <option key={i} value={data?.value}>
+                            {data?.label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.position && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.position}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Technology/Department{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      style={
+                        errorMessages?.department
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select</option>
+                      {all_languagages?.map((data, i) => {
+                        return (
+                          <option value={data?.value}>{data?.label}</option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.department && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.department}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Status <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      style={
+                        errorMessages?.status
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select</option>
+                      {statusObj?.map((data, i) => {
+                        return (
+                          <option key={i} value={data?.value}>
+                            {data?.label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.status && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <InputField
+                    span={true}
+                    labelname={"Username"}
+                    placeholder={"Username"}
+                    classname={"new_employee_form_group"}
+                    type={"text"}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    styleTrue={errorMessages?.username}
+                  />
+                  {errorMessages?.username && (
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {errorMessages.username}
+                    </span>
+                  )}
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Role<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      style={
+                        errorMessages?.role
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select Role</option>
+                      {roles?.data?.data?.map((role, i) => {
+                        if (role?.role === "Admin") {
+                          return null;
+                        }
+                        return (
+                          <option key={i} value={role?.role}>
+                            {role?.role}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.role && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.role}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Working Schedule<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      value={work_schedule}
+                      onChange={(e) => setWork_schedule(e.target.value)}
+                      style={
+                        errorMessages?.role
+                          ? { border: "1px solid red", borderRadius: "10px" }
+                          : {}
+                      }
+                    >
+                      <option value="">Select Role</option>
+                      {workingScheduleOptions?.map((work, i) => {
+                        return (
+                          <option key={i} value={work?.value}>
+                            {work?.value}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errorMessages?.role && (
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {errorMessages.role}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-group new_employee_form_group">
+                <label>
+                  Address <span style={{ color: "red" }}>*</span>
+                </label>
+                <textarea
+                  className="form-control mt-3"
+                  placeholder="Address"
+                  rows={5}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  style={
+                    errorMessages?.address ? { border: "1px solid red" } : {}
+                  }
+                />
+                {errorMessages?.address && (
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {errorMessages.address}
+                  </span>
+                )}
+              </div>
+              <div className=" mt-3 card-cmn">
+                <Table responsive className="leave_table mb-0 ">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Document Name</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {documentsName.map((document) => (
+                      <tr key={document.id}>
+                        <td>{document.id}</td>
+                        <td>{document.name}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={
+                              Array.isArray(selected_documents) &&
+                              selected_documents.includes(document.name)
+                            }
+                            onChange={() => handleCheckboxChange(document.name)} // Prevent users from checking it manually
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <div
+                className="text-center mt-3"
+                onClick={(e) => handleUpdate(e)}
+              >
+                <button className="cmn_Button_style">
+                  {update_user_details?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <UnauthorizedPage />
+  );
+};
+
+export default EditEmployeeInfo;

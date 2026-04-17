@@ -1,45 +1,95 @@
-import React from 'react'
-import { Modal } from 'react-bootstrap'
-import { RiDeleteBinLine } from 'react-icons/ri'
-import { useNavigate } from 'react-router-dom'
-import InputField from '../Common/InputField'
+import React, { useState } from "react";
+import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import InputField from "../Common/InputField";
+import { UsePermissions } from "../Utils/customHooks/useAllPermissions";
+import toast from "react-hot-toast";
 
-const HrQuestionModal = ({show,setShow}) => {
-const navigate=useNavigate()
+const HrQuestionModal = ({ show, setShow, leadId }) => {
+  const navigate = useNavigate();
+  const permissions = UsePermissions("Interviews");
+  const [count, setCount] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
 
-const handleClose=()=>{
-    setShow(false)
-}
-const startHandler=()=>{
-    setShow(false)
-    navigate("/hrInterViewQuestion")
-}
+  const handleClose = () => {
+    setShow(false);
+  };
+  const startHandler = () => {
+    const missingData = {};
+    if (count === "") {
+      toast.error("please perovide how many questions do you want to ask");
+      missingData.count =
+        "please perovide how many questions do you want to ask";
+      setErrorMessage(missingData);
+      return;
+    }
+    setShow(false);
+    navigate("/hrInterViewQuestion", { state: { count: count, leadId } });
+  };
+
+  const handleSaveCount = (e) => {
+    const value = e.target.value;
+    if (value === "") {
+      setCount(null);
+      return;
+    }
+    const numericValue = Number(value);
+    if (numericValue < 1 || numericValue > 5) {
+      setCount(null);
+    } else {
+      setCount(numericValue);
+    }
+  };
+
   return (
-    <div>    
- <Modal
+    <div>
+      <Modal
         show={show}
         size="md"
         aria-labelledby="contained-modal-title-vcenter Invite_candidate_modal"
         centered
         onHide={handleClose}
         className="custom_modal_container"
-    >
-        <Modal.Header closeButton>
-          
-        </Modal.Header>
+      >
+        <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-            <h3 className='heading'>HR round interview questions  </h3>
-            <InputField placeholder={"Enter Question Number"} labelname={"Question"} type={"number"} classname={"new_employee_form_group"}/>
-           
-         
+          <h3 className="heading">HR round interview questions </h3>
+          <InputField
+            isRequred={true}
+            placeholder={"Enter Question Number"}
+            labelname={"How many questions do you want to ask?"}
+            classname={"new_employee_form_group"}
+            type={"text"}
+            value={count}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              const numericPattern = /^\d*\.?\d*$/;
+              if (newValue === "" || numericPattern.test(newValue)) {
+                setCount(newValue);
+              }
+            }}
+            styleTrue={errorMessage?.count}
+          />
+          <span style={{ color: "red", fontSize: "13px" }}>
+            {errorMessage?.count}
+          </span>
         </Modal.Body>
         <Modal.Footer>
-            <button className='cmn_Button_style cmn_darkgray_btn'>Cancel </button>
-            <button className='cmn_Button_style' onClick={startHandler}>Start</button>
+          <button
+            className="cmn_Button_style cmn_darkgray_btn"
+            onClick={() => setShow(false)}
+          >
+            Cancel{" "}
+          </button>
+          {permissions?.can_create && (
+            <button className="cmn_Button_style" onClick={startHandler}>
+              Start
+            </button>
+          )}
         </Modal.Footer>
-    </Modal>
-</div>
-  )
-}
+      </Modal>
+    </div>
+  );
+};
 
-export default HrQuestionModal
+export default HrQuestionModal;

@@ -8,10 +8,10 @@ button.login-button {
     border: none;
     padding: 8px;
     color: white;
-    background: #FF3030;
+    background: #9E0302;
     border-radius: 11px;
     font-size: 17px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 600;
 }
 
@@ -19,7 +19,7 @@ button.login-button {
   color:"#6C6F75";
   font-size: 14px;
   font-weight: 500;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
 
 }
 
@@ -42,7 +42,7 @@ a:-webkit-any-link:focus-visible {
     color: #282A30;
     font-size: 16px;
     font-weight: 500;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
 }
 a.login_text {
     color: #ce2128;
@@ -88,7 +88,17 @@ a.login_text {
     width: 200px;
     object-fit: contain;
 }
+.login_back span {
+    color: #595959;
+    font-weight: 400;
+    cursor: pointer;
+}
 
+.login_wrapper input {
+    background: transparent;
+    min-height: 56px;
+    font-family: 'Montserrat';
+}
 @media screen and (min-width:1900px){
     .ultivic_logo{
         height: 57px;
@@ -104,10 +114,7 @@ a.login_text {
         height: 200px;
         width: 400px;
     }
-    .form-group label {
-      
-        font-size: 20px;
-    }
+   
     button.login-button {
         font-size: 20px;
     }
@@ -122,7 +129,7 @@ a.login_text {
         font-size: 38px;
     }
     .form-group label {
-        font-size: 15px;
+        font-size: 14px;
     }
     .ultivic_logo {
         height: 46px;

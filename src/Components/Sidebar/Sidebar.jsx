@@ -1,325 +1,1003 @@
 import React, { useEffect, useState } from "react";
 import { FaBars, FaRegUser } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { RiLockPasswordLine, RiQuestionnaireFill } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
-import { PiNotebookFill } from "react-icons/pi";
-import { FaUserGroup } from "react-icons/fa6";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import {
-  MdKeyboardArrowDown,
-  MdOutlineEditCalendar,
+  MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
-  MdOutlineQuickreply,
 } from "react-icons/md";
 import logo from "../assets/logo1.png";
-import { IoIosArrowUp, IoIosLogOut } from "react-icons/io";
-
+import { IoIosLogOut } from "react-icons/io";
 import "./Sidebar.css";
-import { CiUser } from "react-icons/ci";
 import { useAppContext } from "../Utils/appContecxt";
-import LogoutModal from "../Modal/LogoutModal";
-import ChangePassword from "../Modal/ChangePassword";
-import { AiOutlineDashboard } from "react-icons/ai";
-
-import menuitems, { developerMenuitems, hrMenuitems } from "./MenuItem";
-import { IoCalendarOutline } from "react-icons/io5";
-import { HiOutlineUsers } from "react-icons/hi";
-import { TbUsersGroup } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { get_logged_in_user_permissions } from "../../utils/redux/userPermissionSlice/userpermissionSlice";
+import { useDispatch, useSelector } from "react-redux";
+import menuitems from "./MenuItem";
+import { save_user_permission_and_roles_globally } from "../../utils/redux/userPermissionSlice/userRolesAndPermissionSlice";
+import UseAllUsernames from "../Utils/customHooks/useAllUserNames";
+
+const AllPermissions = [
+  "Salary",
+  "Attandance",
+  "Events",
+  "Interviews",
+  "Users",
+  "Test",
+  "Leaves",
+  "Dashboard",
+  "Teams",
+];
+
 const Sidebar = () => {
+  UseAllUsernames();
   const navigate = useNavigate();
   const path = useLocation();
+  const dispatch = useDispatch();
   const { show, setShow } = useAppContext();
   const [showChangePassword, setShowChangePassword] = useState(false);
-  const [showAttendenceReportDropdown, setShowAttendenceReportDropdown] =
-    useState(false);
-  const [showLeaveDropdown, setShowLeaveDropdown] = useState(false);
-  const [showInterviewDropdown, setShowInterviewDropdown] = useState(false);
+  const [uniqueRoles, setUniqueRoles] = useState();
+  const all_permissions = useSelector((store) => store.USER_PERMISSIONS);
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+
+  const [permissions, setPermissions] = useState({});
+  const checkPermissions = (permission, rolesData, permissionData) => {
+    return rolesData.some((role) => {
+      const userPermission = permissionData.find(
+        (up) => up.permission === permission && up.role === role
+      );
+      return userPermission ? !!userPermission.can_view : false;
+    });
+  };
+  useEffect(() => {
+    const permissionsStatus = {};
+
+    AllPermissions.forEach((permission) => {
+      permissionsStatus[`${permission}_can_view`] = checkPermissions(
+        permission,
+        user_all_permissions?.roles_data,
+        user_all_permissions?.permission_data
+      );
+    });
+
+    setPermissions(permissionsStatus);
+  }, [user_all_permissions]);
 
   useEffect(() => {
-    if (!localStorage.getItem("ums_token")) {
-      navigate("/login");
+    dispatch(get_logged_in_user_permissions());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (all_permissions?.isSuccess) {
+      const uniqueRole = [];
+      all_permissions?.data?.data?.forEach((item) => {
+        if (!uniqueRole.includes(item?.role)) {
+          uniqueRole.push(item?.role);
+        }
+      });
+      setUniqueRoles(uniqueRole);
+      dispatch(
+        save_user_permission_and_roles_globally({
+          uniqueRole,
+          permissions: all_permissions?.data?.data,
+        })
+      );
     }
-  }, []);
+  }, [all_permissions]);
+
   const handleLogout = () => {
     localStorage.clear("ums_token");
     toast.success("Logout successfully!!", { autoClose: 2000 });
-    navigate("/login");
+    navigate("/");
   };
 
   const handleChangePassword = () => {
     setShowChangePassword(true);
   };
+  const [expanded, setExpanded] = useState(null);
+
+  const handleToggle = (index) => {
+    setExpanded(expanded === index ? null : index);
+  };
+  useEffect(() => {
+    menuitems.forEach((data, index) => {
+      if (data.subItems) {
+        const subItemMatch = data.subItems.some(
+          (subItem) => path.pathname === subItem.pathname
+        );
+        if (subItemMatch) {
+          setExpanded(index);
+        }
+      }
+    });
+  }, [path.pathname, menuitems]);
+
   return (
-    <>
-      <div className={`sidebar ${show ? "cmn_width" : ""}`}>
-        <h3
-          className={`bar ${show ? "text-center" : "pe-3"}`}
-          onClick={() => {
-            setShow(!show);
-          }}
-        >
-          {show ? <FaBars /> : <RxCross2 className="p-0 text-center" />}
-        </h3>
-        <div
-          className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}
-        >
-          <img src={logo} height={"40px"} width={"158px"} />
-          {/* <h3 className="mt-1">TECHNOLOGIES</h3> */}
-        </div>
+    <div className={`sidebar ${show ? "cmn_width" : ""}`}>
+      <h3
+        className={`bar ${show ? "text-center" : "pe-3"}`}
+        onClick={() => {
+          setShow(!show);
+        }}
+        style={{ padding: '12px 16px 0px' }}
+      >
+        {show ? <FaBars /> : <RxCross2 className="p-0 text-center ms-auto" />}
+      </h3>
 
-        {/* <>
-              <div className={`sidebar-button mt-4 ${path.pathname === "/candidates" ? "active-pathname" : ""}`} >
-                <div className="sidebar_content"><CiUser /> 
-                  <h4 className={show ? "d-none" : "sidebar_content"} >Candidates</h4>
+      <div
+        className={`${show ? "d-none" : "text-center sidebar_logo_outer"}`}
+        style={{
+          cursor: "pointer",
+          paddingLeft: "45px",
+        }}
+        onClick={() => navigate("/dashboard")}
+      >
+        <img src={logo} height={"40px"} width={"158px"} alt="" />
+      </div>
+
+
+      <div className="mt-4 nomargintop">
+        {menuitems.map((data, i) => {
+          const isActive = path.pathname === data?.pathname;
+          if (permissions?.Dashboard_can_view && data?.name === "Dashboard" && !uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                        title={data?.name}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/ultivic-team" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content">
-                  <FaUserGroup />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >Team Hub</h4>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (permissions?.Users_can_view && data?.name === "Employees" && !uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/hr-screening" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content"><CiUser />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >HR Screening</h4>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Attandance_can_view &&
+            data?.name === "Attendance Report" && !uniqueRoles?.includes("Employee")
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </div>
-              <div className={`sidebar-button ${path.pathname === "/hr-round-response" ? "active-pathname" : ""}`}  >
-                <div className="sidebar_content"><MdOutlineQuickreply />
-                  <h4 className={show ? "d-none" : "sidebar_content"} >HR feedback </h4>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Events_can_view &&
+            data?.name === "Holiday & Events"
+            && !uniqueRoles?.includes("Employee")
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </div>
-            </> */}
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Leaves_can_view &&
+            data?.name === "Leave Application"
+            && !uniqueRoles?.includes("Employee")
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (
+            permissions?.Interviews_can_view &&
+            data?.name === "InterView Leads"
+            && !uniqueRoles?.includes("Employee")
+          ) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (permissions?.Test_can_view && data?.name === "Test Series" && !uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (data?.name === "Teams & Roles" && !uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          // employee dashboard
+          if (data?.name === "Employee Dashboard" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name === "Employee Dashboard" && "Dashboard"}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name === "Employee Dashboard" && "Dashboard"}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (data?.name === "Employee Attendence Report" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name === "Employee Attendence Report" && "Attendence Report"}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
+          if (data?.name === "Apply For Leave" && uniqueRoles?.includes("Employee")) {
+            return (
+              <>
+                <div
+                  key={i}
+                  className={`sidebar-button ${isActive ? "active-pathname" : ""
+                    }`}
+                >
+                  {data.subItems ? (
+                    <>
+                      <div
+                        className="sidebar_content justify-content-between"
+                        onClick={() => handleToggle(i)}
+                      >
+                        <div
+                          className={`transition_class ${show ? "" : "d-flex flex-grow-1 gap-2 "
+                            }`}
+                        >
+                          <img
+                            src={data?.icon}
+                            alt={data?.name}
+                            height="18px"
+                            width="18px"
+                            className={isActive ? "filterClass" : ""}
+                          />
+                          <h4 className={show ? "d-none" : ""}>{data?.name}</h4>
+                        </div>
+                        {show ? (
+                          ""
+                        ) : expanded === i ? (
+                          <MdOutlineKeyboardArrowUp
+                            onClick={() => {
+                              handleToggle(i);
+                            }}
+                          />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <Link to={data?.pathname}>
+                      <div className="sidebar_content ">
+                        <img
+                          src={data?.icon}
+                          alt={data?.name}
+                          height="18px"
+                          width="18px"
+                          className={isActive ? "filterClass" : ""}
+                        />
+                        <h4 title={data?.name} className={show ? "d-none" : ""}>{data?.name}</h4>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                {expanded === i && (
+                  <ul className="list_inner_item_outer">
+                    {data?.subItems?.map((subItem, j) => (
+                      <li className="">
+                        <Link
+                          to={subItem.pathname}
+                          className={
+                            path.pathname === subItem.pathname
+                              ? "active_path"
+                              : ""
+                          }
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+          }
 
-        {/* <div className="mt-4">
-            <div className={`sidebar-button  ${path.pathname === "/homepage" ? "active-pathname" : ""}`}  >
-              <div className="sidebar_content">
-                <RiQuestionnaireFill />
-                <h4 className={show ? "d-none" : "sidebar_content"}>Questionnaire</h4>
 
-              </div>
-            </div>
-
-            <div className={`sidebar-button ${path.pathname === "/candidates-performance" ? "active-pathname" : ""}`}>
-              <div className="sidebar_content">
-                <PiNotebookFill className="sidebar_content" />
-                <h4 className={show ? "d-none" : "sidebar_content"}> Candidate Results</h4>
-              </div>
-            </div>
-            
-            
-            
-
-          </div>  */}
-        {/* <div className={`sidebar-button`} onClick={handleChangePassword}>
-              <div className="sidebar_content">
-                <RiLockPasswordLine className="sidebar_content" />
-                <h4 className={show ? "d-none" : "sidebar_content"}> Change Password </h4>
-              </div>
-            </div> */}
-        {/* admin sidebar */}
-        <div
-          className={`sidebar-button mt-4 ${
-            path.pathname === "/adminDashboard" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/adminDashboard">
-            <div className="sidebar_content">
-              <AiOutlineDashboard />
-              <h4 className={show ? "d-none" : "sidebar_content"}>Dashboard</h4>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/employee" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/employee">
-            <div className="sidebar_content">
-              <FaRegUser />
-              <h4 className={show ? "d-none" : "sidebar_content"}>Employees</h4>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/ultivic-team" ? "active-pathname" : ""
-          }`}
-        >
-          <div
-            className="sidebar_content justify-content-between "
-            onClick={() => {
-              setShowAttendenceReportDropdown(!showAttendenceReportDropdown);
-            }}
-          >
-            <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-              <MdOutlineEditCalendar />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Attendence Report{" "}
-              </h4>
-            </div>
-            {show ? (
-              ""
-            ) : showAttendenceReportDropdown ? (
-              <MdOutlineKeyboardArrowUp />
-            ) : (
-              <MdKeyboardArrowDown />
-            )}
-          </div>
-        </div>
-        {show
-          ? ""
-          : showAttendenceReportDropdown && (
-              <ul className="list_inner_item_outer">
-                <li>
-                  <Link
-                    to="/todayAttendence"
-                    className={
-                      path.pathname === "/todayAttendence" ? "active_path" : ""
-                    }
-                  >
-                    Attendence Today
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/attendenceReport"
-                    className={
-                      path.pathname === "/attendenceReport" ? "active_path" : ""
-                    }
-                  >
-                    Attendence Report
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/incompleteAttendence"
-                    className={
-                      path.pathname === "/incompleteAttendence"
-                        ? "active_path"
-                        : ""
-                    }
-                  >
-                    Incomplete Attendence
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/holiday" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/holiday">
-            <div className="sidebar_content">
-              <IoCalendarOutline />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Holidays & Events
-              </h4>
-            </div>
-          </Link>
-        </div>
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/leaveApplication" ? "active-pathname" : ""
-          }`}
-        >
-          <div
-            className="sidebar_content justify-content-between"
-            onClick={() => {
-              setShowLeaveDropdown(!showLeaveDropdown);
-            }}
-          >
-            <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-              <MdOutlineEditCalendar />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Leave Application{" "}
-              </h4>
-            </div>
-
-            {show ? (
-              ""
-            ) : showLeaveDropdown ? (
-              <MdOutlineKeyboardArrowUp />
-            ) : (
-              <MdKeyboardArrowDown />
-            )}
-          </div>
-        </div>
-        {show
-          ? ""
-          : showLeaveDropdown && (
-              <ul className="list_inner_item_outer">
-                <li>
-                  <Link
-                    to="/leaveRequest"
-                    className={
-                      path.pathname === "/leaveRequest" ? "active_path" : ""
-                    }
-                  >
-                    Leave Request
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/leaveBank"
-                    className={
-                      path.pathname === "/leaveBank" ? "active_path" : ""
-                    }
-                  >
-                    Leave Bank
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/leaveReport"
-                    className={
-                      path.pathname === "/leaveReport" ? "active_path" : ""
-                    }
-                  >
-                    Leave Report
-                  </Link>
-                </li>
-              </ul>
-            )}
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/interviewLead" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/interviewLead">
-            <div className="sidebar_content justify-content-between">
-              <div className={show ? "" : "gap-2 d-flex flex-grow-1"}>
-                <HiOutlineUsers />
-                <h4 className={show ? "d-none" : "sidebar_content"}>
-                  Interview Leads{" "}
-                </h4>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        <div
-          className={`sidebar-button ${
-            path.pathname === "/rolePermission" ? "active-pathname" : ""
-          }`}
-        >
-          <Link to="/rolePermission">
-            <div className="sidebar_content">
-              <TbUsersGroup />
-              <h4 className={show ? "d-none" : "sidebar_content"}>
-                Teams & Roles
-              </h4>
-            </div>
-          </Link>
-        </div>
-        {/* admin sidebar end */}
+        })}
         <div className={`sidebar-button`} onClick={handleLogout}>
           <div className="sidebar_content">
             <IoIosLogOut className="sidebar_content" />
@@ -327,8 +1005,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      
-    </>
+    </div>
   );
 };
 

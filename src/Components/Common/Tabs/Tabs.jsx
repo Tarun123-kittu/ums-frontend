@@ -1,303 +1,1197 @@
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import HrQuestionModal from '../../Modal/HrQuestionModal';
-import { useState } from 'react';
-import TechInterviewQuestionModal from '../../Modal/TechInterviewQuesModal';
-import insight_icon from "../../assets/insight.svg"
-import "./tabs.css"
-import { useNavigate } from 'react-router-dom';
-import CustomSelectComp from '../CustomSelectComp';
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import HrQuestionModal from "../../Modal/HrQuestionModal";
+import { useEffect, useState } from "react";
+import TechInterviewQuestionModal from "../../Modal/TechInterviewQuesModal";
+import insight_icon from "../../assets/insight.svg";
+import "./tabs.css";
+import { useNavigate, useLocation } from "react-router-dom";
+import CustomSelectComp from "../CustomSelectComp";
+import { get_all_leads } from "../../../utils/redux/interviewLeadsSlice/getAllLeads";
+import { get_hr_round_candidate } from "../../../utils/redux/interviewLeadsSlice/hrRound/getHrRoundCandidate";
+import {
+  hr_update_lead_status,
+  clear_hr_lead_updated_status,
+} from "../../../utils/redux/interviewLeadsSlice/hrRound/hrUpdateLeadStatus";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
+import {
+  update_technical_round_status,
+  clear_tech_round_status_state,
+} from "../../../utils/redux/interviewLeadsSlice/technicalRound/updateTechnicalRoundStatus";
+import {
+  update_face_round_status,
+  clear_face_round_state,
+} from "../../../utils/redux/interviewLeadsSlice/technicalRound/updateFaceToFaceRoundStatus";
+import {
+  update_lead_round_count,
+  clear_lead_round_status,
+} from "../../../utils/redux/interviewLeadsSlice/technicalRound/updateInRoundCount";
+import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
+import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
+import PaginationComp from "../../Pagination/Pagination";
+import Loader from "../../assets/Loader.gif";
+import NoData from "../../assets/nodata.jpg";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+import {
+  delete_lead,
+  clear_delete_lead_slice,
+} from "../../../utils/redux/interviewLeadsSlice/deleteLeads";
+import { Table } from "react-bootstrap";
+import { FiEdit } from "react-icons/fi";
+import EditInterviewLeadModal from '../../Modal/EditInterviewLeadModal'
+function TabComp({ setCurrentTab, setOpen_tab }) {
+  const permissions = UsePermissions("Interviews");
+  const [showHrQuestionModal, setShowHrQuestionModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showTechInterviewQuesModal, setShowTechInterviewQuesModal] =
+    useState(false);
+  const na = "Not Available";
+  const resultData = [
+    { value: "selected", label: "Select" },
+    { value: "rejected", label: "Reject" },
+    { value: "on hold", label: "On Hold" },
+    { value: "pending", label: "Pending" },
+  ];
+  const navigate = useNavigate("/viewQuestionlist");
+  const [activeTab, setActiveTab] = useState("Add Person");
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { tab } = location?.state ? location?.state : location;
 
-function TabComp() {
-const[showHrQuestionModal,setShowHrQuestionModal]=useState(false)
-const[showTechInterviewQuesModal,setShowTechInterviewQuesModal]=useState(false)
-const resultData=[
-  { value: 'Selected', label: 'Selected' },
-  { value: 'Rejected', label: 'Rejected' },
-  { value: 'On Hold', label: 'On Hold'},
-]
-const navigate=useNavigate("/viewQuestionlist")
-  return (
-<div>
+  useEffect(() => {
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
+  const [lead, setLead] = useState()
+  const[editInterviewLeadModal, setEditInterviewLeadModal] = useState(false)
+  // const showEditModal =() =>{
+  //   setEditInterviewLeadModal(true)
+  // }
+  const [leadId, setLeadId] = useState(null);
+  const [language_id, setLanguage_id] = useState(null);
+  const [series_id, setSeries_id] = useState(null);
+  const [language, setLanguage] = useState("");
+  const [allLeadPage, setAllLeadPage] = useState(1);
+  const [hrPage, setHrPages] = useState(1);
+  const [techPage, setTechPage] = useState(1);
+  const [facePage, setFacePage] = useState(1);
+  const [finalPage, setFinalPage] = useState(1);
+  const [round, setRound] = useState("");
+  const all_leads = useSelector((Store) => Store.ALL_LEADS);
+  const all_hr_round_candidate = useSelector((store) => store.HR_ROUND_LEAD);
 
-    <Tabs
-      defaultActiveKey="Add Person"
-      id="uncontrolled-tab-example"
-      className=" interview_lead_tabs_outer"
-    >
-      <Tab eventKey="Add Person" title="Add Person">
-      <div className='table-responsive transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>Sr.no</th>
-            <th>User Name</th>
-            <th>Profile</th>
-            <th>Experience</th>
-            <th>Current salary</th>
-            <th>Expected salray</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>
-            <div className='d-flex justify-content-between align-items-center'>
-            John
-            <div className='icon_wrapper'>
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            {/* <div className='icon_content_outer'>
-              <div className='triangle'></div>
-            <ul className='user_info_detail_list'>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Name :</h3>
-                <h4 className='cmn_text_heading'>Michael Levi</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Phone Number :</h3>
-                <h4 className='cmn_text_heading'>3554656</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Email :</h3>
-                <h4 className='cmn_text_heading'>michael@gameil.com</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Gender : </h3>
-                <h4 className='cmn_text_heading'>Female</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>DOB : </h3>
-                <h4 className='cmn_text_heading'>12-09-2000</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Expereience : </h3>
-                <h4 className='cmn_text_heading'>1</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Current Salary :  </h3>
-                <h4 className='cmn_text_heading'>12343</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Expected Salary </h3>
-                <h4 className='cmn_text_heading'>23444</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Profile </h3>
-                <h4 className='cmn_text_heading'>Developer</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>Last Company : </h3>
-                <h4 className='cmn_text_heading'>Software Company</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>State : </h3>
-                <h4 className='cmn_text_heading'>Punjab</h4>
-              </li>
-              <li className='d-flex gap-2'>
-                <h3 className='cmn_text_heading'>House address :  </h3>
-                <h4 className='cmn_text_heading'>Strret 56 chandigarh house no #4589</h4>
-              </li>
-        
-            
-            </ul>
-             </div> */}
-            </div>
-            </div>
-            </td>
-            <td>Java developer</td>
-            <td>2</td>
-            <td>12,000Rs</td>
-            <td>20,000Rs</td>
-            <td>
-        
-              <button className='cmn_Button_style' onClick={()=>{setShowHrQuestionModal(true)}}>Start</button>
-           
-            </td>
-          </tr>
-        </tbody>
-      </table>
-         </div>
-      </Tab>
-      <Tab eventKey=" HR" title="HR">
-      <div className='table-responsive transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>Sr.no</th>
-            <th> User Name </th>
-            <th>Profile</th>
-            <th>Experience</th>
-            <th>Interview rating/question</th>
-            <th>Interview Result</th>
-            <th>Start Next Round</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>
-            <div className='d-flex justify-content-between align-items-center'>
-           John
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            </div>
-            </td>
-            <td>Java developer</td>
-            <td>2.5</td>
-            <td style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>{navigate("/viewQuestionlist")}}>3.6 View Questions List</td>
-            <td>
-              <div className='form-group new_employee_form_group'>
-              {/* <select className='form-control'>
-                <option>On Hold</option>
-              </select> */}
-              <CustomSelectComp optionsData={resultData}/>
-              </div>
-            </td>
-            <td>
-        
-              <button className='cmn_Button_style' onClick={()=>{setShowTechInterviewQuesModal(true)}}>Start</button>
-           
-            </td>
-          </tr>
-        </tbody>
-      </table>
-         </div>
-      </Tab>
-      <Tab eventKey=" Tachnical" title="Tachnical">
-      <div className='table-responsive transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>Sr.no</th>
-            <th> User Name </th>
-            <th>Profile</th>
-            <th>Experience</th>
-            <th>Question/Answers</th>
-            <th>Technical Result</th>
-            <th>Start Next Round</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>
-            <div className='d-flex justify-content-between align-items-center'>
-           John
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            </div>
-            </td>
-            <td>Java developer</td>
-            <td>2.5</td>
-            <td style={{textDecoration:"underline"}}> View Questions List</td>
-            <td>
-              <div className='form-group new_employee_form_group'>
-              <CustomSelectComp optionsData={resultData}/>
+  const hr_round_candidate_status = useSelector(
+    (store) => store.HR_UPDATE_LEAD_STATUS
+  );
+  const tech_round_leads = useSelector((store) => store.TECH_LEADS);
+  const update_tech_status = useSelector((store) => store.UPDATE_TECH_STATUS);
+  const update_round_status = useSelector((store) => store.ROUND_COUNT);
+  const face_round_leads = useSelector((store) => store.FACE_ROUND_LEADS);
+  const update_face_round = useSelector((store) => store.FACE_ROUND_STATUS);
+  const final_round_leads = useSelector((store) => store.FINAL_ROUND_LEADS);
+  const delete_lead_status = useSelector((store) => store.DELETE_LEAD);
 
-              </div>
-            </td>
-            <td>
-        
-              <button className='cmn_Button_style'>Start</button>
-           
-            </td>
-          </tr>
-        </tbody>
-      </table>
-        </div>
-      </Tab>
-      <Tab eventKey=" Face to face" title="Face to face">
-      <div className='table-responsive transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>Sr.no</th>
-            <th> User Name </th>
-            <th>Profile</th>
-            <th>Experience</th>
-            <th>Salary</th>
-            <th>Technical Result</th>
-            <th>Final Round</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>
-            <div className='d-flex justify-content-between align-items-center'>
-           John
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            </div>
-            </td>
-            <td>Java developer</td>
-            <td>2.5</td>
-            <td> 20000Rs</td>
-            <td>
-              <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
-                <option>On Hold</option>
-              </select>
+  useEffect(() => {
+    if (tech_round_leads?.isSuccess) {
+      setLanguage_id(
+        tech_round_leads?.data?.data?.series_language_data[0].language_id
+      );
+      setSeries_id(
+        tech_round_leads?.data?.data?.series_language_data[0]
+          .assigned_test_series
+      );
+    }
+  }, [tech_round_leads]);
 
-              </div>
-            </td>
-            <td>
-        
-              <button className='cmn_Button_style'>Start</button>
-           
-            </td>
-          </tr>
-        </tbody>
-      </table>
-        </div>
-      </Tab>
-      <Tab eventKey="Final Interaction" title="Final Interaction">
-      <div className='table-responsive transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>Sr.no</th>
-            <th> User Name </th>
-            <th>Profile</th>
-            <th>Experience</th>
-            <th>Salary</th>
-            <th>Technical Result</th>
-            <th>Final Round</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>
-            <div className='d-flex justify-content-between align-items-center'>
-           John
-            <img src={insight_icon} height={"17px"} width={"17px"}/>
-            </div>
-            </td>
-            <td>Java developer</td>
-            <td>2.5</td>
-            <td> 20000Rs</td>
-            <td>
-              <div className='form-group new_employee_form_group'>
-              <select className='form-control'>
-                <option>On Hold</option>
-              </select>
+  useEffect(() => {
+    if (localStorage.getItem("tab")) {
+      if (localStorage?.getItem("tab") === "Technical") {
+        setActiveTab("Technical");
+        setOpen_tab("Technical")
+      }
+      if (localStorage?.getItem("tab") === "HR") {
+        setActiveTab("HR");
+        setOpen_tab("HR")
+      }
+      if (localStorage?.getItem("tab") === "Face to face") {
+        setActiveTab("Face to face");
+        setOpen_tab("Face to face")
+      }
+      if (localStorage?.getItem("tab") === "Final Interaction") {
+        setActiveTab("Final Interaction");
+        setOpen_tab("Final Interaction")
+      }
+    }
+  }, []);
 
-              </div>
-            </td>
-            <td>
-        
-              <button className='cmn_Button_style cmn_darkgray_btn'>Start</button>
-           
-            </td>
-          </tr>
-        </tbody>
-      </table>
-        </div>
-      </Tab>
-    </Tabs>
-    {showTechInterviewQuesModal && <TechInterviewQuestionModal show={showTechInterviewQuesModal} setShow={setShowTechInterviewQuesModal}/>}
-    {showHrQuestionModal && <HrQuestionModal show={showHrQuestionModal} setShow={setShowHrQuestionModal}/>}
-</div>
+  useEffect(() => {
+    if (update_round_status?.isSuccess) {
+      if (activeTab === "Technical") {
+        setActiveTab("Face to face")
+      }
+      if (activeTab === "Face to face") {
+        setActiveTab("Final Interaction")
+      }
+      dispatch(
+        get_all_tech_round_leads({
+          page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_face_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_final_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(clear_lead_round_status());
+    }
+  }, [update_round_status]);
 
+  const technicalRoundStatus = [
+    { value: "selected", label: "Select" },
+    { value: "rejected", label: "Reject" },
+    { value: "on hold", label: "On Hold" },
+    { value: "pending", label: "Pending" },
+    { value: "opened", label: "Opened" },
+    { value: "submitted", label: "Test Submitted" }
+  ];
+
+  useEffect(() => {
+    getAllLeads();
+  }, [allLeadPage, hrPage, techPage, facePage, finalPage]);
+
+  const getAllLeads = () => {
+    dispatch(get_all_leads({ page: allLeadPage, experience: "", profile: "" }));
+    dispatch(
+      get_hr_round_candidate({
+        limit: 2,
+        pageNumber: hrPage,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_all_tech_round_leads({
+        page: techPage,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_face_round_leads({
+        page: 1,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+    dispatch(
+      get_final_round_leads({
+        page: 1,
+        limit: 10,
+        profile: "",
+        experience: "",
+        result_status: "",
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (hr_round_candidate_status?.isSuccess) {
+      toast.success("Candidate status updated successfully");
+      dispatch(get_hr_round_candidate({ limit: 10 }));
+      dispatch(clear_hr_lead_updated_status());
+    }
+    if (hr_round_candidate_status?.isError) {
+      toast.error(hr_round_candidate_status?.error?.message);
+      dispatch(clear_hr_lead_updated_status());
+    }
+  }, [hr_round_candidate_status]);
+
+  const handleTabSelect = (selectedTab) => {
+    localStorage.setItem("tab", selectedTab);
+    setOpen_tab(selectedTab);
+    setActiveTab(selectedTab);
+    setCurrentTab(selectedTab);
+    navigate({
+      ...location,
+      state: { tab: selectedTab },
+    });
+  };
+
+  const changeTechStatus = (e, interview_id) => {
+    dispatch(update_technical_round_status({ interview_id, status: e.value }));
+  };
+
+  useEffect(() => {
+    if (update_tech_status?.isSuccess) {
+      toast.success("Lead status Updated successfully");
+      dispatch(
+        get_all_tech_round_leads({
+          page: techPage,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(clear_tech_round_status_state());
+    }
+    if (update_tech_status?.isError) {
+      toast.success(update_tech_status?.error?.message);
+      dispatch(clear_tech_round_status_state());
+    }
+  }, [update_tech_status]);
+
+  const changeFaceRoundStatus = (e, id, round) => {
+    setRound(round);
+    localStorage.removeItem("tab");
+    dispatch(
+      update_face_round_status({
+        leadId: id,
+        status: e.value,
+        round_type: round,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (update_face_round?.isSuccess) {
+      localStorage.removeItem("tab");
+      toast.success(" Status Updated Successfully");
+      if (round === "face_to_face") {
+        setActiveTab("Face to face");
+      }
+      if (round === "Final") {
+        setActiveTab("Final Interaction");
+      }
+      dispatch(
+        get_face_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(
+        get_final_round_leads({
+          page: 1,
+          limit: 10,
+          profile: "",
+          experience: "",
+          result_status: "",
+        })
+      );
+      dispatch(clear_face_round_state());
+    }
+    if (update_face_round?.isError) {
+      toast.error(update_face_round?.error?.message);
+      dispatch(clear_face_round_state());
+    }
+  }, [update_face_round]);
+
+
+
+  const deleteHandler = () => {
+    dispatch(delete_lead({ leadId }));
+  };
+
+  useEffect(() => {
+    if (delete_lead_status?.isSuccess) {
+      toast.success("Lead Deleted Successfully !!");
+      dispatch(clear_delete_lead_slice);
+      setShowDeleteModal(false);
+      getAllLeads();
+    }
+    if (delete_lead_status?.isError) {
+      toast.error(delete_lead_status?.error?.message);
+      dispatch(clear_delete_lead_slice);
+    }
+  }, [delete_lead_status]);
+
+  return permissions?.can_view ? (
+    <div>
+      <Tabs
+        defaultActiveKey="Add Person"
+        id="uncontrolled-tab-example"
+        className=" interview_lead_tabs_outer"
+        activeKey={activeTab}
+        onSelect={(k) => handleTabSelect(k)}
+      >
+        <Tab eventKey="Add Person" title="Add Person">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>Sr.no</th>
+                  <th>User Name</th>
+                  <th>Profile</th>
+                  <th>Experience</th>
+                  <th>Current salary</th>
+                  <th>Expected salray</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {all_leads?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_leads?.data?.message ===
+                  "No leads found with the specified filters." ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500} height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : Array.isArray(all_leads?.data?.data) ? (
+                  all_leads.data.data.filter((lead) => lead?.in_round === 0)
+                    .length > 0 ? (
+                    all_leads.data.data.map((lead, i) => {
+                      if (lead?.in_round === 0) {
+                        return (
+                          <tr key={i}>
+                        
+                            
+                            <td>{i + 1}</td>
+                            <td>
+                              <div className="d-flex justify-content-between align-items-center">
+                                {lead?.name}
+                                <div className="icon_wrapper">
+                                  <img
+                                    src={insight_icon}
+                                    height="17px"
+                                    width="17px"
+                                    className="cursor_pointer"
+                                    alt=""
+                                  />
+                                  <div className="icon_content_outer_wrraper">
+                                    <div className="icon_content_outer">
+                                      <div className="triangle"></div>
+                                      <div className="tooltip_content">
+                                        <ul className="user_info_detail_list">
+                                          {[
+                                            {
+                                              label: "Name",
+                                              value: lead?.name,
+                                            },
+                                            {
+                                              label: "Phone Number",
+                                              value: lead?.phone_number,
+                                            },
+                                            {
+                                              label: "Email",
+                                              value: lead?.email,
+                                            },
+                                            {
+                                              label: "Gender",
+                                              value: lead?.gender,
+                                            },
+                                            { label: "DOB", value: lead?.dob },
+                                            {
+                                              label: "Experience",
+                                              value: lead?.experience,
+                                            },
+                                            {
+                                              label: "Current Salary",
+                                              value: lead?.current_salary,
+                                            },
+                                            {
+                                              label: "Expected Salary",
+                                              value: lead?.expected_salary,
+                                            },
+                                            {
+                                              label: "Profile",
+                                              value: lead?.profile,
+                                            },
+                                            {
+                                              label: "Last Company",
+                                              value: lead?.last_company,
+                                            },
+                                            {
+                                              label: "State",
+                                              value: lead?.state,
+                                            },
+                                            {
+                                              label: "House Address",
+                                              value: lead?.house_addresss,
+                                            },
+                                          ].map((item, idx) => (
+                                            <li
+                                              className="d-flex gap-2"
+                                              key={idx}
+                                            >
+                                              <h3 className="cmn_text_heading">
+                                                {item.label} :
+                                              </h3>
+                                              <h4 className="cmn_text_heading">
+                                                {item.value}
+                                              </h4>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{lead?.profile ? lead?.profile : na}</td>
+                            <td>
+                              {lead?.experience
+                                ? lead?.experience + " year"
+                                : na}
+                            </td>
+                            <td>
+                              {lead?.current_salary ? lead?.current_salary : na}
+                            </td>
+                            <td>
+                              {lead?.expected_salary
+                                ? lead?.expected_salary
+                                : na}
+                            </td>
+                            <td className="d-flex gap-2">
+                              {permissions?.can_view &&
+                                permissions?.can_update && (
+                                  <button
+                                    className="cmn_Button_style"
+                                    onClick={() => {
+                                      setLeadId(lead?.id);
+                                      setShowHrQuestionModal(true);
+                                    }}
+                                  >
+                                    Start
+                                  </button>
+                                )}
+                              <div
+                                className="cmn_action_outer red_bg"
+                                style={{ cursor: "pointer" }}
+                                title="Delete Lead"
+                              >
+                                {permissions?.can_delete && <RiDeleteBin6Line
+                                  onClick={() => {
+                                    setShowDeleteModal(true);
+                                    setLeadId(lead?.id);
+                                  }}
+                                />}
+                              </div>
+                              <div
+                                className="cmn_action_outer red_bg"
+                                style={{ cursor: "pointer" }}
+                                title="Edit Lead"
+                              >
+                                <FiEdit
+                                  onClick={() => {
+                                    setEditInterviewLeadModal(true);
+                                    setLead(lead)
+                                  }}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      }
+                      return null;
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center">
+                        No lead Found
+                      </td>
+                    </tr>
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center">
+                      No lead Found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+            {all_leads?.data?.pagination?.totalPages > 1 &&
+              all_leads?.data?.data?.some((field) => field.in_round === 0) >
+              0 && (
+                <PaginationComp
+                  totalPage={all_leads?.data?.pagination?.totalPages}
+                  setPage={setAllLeadPage}
+                />
+              )}
+          </div>
+        </Tab>
+        <Tab eventKey="HR" title="HR">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>Sr.no</th>
+                  <th> User Name </th>
+                  <th>Profile</th>
+                  <th>Experience</th>
+                  <th>Interview rating/question</th>
+                  <th>Interview Result</th>
+                  <th>Start Next Round</th>
+                </tr>
+              </thead>
+              <tbody>
+                {all_hr_round_candidate?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_hr_round_candidate?.data?.message ===
+                  "No candidate found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500} height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : all_hr_round_candidate?.data?.data?.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: "center" }}>
+                      No HR round leads available.
+                    </td>
+                  </tr>
+                ) : (
+                  all_hr_round_candidate?.data?.data?.map((candidate, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <div className="d-flex justify-content-between align-items-center">
+                            {candidate?.name}
+                          </div>
+                        </td>
+                        <td>{candidate?.profile ? candidate?.profile : na}</td>
+                        <td>
+                          {candidate?.experience
+                            ? candidate?.experience + " year"
+                            : na}
+                        </td>
+                        <td
+                          style={{
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            permissions?.can_view &&
+                              navigate("/viewQuestionlist", {
+                                state: {
+                                  interview_id: candidate?.interview_id,
+                                  lead_id: candidate?.id,
+                                },
+                              });
+                            localStorage.setItem("tab", "HR");
+                          }}
+                        >
+                          View Questions List
+                        </td>
+
+                        <td>
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={resultData}
+                              value={candidate?.hr_round_result}
+                              changeHandler={(e) =>
+                                permissions?.can_update &&
+                                dispatch(
+                                  hr_update_lead_status({
+                                    interview_id: candidate?.interview_id,
+                                    hr_round_result: e.value,
+                                  })
+                                )
+                              }
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          {permissions?.can_update &&
+                            candidate?.hr_round_result === "selected" && (
+                              <button
+                                className="cmn_Button_style"
+                                onClick={() => {
+                                  setLeadId(candidate?.id);
+                                  setLanguage(candidate?.profile);
+                                  setShowTechInterviewQuesModal(true);
+                                }}
+                              >
+                                Start
+                              </button>
+                            )}
+                          {permissions?.can_delete &&
+                            <div
+                              className="cmn_action_outer red_bg"
+                              style={{ cursor: "pointer" }}
+                              title="Delete Lead"
+                            >
+                              <RiDeleteBin6Line
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setLeadId(candidate?.id);
+                                }}
+                              />
+                            </div>
+                          }
+
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editPerson", {
+                                  state: { leadData: candidate },
+                                });
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+            {all_hr_round_candidate?.data?.totalPages > 1 && (
+              <PaginationComp
+                totalPage={all_hr_round_candidate?.data?.totalPages}
+                setPage={setHrPages}
+              />
+            )}
+          </div>
+        </Tab>
+        <Tab eventKey="Technical" title="Technical">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>Sr.no</th>
+                  <th> User Name </th>
+                  <th>Profile</th>
+                  <th>Experience</th>
+                  <th>Question/Answers</th>
+                  <th>Technical Result</th>
+                  <th>Start Next Round</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tech_round_leads?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : tech_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500} height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : Array.isArray(tech_round_leads?.data?.data?.data) ? (
+                  tech_round_leads.data.data.data.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" style={{ textAlign: "center" }}>
+                        No technical lead found.
+                      </td>
+                    </tr>
+                  ) : (
+                    tech_round_leads.data.data.data.map((tech_leads, i) => (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <div className="d-flex justify-content-between align-items-center">
+                            {tech_leads?.name}
+                          </div>
+                        </td>
+                        <td>
+                          {tech_leads?.profile ? tech_leads?.profile : na}
+                        </td>
+                        <td>
+                          {tech_leads?.experience
+                            ? tech_leads?.experience + " year"
+                            : na}
+                        </td>
+                        <td
+                          className="cursor_pointer"
+                          style={{ textDecoration: "underline" }}
+                          onClick={() => {
+                            permissions?.can_view &&
+                              navigate("/questionAnswerSheet", {
+                                state: {
+                                  lead_id: tech_leads?.id,
+                                  language_id: language_id,
+                                  series_id: series_id,
+                                },
+                              });
+                            localStorage.setItem("tab", "Technical");
+                          }}
+                        >
+                          View Questions List
+                        </td>
+                        <td>
+                          <div className="form-group new_employee_form_group">
+                            <CustomSelectComp
+                              optionsData={technicalRoundStatus}
+                              value={tech_leads?.technical_round_result}
+                              changeHandler={(e) =>
+                                permissions?.can_update &&
+                                changeTechStatus(e, tech_leads?.interview_id)
+                              }
+                            />
+                          </div>
+                        </td>
+
+                        <td>
+                          {permissions?.can_update &&
+                            tech_leads?.technical_round_result ===
+                            "selected" && (
+                              <button
+                                className="cmn_Button_style"
+                                onClick={() =>
+                                  dispatch(
+                                    update_lead_round_count({
+                                      leadId: tech_leads?.id,
+                                      in_round_count: 3,
+                                    })
+                                  )
+                                }
+                              >
+                                Start
+                              </button>
+                            )}
+                          {permissions?.can_delete &&
+                            <div
+                              className="cmn_action_outer red_bg"
+                              style={{ cursor: "pointer" }}
+                              title="Edit Lead"
+                            >
+                              <RiDeleteBin6Line
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setLeadId(tech_leads?.id);
+                                }}
+                              />
+                            </div>
+                          }
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <FiEdit
+                              onClick={() => {
+                                navigate("/editPerson", {
+                                  state: { leadData: tech_leads },
+                                });
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: "center" }}>
+                      No technical lead found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+            {tech_round_leads?.data?.pagination?.totalPages > 1 && (
+              <PaginationComp
+                totalPage={tech_round_leads?.data?.pagination?.totalPages}
+                setPage={setTechPage}
+              />
+            )}
+          </div>
+        </Tab>
+        <Tab eventKey="Face to face" title="Face to face">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>Sr.no</th>
+                  <th>User Name</th>
+                  <th>Profile</th>
+                  <th>Experience</th>
+                  <th>Expected Salary</th>
+                  <th>HR Rating/Question</th>
+                  <th>Technical/Question</th>
+                  <th>Face To Face Result</th>
+                  <th>Final Round</th>
+                </tr>
+              </thead>
+              <tbody>
+                {face_round_leads?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : face_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500} height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : Array.isArray(face_round_leads?.data?.data) &&
+                  face_round_leads?.data?.data?.length > 0 ? (
+                  face_round_leads.data.data.map((lead, i) => (
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>
+                        <div className="d-flex justify-content-between align-items-center">
+                          {lead?.name}
+                        </div>
+                      </td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
+                      <td
+                        style={{
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          permissions?.can_view &&
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                              },
+                            });
+                          localStorage.setItem("tab", "Face to face");
+                        }}
+                      >
+                        View Questions List
+                      </td>
+
+                      <td
+                        className="cursor_pointer"
+                        style={{ textDecoration: "underline" }}
+                        onClick={() => {
+                          permissions?.can_view &&
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
+                          localStorage.setItem("tab", "Final");
+                        }}
+                      >
+                        View Questions List
+                      </td>
+
+                      <td>
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.face_to_face_result}
+                            changeHandler={(e) =>
+                              permissions?.can_update &&
+                              changeFaceRoundStatus(e, lead?.id, "face_to_face")
+                            }
+                          />
+                        </div>
+                      </td>
+
+                      <td>
+                        {permissions?.can_view &&
+                          permissions?.can_update &&
+                          lead?.face_to_face_result === "selected" && (
+                            <button
+                              className="cmn_Button_style"
+                              onClick={() =>
+                                permissions?.can_update &&
+                                dispatch(
+                                  update_lead_round_count({
+                                    leadId: lead?.id,
+                                    in_round_count: 4,
+                                  })
+                                )
+                              }
+                            >
+                              Start
+                            </button>
+                          )}
+                        {permissions?.can_delete &&
+                          <div
+                            className="cmn_action_outer red_bg"
+                            style={{ cursor: "pointer" }}
+                            title="Edit Lead"
+                          >
+                            <RiDeleteBin6Line
+                              onClick={() => {
+                                setShowDeleteModal(true);
+                                setLeadId(lead?.id);
+                              }}
+                            />
+                          </div>
+                        }
+                        <div
+                          className="cmn_action_outer red_bg"
+                          style={{ cursor: "pointer" }}
+                          title="Edit Lead"
+                        >
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editPerson", {
+                                state: { leadData: lead },
+                              });
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="9" className="text-center">
+                      No face-to-face lead found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+            {face_round_leads?.data?.pagination?.totalPages > 1 && (
+              <PaginationComp
+                totalPage={face_round_leads?.data?.pagination?.totalPages}
+                setPage={setFacePage}
+              />
+            )}
+          </div>
+        </Tab>
+        <Tab eventKey="Final Interaction" title="Final Interaction">
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>Sr.no</th>
+                  <th>User Name</th>
+                  <th>Profile</th>
+                  <th>Experience</th>
+                  <th>Expected Salary</th>
+                  <th>HR Rating/Question</th>
+                  <th>Technical/Question</th>
+                  <th>Face Result</th>
+                  <th>Final Round</th>
+                </tr>
+              </thead>
+              <tbody>
+                {final_round_leads?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : final_round_leads?.data?.message === "No Lead Found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500} height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : Array.isArray(final_round_leads?.data?.data) &&
+                  final_round_leads?.data?.data?.length > 0 ? (
+                  final_round_leads?.data?.data?.map((lead, i) => (
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>
+                        <div className="d-flex justify-content-between align-items-center">
+                          {lead?.name}
+                        </div>
+                      </td>
+                      <td>{lead?.profile ? lead?.profile : na}</td>
+                      <td>
+                        {lead?.experience ? lead?.experience + " year" : na}
+                      </td>
+                      <td>
+                        {lead?.expected_salary ? lead?.expected_salary : na}
+                      </td>
+                      <td
+                        style={{
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          permissions?.can_view &&
+                            navigate("/viewQuestionlist", {
+                              state: {
+                                interview_id: lead?.interview_id,
+                                lead_id: lead?.id,
+                                view: true,
+                              },
+                            });
+                          localStorage.setItem("tab", "Final Interaction");
+                        }}
+                      >
+                        View Questions List
+                      </td>
+
+                      <td
+                        className="cursor_pointer"
+                        style={{ textDecoration: "underline" }}
+                        onClick={() => {
+                          permissions?.can_update &&
+                            navigate("/questionAnswerSheet", {
+                              state: {
+                                lead_id: lead?.id,
+                                language_id: lead?.language_id,
+                                series_id: lead?.assigned_test_series,
+                                view: true,
+                              },
+                            });
+                          localStorage.setItem("tab", "Final Interaction");
+                        }}
+                      >
+                        View Questions List
+                      </td>
+
+                      <td>
+                        <div className="form-group new_employee_form_group">
+                          <CustomSelectComp
+                            optionsData={resultData}
+                            value={lead?.final_result}
+                            changeHandler={(e) =>
+                              permissions?.can_update &&
+                              changeFaceRoundStatus(e, lead?.id, "final")
+                            }
+                          />
+                        </div>
+                      </td>
+
+                      <td>
+                        {permissions?.can_update &&
+                          lead?.final_result === "selected" && (
+                            <button className="cmn_Button_style">Start</button>
+                          )}
+                        <div
+                          className="cmn_action_outer red_bg"
+                          style={{ cursor: "pointer" }}
+                          title="Edit Lead"
+                        >
+                          <FiEdit
+                            onClick={() => {
+                              navigate("/editPerson", {
+                                state: { leadData: lead },
+                              });
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="9" className="text-center">
+                      No final lead found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+            {final_round_leads?.data?.totalPages > 0 && (
+              <PaginationComp
+                totalPage={final_round_leads?.data?.totalPages}
+                setPage={setFinalPage}
+              />
+            )}
+          </div>
+        </Tab>
+      </Tabs>
+      {showTechInterviewQuesModal && (
+        <TechInterviewQuestionModal
+          show={showTechInterviewQuesModal}
+          setShow={setShowTechInterviewQuesModal}
+          language={language}
+          leadId={leadId}
+          setActiveTab={setActiveTab}
+        />
+      )}
+      {showHrQuestionModal && (
+        <HrQuestionModal
+          show={showHrQuestionModal}
+          setShow={setShowHrQuestionModal}
+          leadId={leadId}
+        />
+      )}
+      {showDeleteModal && (
+        <CommonDeleteModal
+          heading_text={"Are you sure you want to delete Interview Lead "}
+          paragraph_text={""}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          handleDelete={deleteHandler}
+        />
+      )}
+       <EditInterviewLeadModal editInterviewLeadModal={editInterviewLeadModal} setEditInterviewLeadModal={setEditInterviewLeadModal} lead={lead}/>
+    </div>
+  ) : (
+    <UnauthorizedPage />
   );
 }
 

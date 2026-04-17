@@ -8,52 +8,137 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { ToastContainer, toast } from "react-toastify";
+import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
-import "./employee.css"
+import "./employee.css";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   create_new_user,
   clear_create_user_state,
 } from "../../../utils/redux/userSlice/createNewUserSlice";
+import CustomSelectComp from "../../Common/CustomSelectComp";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { ProfileData } from "../../Utils/customData/profileData";
+import { get_all_roles } from "../../../utils/redux/rolesAndPermissionSlice/getAllRoles";
+import UserValidations from "../../Utils/UserValidations";
+import { Table } from "react-bootstrap";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
 
 const AddnewEmployee = () => {
   const dispatch = useDispatch();
   const { show } = useAppContext();
   const navigate = useNavigate();
+  const [role, setRole] = useState([]);
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+  const [all_languagages, setAll_languages] = useState([]);
   const obj = [
     { name: "Employees", path: "/employee" },
     { name: "Add New Employees", path: "/addemployee" },
   ];
-  const [field_data, setField_date] = useState({
-    username: "",
-    email: "",
-    name: "",
-    mobile: "",
-    emergency_contact: "",
-    emergency_contact_relationship: "",
-    emergency_contact_name: "",
-    bank_name: "",
-    account_number: "",
-    ifsc: "",
-    increment_date: "",
-    gender: "",
-    dob: "",
-    doj: "",
-    skype_email: "",
-    ultivic_email: "",
-    salary: "",
-    security: "",
-    total_security: "",
-    installments: "",
-    position: "",
-    department: "",
-    status: "",
-    address: "",
-    role: "",
-    confirm_password: "",
-    password: "",
-  });
+  const user_all_permissions = useSelector(
+    (store) => store.USER_ALL_PERMISSIONS
+  );
+
+  const roles = useSelector((store) => store.ALL_ROLES);
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
+
+  useEffect(() => {
+    dispatch(get_all_roles());
+    dispatch(get_all_languages());
+  }, []);
+
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({
+            value: data?.language,
+            label: data?.language,
+          });
+        }
+      });
+    }
+  }, [languages]);
+
+  useEffect(() => {
+    if (roles?.isSuccess) {
+      if (roles?.data?.data?.length !== 0) {
+        roles.data.data.forEach((data) => {
+          if (
+            data?.role !== "Admin" &&
+            !role.some((item) => item.value === data?.role)
+          ) {
+            role.push({ value: data?.role, label: data?.role });
+          }
+        });
+      }
+    }
+  }, [roles]);
+
+  const installmentObj = [
+    { value: 1, label: 1 },
+    { value: 2, label: 2 },
+    { value: 3, label: 3 },
+    { value: 4, label: 4 },
+    { value: 5, label: 5 },
+  ];
+
+  const workingScheduleOptions = [
+    { value: "full-time", label: "Full time" },
+    { value: "split", label: "Split" },
+    { value: "part-time", label: "Part time" },
+  ]
+
+  const positionData = [
+    { value: "INTERN", label: "Intern" },
+    { value: "TRAINEE", label: "Trainee" },
+    { value: "JRDEVELOPER", label: "Jr Developer" },
+    { value: "SRDEVELOPER", label: "Sr Developer" },
+    { value: "PROJECTMANAGER", label: "Project Manager" },
+    { value: "HR", label: "HR" },
+    { value: "TESTER", label: "Tester" },
+    { value: "BDE", label: "BDE" },
+    { value: "TEAMLEAD", label: "Team Lead" },
+  ];
+
+  const statusObj = [
+    { value: 0, label: "Terminated" },
+    { value: 1, label: "OnProbation" },
+    { value: 2, label: "Confirmed" },
+    { value: 3, label: "Resignation" },
+    { value: 4, label: "None" },
+  ];
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [emergency_contact, setEmergencyContact] = useState("");
+  const [emergency_contact_relationship, setEmergencyContactRelationship] =
+    useState("");
+  const [emergency_contact_name, setEmergencyContactName] = useState("");
+  const [bank_name, setBankName] = useState("");
+  const [account_number, setAccountNumber] = useState("");
+  const [ifsc, setIfsc] = useState("");
+  const [increment_date, setIncrementDate] = useState("");
+  const [gender, setGender] = useState("");
+  const [dob, setDob] = useState("");
+  const [doj, setDoj] = useState("");
+  const [skype_email, setSkypeEmail] = useState("");
+  const [ultivic_email, setUltivicEmail] = useState("");
+  const [salary, setSalary] = useState("");
+  const [security, setSecurity] = useState("");
+  const [total_security, setTotalSecurity] = useState("");
+  const [installments, setInstallments] = useState("");
+  const [position, setPosition] = useState("");
+  const [department, setDepartment] = useState("");
+  const [status, setStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [selected_role, setSelected_role] = useState("");
+  const [confirm_password, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
+  const [selected_schedule, setSelected_Schedule] = useState("")
 
   const is_user_created = useSelector((store) => store.CREATE_NEW_USER);
 
@@ -73,30 +158,107 @@ const AddnewEmployee = () => {
     }
   }, [is_user_created]);
 
-  const handleInputChange = (name, value) => {
-    const dateFields = ["increment_date", "dob", "doj"];
-    const newValue =
-      dateFields.includes(name) && value
-        ? moment(value).format("DD/MM/YYYY")
-        : value;
-
-    setField_date({
-      ...field_data,
-      [name]: newValue,
-    });
-  };
-
-  const handleSaveUser = (e) => {
+  const handleSaveUser = (
+    e,
+    name,
+    email,
+    mobile,
+    emergency_contact_relationship,
+    emergency_contact_name,
+    emergency_contact,
+    bank_name,
+    account_number,
+    ifsc,
+    increment_date,
+    gender,
+    dob,
+    doj,
+    skype_email,
+    ultivic_email,
+    salary,
+    security,
+    total_security,
+    installments,
+    position,
+    department,
+    status,
+    username,
+    password,
+    confirm_password,
+    selected_role,
+    selected_schedule,
+    address,
+    selectedDocuments
+  ) => {
     e.preventDefault();
+    const checkValidations = UserValidations(
+      name,
+      email,
+      mobile,
+      emergency_contact_relationship,
+      emergency_contact_name,
+      emergency_contact,
+      bank_name,
+      account_number,
+      ifsc,
+      increment_date,
+      gender,
+      dob,
+      doj,
+      skype_email,
+      ultivic_email,
+      salary,
+      security,
+      total_security,
+      installments,
+      position,
+      department,
+      status,
+      username,
+      password,
+      confirm_password,
+      selected_role,
+      selected_schedule,
+      address,
+      selectedDocuments
+    );
 
-    const hasEmptyFields = Object.values(field_data).some((value) => {
-      return typeof value === "string" ? value.trim() === "" : false;
-    });
-
-    if (hasEmptyFields) {
-      alert("Fields can't be empty");
+    if (Object.keys(checkValidations).length === 0) {
+      dispatch(
+        create_new_user({
+          name,
+          email,
+          mobile,
+          emergency_contact_relationship,
+          emergency_contact_name,
+          emergency_contact,
+          bank_name,
+          account_number,
+          ifsc,
+          increment_date,
+          gender,
+          dob,
+          doj,
+          skype_email,
+          ultivic_email,
+          salary,
+          security,
+          total_security,
+          installments,
+          position,
+          department,
+          status,
+          username,
+          password,
+          confirm_password,
+          selected_role,
+          selected_schedule,
+          address,
+          selectedDocuments,
+        })
+      );
     } else {
-      dispatch(create_new_user({ field_data }));
+      setValidationErrors(checkValidations);
     }
   };
 
@@ -106,11 +268,42 @@ const AddnewEmployee = () => {
     return nextYear;
   };
 
+  const documents = [
+    { id: 1, name: "Aadhar Card" },
+    { id: 2, name: "PAN Card" },
+    { id: 3, name: "Qualification" },
+    { id: 4, name: "Experience" },
+    { id: 5, name: "Bank Statement" },
+    { id: 6, name: "Training Certificate" },
+  ];
+
+  const handleCheckboxChange = (name) => {
+    if (selectedDocuments.includes(name)) {
+      const updatedDocuments = selectedDocuments.filter((doc) => doc !== name);
+      setSelectedDocuments(updatedDocuments);
+    } else {
+      const updatedDocuments = [...selectedDocuments, name];
+      setSelectedDocuments(updatedDocuments);
+    }
+  };
+
+  const handleGender = (e) => {
+    setGender(e.value);
+  };
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Adding 1 since months are 0-indexed
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <section className="add_new_emp_container">
-      <Sidebar />
       <div
-        className={`wrapper admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } admin_outer gray_bg ${show ? "cmn_margin" : ""}`}
       >
         <Notification />
         <div className="cmn_padding_outer">
@@ -118,10 +311,10 @@ const AddnewEmployee = () => {
             data={obj}
             classname={"inter_fontfamily employee_heading"}
           />
-          <div className="new_employee_wrapper cmn_border">
+          <div className="new_employee_wrapper cmn_border card-cmn">
             <form>
               <div className="row">
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div className="col-lg-4 col-sm-12 col-md-12" id="name">
                   <InputField
                     labelname={"Name"}
                     span={true}
@@ -129,9 +322,20 @@ const AddnewEmployee = () => {
                     classname={"new_employee_form_group"}
                     type={"text"}
                     name="name"
-                    value={field_data.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    value={name}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      const capitalizedValue =
+                        inputValue.charAt(0).toUpperCase() +
+                        inputValue.slice(1);
+                      setName(capitalizedValue);
+                    }}
+                    styleTrue={validationErrors?.name}
                   />
+
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.name}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -140,9 +344,13 @@ const AddnewEmployee = () => {
                     placeholder={"Email of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    styleTrue={validationErrors?.email}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.email}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -151,24 +359,35 @@ const AddnewEmployee = () => {
                     placeholder={"Mobile of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.mobile}
-                    onChange={(e) =>
-                      handleInputChange("mobile", e.target.value)
-                    }
+                    value={mobile}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue) && newValue.length <= 10) {
+                        setMobile(newValue);
+                      }
+                    }}
+                    styleTrue={validationErrors?.mobile}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.mobile}
+                  </span>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.emergency_contact_relationship
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
                     labelname={"Emergency Contact Relationship "}
                     placeholder={"Relationship of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_relationship}
+                    value={emergency_contact_relationship}
                     onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_relationship",
-                        e.target.value
-                      )
+                      setEmergencyContactRelationship(e.target.value)
                     }
                   />
                 </div>
@@ -178,13 +397,8 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency Contact Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact_name}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "emergency_contact_name",
-                        e.target.value
-                      )
-                    }
+                    value={emergency_contact_name}
+                    onChange={(e) => setEmergencyContactName(e.target.value)}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -193,11 +407,19 @@ const AddnewEmployee = () => {
                     placeholder={"Emergency mobile no of the employee"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.emergency_contact}
-                    onChange={(e) =>
-                      handleInputChange("emergency_contact", e.target.value)
-                    }
+                    value={emergency_contact}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue) && newValue.length <= 10) {
+                        setEmergencyContact(newValue);
+                      }
+                    }}
+                    styleTrue={validationErrors?.emergency_contact}
                   />
+
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.emergency_contact}
+                  </span>
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -206,10 +428,8 @@ const AddnewEmployee = () => {
                     placeholder={"Bank Name"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.bank_name}
-                    onChange={(e) =>
-                      handleInputChange("bank_name", e.target.value)
-                    }
+                    value={bank_name}
+                    onChange={(e) => setBankName(e.target.value)}
                   />
                 </div>
 
@@ -218,11 +438,14 @@ const AddnewEmployee = () => {
                     labelname={"Account Number"}
                     placeholder={"Account Number"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
-                    value={field_data.account_number}
-                    onChange={(e) =>
-                      handleInputChange("account_number", e.target.value)
-                    }
+                    type={"text"}
+                    value={account_number}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (/^\d*$/.test(newValue)) {
+                        setAccountNumber(newValue);
+                      }
+                    }}
                   />
                 </div>
 
@@ -232,102 +455,127 @@ const AddnewEmployee = () => {
                     placeholder={"Bank IFCE Code"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ifsc}
-                    onChange={(e) => handleInputChange("ifsc", e.target.value)}
+                    value={ifsc}
+                    onChange={(e) => setIfsc(e.target.value)}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
-                  <div className="form-group new_employee_form_group">
-                    <label htmlFor="">Increment Date</label>
-                    <DatePicker
-                      selected={
-                        field_data.increment_date
-                          ? new Date(field_data.increment_date)
-                          : null
-                      }
-                      onChange={(date) =>
-                        handleInputChange("increment_date", date)
-                      }
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={getMaxDate()}
+                  <div>
+                    <InputField
+                      labelname={"Increment Date"}
+                      placeholder={"Select DOB"}
+                      classname={"new_employee_form_group"}
+                      type={"date"}
+                      value={increment_date}
+                      onChange={(e) => setIncrementDate(e.target.value)}
+                      styleTrue={validationErrors?.increment_date}
+                      min={true}
                     />
+                    <span style={{ color: "red", fontSize: "13px" }}>
+                      {validationErrors?.increment_date}
+                    </span>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Gender </label>
-                    <select
-                      className="form-control"
-                      value={field_data.gender}
-                      onChange={(e) =>
-                        handleInputChange("gender", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
+                    <label>
+                      {" "}
+                      Gender <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={[
+                          { value: "male", label: "Male" },
+                          { value: "female", label: "Female" },
+                        ]}
+                        changeHandler={(e) => handleGender(e)}
+                        value={gender}
+                        styleTrue={validationErrors?.gender}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.gender}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of Birth</label>
-                    <DatePicker
-                      selected={field_data.dob}
-                      onChange={(date) => handleInputChange("dob", date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={new Date()}
-                    />
+                    <div>
+                      <InputField
+                        labelname={"Date Of Birth"}
+                        span={true}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
+                        styleTrue={validationErrors?.dob}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.dob}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group ">
-                    <label htmlFor="">Date of joining </label>
-                    <DatePicker
-                      classname={"form-control"}
-                      selected={field_data.doj}
-                      onChange={(date) => handleInputChange("doj", date)}
-                      placeholderText="DD/MM/YYYY"
-                      onKeyDown={(e) => e.preventDefault()}
-                      dateFormat="dd/MM/yyyy"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      maxDate={new Date()}
-                    />
+                    <div>
+                      <InputField
+                        span={true}
+                        labelname={"Date of joining"}
+                        placeholder={"Select DOB"}
+                        classname={"new_employee_form_group"}
+                        type={"date"}
+                        value={doj}
+                        onChange={(e) => setDoj(e.target.value)}
+                        styleTrue={validationErrors?.doj}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.doj}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.skype_email
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
-                    labelname={"Skepe"}
-                    placeholder={"Skepe"}
+                    labelname={"Skype"}
+                    placeholder={"Skype"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.skype_email}
-                    onChange={(e) =>
-                      handleInputChange("skype_email", e.target.value)
-                    }
+                    value={skype_email}
+                    onChange={(e) => setSkypeEmail(e.target.value)}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.skype_email}
+                  </span>
                 </div>
 
-                <div className="col-lg-4 col-sm-12 col-md-12">
+                <div
+                  className="col-lg-4 col-sm-12 col-md-12"
+                  style={
+                    validationErrors?.ultivic_email
+                      ? { border: "1px solid red", borderRadius: "10px" }
+                      : {}
+                  }
+                >
                   <InputField
                     labelname={"Ultivic Email"}
                     placeholder={"Ultivic Email"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.ultivic_email}
-                    onChange={(e) =>
-                      handleInputChange("ultivic_email", e.target.value)
-                    }
+                    value={ultivic_email}
+                    onChange={(e) => setUltivicEmail(e.target.value)}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.ultivic_email}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
@@ -336,11 +584,15 @@ const AddnewEmployee = () => {
                     labelname={"Salary"}
                     placeholder={"Salary"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
-                    value={field_data.salary}
-                    onChange={(e) =>
-                      handleInputChange("salary", e.target.value)
-                    }
+                    type={"text"}
+                    value={salary}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSalary(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -350,11 +602,15 @@ const AddnewEmployee = () => {
                     labelname={"Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
-                    value={field_data.security}
-                    onChange={(e) =>
-                      handleInputChange("security", e.target.value)
-                    }
+                    type={"text"}
+                    value={security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setSecurity(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -364,64 +620,65 @@ const AddnewEmployee = () => {
                     labelname={"Total Security"}
                     placeholder={"Security"}
                     classname={"new_employee_form_group"}
-                    type={"number"}
-                    value={field_data.total_security}
-                    onChange={(e) =>
-                      handleInputChange("total_security", e.target.value)
-                    }
+                    type={"text"}
+                    value={total_security}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const numericPattern = /^\d*\.?\d*$/;
+                      if (newValue === "" || numericPattern.test(newValue)) {
+                        setTotalSecurity(newValue);
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label> Installment</label>
-                    <select
-                      className="form-control"
-                      value={field_data.installments}
-                      onChange={(e) =>
-                        handleInputChange("installments", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value={1}>1</option>
-                    </select>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={installmentObj}
+                        changeHandler={(e) => setInstallments(e.value)}
+                        value={installments}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                      {" "}
                       Position <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
-                      className="form-control"
-                      value={field_data.position}
-                      onChange={(e) =>
-                        handleInputChange("position", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="intern">Intern</option>
-                    </select>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={positionData}
+                        changeHandler={(e) => setPosition(e.value)}
+                        value={position}
+                        styleTrue={validationErrors?.position}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.position}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
                     <label>
-                      {" "}
                       Technology/Department{" "}
                       <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
-                      className="form-control"
-                      value={field_data.department}
-                      onChange={(e) =>
-                        handleInputChange("department", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value={"mern"}>MERN</option>
-                    </select>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={all_languagages}
+                        changeHandler={(e) => setDepartment(e.label)}
+                        value={department}
+                        styleTrue={validationErrors?.department}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.department}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -430,16 +687,17 @@ const AddnewEmployee = () => {
                       {" "}
                       Status <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
-                      className="form-control"
-                      value={field_data.status}
-                      onChange={(e) =>
-                        handleInputChange("status", e.target.value)
-                      }
-                    >
-                      <option>Select</option>
-                      <option value="active">ACTIVE</option>
-                    </select>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={statusObj}
+                        changeHandler={(e) => setStatus(e.value)}
+                        value={status}
+                        styleTrue={validationErrors?.status}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.status}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
@@ -449,123 +707,185 @@ const AddnewEmployee = () => {
                     placeholder={"Username"}
                     classname={"new_employee_form_group"}
                     type={"text"}
-                    value={field_data.username}
-                    onChange={(e) =>
-                      handleInputChange("username", e.target.value)
-                    }
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    styleTrue={validationErrors?.username}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.username}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
+                    span={true}
                     labelname={"Password"}
                     placeholder={"Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    styleTrue={validationErrors?.password}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.password}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <InputField
+                    span={true}
                     labelname={"Confirm Password"}
                     placeholder={"Confirm Password"}
                     classname={"new_employee_form_group"}
                     type={"password"}
-                    value={field_data.confirm_password}
-                    onChange={(e) =>
-                      handleInputChange("confirm_password", e.target.value)
-                    }
+                    value={confirm_password}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    styleTrue={validationErrors?.confirm_password}
                   />
+                  <span style={{ color: "red", fontSize: "13px" }}>
+                    {validationErrors?.confirm_password}
+                  </span>
                 </div>
                 <div className="col-lg-4 col-sm-12 col-md-12">
                   <div className="form-group new_employee_form_group">
-                    <label> Role</label>
-                    <select
-                      className="form-control"
-                      value={field_data.role}
-                      onChange={(e) =>
-                        handleInputChange("role", e.target.value)
-                      }
-                    >
-                      <option>Select Role</option>
-                      <option value={"admin"}>ADMIN</option>
-                    </select>
+                    <label>
+                      {" "}
+                      Role <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={role}
+                        changeHandler={(e) => setSelected_role(e.value)}
+                        value={selected_role}
+                        styleTrue={validationErrors?.selected_role}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.selected_role}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>
+                      {" "}
+                      Working Schedule <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <div className="mt-2">
+                      <CustomSelectComp
+                        optionsData={workingScheduleOptions}
+                        changeHandler={(e) => setSelected_Schedule(e.value)}
+                        value={selected_schedule}
+                        styleTrue={validationErrors?.selected_schedule}
+                      />
+                      <span style={{ color: "red", fontSize: "13px" }}>
+                        {validationErrors?.selected_schedule}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="form-group new_employee_form_group">
-                <label>Address</label>
+                <label>
+                  Address <span style={{ color: "red" }}>*</span>
+                </label>
                 <textarea
                   className="form-control mt-3"
                   placeholder="Address"
                   rows={5}
-                  value={field_data.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  style={
+                    validationErrors?.address ? { border: "1px solid red" } : {}
+                  }
                 />
+                <span style={{ color: "red", fontSize: "13px" }}>
+                  {validationErrors?.address}
+                </span>
               </div>
-              {/* edit user code */}
-              {/* <div className="text-end mt-3">
-                <button
-                  className="cmn_Button_style add_document_btn" 
-                
-                >
-                  Add Document
-                </button>
-              </div>
-                <div className='table-responsive mt-4 transparent_bg'>
-                <h3 className='heading_style'>Documents</h3>
-              <table className='employee_detail_table mt-3'>
+
+              <div className="text-end mt-3"></div>
+              <div className=" mt-3 card-cmn">
+                <Table responsive className="leave_table mb-0 ">
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
                       <th>Document Name</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                  
+                      <th>Checked</th>
                     </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                      <td>1</td>
-                      <td>John</td>
-                      <td>sd</td>
-                      <td>N/A</td>
-                      <td>
-                        <input type="checkbox"/>
-                      </td>
-                    
-                  
-                    </tr>
+                    {documents.map((doc) => (
+                      <tr key={doc.id}>
+                        <td>{doc.id}</td>
+                        <td>{doc.name}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={selectedDocuments?.updatedDocuments?.includes(
+                              doc.name
+                            )}
+                            onChange={() => handleCheckboxChange(doc.name)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
-                </table>
+                </Table>
               </div>
-              <div className="text-center mt-3">
-                <button
-                  className="cmn_Button_style"
-                  onClick={(e) => handleSaveUser(e)}
-                >
-                  Add
-                </button>
-              </div> */}
-              {/* edit user code end*/}
-              
+
               <div className="text-end mt-3">
                 <button
                   className="cmn_Button_style"
-                  onClick={(e) => handleSaveUser(e)}
+                  onClick={(e) =>
+                    handleSaveUser(
+                      e,
+                      name,
+                      email,
+                      mobile,
+                      emergency_contact_relationship,
+                      emergency_contact_name,
+                      emergency_contact,
+                      bank_name,
+                      account_number,
+                      ifsc,
+                      increment_date,
+                      gender,
+                      dob,
+                      doj,
+                      skype_email,
+                      ultivic_email,
+                      salary,
+                      security,
+                      total_security,
+                      installments,
+                      position,
+                      department,
+                      status,
+                      username,
+                      password,
+                      confirm_password,
+                      selected_role,
+                      selected_schedule,
+                      address,
+                      selectedDocuments
+                    )
+                  }
                 >
                   Save
+                  {is_user_created?.isLoading && (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

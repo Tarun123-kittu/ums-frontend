@@ -7,13 +7,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppProvider } from './Components/Utils/appContecxt';
 import appStore from './utils/redux/appStore';
 import { Provider } from 'react-redux';
-import { ToastContainer } from "react-toastify";
+import { Toaster } from 'react-hot-toast';
+import InternetChecker from './Components/noInternet/InternetChecker';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <Provider store={appStore}>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <InternetChecker> 
+      <AppProvider>
+        <App />
+        <Toaster />
+      </AppProvider>
+    </InternetChecker>
   </Provider>
 );
+
 reportWebVitals();

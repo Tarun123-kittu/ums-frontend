@@ -1,76 +1,158 @@
-import React from 'react'
-import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp'
-import Notification from '../Notification/Notification'
-import { FiEdit } from 'react-icons/fi';
-import Sidebar from '../../Sidebar/Sidebar';
-import { useAppContext } from '../../Utils/appContecxt';
-
+import React, { useState, useEffect } from "react";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import Notification from "../Notification/Notification";
+import { FiEdit } from "react-icons/fi";
+import { useAppContext } from "../../Utils/appContecxt";
+import { useSelector, useDispatch } from "react-redux";
+import UseFetchAllAppliedLeaves from "../../Utils/customHooks/useFetchAllAppliedLeaves";
+import { useNavigate } from "react-router-dom";
+import PaginationComp from "../../Pagination/Pagination";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import Loader from "../../assets/Loader.gif";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import { Table } from "react-bootstrap";
+import NoData from "../../assets/nodata.jpg";
+import { get_all_applied_leaves } from "../../../utils/redux/leaveSlice/getAllAppliedLeaves";
 
 const LeaveRequest = () => {
-    const obj = [
-        { name: "Leave Application", path: "/leaveApplication" },
-        { name: "Leave Request", path: "/leaveRequest" },
-        
-      ];
+  let index = 0;
+  const dispatch = useDispatch();
+  const permissions = UsePermissions("Leaves");
+  const navigate = useNavigate();
+  UseFetchAllAppliedLeaves({ page: 1 });
+  const all_applied_leaves = useSelector(
+    (store) => store.GET_ALL_APPLIED_LEAVES
+  );
+  localStorage.removeItem("tab");
+  const [page, setPage] = useState(1);
+  const obj = [{ name: "Leave Request", path: "/leaveRequest" }];
 
-const {show} = useAppContext()
+  const { show } = useAppContext();
 
-  return (
-    <section className='leaveRequest_outer'>
-      <Sidebar/>
-    <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
-      <Notification/>
-    
-      <div className='cmn_padding_outer'>
-        <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}  onBreadcrumbClick={""} 
-        />
+  useEffect(() => {
+    dispatch(get_all_applied_leaves({ page }));
+  }, [page]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
 
-        <div className='table-responsive mt-3 transparent_bg'>
-      <table className='employee_detail_table'>
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Employee</th>
-            <th>Type</th>
-            <th>Apply On</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Total</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Remark</th>
-            <th>Action</th>
-          </tr>
-         
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>John</td>
-            <td>Casual Leave</td>
-            <td>11/08/24</td>
-            <td>19/08/24</td>
-            <td>29/08/24</td>
-            <td>10</td>
-            <td>Leave for marriage</td>
-            <td>PENDING</td>
-            <td></td>
-            <td>
-            <div className='cmn_action_outer yellow_bg'><FiEdit /></div>
-            </td>
-          </tr>
-        </tbody>
-        </table>
-         </div>
+  return permissions?.can_view ? (
+    <section className="leaveRequest_outer">
+      <div
+        className={`${
+          localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+        } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
+
+        <div className="cmn_padding_outer minheight">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+            onBreadcrumbClick={""}
+          />
+
+          <div className=" mt-3 card-cmn">
+            <Table responsive className="leave_table mb-0 ">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Employee</th>
+                  <th>Type</th>
+                  <th>Apply On</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Total</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Remark</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {all_applied_leaves?.isLoading ? (
+                  <tr>
+                    <td className="text-center" colSpan={9}>
+                      <img className="loader_gif m-auto" src={Loader} alt="loader" />
+                    </td>
+                  </tr>
+                ) : all_applied_leaves?.data?.message ===
+                  "No pending leaves found" ? (
+                  <tr>
+                    <td className="text-center" colSpan={11}>
+                      <img
+                        className="loader_gif m-auto"
+                        src={NoData}
+                        alt="loader"
+                        width={500}
+                        height={400}
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  all_applied_leaves?.data?.data?.map((leaves, i) => {
+                    if (leaves?.role !== "Admin") {
+                      return (
+                        <tr key={i}>
+                          <td>{++index}</td>
+                          <td>{leaves?.name}</td>
+                          <td>{leaves?.type}</td>
+                          <td>{formatDate(leaves?.applied_on)}</td>
+                          <td>{leaves?.date_from}</td>
+                          <td>{leaves?.to_date}</td>
+                          <td>{leaves?.count}</td>
+                          <td title={leaves?.description}>{leaves?.description?.slice(0,20)+"..."}</td>
+                          <td>{leaves?.status}</td>
+                          <td>{leaves?.remark}</td>
+                          <td>
+                            {permissions?.can_update && (
+                              <div className="cmn_action_outer yellow_bg">
+                                <FiEdit
+                                  onClick={() => {
+                                    navigate("/editLeaveRequest", {
+                                      state: {
+                                        leave_id: leaves?.id,
+                                        leave_status: leaves?.status,
+                                        leave_remark: leaves?.remark,
+                                        from_date: leaves?.date_from,
+                                        to_date: leaves?.to_date,
+                                        leave_count: leaves?.count,
+                                        user_id: leaves?.user_id,
+                                        name: leaves?.name,
+                                        email: leaves?.email,
+                                      },
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  })
+                )}
+              </tbody>
+            </Table>
+          </div>
+        </div>
+        {all_applied_leaves?.data?.totalPages > 1 && (
+          <PaginationComp
+            totalPage={all_applied_leaves?.data?.total_pages}
+            setPage={setPage}
+          />
+        )}
       </div>
-
-    
-
-
-    </div>
     </section>
-  )
-}
+  ) : (
+    <UnauthorizedPage />
+  );
+};
 
-export default LeaveRequest
+export default LeaveRequest;

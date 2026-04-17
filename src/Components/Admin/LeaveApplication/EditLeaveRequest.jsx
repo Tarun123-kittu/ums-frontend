@@ -1,0 +1,250 @@
+import React, { useEffect, useState } from "react";
+import Sidebar from "../../Sidebar/Sidebar";
+import { useAppContext } from "../../Utils/appContecxt";
+import InputField from "../../Common/InputField";
+
+import "./leaveApplication.css";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import Notification from "../Notification/Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import { get_applied_leave_detail } from "../../../utils/redux/leaveSlice/getAppliedLeavesDetails";
+import moment from "moment";
+import {
+  update_leave,
+  clear_update_leave_state,
+} from "../../../utils/redux/leaveSlice/updateLeaves";
+import toast from "react-hot-toast";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+
+const EditLeaveRequest = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const permissions = UsePermissions("Leaves");
+  const {
+    leave_id,
+    back_to_report,
+    leave_status,
+    leave_remark,
+    from_date,
+    to_date,
+    leave_count,
+    user_id,
+    name,
+    email,
+  } = location?.state ? location?.state : location;
+  const leave_details = useSelector((store) => store.APPLIED_LEAVE_DETAIL);
+  const update_leave_data = useSelector((store) => store.UPDATE_LEAVE);
+  const [leaveDetail, setLeaveDetail] = useState();
+  const [status, setStatus] = useState(leave_status);
+  const [remark, setRemark] = useState(leave_remark);
+
+  useEffect(() => {
+    if (!leave_id) navigate("/leaveRequest");
+    leave_id && dispatch(get_applied_leave_detail({ leave_id }));
+  }, [leave_id]);
+
+  useEffect(() => {
+    if (leave_details?.isSuccess) {
+      setLeaveDetail(leave_details?.data?.data[0]);
+    }
+  }, [leave_details]);
+
+  useEffect(() => {
+    if (update_leave_data?.isSuccess) {
+      toast.success("Leave updated successfully");
+      dispatch(clear_update_leave_state());
+      back_to_report ? navigate("/leaveReport") : navigate("/leaveRequest");
+    }
+    if (update_leave_data?.isError) {
+      toast.error("Something went Wrong");
+      dispatch(clear_update_leave_state());
+    }
+  }, [update_leave_data]);
+
+  const obj = [
+    { name: "Leave Application", path: "" },
+    { name: "Edit Leave Request" },
+  ];
+  const { show } = useAppContext();
+
+  const handleUpdateLeave = () => {
+    if (status === "select") {
+      toast.error("Please Select Leave status")
+      return
+    }
+    if (status === leave_details?.data?.data[0]?.status) {
+      toast.error("you cannot update the leave with same status")
+      return
+    }
+    dispatch(
+      update_leave({
+        leave_id,
+        status,
+        remark,
+        email,
+        name,
+        from_date,
+        to_date,
+        user_id,
+        leave_count,
+      })
+    );
+  };
+  return permissions?.can_view ? (
+    <section className="editLeave_outer">
+      <div
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper"
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
+
+        <div className="cmn_padding_outer">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+            onBreadcrumbClick={""}
+          />
+          <div>
+            <div className="cmn_editattendence_outer cmn_border card-cmn">
+              <div className="row">
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Employee"}
+                    type={"text"}
+                    value={leaveDetail?.name}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Mobile"}
+                    type={"text"}
+                    value={leaveDetail?.mobile}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Leave Date"}
+                    type={"text"}
+                    disabled={true}
+                    value={
+                      leaveDetail?.from_date && leaveDetail?.to_date
+                        ? `${moment(leaveDetail.from_date).format(
+                          "MM/DD/YYYY"
+                        )} - ${moment(leaveDetail.to_date).format(
+                          "MM/DD/YYYY"
+                        )}`
+                        : ""
+                    }
+                  />
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Apply Date"}
+                    type={"text"}
+                    value={moment(leaveDetail?.createdAt).format("MM/DD/YYYY")}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Number Of Dates"}
+                    type={"text"}
+                    value={leaveDetail?.count}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <InputField
+                    classname={"new_employee_form_group"}
+                    labelname={"Sandwich"}
+                    type={"text "}
+                    value={leaveDetail?.sandwich === 0 ? "No" : "Yes"}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-lg-12 col-sm-12 col-md-12">
+                  <div className="new_employee_form_group form-group">
+                    <label>Description</label>
+                    <textarea
+                      className="form-control mt-2"
+                      value={leaveDetail?.description}
+                      disabled={true}
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <div className="form-group new_employee_form_group">
+                    <label>Type</label>
+                    <select className="form-control form-group" disabled>
+                      <option>{leaveDetail?.type}</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-lg-6 col-sm-12 col-md-12">
+                  <div className="new_employee_form_group form-group">
+                    <label>Status</label>
+                    <select
+                      className="form-control"
+                      value={status ? status : leaveDetail?.status}
+                      onChange={(e) => setStatus(e.target.value)}
+                    >
+                      <option value="select">Select</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="CANCELLED">Cancel</option>
+                      <option value="REJECTED">Reject</option>
+                      <option value="ACCEPTED">Accept</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="new_employee_form_group form-group">
+                <label>Remark</label>
+                <textarea
+                  className="form-control mt-2"
+                  value={remark ? remark : leaveDetail?.remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+              </div>
+
+              {permissions?.can_update && (
+                <div className="text-center mt-4">
+                  <button onClick={() => navigate(-1)} className="cmn_Button_style cmn_darkgray_btn m-2">
+                    Back
+                  </button>
+                  <button
+                    className="cmn_Button_style"
+                    onClick={() => handleUpdateLeave()}
+                  >
+                    {update_leave_data?.isLoading && (
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Update
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <UnauthorizedPage />
+  );
+};
+
+export default EditLeaveRequest;

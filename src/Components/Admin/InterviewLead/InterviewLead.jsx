@@ -1,109 +1,304 @@
-import React, { useState } from 'react'
-
-import Sidebar from '../../Sidebar/Sidebar';
-import { useAppContext } from '../../Utils/appContecxt';
-import Notification from '../Notification/Notification';
-import { FaSort } from 'react-icons/fa';
-import TabComp from '../../Common/Tabs/Tabs';
-import "./interviewLead.css"
-import { useNavigate } from 'react-router-dom';
-import CommonDeleteModal from '../../Modal/CommonDeleteModal';
-import BreadcrumbComp from '../../Breadcrumb/BreadcrumbComp';
-
+import React, { useState, useEffect } from "react";
+import { useAppContext } from "../../Utils/appContecxt";
+import Notification from "../Notification/Notification";
+import TabComp from "../../Common/Tabs/Tabs";
+import "./interviewLead.css";
+import { useNavigate } from "react-router-dom";
+import CommonDeleteModal from "../../Modal/CommonDeleteModal";
+import BreadcrumbComp from "../../Breadcrumb/BreadcrumbComp";
+import CustomSelectComp from "../../Common/CustomSelectComp";
+import { useSelector } from "react-redux";
+import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
+import { get_all_languages } from "../../../utils/redux/testSeries/getAllLanguages";
+import { useDispatch } from "react-redux";
+import { get_all_leads } from "../../../utils/redux/interviewLeadsSlice/getAllLeads";
+import { get_hr_round_candidate } from "../../../utils/redux/interviewLeadsSlice/hrRound/getHrRoundCandidate";
+import { get_all_tech_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getAllTechRoundLeads";
+import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
+import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
+import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
+import AddInterviewLeadModal from '../../Modal/AddInterviewLeadModal'
+import EditInterviewLeadModal from '../../Modal/AddInterviewLeadModal'
 const InterviewLead = () => {
+  const { show } = useAppContext();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const permissions = UsePermissions("Interviews");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [all_languagages, setAll_languages] = useState([]);
+  const [selected_language, setSelected_language] = useState("");
+  const [selected_experience, setSelected_experience] = useState("");
+  const [selected_result, setSelected_result] = useState("");
+  const [enableSearch, setEnableSearch] = useState(false);
+  const [currentTab, setCurrentTab] = useState("Add Person");
+  const [open_tab, setOpen_tab] = useState(localStorage.getItem('tab') || "Add Person");
+  const [page, setPage] = useState(1);
+  const[addInterviewLeadModal, setAddInterviewLeadModal] = useState(false)
+  const languages = useSelector((store) => store.ALL_LANGUAGES?.data?.data);
+  const obj = [{ name: "Interview Leads", path: "/interviewLead" }];
 
-const {show}=useAppContext()
-const navigate=useNavigate()
-const[showDeleteModal,setShowDeleteModal]=useState(false)
+  const experienceObj = [
+    { value: 1, label: "1 Year" },
+    { value: 2, label: "2 Year" },
+    { value: 3, label: "3 Year" },
+    { value: 4, label: "4 Year" },
+    { value: 5, label: "5 Year" },
+  ];
 
-const obj = [
-  { name: "Interview Leads", path: "/interviewLead" },
-  
-];
-  return (
-    <section className='Interviewlead_outer'>
-    <Sidebar/>
-  <div className={`wrapper gray_bg admin_outer  ${show?"cmn_margin":""}`  }>
-    <Notification/>
-    <div className='cmn_padding_outer'>
-      <BreadcrumbComp data={obj} classname={"inter_fontfamily employee_heading"}/>
-    <div className='employee_list_outer '>
-    <div className='d-flex employee_container align-items-end mt-3'>
+  const resultObj = [
+    { value: "selected", label: "Selected" },
+    { value: "rejected", label: "Rejected" },
+    { value: "on hold", label: "on Hold" },
+    { value: "pending", label: "Pending" },
+  ];
 
-    <div className='new_employee_form_group employee_wrapper'>
+  useEffect(() => {
+    dispatch(get_all_languages());
+  }, []);
 
-<label className='inter_fontfamily'>Profile</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Financial Year">
+  useEffect(() => {
+    if (languages?.length !== 0) {
+      languages?.forEach((data) => {
+        if (!all_languagages.some((item) => item.value === data?.id)) {
+          all_languagages.push({ value: data?.id, label: data?.language });
+        }
+      });
+    }
+  }, [languages]);
 
- <option  value="2022">java developer</option>
-      
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
-   
+  const changeHandler = (e) => {
+    setSelected_language(e.value);
+  };
 
-<div className='new_employee_form_group employee_wrapper'>
-<label className='inter_fontfamily'>Date</label>
-<div class="custom-select-wrapper ">
-<input class=" form-control" type='date'>
+  const changeExperienceHandler = (e) => {
+    setSelected_experience(e.value);
+  };
 
-</input>
-</div>
-   </div>
+  const changeResultHandler = (e) => {
+    setSelected_result(e.value);
+  };
 
-   <div className='new_employee_form_group employee_wrapper'>
+  const searchHandler = () => {
+    if (open_tab === "Add Person") {
+      dispatch(
+        get_all_leads({
+          page,
+          experience: selected_experience,
+          profile: selected_language,
+        })
+      );
+    }
+    if (open_tab === "HR") {
+      dispatch(
+        get_hr_round_candidate({
+          pageNumber: page,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result,
+        })
+      );
+    }
+    if (open_tab === "Technical") {
+      dispatch(
+        get_all_tech_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result,
+        })
+      );
+    }
+    if (open_tab === "Face to face") {
+      dispatch(
+        get_face_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result,
+        })
+      );
+    }
+    if (open_tab === "Final Interaction") {
+      dispatch(
+        get_final_round_leads({
+          page,
+          limit: 10,
+          experience: selected_experience,
+          profile: selected_language,
+          result_status: selected_result,
+        })
+      );
+    }
+  };
 
-<label className='inter_fontfamily'>Experience</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Select Experience">
+  const handleClearResult = () => {
+    if (open_tab === "Add Person") {
+      dispatch(
+        get_all_leads({
+          page,
+          experience: "",
+          profile: "",
+        })
+      );
+    }
+    if (open_tab === "HR") {
+      dispatch(
+        get_hr_round_candidate({
+          pageNumber: page,
+          experience: "",
+          profile: "",
+          result_status: "",
+        })
+      );
+    }
+    if (open_tab === "Technical") {
+      dispatch(
+        get_all_tech_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: "",
+        })
+      );
+    }
+    if (open_tab === "Face to face") {
+      dispatch(
+        get_face_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: "",
+        })
+      );
+    }
+    if (open_tab === "Final Interaction") {
+      dispatch(
+        get_final_round_leads({
+          page,
+          limit: 10,
+          experience: "",
+          profile: "",
+          result_status: "",
+        })
+      );
+    }
+  };
 
- <option >1</option>
-      
-  
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
+  return permissions?.can_view ? (
+    <section className="Interviewlead_outer">
+      <div
+        className={`${localStorage.getItem("roles")?.includes("Employee") ? "" : "wrapper "
+          } gray_bg admin_outer  ${show ? "cmn_margin" : ""}`}
+      >
+        <Notification />
+        <div className="cmn_padding_outer minheight">
+          <BreadcrumbComp
+            data={obj}
+            classname={"inter_fontfamily employee_heading"}
+          />
+          <div className="employee_list_outer ">
+            <div className="d-flex employee_container align-items-end mt-3">
+              <div className="form-group new_employee_form_group employee_wrapper">
+                <label>Profile</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    placeholder={"Select Profile"}
+                    optionsData={all_languagages}
+                    changeHandler={changeHandler}
+                    value={selected_language}
+                  />
+                </div>
+              </div>
 
-<div className='new_employee_form_group employee_wrapper'>
+              <div className="form-group new_employee_form_group employee_wrapper">
+                <label>Experience</label>
+                <div className="mt-2">
+                  <CustomSelectComp
+                    optionsData={experienceObj}
+                    changeHandler={changeExperienceHandler}
+                    value={selected_experience}
+                  />
+                </div>
+              </div>
 
-<label className='inter_fontfamily'>Result</label>
-<div class="custom-select-wrapper ">
-<select class="custom-select form-control" placeholder="Result">
+              {open_tab !== "Add Person" && (
+                <div className="form-group new_employee_form_group employee_wrapper">
+                  <label>Result</label>
+                  <div className="mt-2">
+                    <CustomSelectComp
+                      optionsData={resultObj}
+                      changeHandler={changeResultHandler}
+                      value={selected_result}
+                    />
+                  </div>
+                </div>
+              )}
 
- <option>Pass</option>
-</select>
-<FaSort className='dropdown-icon '/>
-</div>
-</div>
-   
-    <div className='employee_wrapper text-end serach_add_outer d-flex gap-2'>
-      <button className='cmn_Button_style cmn_darkgray_btn' onClick={()=>{setShowDeleteModal(true)}}>Delete</button>
-      <button className='cmn_Button_style'>Search</button>
-    </div>
-
-    </div>
-   <div className='inerterview_lead_tabs cmn_border mt-3'>
-    <TabComp/>
-    <div>
-    <button className='cmn_Button_style addnew_btn_outer' onClick={()=>{navigate("/addNewPerson")}}>Add New</button>
-    </div>
-    
-
-   </div>
-
-
-    </div>
-
-    </div>
-    </div>
-{showDeleteModal && <CommonDeleteModal dialogClassname={"custom_modal_width"} show={showDeleteModal} setShow={setShowDeleteModal}  heading_text={"Are you sure to delete the user list"} paragraph_text={"In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. "}/>}
+              <div className="employee_wrapper text-end serach_add_outer d-flex gap-2">
+                {enableSearch ? (
+                  <button
+                    className="cmn_Button_style cmn_darkgray_btn"
+                    onClick={() => {
+                      handleClearResult();
+                      setEnableSearch(false);
+                    }}
+                  >
+                    Clear
+                  </button>
+                ) : (
+                  <button
+                    className="cmn_Button_style"
+                    onClick={() => {
+                      searchHandler();
+                      setEnableSearch(true);
+                    }}
+                  >
+                    Search
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="inerterview_lead_tabs cmn_border mt-3">
+              <TabComp
+                setCurrentTab={setCurrentTab}
+                setOpen_tab={setOpen_tab}
+              />
+              {
+                <div>
+                  {permissions?.can_create && currentTab === "Add Person" && (
+                    <button
+                      className="cmn_Button_style addnew_btn_outer sdsd"
+                      onClick={() => {
+                        setAddInterviewLeadModal(true);
+                      }}
+                    >
+                      Add New
+                    </button>
+                  )}
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      {showDeleteModal && (
+        <CommonDeleteModal
+          dialogClassname={"custom_modal_width"}
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          heading_text={"Are you sure to delete the user list"}
+          paragraph_text={"Please confirm your action. Deleting the user list is permanent and cannot be reversed."}
+        />
+      )}
+     
     </section>
- 
-  )
-}
+  ) : (
+    <UnauthorizedPage />
+  );
+};
 
-export default InterviewLead
+export default InterviewLead;

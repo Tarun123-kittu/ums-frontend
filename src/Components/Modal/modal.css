@@ -51,6 +51,42 @@
 .modal-dialog.custom_modal_width {
     width: 430px;
 }
+.cmn_ques_heading{
+    font-size: 15px;
+}
+.modal-content .form-group label,.modal-content .form-group input {
+    color: #687281;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.modal-content .form-group input,.modal-content .form-group select,.modal-content .form-group textarea {
+    padding: 10px;
+    font-weight: 300;
+    font-family: 'Inter';
+}
+.modal_head p {
+    font-size: 16px;
+    color: #333333;
+    font-family: 'Inter';
+}
+
+.modal_head .heading {
+    font-weight: 600;
+    font-family: 'Inter';
+    font-size: 24px;
+}
+.modal-content .cmn_select div {
+font-weight: 400;
+color: #687281;
+}
+.modal-content .css-hlgwow{
+    padding-left: 0;
+}
+.modal-content .form-group input::placeholder,.modal-content .form-group textarea::placeholder,.css-1ifhui9-singleValue {
+        font-weight: 300 !important;
+    color: #687281;
+}
  @media screen  and (max-width:1280px) {
     .logout_heading{
         font-size: 23px;

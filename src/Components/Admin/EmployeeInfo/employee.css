@@ -12,6 +12,9 @@
 .employee_wrapper h4{
     font-size: 14px;
 }
+section.employee_outer_container .unauthorized_page_outer .wrapper {
+    margin-left: 0px;
+}
 button.add_document_btn{
     background-color: #555555;
     border-radius: 5px;
@@ -29,7 +32,9 @@ button.add_document_btn{
     width: 100%;
 }
 
-
+.employee_detail_table td span {
+    display: block;
+}
 
 .cmn_Button_style{
     border: unset;
@@ -51,6 +56,9 @@ button.add_document_btn{
     line-height: 27px;
     color: white;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .redbrown_bg{
     background-color: #9e0302;
@@ -59,7 +67,7 @@ button.add_document_btn{
     background-color:#555555
 }
 .red_bg{
-    background-color: #e81600;
+    background-color: #9e0302;
 }
 .employee_detail_table th ,td{
     padding: 10px;
@@ -79,7 +87,7 @@ button.add_document_btn{
     font-family: "Inter", sans-serif;
     color: #8a8d91;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid #ddd;
 }
 .serach_user_outer{
@@ -108,17 +116,21 @@ button.add_document_btn{
 
 }
 .new_employee_form_group input{
-    background-color: transparent !important;
+    background-color: transparent ;
     border-radius: 7px;
     margin-top: 10px;
+    color:#8D8D8E;;
 }
 .new_employee_form_group input.form-control::placeholder {
     color: #798398;
+    font-size: 14px;
 }
 .new_employee_form_group select::placeholder {
-    color: #798398;
+    color: #798398 ;
     font-family: "Inter", sans-serif;
+    font-size: 14px;
 }
+
 .new_employee_form_group label{
     color: #798495;
     font-family: "Inter", sans-serif;
@@ -126,14 +138,19 @@ button.add_document_btn{
 .new_employee_form_group {
     margin-top: 10px;
 }
+
 .new_employee_form_group textarea {
     background: transparent;
     border-radius: 7px;
+    color: #8D8D8E;
+  
     
 }
 .new_employee_form_group textarea.form-control::placeholder {
     color: #798398;
     font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .new_employee_form_group select{
@@ -150,7 +167,13 @@ a.active-breadcrumb{
     color: #687281;
   }
 
-
+.employee_delete_Edit_outer{
+    cursor: pointer;
+}
+.employee_editInfo_wrapper {
+    border: 1px solid #E2E6EB;
+    padding: 20px;
+}
 @media screen and (max-width:991px){
     .employee_container {
         flex-wrap: wrap;

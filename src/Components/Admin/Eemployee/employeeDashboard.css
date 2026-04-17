@@ -1,0 +1,116 @@
+.dashboard-sections{
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 10px;
+}
+.heading-h3{
+    color:#000000;
+    font-size: 26px;
+    font-weight: 500;
+    padding-bottom: 20px;
+    margin: 0;
+}
+.upcoming-month-h4 {
+    font-size: 16px;
+    color: #000000;
+}
+.employee-even-name{
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    padding-bottom: 3px;
+}
+.employee-event-date{
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+.employee-event-type{
+    font-size: 16px;
+    font-weight: 500;
+    color: #27AE60;
+
+}
+.to-do-text{
+    font-size: 16px;
+    color: #030303;
+}
+label.form-check-label{
+    border-bottom:  1px solid rgba(0, 0, 0, 0.10);
+}
+.to-do-input .form-control{
+    padding: 12px;
+    border: none;
+    font-size: 18px;
+    border-bottom:  1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 0;
+    color: #737791;
+}
+.all-btn-red, .all-btn-black{
+    padding: 10px 25px;
+    border-radius: 100px;
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.all-btn-red{
+
+    background-color:#9E0302;
+ 
+}
+.all-btn-black{
+
+    background-color:#303030;
+    margin-right: 5px;
+ 
+}
+.leave-inner-heading{
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+    color: #303030;
+}
+
+.alert-pop-up{
+    background-color: #FFE5E5;
+    border: 1px solid #FFCECE;
+    padding: 20px;
+    border-radius: 12px;
+    position: relative;
+}
+.close-alert{
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    width: 50px !important;
+}
+.alert-text h3{
+    color: #FF0000;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+.alert-text p{
+    color: #000000;
+    padding: 0;
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+.alert-pop-up.row .col-auto{
+padding: 0px;   
+}
+.alert-pop-up.row {
+    margin: 0 auto;
+    margin-bottom: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea#exampleFormControlTextarea1 {
+    border: unset;
+    border-bottom: 1px solid #000000;
+    border-radius: unset;
+    padding-left: 0;
+    margin-top: 1.5rem;
+}

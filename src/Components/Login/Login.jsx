@@ -9,29 +9,58 @@ import {
   login,
   clear_login_state,
 } from "../../utils/redux/loginSlice/loginSlice";
-import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import validator from "validator";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [errorMessage,setErrorMessage] = useState()
   const [password, setPassword] = useState("");
   const login_details = useSelector((store) => store.LOGIN);
 
   useEffect(() => {
-    if (localStorage.getItem("ums_token")) {
-      navigate("/");
+    if (localStorage.getItem("roles")?.includes("Employee")) {
+      navigate("/mark-attendence");
+    }
+    if (
+      localStorage.getItem("ums_token") &&
+      localStorage
+        .getItem("roles")
+        ?.split(",")
+        .some((role) => ["Admin", "Developer", "HR"].includes(role))
+    ) {
+      navigate("/dashboard");
     }
   }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (!password && !email) {
-      toast.error("email and password are required", { autoClose: 2000 });
-    } else {
-      dispatch(login({ email, password }));
+    let missingData = {}
+    if(!email){
+      toast.error("Email is required")
+      missingData.email = 'Email is required'
+      setErrorMessage(missingData)
+      return
     }
+    if(!validator?.isEmail(email)){
+      toast.error("Email is not valid")
+      missingData.email = 'Email is not valid'
+      setErrorMessage(missingData)
+      return
+    }
+    if(!password){
+      toast.error("Password is required")
+      missingData.password = 'Password is required'
+      setErrorMessage(missingData)
+      return
+    }
+   
+      dispatch(login({ email, password }));
+    
   };
 
   useEffect(() => {
@@ -39,7 +68,13 @@ const Login = () => {
       toast.success("Logged in Successfully", { autoClose: 2000 });
       localStorage.setItem("ums_token", login_details?.data?.token);
       localStorage.setItem("roles", login_details?.data?.roles);
-      navigate("/");
+      localStorage.setItem("userId", login_details?.data?.id);
+      localStorage.setItem("tokenIssueTime", Date.now());
+      if (login_details?.data?.roles?.includes("Admin")) {
+        navigate("/dashboard");
+      } else {
+        navigate("/employee-dashboard");
+      }
       dispatch(clear_login_state());
     }
     if (login_details?.isError) {
@@ -47,6 +82,7 @@ const Login = () => {
       dispatch(clear_login_state());
     }
   }, [login_details]);
+
   return (
     <div className="login_container">
       <div className="row">
@@ -80,16 +116,18 @@ const Login = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  style={errorMessage?.email ? {border:"1px solid red"} : {}}
                 />
+                <span style = {{color:"red",fontSize:"13px"}}>{errorMessage?.email}</span>
               </div>
               <div className="form-group mt-3 position-relative">
                 <div className="d-flex justify-content-between ">
                   <label>Your Password</label>
-                  <h6>
-                    {" "}
-                    <a className="forget_password small_font mt-2" href="/">
-                      Forget password?
-                    </a>
+                  <h6
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/forgot-password")}
+                  >
+                    Forget password?
                   </h6>
                 </div>
 
@@ -101,7 +139,9 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  style={errorMessage?.password ? {border:"1px solid red"} : {}}
                 />
+                <span style = {{color:"red",fontSize:"13px"}}>{errorMessage?.password}</span>
                 <div className="open_eye">
                   {showPassword ? (
                     <IoEyeOutline
@@ -118,10 +158,6 @@ const Login = () => {
                   )}
                 </div>
               </div>
-              {/* <div className="mt-3">
-                <input type="checkbox" className="custom-checkbox" />
-                <label className="small_font ms-2">Remember me </label>
-              </div> */}
               <button
                 type="submit"
                 className=" login-button mt-4"
@@ -133,7 +169,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
