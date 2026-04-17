@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import Mobile from "../../assets/mobile.png"
 import Computer from "../../assets/computer.png"
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";

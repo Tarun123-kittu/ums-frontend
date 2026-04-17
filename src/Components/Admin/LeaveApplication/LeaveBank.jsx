@@ -9,7 +9,7 @@ import { get_leave_bank_report } from "../../../utils/redux/leaveSlice/getLeaveB
 import PaginationComp from "../../Pagination/Pagination";
 import CustomSelectComp from "../../Common/CustomSelectComp";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import toast from "react-hot-toast";
 import { Table } from "react-bootstrap";

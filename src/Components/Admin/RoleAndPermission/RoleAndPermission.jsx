@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { get_all_user_roles } from "../../../utils/redux/rolesAndPermissionSlice/getUserRolesSlice";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import PaginationComp from "../../Pagination/Pagination";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
 

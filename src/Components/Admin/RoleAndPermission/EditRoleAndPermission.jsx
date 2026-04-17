@@ -27,7 +27,7 @@ import {
   clear_delete_user_assigned_to_role,
 } from "../../../utils/redux/rolesAndPermissionSlice/deleteUserAssignedToRole";
 import { get_role_permissions } from "../../../utils/redux/rolesAndPermissionSlice/getRolePermissions";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { get_logged_in_user_permissions } from "../../../utils/redux/userPermissionSlice/userpermissionSlice";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";

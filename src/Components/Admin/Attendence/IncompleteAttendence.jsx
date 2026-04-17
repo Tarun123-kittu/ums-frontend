@@ -8,7 +8,7 @@ import "./attendence.css";
 import { useNavigate } from "react-router-dom";
 import PaginationComp from "../../Pagination/Pagination";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import { Table } from "react-bootstrap";
 import { get_attendance_report } from "../../../utils/redux/attendanceSlice/getTodayAttendance";

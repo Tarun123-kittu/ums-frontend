@@ -22,7 +22,7 @@ import {
   clear_delete_series_state,
 } from "../../../utils/redux/testSeries/deleteSeries";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
 import NoData from "../../assets/nodata.jpg";
 

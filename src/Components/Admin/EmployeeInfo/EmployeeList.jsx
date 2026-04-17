@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaSort, FaSortDown } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import NoData from "../../assets/nodata.jpg";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";

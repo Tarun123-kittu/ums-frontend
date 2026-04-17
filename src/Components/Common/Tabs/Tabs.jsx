@@ -31,7 +31,7 @@ import {
 import { get_face_round_leads } from "../../../utils/redux/interviewLeadsSlice/getFaceRoundLeads";
 import { get_final_round_leads } from "../../../utils/redux/interviewLeadsSlice/technicalRound/getFinalRoundLeads";
 import PaginationComp from "../../Pagination/Pagination";
-import Loader from "../../assets/Loader.gif";
+import Loader from "../../assets/loader.gif";
 import NoData from "../../assets/nodata.jpg";
 import UnauthorizedPage from "../../Unauthorized/UnauthorizedPage";
 import { UsePermissions } from "../../Utils/customHooks/useAllPermissions";
