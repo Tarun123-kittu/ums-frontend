@@ -20,7 +20,7 @@ export const check_lead_answers = createAsyncThunk("check_lead_answers", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/check_lead_answer`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/check-lead-answer`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

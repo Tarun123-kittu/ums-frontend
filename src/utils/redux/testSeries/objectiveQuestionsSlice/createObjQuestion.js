@@ -21,7 +21,7 @@ export const create_obj_question = createAsyncThunk("create_obj_question", async
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add_objective`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add-objective`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

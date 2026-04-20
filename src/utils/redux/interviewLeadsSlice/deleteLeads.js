@@ -11,7 +11,7 @@ export const delete_lead = createAsyncThunk("delete_lead", async ({ leadId }, th
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_lead_records?leadId=${leadId}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete-lead-records?leadId=${leadId}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

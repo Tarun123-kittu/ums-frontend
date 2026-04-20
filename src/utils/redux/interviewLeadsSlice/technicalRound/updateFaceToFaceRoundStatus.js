@@ -19,7 +19,7 @@ export const update_face_round_status = createAsyncThunk("update_face_round_stat
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/final_or_face_to_face_round`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/final-or-face-to-face-round`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

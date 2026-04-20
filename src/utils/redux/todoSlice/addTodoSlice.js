@@ -17,7 +17,7 @@ export const add_todo_task = createAsyncThunk("add_todo_task", async ({ task_nam
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create_task`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create-task`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

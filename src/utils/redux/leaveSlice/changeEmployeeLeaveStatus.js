@@ -17,7 +17,7 @@ export const change_employee_leave_status = createAsyncThunk("change_employee_le
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/change_leave_status`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/change-leave-status`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

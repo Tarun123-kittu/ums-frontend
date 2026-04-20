@@ -11,7 +11,7 @@ export const send_test_link = createAsyncThunk("send_test_link", async ({ lead_i
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/send_test_link?lead_id=${lead_id}&test_series=${test_series}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/send-test-link?lead_id=${lead_id}&test_series=${test_series}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

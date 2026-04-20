@@ -11,7 +11,7 @@ export const get_permissions = createAsyncThunk("get_permissions", async (thunkA
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_permissions`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-permissions`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

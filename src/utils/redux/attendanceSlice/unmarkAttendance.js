@@ -19,7 +19,7 @@ export const unmark_attendance = createAsyncThunk("unmark_attendance", async ({ 
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/unmark_attendance`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/unmark-attendance`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

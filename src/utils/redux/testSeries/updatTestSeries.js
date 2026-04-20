@@ -22,7 +22,7 @@ export const update_test_series = createAsyncThunk("update_test_series", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_series`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update-series`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

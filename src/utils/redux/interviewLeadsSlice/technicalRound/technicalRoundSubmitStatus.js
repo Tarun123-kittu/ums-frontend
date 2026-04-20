@@ -11,7 +11,7 @@ export const tech_round_submit_result = createAsyncThunk("tech_round_submit_resu
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_tech_round_test_submit_status?interview_id=${interview_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-tech-round-test-submit-status?interview_id=${interview_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

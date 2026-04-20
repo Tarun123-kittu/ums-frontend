@@ -11,7 +11,7 @@ export const get_user_documents = createAsyncThunk("get_user_documents", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_user_documents?userId=${userId}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-user-documents?userId=${userId}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

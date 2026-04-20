@@ -11,7 +11,7 @@ export const get_all_todo_tasks = createAsyncThunk("get_all_todo_tasks", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_tasks?task_status=${task_status}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-tasks?task_status=${task_status}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

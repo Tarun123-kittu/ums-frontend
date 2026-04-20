@@ -11,7 +11,7 @@ export const get_all_applied_leaves = createAsyncThunk("get_all_applied_leaves",
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_applied_leaves?page=${page}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-applied-leaves?page=${page}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -18,7 +18,7 @@ export const hr_update_lead_status = createAsyncThunk("hr_update_lead_status", a
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/hr_round_result`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/hr-round-result`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

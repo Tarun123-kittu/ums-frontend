@@ -16,7 +16,7 @@ export const get_all_holidays_and_events = createAsyncThunk(
 
             // Include year and page in the query parameters
             const query = new URLSearchParams({ year, page }).toString();
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_all_holidaysOrEvents?${query}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-all-holidays-or-events?${query}`, requestOptions);
 
             if (!response.ok) {
                 const errorMessage = await response.json();

@@ -20,7 +20,7 @@ export const get_all_tech_round_leads = createAsyncThunk("get_all_tech_round_lea
         };
 
         // Fetch data with query parameters
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/all_technical_round_leads?${queryParams}`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/all-technical-round-leads?${queryParams}`, requestOptions);
 
         if (!response.ok) {
             const errorMessage = await response.json();

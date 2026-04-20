@@ -16,7 +16,7 @@ export const forget_password = createAsyncThunk("forget_password", async ({ emai
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forgot_password`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forgot-password`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

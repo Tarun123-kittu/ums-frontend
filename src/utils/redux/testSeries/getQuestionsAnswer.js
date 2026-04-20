@@ -11,7 +11,7 @@ export const get_question_answer = createAsyncThunk("get_question_answer", async
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_questions_answers?language_id=${language_id}&series_id=${series_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-questions-answers?language_id=${language_id}&series_id=${series_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

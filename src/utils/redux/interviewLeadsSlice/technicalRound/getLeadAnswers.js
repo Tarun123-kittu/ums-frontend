@@ -11,7 +11,7 @@ export const get_lead_answer = createAsyncThunk("get_lead_answer", async ({ lead
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_lead_technical_response?leadId=${leadId}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-lead-technical-response?leadId=${leadId}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -11,7 +11,7 @@ export const hr_assigned_questions_to_lead = createAsyncThunk("hr_assigned_quest
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_hr_round_assign_questions_to_lead?interview_id=${interview_id}&lead_id=${lead_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-hr-round-assign-questions-to-lead?interview_id=${interview_id}&lead_id=${lead_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

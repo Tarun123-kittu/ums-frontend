@@ -19,7 +19,7 @@ export const add_holiday_and_event = createAsyncThunk("add_holiday_and_event", a
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add_holidayOrEvent`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add-holiday-or-event`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

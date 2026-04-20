@@ -21,7 +21,7 @@ export const create_test_series = createAsyncThunk("create_test_series", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create_series`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create-series`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

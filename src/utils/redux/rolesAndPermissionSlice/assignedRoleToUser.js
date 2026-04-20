@@ -18,7 +18,7 @@ export const assigned_role = createAsyncThunk("assigned_role", async ({ role_id,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/assign_role`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/assign-role`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -28,7 +28,7 @@ export const add_interview_leads = createAsyncThunk("add_interview_leads", async
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create_lead`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create-lead`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

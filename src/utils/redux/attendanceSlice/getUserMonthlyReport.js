@@ -23,7 +23,7 @@ export const get_user_monthly_attendence = createAsyncThunk(
 
             // Build the query parameters based on filters
             const queryParams = buildQueryParams(month, year);
-            const url = `${process.env.REACT_APP_BACKEND_URL}/get_user_monthly_report` + (queryParams ? `?${queryParams}` : '');
+            const url = `${process.env.REACT_APP_BACKEND_URL}/get-user-monthly-report` + (queryParams ? `?${queryParams}` : '');
 
             const response = await fetch(url, requestOptions);
 

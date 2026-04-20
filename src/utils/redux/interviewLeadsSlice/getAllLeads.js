@@ -20,7 +20,7 @@ export const get_all_leads = createAsyncThunk(
 
             // Use queryParams in the fetch URL
             const response = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/get_all_leads?${queryParams.toString()}`,
+                `${process.env.REACT_APP_BACKEND_URL}/get-all-leads?${queryParams.toString()}`,
                 requestOptions
             );
 

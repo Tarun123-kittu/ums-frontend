@@ -11,7 +11,7 @@ export const get_dashboard_accepted_leaves = createAsyncThunk("get_dashboard_acc
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_all_employees_accepted_leaves`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-all-employees-accepted-leaves`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

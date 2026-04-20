@@ -18,7 +18,7 @@ export const hr_round_response = createAsyncThunk("hr_round_response", async ({ 
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/hr_round`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/hr-round`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

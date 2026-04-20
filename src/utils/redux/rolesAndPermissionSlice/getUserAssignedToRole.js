@@ -11,7 +11,7 @@ export const get_users_assigned_to_role = createAsyncThunk("get_users_assigned_t
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_role_assigned_to_users?role_id=${role_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-role-assigned-to-users?role_id=${role_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

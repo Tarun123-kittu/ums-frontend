@@ -11,7 +11,7 @@ export const get_current_and_next_month_events = createAsyncThunk("get_current_a
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_current_and_next_month_events`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-current-and-next-month-events`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

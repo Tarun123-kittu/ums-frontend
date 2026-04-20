@@ -11,7 +11,7 @@ export const delete_user_assigned_to_role = createAsyncThunk("delete_user_assign
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_user_role?user_id=${user_id}&roleId=${roleId}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete-user-role?user_id=${user_id}&roleId=${roleId}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

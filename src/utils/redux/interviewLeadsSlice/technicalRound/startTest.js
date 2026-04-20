@@ -7,7 +7,7 @@ export const start_test = createAsyncThunk("start_test", async ({ lead_id }, thu
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/start_test?lead_id=${lead_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/start-test?lead_id=${lead_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

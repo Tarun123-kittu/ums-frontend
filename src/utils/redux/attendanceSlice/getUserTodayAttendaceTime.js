@@ -11,7 +11,7 @@ export const get_today_attendance_time = createAsyncThunk("get_today_attendance_
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_user_today_attendance`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-user-today-attendance`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

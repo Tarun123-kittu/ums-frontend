@@ -11,7 +11,7 @@ export const get_role_permissions = createAsyncThunk("get_role_permissions", asy
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_roles_permissions?id=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-roles-permissions?id=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

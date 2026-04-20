@@ -11,7 +11,7 @@ export const delete_series = createAsyncThunk("delete_series", async ({ id }, th
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_series?seriesId=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete-series?seriesId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

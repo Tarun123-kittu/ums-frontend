@@ -11,7 +11,7 @@ export const get_user_monthly_leave_report = createAsyncThunk("get_user_monthly_
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_employee_montly_leave_report`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-employee-monthly-leave-report`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

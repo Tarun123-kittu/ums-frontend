@@ -22,7 +22,7 @@ export const submit_result = createAsyncThunk("submit_result", async ({ lead_id,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/submit_technical_round`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/submit-technical-round`, requestOptions);
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

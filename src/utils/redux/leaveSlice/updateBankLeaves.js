@@ -11,7 +11,7 @@ export const update_bank_leave = createAsyncThunk("update_bank_leave", async ({ 
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_user_leave_bank?employeeId=${employeeId}&taken_leaves=${taken_leaves}&paid_leaves=${paid_leaves}&session=${session}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update-user-leave-bank?employeeId=${employeeId}&taken_leaves=${taken_leaves}&paid_leaves=${paid_leaves}&session=${session}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

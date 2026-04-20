@@ -11,7 +11,7 @@ export const get_all_roles = createAsyncThunk("get_all_roles", async (thunkAPI) 
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_all_roles`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-all-roles`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

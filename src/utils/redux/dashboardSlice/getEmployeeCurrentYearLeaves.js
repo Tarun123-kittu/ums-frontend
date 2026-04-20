@@ -11,7 +11,7 @@ export const get_employee_current_year_leaves = createAsyncThunk("get_employee_c
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_employee_leaves_record`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-employee-leaves-record`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

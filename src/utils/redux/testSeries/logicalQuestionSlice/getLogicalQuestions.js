@@ -11,7 +11,7 @@ export const get_logical_question = createAsyncThunk("get_logical_question", asy
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_logical_subjective_questions?question_id=${question_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-logical-subjective-questions?question_id=${question_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

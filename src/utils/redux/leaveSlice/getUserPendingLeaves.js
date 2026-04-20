@@ -11,7 +11,7 @@ export const user_pending_leaves = createAsyncThunk("user_pending_leaves", async
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_user_pending_leaves`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get-user-pending-leaves`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {
