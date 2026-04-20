@@ -48,7 +48,7 @@ export const update_user = createAsyncThunk("update_user", async ({ name, userna
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_user`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_user`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

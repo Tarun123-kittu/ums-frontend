@@ -11,7 +11,7 @@ export const delete_user = createAsyncThunk("delete_user", async ({ id }, thunkA
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/delete_employee/${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_employee/${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -11,7 +11,7 @@ export const update_technical_round_status = createAsyncThunk("update_technical_
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_status?interview_id=${interview_id}&status=${status}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_status?interview_id=${interview_id}&status=${status}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -11,7 +11,7 @@ export const get_applied_leave_detail = createAsyncThunk("get_applied_leave_deta
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_applied_leave_detail?leave_id=${leave_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_applied_leave_detail?leave_id=${leave_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

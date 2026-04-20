@@ -19,7 +19,7 @@ export const create_new_role_and_assign_permissions = createAsyncThunk("create_n
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/assign_new_permissions_to_roles`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/assign_new_permissions_to_roles`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

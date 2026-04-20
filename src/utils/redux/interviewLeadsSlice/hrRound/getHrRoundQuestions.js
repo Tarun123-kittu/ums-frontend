@@ -11,7 +11,7 @@ export const get_hr_round_questions = createAsyncThunk("get_hr_round_questions",
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_hr_assign_questions_to_lead?count=${count}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_hr_assign_questions_to_lead?count=${count}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

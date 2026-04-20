@@ -11,7 +11,7 @@ export const get_holiay_birthday_events = createAsyncThunk("get_holiay_birthday_
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_events_and_birthdays`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_events_and_birthdays`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

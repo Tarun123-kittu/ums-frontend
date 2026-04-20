@@ -18,7 +18,7 @@ export const update_lead_round_count = createAsyncThunk("update_lead_round_count
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_in_round_count`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_in_round_count`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

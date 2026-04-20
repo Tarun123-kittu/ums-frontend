@@ -15,7 +15,7 @@ export const get_all_users_user = createAsyncThunk(
             };
 
             // Start with the base URL
-            let url = `${process.env.REACT_APP_BACKEN_URL}/get_employees?page=${page}`;
+            let url = `${process.env.REACT_APP_BACKEND_URL}/get_employees?page=${page}`;
 
             // Collect query parameters if name and/or status exist
             const queryParams = [];

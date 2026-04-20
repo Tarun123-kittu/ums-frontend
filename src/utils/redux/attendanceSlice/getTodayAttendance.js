@@ -11,7 +11,7 @@ export const get_attendance_report = createAsyncThunk("get_attendance_report", a
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_attendances?page=${page}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_attendances?page=${page}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

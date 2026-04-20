@@ -20,7 +20,7 @@ export const add_logical_que = createAsyncThunk("add_logical_que", async ({ test
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/add_logical`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add_logical`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

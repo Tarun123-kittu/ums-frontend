@@ -22,7 +22,7 @@ export const update_attendance = createAsyncThunk("update_attendance", async ({ 
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_attendance_details?attendanceId=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_attendance_details?attendanceId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

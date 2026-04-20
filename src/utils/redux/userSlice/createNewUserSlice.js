@@ -76,7 +76,7 @@ export const create_new_user = createAsyncThunk("create_new_user", async ({
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/create_user`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/create_user`, requestOptions);
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

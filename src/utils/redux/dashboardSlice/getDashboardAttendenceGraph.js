@@ -11,7 +11,7 @@ export const get_dashboard_attendence_graph = createAsyncThunk("get_dashboard_at
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_employees_working_time`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_employees_working_time`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

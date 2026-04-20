@@ -19,7 +19,7 @@ export const update_objective_questions = createAsyncThunk("update_objective_que
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_objective_question?question_id=${question_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_objective_question?question_id=${question_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

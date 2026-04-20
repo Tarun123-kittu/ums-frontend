@@ -18,7 +18,7 @@ export const update_logical_que = createAsyncThunk("update_logical_que", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_logical_and_subjective_question?question_id=${question_id}&answer_id=${answer_id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_logical_and_subjective_question?question_id=${question_id}&answer_id=${answer_id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

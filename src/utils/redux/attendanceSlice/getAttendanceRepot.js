@@ -19,7 +19,7 @@ export const get_user_attendance_report = createAsyncThunk(
             if (month) queryParams.append('month', month);
             if (year) queryParams.append('year', year);
             const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
-            const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_attendances_report${queryString}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_attendances_report${queryString}`, requestOptions);
 
             if (!response.ok) {
                 const errorMessage = await response.json();

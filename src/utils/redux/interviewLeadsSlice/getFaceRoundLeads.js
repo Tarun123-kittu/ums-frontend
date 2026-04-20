@@ -20,7 +20,7 @@ export const get_face_round_leads = createAsyncThunk("get_face_round_leads", asy
         };
 
         // Fetch data with query parameters
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_face_to_face_round_leads?${queryParams}`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_face_to_face_round_leads?${queryParams}`, requestOptions);
 
         if (!response.ok) {
             const errorMessage = await response.json();

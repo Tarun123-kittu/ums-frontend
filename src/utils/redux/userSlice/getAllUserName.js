@@ -11,7 +11,7 @@ export const get_all_usernames = createAsyncThunk("get_all_usernames", async (th
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_username`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_all_username`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

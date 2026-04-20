@@ -13,7 +13,7 @@ export const get_all_user_leave = createAsyncThunk(
                 redirect: "follow",
             };
 
-            let url = `${process.env.REACT_APP_BACKEN_URL}/all_user_applied_leaves?`;
+            let url = `${process.env.REACT_APP_BACKEND_URL}/all_user_applied_leaves?`;
             const params = new URLSearchParams();
 
             if (name) params.append("name", name);

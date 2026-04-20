@@ -17,7 +17,7 @@ export const login = createAsyncThunk("login", async ({ email, password }, thunk
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/login`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

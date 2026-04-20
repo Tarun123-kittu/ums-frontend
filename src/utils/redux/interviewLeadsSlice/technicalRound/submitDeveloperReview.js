@@ -19,7 +19,7 @@ export const submit_developer_review = createAsyncThunk("submit_developer_review
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/technical_round_result`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/technical_round_result`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

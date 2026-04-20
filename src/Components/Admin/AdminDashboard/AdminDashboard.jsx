@@ -82,7 +82,7 @@ const AdminDashboard = () => {
     };
 
     const response = await fetch(
-      `${process.env.REACT_APP_BACKEN_URL}/get_all_interviews`,
+      `${process.env.REACT_APP_BACKEND_URL}/get_all_interviews`,
       requestOptions
     );
 

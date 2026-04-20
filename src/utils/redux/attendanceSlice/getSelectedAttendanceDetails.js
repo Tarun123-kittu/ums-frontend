@@ -11,7 +11,7 @@ export const get_selected_attendance_details = createAsyncThunk("get_selected_at
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_attendance_details?attendanceId=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_attendance_details?attendanceId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

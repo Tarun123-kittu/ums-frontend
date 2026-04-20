@@ -18,7 +18,7 @@ export const mark_attendance = createAsyncThunk("mark_attendance", async ({ logi
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/mark_attendance`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/mark_attendance`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

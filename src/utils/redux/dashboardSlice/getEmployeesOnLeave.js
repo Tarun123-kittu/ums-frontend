@@ -11,7 +11,7 @@ export const get_employee_leave_count = createAsyncThunk("get_employee_leave_cou
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_all_on_leave_employees`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_all_on_leave_employees`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -11,7 +11,7 @@ export const get_selected_language_series = createAsyncThunk("get_selected_langu
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_language_test_series?language=${language}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_language_test_series?language=${language}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

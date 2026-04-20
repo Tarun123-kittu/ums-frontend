@@ -12,8 +12,8 @@ export const get_all_series = createAsyncThunk("get_all_series", async ({ id }, 
         };
 
         const url = id
-            ? `${process.env.REACT_APP_BACKEN_URL}/get_all_series?languageId=${id}`
-            : `${process.env.REACT_APP_BACKEN_URL}/get_all_series`;
+            ? `${process.env.REACT_APP_BACKEND_URL}/get_all_series?languageId=${id}`
+            : `${process.env.REACT_APP_BACKEND_URL}/get_all_series`;
 
         const response = await fetch(url, requestOptions);
 

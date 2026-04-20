@@ -11,7 +11,7 @@ export const get_logged_in_user_permissions = createAsyncThunk("get_logged_in_us
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_roles_permissions`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_roles_permissions`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

@@ -15,7 +15,7 @@ export const get_leave_bank_report = createAsyncThunk("get_leave_bank_report", a
             redirect: "follow"
         };
 
-        const url = `${process.env.REACT_APP_BACKEN_URL}/leave_bank_report?page=${page}&${params.toString()}`;
+        const url = `${process.env.REACT_APP_BACKEND_URL}/leave_bank_report?page=${page}&${params.toString()}`;
 
         const response = await fetch(url, requestOptions);
 

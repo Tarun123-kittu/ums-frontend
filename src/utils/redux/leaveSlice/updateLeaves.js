@@ -33,7 +33,7 @@ export const update_leave = createAsyncThunk("update_leave", async ({ leave_id,
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_pending_leaaves`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_pending_leaaves`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

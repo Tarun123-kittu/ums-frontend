@@ -17,7 +17,7 @@ export const get_hr_round_candidate = createAsyncThunk("get_hr_round_candidate",
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_hr_round_candidate?${queryParams}`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_hr_round_candidate?${queryParams}`, requestOptions);
 
         if (!response.ok) {
             const errorMessage = await response.json();

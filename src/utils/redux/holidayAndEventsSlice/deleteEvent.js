@@ -12,7 +12,7 @@ export const delete_event = createAsyncThunk("delete_event", async ({ id }, thun
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/delete_holidayOrEvent?holidayEventId=${id}`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_holidayOrEvent?holidayEventId=${id}`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

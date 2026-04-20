@@ -20,7 +20,7 @@ export const update_key_point = createAsyncThunk("update_key_point", async ({ qu
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/update_key_point`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update_key_point`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

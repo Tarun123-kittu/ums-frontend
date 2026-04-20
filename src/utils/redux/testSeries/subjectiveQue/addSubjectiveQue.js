@@ -20,7 +20,7 @@ export const add_subjective_que = createAsyncThunk("add_subjective_que", async (
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/add_subjective`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/add_subjective`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

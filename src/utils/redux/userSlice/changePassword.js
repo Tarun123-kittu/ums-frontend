@@ -19,7 +19,7 @@ export const change_password = createAsyncThunk("change_password", async ({ pass
             redirect: "follow"
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/change_password`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/change_password`, requestOptions)
         if (!response.ok) {
             const errorMessage = await response.json();
             if (errorMessage) {

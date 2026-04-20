@@ -13,7 +13,7 @@ export const user_applied_leaves = createAsyncThunk(
                 redirect: "follow"
             };
 
-            const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/user_applied_leaves?month=${month}&year=${year}`, requestOptions)
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user_applied_leaves?month=${month}&year=${year}`, requestOptions)
             if (!response.ok) {
                 const errorMessage = await response.json();
                 if (errorMessage) {

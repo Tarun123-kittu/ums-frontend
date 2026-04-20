@@ -20,7 +20,7 @@ export const get_final_round_leads = createAsyncThunk("get_final_round_leads", a
         };
 
         // Fetch with dynamically constructed query parameters
-        const response = await fetch(`${process.env.REACT_APP_BACKEN_URL}/get_final_round_leads?${queryParams}`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/get_final_round_leads?${queryParams}`, requestOptions);
 
         if (!response.ok) {
             const errorMessage = await response.json();
